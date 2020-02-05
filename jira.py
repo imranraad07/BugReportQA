@@ -1,5 +1,6 @@
 import os
 import io
+import sys
 import time
 import logging
 import requests
@@ -26,6 +27,7 @@ def download_jira_bugs(output, repo_name):
         logger.info("Fetching bugid %s", bugid)
         fname = repo_name.upper() + '-' + str(bugid)
 
+        print(url_base % (fname, fname));
         r = try_request(url_base % (fname, fname))
         r = to_unicode(r.text)
 
@@ -52,15 +54,18 @@ def download_jira_bugs(output, repo_name):
         created_time = get_time(created_time[0].text)
 
         htree = etree.parse(io.StringIO(html), hp)
-        desc = ''.join(htree.getroot().itertext())
-        desc = to_unicode(desc)
+        if htree.getroot() is not None:
+            desc = ''.join(htree.getroot().itertext())
+            desc = to_unicode(desc)
 
-        comments = root.find('channel').find('item').find('comments')
-        for comment in list(comments):
-            id = comment.get('id')
-            text = BeautifulSoup(comment.text).get_text().repalce('\n', ' ')
-            author = comment.get('author')
-            time = get_time(comment.get('created'))
+            comments = root.find('channel').find('item').find('comments')
+            if comments is not None:
+                print(len(list(comments)));
+                for comment in list(comments):
+                    id = comment.get('id')
+                    text = BeautifulSoup(comment.text).get_text().replace('\n', ' ')
+                    author = comment.get('author')
+                    time = get_time(comment.get('created'))
 
 
 def try_request(url, n=100):
@@ -93,4 +98,4 @@ def mkdir(d):
 
 
 if __name__ == '__main__':
-    download_jira_bugs('test', 'bookkeeper')
+    download_jira_bugs('test', 'zookeeper')
