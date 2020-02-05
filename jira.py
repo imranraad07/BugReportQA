@@ -3,7 +3,6 @@ import io
 import time
 import logging
 import requests
-import corley.utils as utils
 from gensim.utils import to_unicode, to_utf8
 from lxml import etree
 from bs4 import BeautifulSoup
@@ -14,7 +13,7 @@ os.environ['TZ'] = 'UTC'
 
 def download_jira_bugs(output, repo_name):
     url_base = 'https://issues.apache.org/jira/si/jira.issueviews:issue-xml/%s/%s.xml'
-    utils.mkdir(output)
+    mkdir(output)
 
     p = etree.XMLParser()
     hp = etree.HTMLParser()
@@ -80,21 +79,17 @@ def get_time(date_str):
     return int(time.mktime(date))
 
 
-class Issue:
-
-    def __init__(self, short_desc, long_desc, type, comments):
-        self.short_desc = short_desc
-        self.long_desc = long_desc
-        self.type = type
-        self.comments = comments
-
-
-class Comment:
-
-    def __init__(self, text, time, author):
-        self.text = text
-        self.time = time
-        self.author = author
+def mkdir(d):
+    # exception handling mkdir -p
+    try:
+        os.makedirs(d)
+    except os.error as e:
+        if 17 == e.errno:
+            # the directory already exists
+            pass
+        else:
+            print('Failed to create "%s" directory!' % d)
+            sys.exit(e.errno)
 
 
 if __name__ == '__main__':
