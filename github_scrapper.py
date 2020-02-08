@@ -4,18 +4,15 @@ from nltk import word_tokenize, sent_tokenize
 import csv
 
 
-def get_comments(auth, url):
+def get_comments(url, auth):
     response = requests.get(url, auth=auth)
     if response.status_code == 200:
         return response.json()
 
 
-def get_issues(auth):
-    # url = "https://api.github.com/repos/flutter/flutter/issues?state=closed&sort=comments-desc"
-    # url = "https://api.github.com/repos/google/material-design-icons/issues?state=closed&sort=comments-desc"
-    # url = "https://api.github.com/repos/android/architecture-samples/issues?state=closed&sort=comments-desc"
-    # url = "https://api.github.com/repos/square/okhttp/issues?state=closed&sort=comments-desc"
-    # url = "https://api.github.com/repos/PhilJay/MPAndroidChart/issues?state=closed&sort=comments-desc"
+def get_issues(repo, auth):
+    url = "https://api.github.com/repos/{repo}/issues?state=closed&sort=comments-desc"
+    url = url.format(repo=repo)
     return _getter(url, auth)
 
 
@@ -64,29 +61,62 @@ if __name__ == '__main__':
     username = data['username']
     password = data['password']
     auth = (username, password)
-    count = 0
-    for issue in get_issues(auth):
-        comments = get_comments(auth, issue['comments_url'])
-        print(count, " ", issue['comments'], " ", len(comments), " ", issue['comments_url'])
-        count = count + 1
-        commentCount = 0
-        followUpQuestion = False
-        for comment in comments:
-            commentCount = commentCount + 1
-            if commentCount >= 3:
-                break
-            for sentence in sent_tokenize(comment['body']):
-                if check(sentence):
-                    count = count + 1
-                    sw = csv.writer(open('results/data_github.csv', 'a'))
-                    sw.writerow([
-                        '{0}'.format(comment['html_url']),
-                        '{0}'.format(sentence)
-                    ])
-                    followUpQuestion = True
-                    break
-            if followUpQuestion:
+
+    github_repos = [
+        "duckduckgo/Android", "mozilla-mobile/focus-android",
+        "MozillaReality/FirefoxReality", "TeamAmaze/AmazeFileManager",
+        "PhilippC/keepass2android", "zxing/zxing",
+        "federicoiosue/Omni-Notes", "AntennaPod/AntennaPod",
+        "QuantumBadger/RedReader", "brave/browser-android-tabs", "Telegram-FOSS-Team/Telegram-FOSS"
+    ]
+
+    for repo in github_repos:
+        commentAddedCSVCount = 0
+        issueCount = 0
+        totalIssues = 0
+        for issue in get_issues(repo, auth):
+            issueCount = issueCount + 1
+            totalIssues = totalIssues + 1
+            print(issueCount, " ", repo, " ", issue)
+            # consider at most 1000 issues
+            if issueCount == 1000:
                 break
 
-        if count >= 100:
-            break
+            # label bug check
+            isLabelBug = False
+            for label in issue['labels']:
+                labelText = label['name']
+                if labelText.startswith("bug"):
+                    isLabelBug = True
+                    break
+
+            if not isLabelBug:
+                continue
+
+            # print(commentAddedCSVCount, " ", issue['comments'], " ", issue['labels'], " ", issue['comments_url'])
+            commentCount = 0
+            followUpQuestion = False
+            comments = get_comments(issue['comments_url'], auth)
+            for comment in comments:
+                commentCount = commentCount + 1
+                if commentCount >= 3:
+                    break
+                # if comment author and issue author are same, then discard the comment
+                if comment['user']['id'] == issue['user']['id']:
+                    continue
+                for sentence in sent_tokenize(comment['body']):
+                    if check(sentence):
+                        commentAddedCSVCount = commentAddedCSVCount + 1;
+                        sw = csv.writer(open('results/data_github.csv', 'a'))
+                        sw.writerow([
+                            '{0}'.format(comment['html_url']),
+                            '{0}'.format(comment['body'])
+                        ])
+                        followUpQuestion = True
+                        break
+                if followUpQuestion:
+                    break
+            # at most 10 comments from each repo
+            if commentAddedCSVCount == 10:
+                break
+        print(totalIssues)
