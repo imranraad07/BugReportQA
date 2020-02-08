@@ -77,7 +77,6 @@ if __name__ == '__main__':
         for issue in get_issues(repo, auth):
             issueCount = issueCount + 1
             totalIssues = totalIssues + 1
-            print(issueCount, " ", repo, " ", issue)
             # consider at most 1000 issues
             if issueCount == 1000:
                 break
