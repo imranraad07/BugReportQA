@@ -25,10 +25,12 @@ def _getter(url, auth):
     while 'next' in link:
         response = requests.get(link['next'], auth=auth)
         # And.. if we didn't get good results, just bail.
-        # if response.status_code != 200:
+        if response.status_code != 200:
+            print ("Bad response code: ", response.status_code)
         #     raise IOError(
         #         "Non-200 status code %r; %r; %r" % (
         #             response.status_code, url, response.json()))
+
 
         for result in response.json():
             yield result
@@ -66,11 +68,15 @@ if __name__ == '__main__':
     auth = (username, password)
 
     github_repos = [
-        "duckduckgo/Android", "mozilla-mobile/focus-android",
-        "MozillaReality/FirefoxReality", "TeamAmaze/AmazeFileManager",
-        "PhilippC/keepass2android", "zxing/zxing",
-        "federicoiosue/Omni-Notes", "AntennaPod/AntennaPod",
-        "QuantumBadger/RedReader", "brave/browser-android-tabs", "Telegram-FOSS-Team/Telegram-FOSS"
+        "elastic/elasticsearch",
+        "spring-projects/spring-boot",
+        "iluwatar/java-design-patterns",
+        "ReactiveX/RxJava",
+        "mockito/mockito",
+        "google/guava",
+        "square/okhttp"
+        # "duckduckgo/Android", "PhilippC/keepass2android", "zxing/zxing", "AntennaPod/AntennaPod",
+        # "brave/browser-android-tabs", "Telegram-FOSS-Team/Telegram-FOSS"
     ]
 
     totalIssues = 0
@@ -82,16 +88,22 @@ if __name__ == '__main__':
             totalIssues = totalIssues + 1
             # print(totalIssues)
             # consider at most 1000 issues
-            if issueCount > 1000:
-                break
+            # if issueCount > 1000:
+            #     break
 
             # label bug check
             isLabelBug = False
             for label in issue['labels']:
                 labelText = label['name']
-                if labelText.startswith("bug"):
+                if "bug" in labelText:
                     isLabelBug = True
                     break
+
+            if "bug" in issue['title']:
+                isLabelBug = True
+
+            if "bug" in issue['body']:
+                isLabelBug = True
 
             if not isLabelBug:
                 continue
@@ -102,7 +114,7 @@ if __name__ == '__main__':
             comments = get_comments(issue['comments_url'], auth)
             for comment in comments:
                 commentCount = commentCount + 1
-                if commentCount > 2:
+                if commentCount > 3:
                     break
                 # if comment author and issue author are same, then discard the comment
                 if comment['user']['id'] == issue['user']['id']:
