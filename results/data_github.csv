@@ -1,0 +1,1267 @@
+duckduckgo/Android,https://github.com/duckduckgo/Android/issues/386#issuecomment-433597487,"Thank you so much for raising this issue. We've had a few people mention similar type problems with the latest release, but it wasn't clear exactly what they were describing or when it was happening from their reports.
+
+This, however, is fantastic. This will definitely help identify the problem. In fact, I have a pretty good suspicion on where to look already.
+
+My problem so far was that I was unable to replicate the problem. If I can continue to have this problem, would you (or anyone else looking at this ticket) be in a position to test a fix?"
+duckduckgo/Android,https://github.com/duckduckgo/Android/issues/431#issuecomment-461229116,"I can't reproduce the issue. What device are you using?
+I always see the last page in address bar, when I clear it and put ""!"" there are suggestions appearing always. Clear and put ""!"" again doesn't help."
+duckduckgo/Android,https://github.com/duckduckgo/Android/issues/415#issuecomment-453870743,"Thanks for reporting this.
+
+Can you clarify something: when you share to the app, and you see the new tab page, does the shared link open in a background tab or not at all?
+
+Also, can you share with me details of 
+
+1. which app version you're using?
+1. if you've enabled automatic data clearing or not?
+1. does it do it sometimes, or every time?
+
+This is sounding very related to a bug I've just fixed (merged, but not yet released). 
+
+Hopefully it's the same thing and the bug will be fixed for you in the next release."
+duckduckgo/Android,https://github.com/duckduckgo/Android/issues/235#issuecomment-378199281,"Thanks for reporting this @BigNickBurgess. I will investigate. A few questions to help me reproduce this:
+• Which device and android version are you on?
+• What is broken on reddit? Does the page load? Can you login?
+• Does toggling off the privacy protection toggle in the Privacy Dashboard fix the issue? You can get there via the Privacy Grade button next to the search bar.
+
+Thanks again for your help."
+duckduckgo/Android,https://github.com/duckduckgo/Android/issues/218#issuecomment-375428804,@Daiky96 Can I be assigned to the bug?
+duckduckgo/Android,https://github.com/duckduckgo/Android/issues/241#issuecomment-390425699,I'v heard once before many time that the reponse of a website/theme/app is a nightmare for any developer. Can you give some details?
+duckduckgo/Android,https://github.com/duckduckgo/Android/issues/241#issuecomment-390425699,I'v heard once before many time that the reponse of a website/theme/app is a nightmare for any developer. Can you give some details?
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1306#issuecomment-328462301,"* Can you provide us with the exact steps to reproduce (1)?
+
+* Your second issue was recently fixed in #1025 and will be released soon."
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1358#issuecomment-337997899,"I can reproduce. Reddit opens a custom tab and it appears our custom tab implementation doesn't include the ""Share"" menu item.
+
+@pocmo Was this intentional in any way?"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/2096#issuecomment-365028911,"@eiffel-fl Thanks for reporting – it'd be helpful to have specific steps to take so we can reproduce. Here are some questions to use as a prompt: you mentioned, ""go to the same website you will see that you are still connected."" What website did you go to? What do you expect to see on the website when you delete? What do you actually see?
+
+"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/3236#issuecomment-417426052,Should I remove this for the time being? It's basically a one-liner. Or do we want a setting?
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1284#issuecomment-327740141,Do you see the same issue when adding shortcuts via Firefox or Chrome? This looks like a launcher bug. The launcher app is responsible for the icon after we created the shortcut (saving to disk etc.).
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1880#issuecomment-349139001,@lime124 I added this behavior without really thinking about it needing an error string - what do you think we should do here?
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1837#issuecomment-348011243,"2.5 on Google Play is affected too.
+
+There's some new code in BrowserFragment that does not update the loading bar and background etc. if we haven't been loading before. Maybe that's causing this?"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/927#issuecomment-315381338,What trackers are you blocking in settings? This is often caused by blocking web fonts.
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/927#issuecomment-315381338,What trackers are you blocking in settings? This is often caused by blocking web fonts.
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1922#issuecomment-349719725,"I saw this once too but couldn't repro it afterwards. I think this happens intermittently, but still, it does look like it's a high priority.  I'll tentatively mark it as a release blocker, @bbinto what do you think?"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/785#issuecomment-311007147,"Result of triage?
+
+This is likely the result of disabling ""clip children"" on the view to allow the loading indicator to draw outside the parent view."
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1238#issuecomment-325972183,"* Does this happen in Chrome?
+* What Android version is installed on your device?"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1836#issuecomment-348134716,"I followed the behavior of the ""remove search engines"" screen here.
+
+@lime124 Is this a bug? What's the expected behavior?"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/785#issuecomment-311007147,"Result of triage?
+
+This is likely the result of disabling ""clip children"" on the view to allow the loading indicator to draw outside the parent view."
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1193#issuecomment-330297594,@bbinto should this be in folly?  was removed from cobalt.
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1124#issuecomment-321647606,What should be the desired behaviour in such a scenario? A Toast message would do?
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1193#issuecomment-330297594,@bbinto should this be in folly?  was removed from cobalt.
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1124#issuecomment-321647606,What should be the desired behaviour in such a scenario? A Toast message would do?
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1953#issuecomment-350022710,"Thank you for the detailed report - especially the video.
+
+@Jacquester Does this happen when adding an autocomplete domain too?"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1340#issuecomment-330781933,I'm not able to reproduce this. Can you name one third-party app that is opening such a broken custom tab?
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1361#issuecomment-331409552,"* What app version are you using?
+* What Android device / version are you using?
+* What language have you set in your system settings (or in Focus)?"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/2835#issuecomment-402231618,@mcomella Is this issue up for grab?
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/2835#issuecomment-402231618,@mcomella Is this issue up for grab?
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/928#issuecomment-315383469,"Oh weird. It's showing this every time for you? When you click on download then it prompts you to download build 2202 again? Can you shake the device, click on the (i) icon and see if the current build reports to be 2202 too?
+
+This functionality is provided by the buddybuild SDK. If there's a bug then we'd need to report it to them. I haven't had this issue on my phone yet."
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1953#issuecomment-350022710,"Thank you for the detailed report - especially the video.
+
+@Jacquester Does this happen when adding an autocomplete domain too?"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/291#issuecomment-287567857,"I can reproduce this only if webfont blocking is enabled. However, disabling webfonts in firefox for android doesn't break this (I don't know if that means our webfont blocking is broken, or if firefox's blocking is broken).
+
+This could be the result of our blocking methodology, I'll need to debug the page in question to figure out. (My theory is that the font files aren't being loaded as a font but instead directly by JS or some other mechanism, hence firefox doesn't block them since it only blocks files being loaded via the font loading mechanism, whereas focus blocks all files that are fonts, regardless of where they're being used.)
+
+I wonder if that means we'd need to provide an explanation that webfont blocking can break some sites (we already have text that could be used as part of the ""Block other content trackers"" pref)? Webfont blocking is disabled by default, so this shouldn't affect users until they select webfont blocking."
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1361#issuecomment-331409552,"* What app version are you using?
+* What Android device / version are you using?
+* What language have you set in your system settings (or in Focus)?"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1953#issuecomment-350022710,"Thank you for the detailed report - especially the video.
+
+@Jacquester Does this happen when adding an autocomplete domain too?"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/2656#issuecomment-391771349,On a WebView or GeckoView build?
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/855#issuecomment-314260087,"Looking at ^, we could either wait for the Chromium fix & re-evaluate (note: primary person on Chromium skilled enough to do it is out-of-office until July 28th) or look for a work-around. Since it's not our fault, I'm going to look at other issues first and come back if I have time before the Wednesday code freeze.
+
+Sebastian added some more details about our experiences with this issue [in the Chromium issue](https://bugs.chromium.org/p/chromium/issues/detail?id=726558#c16). Here's the repost (because I think it'd be useful for a workaround):
+
+> We are seeing the same issue in Firefox Focus [1] which is based on WebView.
+>
+> Some additional information:
+>
+> * The callback for ""exit full screen mode"" (onHideCustomView) is called immediately after the ""enter full screen mode"" (onShowCustomView) [WebChromeClient]. Often you can see that the video is in full screen mode for a split second.
+> 
+> * This only happens on YouTube. Other sites with video content like vimeo.com or ted.com just work.
+> 
+> * In rare cases onHideCustomView() is not called immediately on YouTube and the video stays in full screen mode. However in this situation the video player button for leaving full screen mode does not work (as if it's not expected to actually be in full screen mode). 
+> 
+> * As this is only observed on YouTube I'm not sure if this is a WebView issue or maybe something the YouTube website does accidentally?
+>
+> * I do not see this issue when using Chrome directly."
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/2656#issuecomment-391771349,On a WebView or GeckoView build?
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/2828#issuecomment-401385270,@npark-mozilla Can you test this too?
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/2308#issuecomment-373375933,"Flagged it with bug/feature because it's kind of both:
+
+* If the shared text is a URL then we open it, otherwise we do a search
+* I assume Fennec does search for a URL inside the text?"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1923#issuecomment-349727419,"I'm not even able to add a search engine, as I select either one of the TextInputEditText it instantly loses focus.
+Would you mind if I try my luck with this one ?"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1923#issuecomment-349727419,"I'm not even able to add a search engine, as I select either one of the TextInputEditText it instantly loses focus.
+Would you mind if I try my luck with this one ?"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/2055#issuecomment-376352784,"Thinking of implementing this by saving the What's New URL and check that to see if we should show highlight. Will we always get a new What's New URL for highlighted version, @pocmo ? "
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1923#issuecomment-349727419,"I'm not even able to add a search engine, as I select either one of the TextInputEditText it instantly loses focus.
+Would you mind if I try my luck with this one ?"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1979#issuecomment-351016530,"Hello @antlam !
+I'd like to give a contribution (of any kind) to this project. Can i give it a try ? Do you think it's worth a PR? (I'm asking because the solution i have holds in 5 lines of code) 
+regards"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1897#issuecomment-354148323,"Can I look into this?
+
+I think that the expected behaviour is all search engines being restored since the user can select a search engine that is not available in other languages"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1920#issuecomment-349719029,"@pocmo hmm, this might be related to #1924 ?"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1897#issuecomment-354148323,"Can I look into this?
+
+I think that the expected behaviour is all search engines being restored since the user can select a search engine that is not available in other languages"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1392#issuecomment-331957672,"Thank you for filing this issue. Can you help me answer the following questions so that I can try to reproduce this issue?
+
+* What device are you using?
+* What Android version is installed on your device?
+* What's the browser user agent if you go to this URL: http://www.whoishostingthis.com/tools/user-agent/"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/377#issuecomment-290454020,@ahunt Regression from the spoof fix?
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1231#issuecomment-326069602,"So far the implementation only does:
+* Remove the scheme (http://  https://)
+* Removes common unspecific sub domains (m. www. mobile.) - Code borrowed from Fennec
+
+I noticed two things:
+* We only allow opening new tabs from the context menu. Using this I often opened a bunch of tabs  that are from the same ""page"". Meaning at least the domain (and sometimes parts of the path) are the same for a bunch of tabs. Making it hard or impossible to distinguish between them.
+* Strictly following the spec I end up with pages that are reduced to the same ""label"":
+** https://en.m.wikipedia.org/wiki/Firefox_Focus -> m.wikipedia.org/wiki
+** https://en.m.wikipedia.org/wiki/Mozilla -> m.wikipedia.org/wiki
+
+Picking a ""label"" from a URL is pretty hard. We had this discussion a bunch of times for Activity Stream and whatever algorithm we pick there are always cases where it doesn't work correctly. I understand that we need to somehow cut off the string if it's too long - but I'm not sure why we purposefully make it shorter if there's space to show more.
+
+Unfortunately I have no other proposal. Sometimes the domain is important, sometimes the path and other times the page title is the most helpful.
+
+@brampitoyo @antlam What do you think? "
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/2225#issuecomment-370427196,"```
+03-05 15:50:52.824 27468-27468/? E/AndroidRuntime: FATAL EXCEPTION: main
+                                                   Process: org.mozilla.klar.gecko.beta, PID: 27468
+                                                   java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Boolean
+                                                       at org.mozilla.gecko.util.GeckoBundle.getBoolean(GeckoBundle.java:131)
+                                                       at org.mozilla.gecko.util.GeckoBundle.getBoolean(GeckoBundle.java:142)
+                                                       at org.mozilla.geckoview.GeckoSession$PromptDelegate$Choice.<init>(GeckoSession.java:1731)
+                                                       at org.mozilla.geckoview.GeckoSession.handlePromptEvent(GeckoSession.java:1113)
+                                                       at org.mozilla.geckoview.GeckoSession$Listener.handleMessage(GeckoSession.java:449)
+                                                       at org.mozilla.gecko.EventDispatcher$2.run(EventDispatcher.java:341)
+                                                       at android.os.Handler.handleCallback(Handler.java:789)
+                                                       at android.os.Handler.dispatchMessage(Handler.java:98)
+                                                       at android.os.Looper.loop(Looper.java:180)
+                                                       at android.app.ActivityThread.main(ActivityThread.java:6944)
+                                                       at java.lang.reflect.Method.invoke(Native Method)
+                                                       at com.android.internal.os.Zygote$MethodAndArgsCaller.run(Zygote.java:240)
+                                                       at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:835)
+03-05 15:50:52.824 27468-27468/? E/GeckoCrashHandler: >>> REPORTING UNCAUGHT EXCEPTION FROM THREAD 2 (""main"")
+                                                      java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Boolean
+                                                          at org.mozilla.gecko.util.GeckoBundle.getBoolean(GeckoBundle.java:131)
+                                                          at org.mozilla.gecko.util.GeckoBundle.getBoolean(GeckoBundle.java:142)
+                                                          at org.mozilla.geckoview.GeckoSession$PromptDelegate$Choice.<init>(GeckoSession.java:1731)
+                                                          at org.mozilla.geckoview.GeckoSession.handlePromptEvent(GeckoSession.java:1113)
+                                                          at org.mozilla.geckoview.GeckoSession$Listener.handleMessage(GeckoSession.java:449)
+                                                          at org.mozilla.gecko.EventDispatcher$2.run(EventDispatcher.java:341)
+                                                          at android.os.Handler.handleCallback(Handler.java:789)
+                                                          at android.os.Handler.dispatchMessage(Handler.java:98)
+                                                          at android.os.Looper.loop(Looper.java:180)
+                                                          at android.app.ActivityThread.main(ActivityThread.java:6944)
+                                                          at java.lang.reflect.Method.invoke(Native Method)
+                                                          at com.android.internal.os.Zygote$MethodAndArgsCaller.run(Zygote.java:240)
+                                                          at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:835)
+03-05 15:50:52.842 27468-27468/? W/google-breakpad: ExceptionHandler::GenerateDump cloned child 
+```"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/894#issuecomment-318443728,"On my fork, I offered a quick and dirty solution to this problem. Can't think of any way to prevent AppCompatDialogFragment from providing same package in getArguments(), so ignoring may be the best action. Tangentially: what behaviour should occur when there are no applications other than Focus available?
+
+One note is that my solution compares to see if the packageName of each AppInfo is equal to the current application's packageName: if you are using, for example, Gecko, you will still be prompted to open the app in Focus. Could potentially instead filter based on the existence of the expression ""org.mozilla.focus"" within the AppInfo's packageName, but this is a little bit dirtier."
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1993#issuecomment-350579397,"Hi @supnah , thanks for filing! Which autofill service are you using? "
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/2521#issuecomment-384294603,@bbinto @ekager Release blocker?
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/2873#issuecomment-404435518,Is this #2664?
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/3069#issuecomment-411141193,Is this in the debug build or release build?
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/3124#issuecomment-420495696,"@rpappalax @npark-mozilla I think this is only an issue within WebView. On beta 7.0.2 (using WebView) I am able to reproduce the error but when I manually set the engine to GeckoView the issue seem to be fixed. Would you be able to confirm?
+
+FYI @colintheshots "
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/2337#issuecomment-374381058,Ah on GV builds? I can repro I'll look into it. 
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/660#issuecomment-304350339,"I can't reproduce this. Is this the latest beta build? Which Android version / device are you using?
+
+@ahunt Does it crash on your device?"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/2463#issuecomment-381691593,@ekager @brampitoyo Mhhh. Maybe we just want to show no doorhanger while the page is still loading?
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/3633#issuecomment-430146519,@jonalmeida Can I work on this?
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/623#issuecomment-303682568,"This seems to work correctly for me.
+
+To help us debug this: What device and Android version are you using? And what build of Focus?"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/660#issuecomment-304350339,"I can't reproduce this. Is this the latest beta build? Which Android version / device are you using?
+
+@ahunt Does it crash on your device?"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/623#issuecomment-303682568,"This seems to work correctly for me.
+
+To help us debug this: What device and Android version are you using? And what build of Focus?"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/3124#issuecomment-420495696,"@rpappalax @npark-mozilla I think this is only an issue within WebView. On beta 7.0.2 (using WebView) I am able to reproduce the error but when I manually set the engine to GeckoView the issue seem to be fixed. Would you be able to confirm?
+
+FYI @colintheshots "
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/660#issuecomment-304350339,"I can't reproduce this. Is this the latest beta build? Which Android version / device are you using?
+
+@ahunt Does it crash on your device?"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/2337#issuecomment-374381058,Ah on GV builds? I can repro I'll look into it. 
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1350#issuecomment-426282847,Have we ever seen this again? Or was it just an Android O bug
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1288#issuecomment-327882069,"I assume you are running Focus 1.3?
+
+It will be available in Android O in the next release. :)"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1350#issuecomment-426282847,Have we ever seen this again? Or was it just an Android O bug
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/2076#issuecomment-366988187,local db wipe?
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1385#issuecomment-332520846,@liuche I saw that you assigned this issue a couple of days ago. There's also a contributor working on a patch in PR #1391. Maybe you can mentor this?
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1288#issuecomment-327882069,"I assume you are running Focus 1.3?
+
+It will be available in Android O in the next release. :)"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1350#issuecomment-426282847,Have we ever seen this again? Or was it just an Android O bug
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1385#issuecomment-332520846,@liuche I saw that you assigned this issue a couple of days ago. There's also a contributor working on a patch in PR #1391. Maybe you can mentor this?
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/797#issuecomment-311006286,"Can you leave a comment when removing the ""needs triage"" label and not adding a new label? What was the result of triage?"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/2076#issuecomment-366988187,local db wipe?
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/776#issuecomment-312957619,"Actually, the fix seem to recognize empty spaces as valid input, instead of ignoring it. The behavior in Chrome (and in Firefox for Android) is that it ignores the input unless there is a non-space char.  Can we add a fix for it?"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/797#issuecomment-311006286,"Can you leave a comment when removing the ""needs triage"" label and not adding a new label? What was the result of triage?"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1350#issuecomment-426282847,Have we ever seen this again? Or was it just an Android O bug
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/2110#issuecomment-367060398,"I can zoom in on the latest version of GeckoView+Klar for this page, you may have had an outdated build? "
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1385#issuecomment-332520846,@liuche I saw that you assigned this issue a couple of days ago. There's also a contributor working on a patch in PR #1391. Maybe you can mentor this?
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/797#issuecomment-311006286,"Can you leave a comment when removing the ""needs triage"" label and not adding a new label? What was the result of triage?"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/2110#issuecomment-367060398,"I can zoom in on the latest version of GeckoView+Klar for this page, you may have had an outdated build? "
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1385#issuecomment-332520846,@liuche I saw that you assigned this issue a couple of days ago. There's also a contributor working on a patch in PR #1391. Maybe you can mentor this?
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/915#issuecomment-314998789,"I'm confused. You mention UI tests, but `:app:testFocusWebkitReleaseUnitTest` is running unit tests (that shouldn't upload).
+
+For UI tests we set up the build variant in buddybuild. Currently this should be focusWebkitAndroidDebugTest only. We were thinking about switching to Beta -> It's closer to what we ship - without most of the debug code. Telemetry is a concern when using beta builds. But the beta telemetry is not used for anything anyways (The test group is waaaaay to small).
+
+> should BB release builds even be uploading to telemetry? Or should we save that for Google Play builds & BB beta builds?
+
+I'm not sure I fully understand the question. Technically there should be no difference between the Buddybuild release builds and the builds that go to Google Play.
+
+> I think the best way to fix this is to have an argument passed to the app when we start the activity during testing that configures it to disable telemetry uploads.
+
+I'm a bit hesitant here. Or at least I want to delay this as long as possible. The more we use those flags the more we test things that are different to what we ship."
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/797#issuecomment-311006286,"Can you leave a comment when removing the ""needs triage"" label and not adding a new label? What was the result of triage?"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/915#issuecomment-314998789,"I'm confused. You mention UI tests, but `:app:testFocusWebkitReleaseUnitTest` is running unit tests (that shouldn't upload).
+
+For UI tests we set up the build variant in buddybuild. Currently this should be focusWebkitAndroidDebugTest only. We were thinking about switching to Beta -> It's closer to what we ship - without most of the debug code. Telemetry is a concern when using beta builds. But the beta telemetry is not used for anything anyways (The test group is waaaaay to small).
+
+> should BB release builds even be uploading to telemetry? Or should we save that for Google Play builds & BB beta builds?
+
+I'm not sure I fully understand the question. Technically there should be no difference between the Buddybuild release builds and the builds that go to Google Play.
+
+> I think the best way to fix this is to have an argument passed to the app when we start the activity during testing that configures it to disable telemetry uploads.
+
+I'm a bit hesitant here. Or at least I want to delay this as long as possible. The more we use those flags the more we test things that are different to what we ship."
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/2303#issuecomment-373379247,"> More general problem is, do we ever update that list to prune dead links?
+
+We haven't so far. However there is one update in the making right now. Those autocomplete lists are one of the things that I would like to move to a library - and then test/verify/(propose update?) in automation."
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/915#issuecomment-314998789,"I'm confused. You mention UI tests, but `:app:testFocusWebkitReleaseUnitTest` is running unit tests (that shouldn't upload).
+
+For UI tests we set up the build variant in buddybuild. Currently this should be focusWebkitAndroidDebugTest only. We were thinking about switching to Beta -> It's closer to what we ship - without most of the debug code. Telemetry is a concern when using beta builds. But the beta telemetry is not used for anything anyways (The test group is waaaaay to small).
+
+> should BB release builds even be uploading to telemetry? Or should we save that for Google Play builds & BB beta builds?
+
+I'm not sure I fully understand the question. Technically there should be no difference between the Buddybuild release builds and the builds that go to Google Play.
+
+> I think the best way to fix this is to have an argument passed to the app when we start the activity during testing that configures it to disable telemetry uploads.
+
+I'm a bit hesitant here. Or at least I want to delay this as long as possible. The more we use those flags the more we test things that are different to what we ship."
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/3662#issuecomment-430738927,"Hey @brampitoyo :) We just readded an ""Advanced"" menu for remote debugging. Which icon would you like here?"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/915#issuecomment-314998789,"I'm confused. You mention UI tests, but `:app:testFocusWebkitReleaseUnitTest` is running unit tests (that shouldn't upload).
+
+For UI tests we set up the build variant in buddybuild. Currently this should be focusWebkitAndroidDebugTest only. We were thinking about switching to Beta -> It's closer to what we ship - without most of the debug code. Telemetry is a concern when using beta builds. But the beta telemetry is not used for anything anyways (The test group is waaaaay to small).
+
+> should BB release builds even be uploading to telemetry? Or should we save that for Google Play builds & BB beta builds?
+
+I'm not sure I fully understand the question. Technically there should be no difference between the Buddybuild release builds and the builds that go to Google Play.
+
+> I think the best way to fix this is to have an argument passed to the app when we start the activity during testing that configures it to disable telemetry uploads.
+
+I'm a bit hesitant here. Or at least I want to delay this as long as possible. The more we use those flags the more we test things that are different to what we ship."
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/2543#issuecomment-385503399,@ekager @boek is the 5.0 page not ready yet? may need to check with @jonisavage 
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/3985#issuecomment-460563163,"@vesta0, I cannot reproduce this now using 8.0.6 (GV: 64.0.20190111134233).  Could you still reproduce using it?"
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1063#issuecomment-390280774,@bbinto this still needs some more investigation - do you want to spend time on it in 6.0?
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1065#issuecomment-319755183,google.ca isn't in our ca search resource folder which I use to check if it's a default search. google.ca is automatically used for you when you search from the focus homescreen?
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/1069#issuecomment-319924143,What version / build are you using? We recently fixed a local storage issue and I wonder if this version has already this fix.
+mozilla-mobile/focus-android,https://github.com/mozilla-mobile/focus-android/issues/2714#issuecomment-395596633,"This is resolved now, correct? "
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/418#issuecomment-416010586,"What version of the ADB helper extensions do you have?
+
+<img width=""904"" alt=""screen shot 2018-08-25 at 8 07 47 pm"" src=""https://user-images.githubusercontent.com/3066/44624409-9b642500-a8a2-11e8-9a38-384fe68fe5f5.png"">
+"
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/1605#issuecomment-523133232,"I was able to record media with 1.4 and go in and out of immersive mode. If possible could you retest with 1.4 staging builds?  I used:
+
+https://queue.taskcluster.net/v1/task/A7Vb1yiySAOJTopgkF-Dgw/runs/0/artifacts/public/FirefoxReality-1.4-32321428-oculusvr-arm64-staging-signed-aligned.apk
+
+On thing I did notice is that the hud would disappear and was not visible in immersive mode. However if I exited immersive mode it was visible and I was able to click the camera then go back into immersive mode and take pictures and video. The only way to make the camera go away was exit immersive mode and use the hud out side of immersive mode. "
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/217#issuecomment-406727237,"I just tried to reproduce. For you/them, Is the rest of the UI responsive? My cursor frozen at a particular point on the page. Do you have a screenshot or video or numbered steps to reproduce in the `Steps to Reproduce` part. I'm a tad confused. Thanks!"
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/1473#issuecomment-517044380,@Softvision-GeluHaiduc can you confirm that this isnt just a facebook problem?
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/pull/1175#issuecomment-490742920,"If there are missing localisations in geckoview, we should probably back this change out for v1.2, since it's preferable to have at least the enter key localised correctly rather than having enter/search/go incorrectly localised. Comments? @MortimerGoro @bluemarvin "
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/322#issuecomment-410807836,Curious: What is the expected way for users to switch apps / exit to the lobby? (Asking for the Go.)
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/1362#issuecomment-510273614,@gfodor What version were you running? I'm having trouble reproducing the issue to verify the PR that contains the fix is working.
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/2013#issuecomment-554380346,"@jvonitter @thenadj This was in the **UIS-6_Keyboard_021.pdf** design spec: https://trello.com/c/VLsCI8iC:
+
+<img width=""639"" alt=""Screen Shot 2019-11-15 at 15 26 42"" src=""https://user-images.githubusercontent.com/837184/68950553-a8797680-07bc-11ea-97ad-d63b5e5a6e73.png"">
+
+Should we revert?"
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/1362#issuecomment-510273614,@gfodor What version were you running? I'm having trouble reproducing the issue to verify the PR that contains the fix is working.
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/780#issuecomment-440156511,"@caseyyee: thanks for filing. how severe is this? blocker, important, or nice to have after release v1.1?"
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/196#issuecomment-406000906,"Some dev-chat we had about this:
+
+- Using a circle/sphere could be a good idea but could impact precision
+- Height position of the remove controller, it has a lot of impact. Is it correclty set now?
+- Elbow model dimensions"
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/472#issuecomment-418894127,"> 2. Cancel it
+
+what's the expected way for a user to cancel a search? by clicking the mic in the URL bar or by pressing the × (close button) at the top of the Voice Search modal?"
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/1627#issuecomment-523869632,"I also saw this behavior on the Oculus Go and Quest headsets and was at the point of logging a bug. 
+The app crashes intermittently after resuming from a device sleep. I’ve attached a screen recording of the issue [here](https://drive.google.com/file/d/12Fpjkml2MyIuu3qxgYXQLlhYPeZIz9F4/view?usp=sharing).
+
+@bluemarvin Do you think this is related or a separate issue?
+"
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/1276#issuecomment-496808592,@daoshengmu Can you take a look at https://pontoon.mozilla.org/zh-TW/android-l10n/MozillaReality/FirefoxReality/app/src/main/res/values/strings.xml/?string=198962 and make a translation suggestion if you think it can be improved? This is the text used when the enter key takes an action of taking the user to an entered location.
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/1627#issuecomment-523869632,"I also saw this behavior on the Oculus Go and Quest headsets and was at the point of logging a bug. 
+The app crashes intermittently after resuming from a device sleep. I’ve attached a screen recording of the issue [here](https://drive.google.com/file/d/12Fpjkml2MyIuu3qxgYXQLlhYPeZIz9F4/view?usp=sharing).
+
+@bluemarvin Do you think this is related or a separate issue?
+"
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/1543#issuecomment-521819127,"@joshmarinacci Can you reproduce with latest built from https://github.taskcluster.net/v1/repository/MozillaReality/FirefoxReality/master/latest? If so, we'll try to reproduce on other devices."
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/254#issuecomment-409727851,"I think the larger issue is why are there four modes:
+
+1. 2D
+2. Fullscreen
+3. Fullscreen + Focus Mode
+4. Immersive Mode
+
+Can we remove 2 and 3? And let content handle entering fullscreen, but allow the back-button to call `document.exitFullscreen` (à la the Escape key in desktop browsers).
+
+If you check Vimeo, YouTube, etc., they already have their own Fullscreen icons. It is confusing to have in our browser UI an ""Enter Fullscreen"" when no other browser (VR, desktop, mobile) has one. It breaks product conventions and causes confusion to users.
+
+What would make a lot of sense to have `<video>` elements to automatically enter a Fullscreen/Focus mode. Think iOS' auto-fullscreen video player.
+
+And then add adjustable points at every corner of the window to resize the window.
+
+That way, there is no confusion between toggling modes to achieve the appearance you want. "
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/167#issuecomment-407535785,Any update on this?
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/254#issuecomment-409727851,"I think the larger issue is why are there four modes:
+
+1. 2D
+2. Fullscreen
+3. Fullscreen + Focus Mode
+4. Immersive Mode
+
+Can we remove 2 and 3? And let content handle entering fullscreen, but allow the back-button to call `document.exitFullscreen` (à la the Escape key in desktop browsers).
+
+If you check Vimeo, YouTube, etc., they already have their own Fullscreen icons. It is confusing to have in our browser UI an ""Enter Fullscreen"" when no other browser (VR, desktop, mobile) has one. It breaks product conventions and causes confusion to users.
+
+What would make a lot of sense to have `<video>` elements to automatically enter a Fullscreen/Focus mode. Think iOS' auto-fullscreen video player.
+
+And then add adjustable points at every corner of the window to resize the window.
+
+That way, there is no confusion between toggling modes to achieve the appearance you want. "
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/2033#issuecomment-544750258,"In the build i'm using from 10/18, history shows up in the right order. @daoshengmu can you update and check to see if this still happens for you?"
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/254#issuecomment-409727851,"I think the larger issue is why are there four modes:
+
+1. 2D
+2. Fullscreen
+3. Fullscreen + Focus Mode
+4. Immersive Mode
+
+Can we remove 2 and 3? And let content handle entering fullscreen, but allow the back-button to call `document.exitFullscreen` (à la the Escape key in desktop browsers).
+
+If you check Vimeo, YouTube, etc., they already have their own Fullscreen icons. It is confusing to have in our browser UI an ""Enter Fullscreen"" when no other browser (VR, desktop, mobile) has one. It breaks product conventions and causes confusion to users.
+
+What would make a lot of sense to have `<video>` elements to automatically enter a Fullscreen/Focus mode. Think iOS' auto-fullscreen video player.
+
+And then add adjustable points at every corner of the window to resize the window.
+
+That way, there is no confusion between toggling modes to achieve the appearance you want. "
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/287#issuecomment-409409584,@cvan Is there a standard volume control UI that we'll get from Oculus or do we have to draw our own?
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/291#issuecomment-409720167,Good catch! Is there an example site or reduced test case you can point to for me to reproduce this?
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/pull/1566#issuecomment-521193665,@bluemarvin I've been trying to reproduce the issue but I couldn't. Could you provide STRs to repro this?
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/pull/856#issuecomment-442172864,Shouldn't both browser window size and fullscreen window size be saved seperately? Maybe just a scale factor for fullscreen since we resize based on video aspect ratio? Probably should be considered when the window resize refactor work is done.
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/pull/1566#issuecomment-521193665,@bluemarvin I've been trying to reproduce the issue but I couldn't. Could you provide STRs to repro this?
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/310#issuecomment-410077081,"I can reproduce this on GVR too. My theory is that the shared egl context only works as long as the shared parent context is current. During immersive mode, a different egl context is current. I'm not sure how to fix this other than prevent going into immersive mode until the environment is loaded? e10s might also help since the webgl egl context would then be in a different process."
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/pull/1566#issuecomment-521193665,@bluemarvin I've been trying to reproduce the issue but I couldn't. Could you provide STRs to repro this?
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/pull/856#issuecomment-442172864,Shouldn't both browser window size and fullscreen window size be saved seperately? Maybe just a scale factor for fullscreen since we resize based on video aspect ratio? Probably should be considered when the window resize refactor work is done.
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/pull/1300#issuecomment-505661982,"@pocmo Could you help us review this patch again? Our FxR telemetry seems to be broken after removing `RECEIVE_BOOT_COMPLETED` permission (we have to because the requirement of the app store ) at #1085. We gave a workaround to make our own `TelemetryScheduler` but it seems still not be totally right regarding to the telemetry result. The only difference between this and the current Mozilla AC [1] is we don’t set `setPersisted` .
+
+[1] https://github.com/mozilla-mobile/android-components/blob/4e56e3a1375c4b6e7bcd218a632fa5551add9b34/components/service/telemetry/src/main/java/org/mozilla/telemetry/schedule/jobscheduler/JobSchedulerTelemetryScheduler.java#L37
+"
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/1154#issuecomment-489386115,I agree that #1070 has made rapid typing much more difficult. What was the original issue that it was trying to address? I'm in favour of backing it out.
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/783#issuecomment-440137272,"It appears this is a dupe of #745, yeah? If so, feel free to close this and paste the URL to the Socorro report. Thank you! "
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/826#issuecomment-467285423,"@MortimerGoro Do you have your Go set to es_ES locale? If so, could you comment on whether this is still an issue?"
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/848#issuecomment-442161472,@cvan were you logged into amazon? I can't reproduce the crash.
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/848#issuecomment-442161472,@cvan were you logged into amazon? I can't reproduce the crash.
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/911#issuecomment-452202408,"@bluemarvin: @MortimerGoro: in your opinions, what would be the quickest and safest way to patch this?"
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/665#issuecomment-434458007,"@MortimerGoro Are we planning to do this for 1.1, or should I leave it in the backlog? Thanks!"
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/1335#issuecomment-502332518,"I gather that private browsing still functions and it's just the message that doesn't display, but can we verify this?"
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/826#issuecomment-467285423,"@MortimerGoro Do you have your Go set to es_ES locale? If so, could you comment on whether this is still an issue?"
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/227#issuecomment-407820410,@bluemarvin I guess there were several of this and I didn't mention all of them in the PR. Can we close this one?
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/1529#issuecomment-519879918,"@jvonitter @thenadj A few notes on the above:
+- We have reused the same scrollbar style as we are using in the rest of the app. Do we want to use a specific style for the scroll bars in this dialog?
+- The scrollbar movement is also the same as in the rest of the app, I'd leave it as it currently is in the rest of the app or change across the app.
+
+APK for testing: https://send.firefox.com/download/7dd604036062eafc/#-5IbRAUYh2hXm7lzvE6WmA"
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/pull/1847#issuecomment-532007866,What is the main purpose you wanna send `extrasPath` in our crash reports? Is it a local file path? 
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/issues/1529#issuecomment-519879918,"@jvonitter @thenadj A few notes on the above:
+- We have reused the same scrollbar style as we are using in the rest of the app. Do we want to use a specific style for the scroll bars in this dialog?
+- The scrollbar movement is also the same as in the rest of the app, I'd leave it as it currently is in the rest of the app or change across the app.
+
+APK for testing: https://send.firefox.com/download/7dd604036062eafc/#-5IbRAUYh2hXm7lzvE6WmA"
+MozillaReality/FirefoxReality,https://github.com/MozillaReality/FirefoxReality/pull/1847#issuecomment-532007866,What is the main purpose you wanna send `extrasPath` in our crash reports? Is it a local file path? 
+PhilippC/keepass2android,https://github.com/PhilippC/keepass2android/issues/45#issuecomment-338862284,"Can you please try to collect logging regarding this? You can try to create an empty file /mnt/sdcard/keepass2android.cloud.log (e.g. with ES File Explorer) and see if this gets filled. If it is, that's nice. If not, please collect a logcat. The most relevant tag ist KP2AJ, but you might include KP2A as well. thanks."
+PhilippC/keepass2android,https://github.com/PhilippC/keepass2android/issues/149#issuecomment-367895608,"if you encountered this error with version 1.04b or earlier, can you please check if this is fixed in 1.05-pre1?"
+zxing/zxing,https://github.com/zxing/zxing/issues/194#issuecomment-50230350,"Did you turn on inverted scan?
+"
+zxing/zxing,https://github.com/zxing/zxing/issues/923#issuecomment-350733949,"Not sure, can you debug to see where it goes wrong? are you sure the contents are wrong or somehow is it read back wrong?"
+zxing/zxing,https://github.com/zxing/zxing/issues/806#issuecomment-304847014,It's hard to help without an example of the barcode?
+zxing/zxing,https://github.com/zxing/zxing/issues/302#issuecomment-72204016,"Hm, I might see the problem. Can I send you a debug build to test, or are you in a position to build from a branch here?
+"
+zxing/zxing,https://github.com/zxing/zxing/issues/214#issuecomment-54127613,"Can you debug? it looks like `Decoder.extractBits` overruns the size of your image. I don't know the code, and at first glance it looks complex. If you know your image and Aztec you might be able to see why and propose a patch.
+"
+zxing/zxing,https://github.com/zxing/zxing/issues/842#issuecomment-319895912,"Hm, it is just showing whatever Android returns when it asks for the contact info. It doesn't add or strip anything. Do you see anything in the code that does otherwise?"
+zxing/zxing,https://github.com/zxing/zxing/issues/518#issuecomment-163066244,"How are you running this? the command-line programs need jcommander, so it has to be included in some way on the classpath. It's correctly specified in the Maven build.
+"
+zxing/zxing,https://github.com/zxing/zxing/issues/557#issuecomment-182810335,"How about opening a pull request to just replace those references with the string value of those constants? that's OK by me.
+"
+zxing/zxing,https://github.com/zxing/zxing/pull/811#issuecomment-307092542,"@PhilLab OK, is there any other implication to looking up from context? 
+What about other services that are looked up this way?"
+zxing/zxing,https://github.com/zxing/zxing/pull/811#issuecomment-307092542,"@PhilLab OK, is there any other implication to looking up from context? 
+What about other services that are looked up this way?"
+zxing/zxing,https://github.com/zxing/zxing/issues/361#issuecomment-95667010,"Can you debug to see what's going on, and suggest a patch? this might be a straightforward one.
+"
+zxing/zxing,https://github.com/zxing/zxing/issues/361#issuecomment-95667010,"Can you debug to see what's going on, and suggest a patch? this might be a straightforward one.
+"
+zxing/zxing,https://github.com/zxing/zxing/issues/235#issuecomment-57935741,"Hm, the app seems to preserve + just fine. Are you referring to the encoder? I see that it does not preserve +. I'm not sure that MECARD is supposed to encode + (https://www.nttdocomo.co.jp/english/service/developer/make/content/barcode/function/application/addressbook/) but I don't see a big reason not to. I think I can change the encoder.
+"
+zxing/zxing,https://github.com/zxing/zxing/pull/412#issuecomment-118070089,"Do you have a moment to throw in a minimal unit test for this? if it looks like it would take more than 10 mins to adapt some of the existing code you can forget it and I can try to tack it on
+"
+zxing/zxing,https://github.com/zxing/zxing/pull/412#issuecomment-118070089,"Do you have a moment to throw in a minimal unit test for this? if it looks like it would take more than 10 mins to adapt some of the existing code you can forget it and I can try to tack it on
+"
+zxing/zxing,https://github.com/zxing/zxing/pull/1032#issuecomment-398441299,"# [Codecov](https://codecov.io/gh/zxing/zxing/pull/1032?src=pr&el=h1) Report
+> Merging [#1032](https://codecov.io/gh/zxing/zxing/pull/1032?src=pr&el=desc) into [master](https://codecov.io/gh/zxing/zxing/commit/fc057169cd8f87f04ddff6689f61b734f623f791?src=pr&el=desc) will **increase** coverage by `<.01%`.
+> The diff coverage is `100%`.
+
+[![Impacted file tree graph](https://codecov.io/gh/zxing/zxing/pull/1032/graphs/tree.svg?width=650&src=pr&token=6RrJHvUMDl&height=150)](https://codecov.io/gh/zxing/zxing/pull/1032?src=pr&el=tree)
+
+```diff
+@@             Coverage Diff              @@
+##             master    #1032      +/-   ##
+============================================
++ Coverage     76.15%   76.15%   +<.01%     
+- Complexity     4198     4199       +1     
+============================================
+  Files           252      252              
+  Lines         14008    14010       +2     
+  Branches       2870     2871       +1     
+============================================
++ Hits          10668    10670       +2     
+  Misses         2539     2539              
+  Partials        801      801
+```
+
+
+| [Impacted Files](https://codecov.io/gh/zxing/zxing/pull/1032?src=pr&el=tree) | Coverage Δ | Complexity Δ | |
+|---|---|---|---|
+| [...google/zxing/common/reedsolomon/GenericGFPoly.java](https://codecov.io/gh/zxing/zxing/pull/1032/diff?src=pr&el=tree#diff-Y29yZS9zcmMvbWFpbi9qYXZhL2NvbS9nb29nbGUvenhpbmcvY29tbW9uL3JlZWRzb2xvbW9uL0dlbmVyaWNHRlBvbHkuamF2YQ==) | `86.5% <100%> (+0.21%)` | `45 <13> (+1)` | :arrow_up: |
+
+------
+
+[Continue to review full report at Codecov](https://codecov.io/gh/zxing/zxing/pull/1032?src=pr&el=continue).
+> **Legend** - [Click here to learn more](https://docs.codecov.io/docs/codecov-delta)
+> `Δ = absolute <relative> (impact)`, `ø = not affected`, `? = missing data`
+> Powered by [Codecov](https://codecov.io/gh/zxing/zxing/pull/1032?src=pr&el=footer). Last update [fc05716...d4e2653](https://codecov.io/gh/zxing/zxing/pull/1032?src=pr&el=lastupdated). Read the [comment docs](https://docs.codecov.io/docs/pull-request-comments).
+"
+zxing/zxing,https://github.com/zxing/zxing/pull/1072#issuecomment-423703395,"# [Codecov](https://codecov.io/gh/zxing/zxing/pull/1072?src=pr&el=h1) Report
+> Merging [#1072](https://codecov.io/gh/zxing/zxing/pull/1072?src=pr&el=desc) into [master](https://codecov.io/gh/zxing/zxing/commit/ea0a9a670fd52d1367201e0d3b88488010b07d2e?src=pr&el=desc) will **increase** coverage by `<.01%`.
+> The diff coverage is `n/a`.
+
+[![Impacted file tree graph](https://codecov.io/gh/zxing/zxing/pull/1072/graphs/tree.svg?width=650&token=6RrJHvUMDl&height=150&src=pr)](https://codecov.io/gh/zxing/zxing/pull/1072?src=pr&el=tree)
+
+```diff
+@@             Coverage Diff             @@
+##             master   #1072      +/-   ##
+===========================================
++ Coverage     77.49%   77.5%   +<.01%     
+- Complexity     4259    4260       +1     
+===========================================
+  Files           252     252              
+  Lines         14033   14033              
+  Branches       2875    2875              
+===========================================
++ Hits          10875   10876       +1     
+  Misses         2329    2329              
++ Partials        829     828       -1
+```
+
+
+| [Impacted Files](https://codecov.io/gh/zxing/zxing/pull/1072?src=pr&el=tree) | Coverage Δ | Complexity Δ | |
+|---|---|---|---|
+| [...rc/main/java/com/google/zxing/common/BitArray.java](https://codecov.io/gh/zxing/zxing/pull/1072/diff?src=pr&el=tree#diff-Y29yZS9zcmMvbWFpbi9qYXZhL2NvbS9nb29nbGUvenhpbmcvY29tbW9uL0JpdEFycmF5LmphdmE=) | `87.5% <0%> (+0.69%)` | `59% <0%> (+1%)` | :arrow_up: |
+
+------
+
+[Continue to review full report at Codecov](https://codecov.io/gh/zxing/zxing/pull/1072?src=pr&el=continue).
+> **Legend** - [Click here to learn more](https://docs.codecov.io/docs/codecov-delta)
+> `Δ = absolute <relative> (impact)`, `ø = not affected`, `? = missing data`
+> Powered by [Codecov](https://codecov.io/gh/zxing/zxing/pull/1072?src=pr&el=footer). Last update [ea0a9a6...f5af41c](https://codecov.io/gh/zxing/zxing/pull/1072?src=pr&el=lastupdated). Read the [comment docs](https://docs.codecov.io/docs/pull-request-comments).
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/497#issuecomment-53243135,"@eugenesan, are you also using Prestissimo or Presto?  I suspect the interface to them doesn't handle wake locks properly.
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/3153#issuecomment-488974832,Thanks. Are you using ExoPlayer or Sonic in Settings -> Playback -> Media player?
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/1466#issuecomment-164442163,"Just checked, Android watches work fine (via the standard interface for media control).
+
+I'm not very familiar with the Pebble, so I don't really have an idea ""what"" provides these playback controls (the system? a system app? third-party app?).
+
+I heard good things about Music Boss, maybe you want to give it or another app a try.
+
+Apart from that, we really cannot give any support for the Pebble.
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/576#issuecomment-66421196,"Hmm I can't rule out a problem with gpodder because https://gpodder.net/ is giving me a 502 error right now. Are you able to load https://gpodder.net/ in a browser?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/1417#issuecomment-159891408,"This might be connected to the widget. Could you please remove the widget from the home screen and see if that still happens? Just trying to find the cause.
+I don't see the behavior in my phone (Not using widgets. They are a bit 2005, aren't they?).
+
+Other potential causes: http://stackoverflow.com/a/14293528/5369600
+TLDR: ""Only 3 service processes can nominate themselves as foreground services at any given time."" Are you running a lot of other apps?
+Also, Android might be killing our service because it needs memory.
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/996#issuecomment-119004921,"I just paused and unpaused an episode several times, could not hear any increase in volume.
+
+Do you actually ""see"" the volume raise or is this just a feeling? Are you pressing the (software) play button or do you use any hardware buttons (which might get confused with a volume increase button)?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/1284#issuecomment-150389823,"What version of AntennaPod are you currently using?  What version of Android?  Do you have ""Persistent Playback Controls"" enabled in AntennaPod settings?
+
+This isn't by design. We attempt to keep AntennaPod running, but the system can also shut us down if we're not doing anything.
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/163#issuecomment-16165023,"In 0.9.7.2, a checkbox for disabling automatic download has been added. Also, this checkbox has been disabled by default because many people didn't like the automatic download feature at all. Have you made sure that you have re-enabled automatic download in 0.9.7.2?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/1726#issuecomment-191705350,"Episode view as in ""All Episodes""?
+Does this actually concern ""random"" episodes or are these episodes maybe from the same podcast? If so, could you please tell us the corresponding url?
+Sounds a lot like a feed containing incorrect publication dates.
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/975#issuecomment-116157932,"Perhaps http://android-revolution-hd.blogspot.com.es/2015/01/how-to-unlock-external-sd-card-writing.html or http://android-revolution-hd.blogspot.com.es/2015/01/how-to-fix-no-access-to-virtual-sd-card.html help?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/920#issuecomment-113915835,"Ok, so I'm thinking we should disable this feature.
+
+Some people like using AntennaPod as a generic player since it can use the Prestissimo plugin where others can't.  So disabling it will likely make them sad.
+
+However, I think we could ameliorate that by allowing people to add folders on the SD card as feeds.  That is, any files in that folder will show up as a feed, in New Episodes, whatever.  This would resolve a number of other outstanding issues as well.  Thoughts?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/924#issuecomment-113885222,"Out of curiosity, how big are those files?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/975#issuecomment-116157932,"Perhaps http://android-revolution-hd.blogspot.com.es/2015/01/how-to-unlock-external-sd-card-writing.html or http://android-revolution-hd.blogspot.com.es/2015/01/how-to-fix-no-access-to-virtual-sd-card.html help?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/3103#issuecomment-481771565,do you have auto download + cleanup enabled?
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/3103#issuecomment-481771565,do you have auto download + cleanup enabled?
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/627#issuecomment-75675374,"This certainly sounds like a problem. Unfortunately I don't have access to any password protected feeds to reproduce the problem.
+
+After some digging I wonder if this was introduced when HttpDownloader was switched to the OkHttpClient from HttpClient. This (https://github.com/square/okhttp/wiki/Recipes#handling-authentication) suggests we might be doing authentication incorrectly with the OkHttpClient.
+
+Unfortunately, as I said, I don't have access to an authenticated feed to test with and I'm not familiar enough with the existing code to be comfortable messing around with it.  Anyone have any suggestions?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/629#issuecomment-75660421,"This doesn't happen for me. What phone and android OS version are you using?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/1236#issuecomment-144788084,"Have been playing the current episode on an emulator for about 15 min now, did not encounter a problem, yet.
+Is this happening for every episode for you or are there specific ones?
+Which android version are you using? Do you use prestissimo?
+
+**Update**: Now I see the hanging. Strangely, there doesn't seem to be any exception or error from android.
+You can try enabling sonic (Settings, at the bottom), seemed to work for me.
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/1236#issuecomment-144788084,"Have been playing the current episode on an emulator for about 15 min now, did not encounter a problem, yet.
+Is this happening for every episode for you or are there specific ones?
+Which android version are you using? Do you use prestissimo?
+
+**Update**: Now I see the hanging. Strangely, there doesn't seem to be any exception or error from android.
+You can try enabling sonic (Settings, at the bottom), seemed to work for me.
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/1094#issuecomment-131442581,"1 GB, are you sure?!
+We changed the way images are cached. Do you have a lot (50+) podcasts? If all of these have very big cover images, you probably should increase the image cache size.
+Else, you could end up in a never-ending download loop...
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/374#issuecomment-38045748,"I think i am not sure what you mean by ""last podcast"". Do you mean the episode at the end of the queue or the last played episode? 
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/1838#issuecomment-203146952,"Maybe it would make sense to distinguish between actual bugs and enhancements...
+
+How about making the counter triangle blue (either AntennaPod blue or the light/dark blue we already have), number just gets primary text color?
+
+Titles: Why not adapt placeholders from queue/episodes and give the textview the same size as the cover? For add feeds, just use Iconify - `{fa-plus 300%}\nAdd...`
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/311#issuecomment-29562752,"Do you have this issue with other video podcasts, or is it in particular with this one?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/872#issuecomment-110661340,"Are we talking about manual or auto downloading?
+I tested manual downloading on my test feed\* and it works just fine for me: I instantly get a download report with 1 failed download.
+Streaming gives me an unknown error dialog.
+
+You should also consider telling the podcast maintainers to not do that. It is not only unprofessional, but most likely confuses other listeners, too.
+
+[*] Would be rather difficult to get the timing right with the mentioned feeds.
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/665#issuecomment-77779937,"Hi @cdysthe, can we have some more information?
+
+What device are you using? what version of Android is it running?  Does this only happen with certain podcasts if so can you provide a link to them?  This isn't happening for me right now, so we need a good way to try to reproduce it.
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/872#issuecomment-110661340,"Are we talking about manual or auto downloading?
+I tested manual downloading on my test feed\* and it works just fine for me: I instantly get a download report with 1 failed download.
+Streaming gives me an unknown error dialog.
+
+You should also consider telling the podcast maintainers to not do that. It is not only unprofessional, but most likely confuses other listeners, too.
+
+[*] Would be rather difficult to get the timing right with the mentioned feeds.
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/376#issuecomment-37751060,"Same problem in the [feedmedia-nightly](https://www.dropbox.com/sh/45vgg13bmh8jmhp/rdZMiO56Wz/antennapod-feedmedia_update-090fb1c-nightly.apk) in FairPhoneOS 1.1
+
+There seem to be 2 feed validation problems: [1](http://www.rssboard.org/rss-validator/check.cgi?url=http%3A%2F%2Fwww.badvoltage.org%2Ffeed%2Fmp3%2F) & [2](http://validator.w3.org/feed/check.cgi?url=http%3A%2F%2Fwww.badvoltage.org%2Ffeed%2Fmp3%2F). Maybe AntennaPod stumbles over those, but returns a misleading error?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/376#issuecomment-37751060,"Same problem in the [feedmedia-nightly](https://www.dropbox.com/sh/45vgg13bmh8jmhp/rdZMiO56Wz/antennapod-feedmedia_update-090fb1c-nightly.apk) in FairPhoneOS 1.1
+
+There seem to be 2 feed validation problems: [1](http://www.rssboard.org/rss-validator/check.cgi?url=http%3A%2F%2Fwww.badvoltage.org%2Ffeed%2Fmp3%2F) & [2](http://validator.w3.org/feed/check.cgi?url=http%3A%2F%2Fwww.badvoltage.org%2Ffeed%2Fmp3%2F). Maybe AntennaPod stumbles over those, but returns a misleading error?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/1937#issuecomment-219851425,"Just to check, Scientific American also fails to specify a reasonable content type. However, it returns `Content-Type: application/octet-stream;charset=UTF-8`. In the commit that fixes this issue, there seems to be an exact equality check with ""application/octet-stream"". I'm not clear on whether the `;charset=UTF-8` would be stripped earlier on, or if the check would fail due to this.
+
+I see the header running:
+
+```
+curl -s -I http://www.scientificamerican.com/podcast/podcast.mp3?fileId=76531597-C7D0-46DB-BAC129F111B99A1C
+```
+
+Also, AntennaPod seems to retry a download immediately after throwing the File Type Error. This seems to be hammering the notification tray, and presumably the server. Is there supposed to be a limit on how soon a retry should happen?
+
+**AntennaPod version:** 1.6.0.7 (4f5acbf)
+
+**Android version:** 5.1.1 (LMY48T)
+
+**Device model:** Nexus 4
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/1606#issuecomment-174299723,"But only if it is the last episode in the queue, right?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/827#issuecomment-104950510,"I was able to reproduce your problem with sharing the OPML file to AntennaPod. I'm going to get that fixed.
+
+But let me ask you some questions about the other steps you took, because those were working fine for me with your OPML file.
+- What version of Android are you using and on what device?
+- When you clicked ""From Local Filesystem"" and then selected the OPML file, did it get as far as letting you select the podcasts you wanted to import?
+- Once you confirmed the ones you wanted to import, did it say 'processing'?
+- If you wait a while, (30+ seconds), do the podcasts start showing up in the navigation drawer (the thing with the three horizontal lines that shows 'Queue', 'New Episodes', etc...?)
+
+Here is the crashdump that occurs when sharing in to AntennaPod:
+
+```
+05-23 18:02:25.131: E/AndroidRuntime(2573): FATAL EXCEPTION: main
+05-23 18:02:25.131: E/AndroidRuntime(2573): Process: de.danoeh.antennapod.debug, PID: 2573
+05-23 18:02:25.131: E/AndroidRuntime(2573): java.lang.RuntimeException: Unable to start activity ComponentInfo{de.danoeh.antennapod.debug/de.danoeh.antennapod.activity.DefaultOnlineFeedViewActivity}: java.lang.NullPointerException: Attempt to invoke virtual method 'boolean java.lang.String.startsWith(java.lang.String)' on a null object reference
+05-23 18:02:25.131: E/AndroidRuntime(2573):     at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2298)
+05-23 18:02:25.131: E/AndroidRuntime(2573):     at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2360)
+05-23 18:02:25.131: E/AndroidRuntime(2573):     at android.app.ActivityThread.access$800(ActivityThread.java:144)
+05-23 18:02:25.131: E/AndroidRuntime(2573):     at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1278)
+05-23 18:02:25.131: E/AndroidRuntime(2573):     at android.os.Handler.dispatchMessage(Handler.java:102)
+05-23 18:02:25.131: E/AndroidRuntime(2573):     at android.os.Looper.loop(Looper.java:135)
+05-23 18:02:25.131: E/AndroidRuntime(2573):     at android.app.ActivityThread.main(ActivityThread.java:5221)
+05-23 18:02:25.131: E/AndroidRuntime(2573):     at java.lang.reflect.Method.invoke(Native Method)
+05-23 18:02:25.131: E/AndroidRuntime(2573):     at java.lang.reflect.Method.invoke(Method.java:372)
+05-23 18:02:25.131: E/AndroidRuntime(2573):     at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:899)
+05-23 18:02:25.131: E/AndroidRuntime(2573):     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:694)
+05-23 18:02:25.131: E/AndroidRuntime(2573): Caused by: java.lang.NullPointerException: Attempt to invoke virtual method 'boolean java.lang.String.startsWith(java.lang.String)' on a null object reference
+05-23 18:02:25.131: E/AndroidRuntime(2573):     at de.danoeh.antennapod.core.util.URLChecker.prepareURL(URLChecker.java:36)
+05-23 18:02:25.131: E/AndroidRuntime(2573):     at de.danoeh.antennapod.activity.OnlineFeedViewActivity.startFeedDownload(OnlineFeedViewActivity.java:186)
+05-23 18:02:25.131: E/AndroidRuntime(2573):     at de.danoeh.antennapod.activity.OnlineFeedViewActivity.onCreate(OnlineFeedViewActivity.java:102)
+05-23 18:02:25.131: E/AndroidRuntime(2573):     at de.danoeh.antennapod.activity.DefaultOnlineFeedViewActivity.onCreate(DefaultOnlineFeedViewActivity.java:59)
+05-23 18:02:25.131: E/AndroidRuntime(2573):     at android.app.Activity.performCreate(Activity.java:5933)
+05-23 18:02:25.131: E/AndroidRuntime(2573):     at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1105)
+05-23 18:02:25.131: E/AndroidRuntime(2573):     at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2251)
+05-23 18:02:25.131: E/AndroidRuntime(2573):     ... 10 more
+```
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/880#issuecomment-112578809,"I only get an ""Unknown host"" error.
+Do you click the link in an app, get the share menu and choose ""Add podcast"" or are you doing anything else?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/342#issuecomment-37740796,"Could this issue and #369 be related?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/3186#issuecomment-493245494,"This is caused by #2954. Since that PR, if the player gets paused because of an interruption, the service is stopped. The callbacks are still there and access the PlaybackService object in an invalid state. @orionlee What shall we do about the new bugs here? They are probably caused by your PR.
+
+The change can be found here:
+https://github.com/AntennaPod/AntennaPod/pull/2954/files#diff-5ffb993244e8ec3096093f4d36a50c57R1331"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/342#issuecomment-37740796,"Could this issue and #369 be related?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/1937#issuecomment-219851425,"Just to check, Scientific American also fails to specify a reasonable content type. However, it returns `Content-Type: application/octet-stream;charset=UTF-8`. In the commit that fixes this issue, there seems to be an exact equality check with ""application/octet-stream"". I'm not clear on whether the `;charset=UTF-8` would be stripped earlier on, or if the check would fail due to this.
+
+I see the header running:
+
+```
+curl -s -I http://www.scientificamerican.com/podcast/podcast.mp3?fileId=76531597-C7D0-46DB-BAC129F111B99A1C
+```
+
+Also, AntennaPod seems to retry a download immediately after throwing the File Type Error. This seems to be hammering the notification tray, and presumably the server. Is there supposed to be a limit on how soon a retry should happen?
+
+**AntennaPod version:** 1.6.0.7 (4f5acbf)
+
+**Android version:** 5.1.1 (LMY48T)
+
+**Device model:** Nexus 4
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/3186#issuecomment-493245494,"This is caused by #2954. Since that PR, if the player gets paused because of an interruption, the service is stopped. The callbacks are still there and access the PlaybackService object in an invalid state. @orionlee What shall we do about the new bugs here? They are probably caused by your PR.
+
+The change can be found here:
+https://github.com/AntennaPod/AntennaPod/pull/2954/files#diff-5ffb993244e8ec3096093f4d36a50c57R1331"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/940#issuecomment-114111609,"That happened to me once the first time I upgraded the application. But it has been working properly it since then.
+Can you try closing and opening the application again?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/959#issuecomment-116334120,"This is tricky.  I took a pot shot at it. Can you tell me if this build works for you?
+
+https://www.dropbox.com/s/jtkivpmh0ajb0gf/AntennaPod_bug959_release.apk?dl=0
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/1345#issuecomment-154664333,"Unknown errors sounds like an issue with prestissimo.
+Have you tried the new sonic player? (settings, bottom)
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/2037#issuecomment-228074691,"Any way of getting old apk? The signature from F-Droid version does not match the one on Google Play and I have currently a bricked app due to this bug... I'm not sure if uninstalling to install F-Droid version will delete settings and podcasts.
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/251#issuecomment-24460906,"There were some problems in the routine that handles feed deletion which were solved in 0.9.7.5. I never had that specific problem on any of the devices i have tested the app on. Could you please check if that issue still exists on your device with the latest version?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/251#issuecomment-24460906,"There were some problems in the routine that handles feed deletion which were solved in 0.9.7.5. I never had that specific problem on any of the devices i have tested the app on. Could you please check if that issue still exists on your device with the latest version?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/2037#issuecomment-228074691,"Any way of getting old apk? The signature from F-Droid version does not match the one on Google Play and I have currently a bricked app due to this bug... I'm not sure if uninstalling to install F-Droid version will delete settings and podcasts.
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/2028#issuecomment-227162609,"What's up with you and rotations? ;>
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/pull/217#issuecomment-22060207,"The lockscreen controls should actually disappear once playback has been paused by the sleep timer. So i think instead of introducing a setting to disable them, they should be fixed instead. Or is there any other reason why someone would want to deactivate them?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/396#issuecomment-41483527,"Does this also happen in the latest nightly build? And if it does, is there a blank icon everywhere or only in specific locations (e.g. only in the audio player, or only in the queue, etc.)?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/1095#issuecomment-131456080,"Oh, do you happen to know if you've ever changed the default storage location for AntennaPod files?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/741#issuecomment-93236486,"> - Some of my podcasts were in the playlist, some are not, ...
+
+First thing I can think of: Episodes are added to the queue after they have been downloading. If your internet connection really sucks, you might have a huge delay and the adding seems rather random.
+
+> - If ""swyping away"" multiple episodes in a row, the app reproducibly crases
+
+Has to be investigated. There should be a crash report, shouldn't it?
+
+> - Some of my podcasts are automatically downloaded, some are not, even though I have ""automatic
+>   download"" enabled for all podcasts (but this problem also existed in previous releases)
+
+Has to to do with the episode cache limit, I guess. Maybe the list of undownloaded episodes is sorted in such a way that some podcasts come out on the short end
+
+> - If I download podcasts manually in the ""new eposodes"" list, they are not marked as downloaded ...
+
+Hmpf... the list doesn't seem to be notified to redraw itself. Never had this issue.
+
+> - As already said, swyping is much more sensive than in any other app...
+
+The problem is: Some devices seem to be a lot more twitchy than others. My Nexus 4 is by all means not. Devices with a bigger display/higher resolution seem to have this problem more often.
+
+> - Loading the list sometimes takes minutes - or maybe the process hangs somehow.
+
+No idea.
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/741#issuecomment-93236486,"> - Some of my podcasts were in the playlist, some are not, ...
+
+First thing I can think of: Episodes are added to the queue after they have been downloading. If your internet connection really sucks, you might have a huge delay and the adding seems rather random.
+
+> - If ""swyping away"" multiple episodes in a row, the app reproducibly crases
+
+Has to be investigated. There should be a crash report, shouldn't it?
+
+> - Some of my podcasts are automatically downloaded, some are not, even though I have ""automatic
+>   download"" enabled for all podcasts (but this problem also existed in previous releases)
+
+Has to to do with the episode cache limit, I guess. Maybe the list of undownloaded episodes is sorted in such a way that some podcasts come out on the short end
+
+> - If I download podcasts manually in the ""new eposodes"" list, they are not marked as downloaded ...
+
+Hmpf... the list doesn't seem to be notified to redraw itself. Never had this issue.
+
+> - As already said, swyping is much more sensive than in any other app...
+
+The problem is: Some devices seem to be a lot more twitchy than others. My Nexus 4 is by all means not. Devices with a bigger display/higher resolution seem to have this problem more often.
+
+> - Loading the list sometimes takes minutes - or maybe the process hangs somehow.
+
+No idea.
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/2340#issuecomment-315526303,"I also think the notification takes up too much display space.
+Is it possible to disable the ""queue section with upcoming podcasts"" in the notification?"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/765#issuecomment-129684671,"Hi, you mean the problem is that other listeners on the listview item 'consume' the event and the GestureDetector cannot get the related event? Do you know how to reproduce the exception? Thanks in advance.
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/2340#issuecomment-315526303,"I also think the notification takes up too much display space.
+Is it possible to disable the ""queue section with upcoming podcasts"" in the notification?"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/1095#issuecomment-131456080,"Oh, do you happen to know if you've ever changed the default storage location for AntennaPod files?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/741#issuecomment-93236486,"> - Some of my podcasts were in the playlist, some are not, ...
+
+First thing I can think of: Episodes are added to the queue after they have been downloading. If your internet connection really sucks, you might have a huge delay and the adding seems rather random.
+
+> - If ""swyping away"" multiple episodes in a row, the app reproducibly crases
+
+Has to be investigated. There should be a crash report, shouldn't it?
+
+> - Some of my podcasts are automatically downloaded, some are not, even though I have ""automatic
+>   download"" enabled for all podcasts (but this problem also existed in previous releases)
+
+Has to to do with the episode cache limit, I guess. Maybe the list of undownloaded episodes is sorted in such a way that some podcasts come out on the short end
+
+> - If I download podcasts manually in the ""new eposodes"" list, they are not marked as downloaded ...
+
+Hmpf... the list doesn't seem to be notified to redraw itself. Never had this issue.
+
+> - As already said, swyping is much more sensive than in any other app...
+
+The problem is: Some devices seem to be a lot more twitchy than others. My Nexus 4 is by all means not. Devices with a bigger display/higher resolution seem to have this problem more often.
+
+> - Loading the list sometimes takes minutes - or maybe the process hangs somehow.
+
+No idea.
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/765#issuecomment-129684671,"Hi, you mean the problem is that other listeners on the listview item 'consume' the event and the GestureDetector cannot get the related event? Do you know how to reproduce the exception? Thanks in advance.
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/1313#issuecomment-152783680,"You haven't sent a crash report (via google play), have you? Please do next time, saves us some time. Or better: Provide us with the crash logs ;)
+
+When you entered that url, which of the 4 feeds did you choose? News, RSS last 100, Podcast feed of the last two years or Podcast archive feed?
+
+So far, no crash for me. What are your settings (changed from a fresh install)? Things like auto download, for example
+Also, android version, app version and maybe even your smartphone would be good to know. (see https://github.com/AntennaPod/AntennaPod/blob/master/CONTRIBUTING.md, How to report a bug)
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/252#issuecomment-24889151,"I've seen this a few months back, but not in recent times. Is probably fixed.
+@AlfredSK could you close the issue, and reopen it if it occurs again? Keeping the issues list short helps folks to focus on the real issues ;)
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/2005#issuecomment-225345900,"There is an option to allow download only on selected wifi network => I thought if it was off AntennaPod would auto download on mobile ?
+Maybe ""Enable wifi filter"" should be rename ""Download only via Wifi"" and turning it on should list an ""All wifi network"" to select ?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/2025#issuecomment-227109875,"With settings, you mean that little (i) in the top right corner?
+If so, what items do you mean are disappearing? I don't see any items in the settings...
+
+Also, please use our template. Especially the app version part is important (3 month from now I should be able to see immediately if this is still an issue).
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/494#issuecomment-53867889,"Has anyone of you sent a crash report (if you are using the Google Play version)? I have fixed a bug like this recently, so if you have sent a crash report, it might already be fixed in the next version.
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/2005#issuecomment-225345900,"There is an option to allow download only on selected wifi network => I thought if it was off AntennaPod would auto download on mobile ?
+Maybe ""Enable wifi filter"" should be rename ""Download only via Wifi"" and turning it on should list an ""All wifi network"" to select ?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/494#issuecomment-53867889,"Has anyone of you sent a crash report (if you are using the Google Play version)? I have fixed a bug like this recently, so if you have sent a crash report, it might already be fixed in the next version.
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/1313#issuecomment-152783680,"You haven't sent a crash report (via google play), have you? Please do next time, saves us some time. Or better: Provide us with the crash logs ;)
+
+When you entered that url, which of the 4 feeds did you choose? News, RSS last 100, Podcast feed of the last two years or Podcast archive feed?
+
+So far, no crash for me. What are your settings (changed from a fresh install)? Things like auto download, for example
+Also, android version, app version and maybe even your smartphone would be good to know. (see https://github.com/AntennaPod/AntennaPod/blob/master/CONTRIBUTING.md, How to report a bug)
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/1945#issuecomment-219539008,"Race condition? Android was in the process of closing AP while the DownloadService was running. Database was closed and then the DownloadService tried to do stuff.
+
+Just a guess...
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/1313#issuecomment-152783680,"You haven't sent a crash report (via google play), have you? Please do next time, saves us some time. Or better: Provide us with the crash logs ;)
+
+When you entered that url, which of the 4 feeds did you choose? News, RSS last 100, Podcast feed of the last two years or Podcast archive feed?
+
+So far, no crash for me. What are your settings (changed from a fresh install)? Things like auto download, for example
+Also, android version, app version and maybe even your smartphone would be good to know. (see https://github.com/AntennaPod/AntennaPod/blob/master/CONTRIBUTING.md, How to report a bug)
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/2005#issuecomment-225345900,"There is an option to allow download only on selected wifi network => I thought if it was off AntennaPod would auto download on mobile ?
+Maybe ""Enable wifi filter"" should be rename ""Download only via Wifi"" and turning it on should list an ""All wifi network"" to select ?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/1044#issuecomment-126813064,"When you say you ""removed the auto download"", you mean you disabled auto downloading for that particular feed, I suppose?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/897#issuecomment-238007441,"Could i know what have you used instead of DSLV for implemeting drag and drop in listview?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/1044#issuecomment-126813064,"When you say you ""removed the auto download"", you mean you disabled auto downloading for that particular feed, I suppose?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/897#issuecomment-238007441,"Could i know what have you used instead of DSLV for implemeting drag and drop in listview?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/2155#issuecomment-253997675,"Are you using the most current version (1.6.1.2)? I think I saw this kind of error in an older version.
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/897#issuecomment-238007441,"Could i know what have you used instead of DSLV for implemeting drag and drop in listview?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/897#issuecomment-238007441,"Could i know what have you used instead of DSLV for implemeting drag and drop in listview?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/1216#issuecomment-172310275,"Is this still an issue?
+"
+AntennaPod/AntennaPod,https://github.com/AntennaPod/AntennaPod/issues/897#issuecomment-238007441,"Could i know what have you used instead of DSLV for implemeting drag and drop in listview?
+"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/167#issuecomment-284415225,@Seferi unfortunately we cannot replicate that. Could you please tell us what device do you use?
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1523#issuecomment-493185819,"We should present a local notification to announce Ads release, similar to desktop. @mandar-brave @anthonypkeane could you provide the text for this?"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/890#issuecomment-441713037,"@gdregalo can you post screenshots?
+
+@serg this sounds like something covered in the scope of https://github.com/brave/browser-android-tabs/issues/865 correct?"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1076#issuecomment-460218044,"Following the steps from issue I can't reproduce the issue. Bookmarks from desktop sync to Mobile but bookmarks from Android doesnt propagate to desktop which should be fixed as part of brave/sync#277. When Android device is sync'd there is a delay in getting bookmarks. It took me about 5 mins post joining sync chain for the mobile to receive bookmarks. Adding a second Android device syncs bookmarks instantly. 
+
+@mithodin Does any of the device in the sync chain had sync reset before and then rejoined? "
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1184#issuecomment-468389734,"@srirambv - by step 5, are two rewards pages open at this point? Is the first one still showing grant claim button while second one is not? Or did I misread and this all happens on the same page"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1447#issuecomment-482228130,@srirambv are we going to get this fixed before enabling BR by default? Sounds like this is a regression that's currently not happening in the current release.
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1251#issuecomment-471494479,@SergeyZhukovsky is `OnGrantFinish` being called when you claim a grant via the panel? 
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1151#issuecomment-531104212,@jamesmudgett @karenkliu  what colour code i should use ?
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/715#issuecomment-414766893,"We checked that on several devices and it works. Are you sure Chrome doesn't have the same behavior, it looks like you have global phone settings. @srirambv could you replicate that?"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1481#issuecomment-487058612,@samartnik could you suggest a test plan for this one?
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/636#issuecomment-391110182,"Do we have Brave resources on this, and is that something that we want to maintain long-term?"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/788#issuecomment-436234925,@srirambv was it real or virtual device?
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1622#issuecomment-498305500,I'm not able to reproduce this. @LaurenWags @btlechowski could you try to reproduce this?
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1202#issuecomment-467985102,"I cannot replicate that, @GeetaSarvadnya could you make a video please?"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1817#issuecomment-508737910,"@srirambv I cannot reproduce on Pixel3, can you please try on a phone too so we know if this is just a tablet issue?"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/933#issuecomment-447377568,@AlexeyBarabash dupe of #919 ?
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/788#issuecomment-436234925,@srirambv was it real or virtual device?
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1817#issuecomment-508737910,"@srirambv I cannot reproduce on Pixel3, can you please try on a phone too so we know if this is just a tablet issue?"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1202#issuecomment-467985102,"I cannot replicate that, @GeetaSarvadnya could you make a video please?"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1309#issuecomment-531387029,"@anthonypkeane @LaurenWags i would suggest to use date as **1 september, 2019** or **1 sept, 2019**. this way we can avoid date formatting specific to the region and locale. What are your thoughts ?"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/2075#issuecomment-532397066,@karenkliu Do we have UI for Sync Dark Mode? 
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/674#issuecomment-400724570,"@kjozwiak I don't see the message listed, when I go to the link, using the latest beta build. Does it matter if the site was sent a request in a private tab?"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1155#issuecomment-465281923,@jamesmudgett @anthonypkeane how should it look like?
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1727#issuecomment-503816648,@tmancey should we have @GeetaSarvadnya double check to make sure this doesn't fall through the cracks? Maybe the above happens in certain conditions that @btlechowski didn't hit?
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1635#issuecomment-518393206,"Still seeing the issue on 1.3.0. @gdregalo could you confirm if this was part of the onboarding build?
+![Screenshot_20190805-164526](https://user-images.githubusercontent.com/17010094/62494067-955c1100-b7a0-11e9-805b-2d433549a9dc.jpg)
+"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/674#issuecomment-400724570,"@kjozwiak I don't see the message listed, when I go to the link, using the latest beta build. Does it matter if the site was sent a request in a private tab?"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1093#issuecomment-461786468,@GeetaSarvadnya can you post a screenshot of this?
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1775#issuecomment-506256860,@GeetaSarvadnya after 20 new app opens?
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1126#issuecomment-465294292,@jamesmudgett could you please provide the correct icon?
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1635#issuecomment-518393206,"Still seeing the issue on 1.3.0. @gdregalo could you confirm if this was part of the onboarding build?
+![Screenshot_20190805-164526](https://user-images.githubusercontent.com/17010094/62494067-955c1100-b7a0-11e9-805b-2d433549a9dc.jpg)
+"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1775#issuecomment-506256860,@GeetaSarvadnya after 20 new app opens?
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1126#issuecomment-465294292,@jamesmudgett could you please provide the correct icon?
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/826#issuecomment-438823671,The button with BAT icon doesn't open multiple rewards panels. It opens one if it's not opened and close it when it is opened. Do we really need to disable it?   
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1283#issuecomment-472066175,I could replicate it either. @ryanml do we need to make an extra call probably there. Or will it just appear after some time?
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/925#issuecomment-448115367,"@LaurenWags just wondering, this is the issue where you mentioned that only 600/1k of the bookmarks were actually synced correct?"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/2496#issuecomment-580927715,@anthonypkeane assume this is an onboarding flow flag issue? Unclear if related to NTP.
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1635#issuecomment-518393206,"Still seeing the issue on 1.3.0. @gdregalo could you confirm if this was part of the onboarding build?
+![Screenshot_20190805-164526](https://user-images.githubusercontent.com/17010094/62494067-955c1100-b7a0-11e9-805b-2d433549a9dc.jpg)
+"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/987#issuecomment-455824371,"@ryanml it could be a problem outside HTML, but could you please let us know what calls are missed there?"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1671#issuecomment-500576776,"> Current Play Store version? Yes, @kjozwiak confirmed it
+
+Example of the issue occurring on `1.0.95 CR: 74.0.3729.157` using `Samsung S10+ with Android 9`:
+
+![Screenshot_20190610-160241_Brave](https://user-images.githubusercontent.com/2602313/59223738-b803ec00-8b9a-11e9-903a-63e4ed26aac6.jpg)
+"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1030#issuecomment-459445415,@GeetaSarvadnya did it appear in a minute or so? Their is a random delay on tipping from 1 to 60 seconds. I cannot reproduce that.
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1029#issuecomment-458656908,@GeetaSarvadnya do you have any website example for that?
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1049#issuecomment-460320569,"![screenshot_20190204-114206](https://user-images.githubusercontent.com/12011303/52222686-1843f380-2872-11e9-9bc2-72800c27bc36.png)
+@ryanml it is on that screen ^ inside settings. There is a delay of couple seconds till the grants appear. It's expected as there is a network call. Could we do a kind of endless spinner there till the grant appears or what else could be done @srirambv ?"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/378#issuecomment-327226911,"1. As for this site  https://jsfiddle.net/bkf50r8v/13/. When we block WebRTC it doesn't go further to canvas and WebGL. So in this case there was used 1 fingerprinting method that blocked all 3 fingerprints. If we disable code for WebRTC, it will show 2 methods used.
+2. As for this site browserleaks.com/canvas. I see canvas toDataUrl is blocked. Do you have another result?"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1049#issuecomment-460320569,"![screenshot_20190204-114206](https://user-images.githubusercontent.com/12011303/52222686-1843f380-2872-11e9-9bc2-72800c27bc36.png)
+@ryanml it is on that screen ^ inside settings. There is a delay of couple seconds till the grants appear. It's expected as there is a network call. Could we do a kind of endless spinner there till the grant appears or what else could be done @srirambv ?"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/987#issuecomment-455824371,"@ryanml it could be a problem outside HTML, but could you please let us know what calls are missed there?"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1671#issuecomment-500576776,"> Current Play Store version? Yes, @kjozwiak confirmed it
+
+Example of the issue occurring on `1.0.95 CR: 74.0.3729.157` using `Samsung S10+ with Android 9`:
+
+![Screenshot_20190610-160241_Brave](https://user-images.githubusercontent.com/2602313/59223738-b803ec00-8b9a-11e9-903a-63e4ed26aac6.jpg)
+"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1671#issuecomment-500576776,"> Current Play Store version? Yes, @kjozwiak confirmed it
+
+Example of the issue occurring on `1.0.95 CR: 74.0.3729.157` using `Samsung S10+ with Android 9`:
+
+![Screenshot_20190610-160241_Brave](https://user-images.githubusercontent.com/2602313/59223738-b803ec00-8b9a-11e9-903a-63e4ed26aac6.jpg)
+"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1029#issuecomment-458656908,@GeetaSarvadnya do you have any website example for that?
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1049#issuecomment-460320569,"![screenshot_20190204-114206](https://user-images.githubusercontent.com/12011303/52222686-1843f380-2872-11e9-9bc2-72800c27bc36.png)
+@ryanml it is on that screen ^ inside settings. There is a delay of couple seconds till the grants appear. It's expected as there is a network call. Could we do a kind of endless spinner there till the grant appears or what else could be done @srirambv ?"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1819#issuecomment-514289750,@jamesmudgett  do we have the updated text for this?
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1120#issuecomment-464368827,Mind if I take a look of this Issue? 
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1855#issuecomment-512053878,"@tmancey is there anything QA can try in terms of test cases? Or basically toggle `Ads` on/off several times and make sure there's no intermittent crashes?
+
+Was the crash easy to reproduce originally?"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1858#issuecomment-514304747,@ryanml should this ticket be closed?
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/795#issuecomment-433068869,@GeetaSarvadnya could you try the same with different sites being added? Using the same site isn't clear if one bookmark got duplicated several times or not
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1858#issuecomment-514304747,@ryanml should this ticket be closed?
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1518#issuecomment-508231182,"- Verification passed on Samsung Tab A running 1.1.0-6 ads x64 build
+  - Verified disabling app notification doesn't show ads, logs capture the reason for not showing
+  - Verified re-enabling app notification shows ads after a specified time
+  - Verified log captures all `view`,`click` and `landed` and `dismiss` after app notification is re-enabled
+- Verification passed on OnePlus 6T with Android 9.0 running 1.1.0-6 x64 ads build
+  - Verified disabling app notification doesn't show ads, logs capture the reason for not showing
+  - Verified re-enabling app notification shows ads after a specified time
+  - Verified log captures all `view`,`click` and `landed` and `dismiss` after app notification is re-enabled
+- Verification passed on Huawei P20 with Android 8.1.0 running 1.1.0-6 x64 ads build
+  - Verified disabling app notification doesn't show ads, logs capture the reason for not showing
+  - Verified re-enabling app notification shows ads after a specified time
+  - Verified log captures all `view`,`click` and `landed` and `dismiss` after app notification is re-enabled
+   ```
+      2019-07-04 11:13:20.499 28916-28945/? I/chromium: [INFO:ads_impl.cc(1200)] Ad not served: Notifications not presently allowed
+   2019-07-04 11:13:20.499 28916-28945/? I/chromium: [INFO:ads_impl.cc(1143)] Stopped delivering notifications
+   2019-07-04 11:13:20.502 28916-28945/? I/chromium: [INFO:ads_impl.cc(1128)] Start delivering notifications in 720 seconds
+   2019-07-04 11:14:49.270 28916-28945/? I/chromium: [INFO:ads_impl.cc(526)] Site visited https://github.com/, immediateWinner is technology & computing-database and winnerOverTime is arts & entertainment-film, previous tab url chrome-native://newtab/
+   2019-07-04 11:14:49.271 28916-28945/? I/chromium: [INFO:client.cc(269)] Successfully saved client state
+   2019-07-04 11:25:20.503 28916-28945/? I/chromium: [INFO:ads_impl.cc(1302)] OnTimer: 
+      timer_id: 4
+      collect_activity_timer_id_: 3
+      deliverying_notifications_timer_id_: 4
+      sustained_ad_interaction_timer_id_: 0
+   2019-07-04 11:25:20.521 28790-28790/? I/chromium: [INFO:ads_service_impl.cc(1404)] AdsService Event Log: {""data"":{""type"":""settings"",""stamp"":""2019-07-04T11:25:20Z"",""settings"":{""notifications"":{""available"":true},""locale"":""en"",""adsPerDay"":12,""adsPerHour"":5}}}
+   2019-07-04 11:25:20.527 28916-28945/? I/chromium: [INFO:ads_impl.cc(1063)] DoesHistoryRespectAdsPerDayLimit:
+   2019-07-04 11:25:20.528 28916-28945/? I/chromium: [INFO:ads_impl.cc(1064)]     respects_day_limit: 1
+   2019-07-04 11:25:20.529 28916-28945/? I/chromium: [INFO:ads_impl.cc(1023)] IsAllowedToShowAds:
+   2019-07-04 11:25:20.529 28916-28945/? I/chromium: [INFO:ads_impl.cc(1024)]     does_history_respect_minimum_wait_time: 1
+   2019-07-04 11:25:20.529 28916-28945/? I/chromium: [INFO:ads_impl.cc(1026)]     does_history_respect_ads_per_day_limit: 1
+   2019-07-04 11:25:20.544 28916-28945/? I/chromium: [INFO:ads_impl.cc(970)] Notification shown:
+      id: 378874d6-4d6e-4a27-b4da-058b788dfe3f
+      campaign_id: 66593bcb-85b6-4edc-a259-006a187c432a
+      winnerOverTime: arts & entertainment-film
+      advertiser: Hotel Deals Club
+      category: arts & entertainment
+      notificationText: Travel more, pay (much) less. Save up to 80% on hotels today.
+      notificationUrl: https://hotel-deals.club/join-and-save-25/
+      uuid: ea089fb0-3c73-4daa-bd54-a37d10fe5d38
+   2019-07-04 11:25:20.544 28916-28945/? I/chromium: [INFO:notifications.cc(247)] Saving notifications state
+   2019-07-04 11:25:20.632 28903-28940/? I/chromium: [INFO:confirmations_impl.cc(1006)] Confirm ad:
+      id: 378874d6-4d6e-4a27-b4da-058b788dfe3f
+      advertiser: Hotel Deals Club
+      category: arts & entertainment
+      notificationText: Travel more, pay (much) less. Save up to 80% on hotels today.
+      notificationUrl: https://hotel-deals.club/join-and-save-25/
+      uuid: ea089fb0-3c73-4daa-bd54-a37d10fe5d38
+      type: view
+   2019-07-04 11:26:01.640 1044-3094/? D/JobServiceContext: Scheduling time out for 'org.chromium.chrome.browser.notifications.NotificationJobService' jId: 21, in 18 s
+   2019-07-04 11:26:01.657 1044-7541/? V/BroadcastQueue: Finished with ordered broadcast BroadcastRecord{438c3b5 u0 org.chromium.chrome.browser.notifications.CLICK_NOTIFICATION}
+   2019-07-04 11:26:01.659 1044-1044/? D/JobServiceContext: handleServiceBound for acaaa4a #u0a203/21 com.brave.browser/org.chromium.chrome.browser.notifications.NotificationJobService
+   2019-07-04 11:26:01.659 1044-1044/? D/JobServiceContext: Scheduling time out for 'org.chromium.chrome.browser.notifications.NotificationJobService' jId: 21, in 8 s
+   2019-07-04 11:26:01.663 28790-29394/? W/chromium: [WARNING:library_prefetcher.cc(301)] Incorrect code ordering
+   2019-07-04 11:26:01.665 28790-28790/? I/chromium: [INFO:ads_service_impl.cc(1246)] View ad with id 378874d6-4d6e-4a27-b4da-058b788dfe3f
+   2019-07-04 11:26:01.666 1044-1054/? D/JobServiceContext: doCallback of : JobStatus{acaaa4a #u0a203/21 com.brave.browser/org.chromium.chrome.browser.notifications.NotificationJobService u=0 s=10203 TIME=none:-27ms READY} v:VERB_STARTING
+   2019-07-04 11:26:01.672 28916-28945/? I/chromium: [INFO:notifications.cc(247)] Saving notifications state
+   2019-07-04 11:26:01.717 1044-1054/? I/ActivityManager: START u0 {act=android.intent.action.VIEW dat=https://hotel-deals.club/... flg=0x10000000 pkg=com.brave.browser cmp=com.brave.browser/org.chromium.chrome.browser.document.ChromeLauncherActivity (has extras)} from uid 10203
+   2019-07-04 11:26:01.720 1044-1054/? I/ActivityManager: ActivityRecord info: ActivityInfo{2112116 org.chromium.chrome.browser.document.ChromeLauncherActivity}
+   2019-07-04 11:26:01.725 1044-1054/? V/WindowManager: addAppToken: AppWindowToken{37638a2 token=Token{92ab46d ActivityRecord{6b5e484 u0 com.brave.browser/org.chromium.chrome.browser.document.ChromeLauncherActivity t359}}} controller={TaskWindowContainerController taskId=359} at 2147483647
+   2019-07-04 11:26:01.732 28790-28790/? I/chromium: [INFO:ads_service_impl.cc(1404)] AdsService Event Log: {""data"":{""type"":""notify"",""stamp"":""2019-07-04T11:26:01Z"",""notificationType"":""clicked"",""notificationClassification"":[""arts & entertainment""],""notificationCatalog"":""bf30ca4c-eb7c-4b3e-a2db-22a1f3181c3d"",""notificationUrl"":""https://hotel-deals.club/join-and-save-25/""}}
+   2019-07-04 11:26:01.732 28790-28790/? I/chromium: [INFO:ads_service_impl.cc(1404)] AdsService Event Log: {""data"":{""type"":""confirmation"",""stamp"":""2019-07-04T11:26:01Z"",""notificationId"":""ea089fb0-3c73-4daa-bd54-a37d10fe5d38"",""notificationType"":""click""}}
+   2019-07-04 11:26:01.735 28903-28940/? I/chromium: [INFO:confirmations_impl.cc(1006)] Confirm ad:
+      id: 378874d6-4d6e-4a27-b4da-058b788dfe3f
+      advertiser: Hotel Deals Club
+      category: arts & entertainment
+      notificationText: Travel more, pay (much) less. Save up to 80% on hotels today.
+      notificationUrl: https://hotel-deals.club/join-and-save-25/
+      uuid: ea089fb0-3c73-4daa-bd54-a37d10fe5d38
+      type: click
+   2019-07-04 11:26:13.583 28916-28945/? I/chromium: [INFO:ads_impl.cc(1302)] OnTimer: 
+      timer_id: 6
+      collect_activity_timer_id_: 3
+      deliverying_notifications_timer_id_: 5
+      sustained_ad_interaction_timer_id_: 6
+   2019-07-04 11:26:13.584 28916-28945/? I/chromium: [INFO:ads_impl.cc(1247)] Sustained ad interaction
+   2019-07-04 11:26:13.584 28790-28790/? I/chromium: [INFO:ads_service_impl.cc(1404)] AdsService Event Log: {""data"":{""type"":""confirmation"",""stamp"":""2019-07-04T11:26:13Z"",""notificationId"":""ea089fb0-3c73-4daa-bd54-a37d10fe5d38"",""notificationType"":""landed""}}
+   2019-07-04 11:26:13.586 28903-28940/? I/chromium: [INFO:confirmations_impl.cc(1006)] Confirm ad:
+      id: 378874d6-4d6e-4a27-b4da-058b788dfe3f
+      advertiser: Hotel Deals Club
+      category: arts & entertainment
+      notificationText: Travel more, pay (much) less. Save up to 80% on hotels today.
+      notificationUrl: https://hotel-deals.club/join-and-save-25/
+      uuid: ea089fb0-3c73-4daa-bd54-a37d10fe5d38
+      type: landed
+   2019-07-04 11:26:13.926 28903-28940/? I/chromium: [INFO:confirmations_impl.cc(669)] Saving confirmations state
+   2019-07-04 11:26:13.929 28903-28940/? I/chromium: [INFO:redeem_token.cc(387)] Added 1 unblinded payment token with an estimated redemption value of 0 BAT, you now have 4 unblinded payment tokens
+   2019-07-04 11:26:13.929 28903-28940/? I/chromium: [INFO:confirmations_impl.cc(669)] Saving confirmations state
+   2019-07-04 11:26:13.931 28903-28940/? I/chromium: [INFO:redeem_token.cc(424)] Successfully redeemed token with ea089fb0-3c73-4daa-bd54-a37d10fe5d38 creative instance id for landed
+   2019-07-04 11:26:13.931 28903-28940/? I/chromium: [INFO:confirmations_impl.cc(669)] Saving confirmations state
+   2019-07-04 11:26:13.932 28903-28940/? I/chromium: [INFO:redeem_token.cc(430)] Removed 5TDSXobCX5BeqBH9X472umTN5S65oOxibgOZGHPfnwFgXa/jAufP07p6lsYpJmgxJwLjpvL2NqAHmcVW0LA7d0rFGW0To0ek0PSTh8DHzAGJMOt+dyYoH5qyv+PfpEMv unblinded token
+   2019-07-04 11:26:13.933 28903-28940/? I/chromium: [INFO:confirmations_impl.cc(1087)] No failed confirmations to retry
+   2019-07-04 11:26:13.933 28903-28940/? I/chromium: [INFO:refill_tokens.cc(53)] Refill
+   2019-07-04 11:26:13.933 28903-28940/? I/chromium: [INFO:refill_tokens.cc(71)] RequestSignedTokens
+   2019-07-04 11:26:13.933 28903-28940/? I/chromium: [INFO:refill_tokens.cc(74)] No need to refill tokens as we already have 46 unblinded tokens which is above the minimum threshold of 20
+   2019-07-04 11:53:25.177 1044-1881/? D/JobServiceContext: Scheduling time out for 'org.chromium.chrome.browser.notifications.NotificationJobService' jId: 21, in 18 s
+   2019-07-04 11:53:25.183 1044-7541/? V/BroadcastQueue: Finished with ordered broadcast BroadcastRecord{aabde6c u0 org.chromium.chrome.browser.notifications.CLOSE_NOTIFICATION}
+   2019-07-04 11:53:25.185 1044-1044/? D/JobServiceContext: handleServiceBound for c7acc35 #u0a203/21 com.brave.browser/org.chromium.chrome.browser.notifications.NotificationJobService
+   2019-07-04 11:53:25.186 1044-1044/? D/JobServiceContext: Scheduling time out for 'org.chromium.chrome.browser.notifications.NotificationJobService' jId: 21, in 8 s
+   2019-07-04 11:53:25.188 28790-29683/? W/chromium: [WARNING:library_prefetcher.cc(301)] Incorrect code ordering
+   2019-07-04 11:53:25.189 1044-1881/? D/JobServiceContext: doCallback of : JobStatus{c7acc35 #u0a203/21 com.brave.browser/org.chromium.chrome.browser.notifications.NotificationJobService u=0 s=10203 TIME=none:-13ms READY} v:VERB_STARTING
+   2019-07-04 11:53:25.192 28916-28945/? I/chromium: [INFO:notifications.cc(247)] Saving notifications state
+   2019-07-04 11:53:25.196 28790-28790/? I/chromium: [INFO:ads_service_impl.cc(1404)] AdsService Event Log: {""data"":{""type"":""notify"",""stamp"":""2019-07-04T11:53:25Z"",""notificationType"":""dismissed"",""notificationClassification"":[""arts & entertainment""],""notificationCatalog"":""9993cb08-fa34-41e0-8c3f-848f12dda791"",""notificationUrl"":""https://batcommunity.org""}}
+   2019-07-04 11:53:25.196 28790-28790/? I/chromium: [INFO:ads_service_impl.cc(1404)] AdsService Event Log: {""data"":{""type"":""confirmation"",""stamp"":""2019-07-04T11:53:25Z"",""notificationId"":""c7f19ef9-444b-4146-90d8-3b2c761fd122"",""notificationType"":""dismiss""}}
+   2019-07-04 11:53:25.197 28903-28940/? I/chromium: [INFO:confirmations_impl.cc(1006)] Confirm ad:
+      id: 508c694d-c37d-4ba2-a80a-1f4533b3772c
+      advertiser: BATCommunity.org
+      category: arts & entertainment
+      notificationText: Learn more about BAT and get involved with the BAT Community!
+      notificationUrl: https://batcommunity.org
+      uuid: c7f19ef9-444b-4146-90d8-3b2c761fd122
+      type: dismiss
+
+- Verification passed on Samsung Galaxy J3 5.1.1 running `1.1.0-brave-ads-6` build
+  - Verified disabling app notification doesn't show ads, logs capture the reason for not showing
+  - Verified re-enabling app notification shows ads after a specified time
+  - Verified log captures all `view`,`click` and `landed` and `dismiss` after app notification is re-enabled
+
+"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/898#issuecomment-442284388,"George can you upload a screenshot of what you are seeing?
+
+It fits flush when I load it up on my phone. A couple of small discrepancies I would fix but I wouldn't say this is unresponsive
+
+![screenshot_20181127-183136_brave](https://user-images.githubusercontent.com/8732757/49122698-c29c0b00-f272-11e8-8654-22d46c808a5f.jpg)
+"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1570#issuecomment-494729050,"Once an Ad notification has been added to the notification list (even if the device is asleep) the Ad will be confirmed as a View. I believe this is working as expected as when a user on Android then taps this Ad (while the device is awake) in the notification area then this would be confirmed as a Click.
+
+Spec (https://docs.google.com/document/d/1QynlNXswjNfhxGeilooS9TjQsIPkYvgpZH8y9FJdRy4/edit#):
+
+""The Heads up format works in the foreground and the background. The basis for Heads up;
+1. Opens in system tray when Ad is in foreground
+2. Opens on top of lock screen or non Brave App if running in background""
+
+@mandar-brave @anthonypkeane your thoughts please? If you agree we can just close this ticket as `Wont fix`"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1518#issuecomment-508231182,"- Verification passed on Samsung Tab A running 1.1.0-6 ads x64 build
+  - Verified disabling app notification doesn't show ads, logs capture the reason for not showing
+  - Verified re-enabling app notification shows ads after a specified time
+  - Verified log captures all `view`,`click` and `landed` and `dismiss` after app notification is re-enabled
+- Verification passed on OnePlus 6T with Android 9.0 running 1.1.0-6 x64 ads build
+  - Verified disabling app notification doesn't show ads, logs capture the reason for not showing
+  - Verified re-enabling app notification shows ads after a specified time
+  - Verified log captures all `view`,`click` and `landed` and `dismiss` after app notification is re-enabled
+- Verification passed on Huawei P20 with Android 8.1.0 running 1.1.0-6 x64 ads build
+  - Verified disabling app notification doesn't show ads, logs capture the reason for not showing
+  - Verified re-enabling app notification shows ads after a specified time
+  - Verified log captures all `view`,`click` and `landed` and `dismiss` after app notification is re-enabled
+   ```
+      2019-07-04 11:13:20.499 28916-28945/? I/chromium: [INFO:ads_impl.cc(1200)] Ad not served: Notifications not presently allowed
+   2019-07-04 11:13:20.499 28916-28945/? I/chromium: [INFO:ads_impl.cc(1143)] Stopped delivering notifications
+   2019-07-04 11:13:20.502 28916-28945/? I/chromium: [INFO:ads_impl.cc(1128)] Start delivering notifications in 720 seconds
+   2019-07-04 11:14:49.270 28916-28945/? I/chromium: [INFO:ads_impl.cc(526)] Site visited https://github.com/, immediateWinner is technology & computing-database and winnerOverTime is arts & entertainment-film, previous tab url chrome-native://newtab/
+   2019-07-04 11:14:49.271 28916-28945/? I/chromium: [INFO:client.cc(269)] Successfully saved client state
+   2019-07-04 11:25:20.503 28916-28945/? I/chromium: [INFO:ads_impl.cc(1302)] OnTimer: 
+      timer_id: 4
+      collect_activity_timer_id_: 3
+      deliverying_notifications_timer_id_: 4
+      sustained_ad_interaction_timer_id_: 0
+   2019-07-04 11:25:20.521 28790-28790/? I/chromium: [INFO:ads_service_impl.cc(1404)] AdsService Event Log: {""data"":{""type"":""settings"",""stamp"":""2019-07-04T11:25:20Z"",""settings"":{""notifications"":{""available"":true},""locale"":""en"",""adsPerDay"":12,""adsPerHour"":5}}}
+   2019-07-04 11:25:20.527 28916-28945/? I/chromium: [INFO:ads_impl.cc(1063)] DoesHistoryRespectAdsPerDayLimit:
+   2019-07-04 11:25:20.528 28916-28945/? I/chromium: [INFO:ads_impl.cc(1064)]     respects_day_limit: 1
+   2019-07-04 11:25:20.529 28916-28945/? I/chromium: [INFO:ads_impl.cc(1023)] IsAllowedToShowAds:
+   2019-07-04 11:25:20.529 28916-28945/? I/chromium: [INFO:ads_impl.cc(1024)]     does_history_respect_minimum_wait_time: 1
+   2019-07-04 11:25:20.529 28916-28945/? I/chromium: [INFO:ads_impl.cc(1026)]     does_history_respect_ads_per_day_limit: 1
+   2019-07-04 11:25:20.544 28916-28945/? I/chromium: [INFO:ads_impl.cc(970)] Notification shown:
+      id: 378874d6-4d6e-4a27-b4da-058b788dfe3f
+      campaign_id: 66593bcb-85b6-4edc-a259-006a187c432a
+      winnerOverTime: arts & entertainment-film
+      advertiser: Hotel Deals Club
+      category: arts & entertainment
+      notificationText: Travel more, pay (much) less. Save up to 80% on hotels today.
+      notificationUrl: https://hotel-deals.club/join-and-save-25/
+      uuid: ea089fb0-3c73-4daa-bd54-a37d10fe5d38
+   2019-07-04 11:25:20.544 28916-28945/? I/chromium: [INFO:notifications.cc(247)] Saving notifications state
+   2019-07-04 11:25:20.632 28903-28940/? I/chromium: [INFO:confirmations_impl.cc(1006)] Confirm ad:
+      id: 378874d6-4d6e-4a27-b4da-058b788dfe3f
+      advertiser: Hotel Deals Club
+      category: arts & entertainment
+      notificationText: Travel more, pay (much) less. Save up to 80% on hotels today.
+      notificationUrl: https://hotel-deals.club/join-and-save-25/
+      uuid: ea089fb0-3c73-4daa-bd54-a37d10fe5d38
+      type: view
+   2019-07-04 11:26:01.640 1044-3094/? D/JobServiceContext: Scheduling time out for 'org.chromium.chrome.browser.notifications.NotificationJobService' jId: 21, in 18 s
+   2019-07-04 11:26:01.657 1044-7541/? V/BroadcastQueue: Finished with ordered broadcast BroadcastRecord{438c3b5 u0 org.chromium.chrome.browser.notifications.CLICK_NOTIFICATION}
+   2019-07-04 11:26:01.659 1044-1044/? D/JobServiceContext: handleServiceBound for acaaa4a #u0a203/21 com.brave.browser/org.chromium.chrome.browser.notifications.NotificationJobService
+   2019-07-04 11:26:01.659 1044-1044/? D/JobServiceContext: Scheduling time out for 'org.chromium.chrome.browser.notifications.NotificationJobService' jId: 21, in 8 s
+   2019-07-04 11:26:01.663 28790-29394/? W/chromium: [WARNING:library_prefetcher.cc(301)] Incorrect code ordering
+   2019-07-04 11:26:01.665 28790-28790/? I/chromium: [INFO:ads_service_impl.cc(1246)] View ad with id 378874d6-4d6e-4a27-b4da-058b788dfe3f
+   2019-07-04 11:26:01.666 1044-1054/? D/JobServiceContext: doCallback of : JobStatus{acaaa4a #u0a203/21 com.brave.browser/org.chromium.chrome.browser.notifications.NotificationJobService u=0 s=10203 TIME=none:-27ms READY} v:VERB_STARTING
+   2019-07-04 11:26:01.672 28916-28945/? I/chromium: [INFO:notifications.cc(247)] Saving notifications state
+   2019-07-04 11:26:01.717 1044-1054/? I/ActivityManager: START u0 {act=android.intent.action.VIEW dat=https://hotel-deals.club/... flg=0x10000000 pkg=com.brave.browser cmp=com.brave.browser/org.chromium.chrome.browser.document.ChromeLauncherActivity (has extras)} from uid 10203
+   2019-07-04 11:26:01.720 1044-1054/? I/ActivityManager: ActivityRecord info: ActivityInfo{2112116 org.chromium.chrome.browser.document.ChromeLauncherActivity}
+   2019-07-04 11:26:01.725 1044-1054/? V/WindowManager: addAppToken: AppWindowToken{37638a2 token=Token{92ab46d ActivityRecord{6b5e484 u0 com.brave.browser/org.chromium.chrome.browser.document.ChromeLauncherActivity t359}}} controller={TaskWindowContainerController taskId=359} at 2147483647
+   2019-07-04 11:26:01.732 28790-28790/? I/chromium: [INFO:ads_service_impl.cc(1404)] AdsService Event Log: {""data"":{""type"":""notify"",""stamp"":""2019-07-04T11:26:01Z"",""notificationType"":""clicked"",""notificationClassification"":[""arts & entertainment""],""notificationCatalog"":""bf30ca4c-eb7c-4b3e-a2db-22a1f3181c3d"",""notificationUrl"":""https://hotel-deals.club/join-and-save-25/""}}
+   2019-07-04 11:26:01.732 28790-28790/? I/chromium: [INFO:ads_service_impl.cc(1404)] AdsService Event Log: {""data"":{""type"":""confirmation"",""stamp"":""2019-07-04T11:26:01Z"",""notificationId"":""ea089fb0-3c73-4daa-bd54-a37d10fe5d38"",""notificationType"":""click""}}
+   2019-07-04 11:26:01.735 28903-28940/? I/chromium: [INFO:confirmations_impl.cc(1006)] Confirm ad:
+      id: 378874d6-4d6e-4a27-b4da-058b788dfe3f
+      advertiser: Hotel Deals Club
+      category: arts & entertainment
+      notificationText: Travel more, pay (much) less. Save up to 80% on hotels today.
+      notificationUrl: https://hotel-deals.club/join-and-save-25/
+      uuid: ea089fb0-3c73-4daa-bd54-a37d10fe5d38
+      type: click
+   2019-07-04 11:26:13.583 28916-28945/? I/chromium: [INFO:ads_impl.cc(1302)] OnTimer: 
+      timer_id: 6
+      collect_activity_timer_id_: 3
+      deliverying_notifications_timer_id_: 5
+      sustained_ad_interaction_timer_id_: 6
+   2019-07-04 11:26:13.584 28916-28945/? I/chromium: [INFO:ads_impl.cc(1247)] Sustained ad interaction
+   2019-07-04 11:26:13.584 28790-28790/? I/chromium: [INFO:ads_service_impl.cc(1404)] AdsService Event Log: {""data"":{""type"":""confirmation"",""stamp"":""2019-07-04T11:26:13Z"",""notificationId"":""ea089fb0-3c73-4daa-bd54-a37d10fe5d38"",""notificationType"":""landed""}}
+   2019-07-04 11:26:13.586 28903-28940/? I/chromium: [INFO:confirmations_impl.cc(1006)] Confirm ad:
+      id: 378874d6-4d6e-4a27-b4da-058b788dfe3f
+      advertiser: Hotel Deals Club
+      category: arts & entertainment
+      notificationText: Travel more, pay (much) less. Save up to 80% on hotels today.
+      notificationUrl: https://hotel-deals.club/join-and-save-25/
+      uuid: ea089fb0-3c73-4daa-bd54-a37d10fe5d38
+      type: landed
+   2019-07-04 11:26:13.926 28903-28940/? I/chromium: [INFO:confirmations_impl.cc(669)] Saving confirmations state
+   2019-07-04 11:26:13.929 28903-28940/? I/chromium: [INFO:redeem_token.cc(387)] Added 1 unblinded payment token with an estimated redemption value of 0 BAT, you now have 4 unblinded payment tokens
+   2019-07-04 11:26:13.929 28903-28940/? I/chromium: [INFO:confirmations_impl.cc(669)] Saving confirmations state
+   2019-07-04 11:26:13.931 28903-28940/? I/chromium: [INFO:redeem_token.cc(424)] Successfully redeemed token with ea089fb0-3c73-4daa-bd54-a37d10fe5d38 creative instance id for landed
+   2019-07-04 11:26:13.931 28903-28940/? I/chromium: [INFO:confirmations_impl.cc(669)] Saving confirmations state
+   2019-07-04 11:26:13.932 28903-28940/? I/chromium: [INFO:redeem_token.cc(430)] Removed 5TDSXobCX5BeqBH9X472umTN5S65oOxibgOZGHPfnwFgXa/jAufP07p6lsYpJmgxJwLjpvL2NqAHmcVW0LA7d0rFGW0To0ek0PSTh8DHzAGJMOt+dyYoH5qyv+PfpEMv unblinded token
+   2019-07-04 11:26:13.933 28903-28940/? I/chromium: [INFO:confirmations_impl.cc(1087)] No failed confirmations to retry
+   2019-07-04 11:26:13.933 28903-28940/? I/chromium: [INFO:refill_tokens.cc(53)] Refill
+   2019-07-04 11:26:13.933 28903-28940/? I/chromium: [INFO:refill_tokens.cc(71)] RequestSignedTokens
+   2019-07-04 11:26:13.933 28903-28940/? I/chromium: [INFO:refill_tokens.cc(74)] No need to refill tokens as we already have 46 unblinded tokens which is above the minimum threshold of 20
+   2019-07-04 11:53:25.177 1044-1881/? D/JobServiceContext: Scheduling time out for 'org.chromium.chrome.browser.notifications.NotificationJobService' jId: 21, in 18 s
+   2019-07-04 11:53:25.183 1044-7541/? V/BroadcastQueue: Finished with ordered broadcast BroadcastRecord{aabde6c u0 org.chromium.chrome.browser.notifications.CLOSE_NOTIFICATION}
+   2019-07-04 11:53:25.185 1044-1044/? D/JobServiceContext: handleServiceBound for c7acc35 #u0a203/21 com.brave.browser/org.chromium.chrome.browser.notifications.NotificationJobService
+   2019-07-04 11:53:25.186 1044-1044/? D/JobServiceContext: Scheduling time out for 'org.chromium.chrome.browser.notifications.NotificationJobService' jId: 21, in 8 s
+   2019-07-04 11:53:25.188 28790-29683/? W/chromium: [WARNING:library_prefetcher.cc(301)] Incorrect code ordering
+   2019-07-04 11:53:25.189 1044-1881/? D/JobServiceContext: doCallback of : JobStatus{c7acc35 #u0a203/21 com.brave.browser/org.chromium.chrome.browser.notifications.NotificationJobService u=0 s=10203 TIME=none:-13ms READY} v:VERB_STARTING
+   2019-07-04 11:53:25.192 28916-28945/? I/chromium: [INFO:notifications.cc(247)] Saving notifications state
+   2019-07-04 11:53:25.196 28790-28790/? I/chromium: [INFO:ads_service_impl.cc(1404)] AdsService Event Log: {""data"":{""type"":""notify"",""stamp"":""2019-07-04T11:53:25Z"",""notificationType"":""dismissed"",""notificationClassification"":[""arts & entertainment""],""notificationCatalog"":""9993cb08-fa34-41e0-8c3f-848f12dda791"",""notificationUrl"":""https://batcommunity.org""}}
+   2019-07-04 11:53:25.196 28790-28790/? I/chromium: [INFO:ads_service_impl.cc(1404)] AdsService Event Log: {""data"":{""type"":""confirmation"",""stamp"":""2019-07-04T11:53:25Z"",""notificationId"":""c7f19ef9-444b-4146-90d8-3b2c761fd122"",""notificationType"":""dismiss""}}
+   2019-07-04 11:53:25.197 28903-28940/? I/chromium: [INFO:confirmations_impl.cc(1006)] Confirm ad:
+      id: 508c694d-c37d-4ba2-a80a-1f4533b3772c
+      advertiser: BATCommunity.org
+      category: arts & entertainment
+      notificationText: Learn more about BAT and get involved with the BAT Community!
+      notificationUrl: https://batcommunity.org
+      uuid: c7f19ef9-444b-4146-90d8-3b2c761fd122
+      type: dismiss
+
+- Verification passed on Samsung Galaxy J3 5.1.1 running `1.1.0-brave-ads-6` build
+  - Verified disabling app notification doesn't show ads, logs capture the reason for not showing
+  - Verified re-enabling app notification shows ads after a specified time
+  - Verified log captures all `view`,`click` and `landed` and `dismiss` after app notification is re-enabled
+
+"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1570#issuecomment-494729050,"Once an Ad notification has been added to the notification list (even if the device is asleep) the Ad will be confirmed as a View. I believe this is working as expected as when a user on Android then taps this Ad (while the device is awake) in the notification area then this would be confirmed as a Click.
+
+Spec (https://docs.google.com/document/d/1QynlNXswjNfhxGeilooS9TjQsIPkYvgpZH8y9FJdRy4/edit#):
+
+""The Heads up format works in the foreground and the background. The basis for Heads up;
+1. Opens in system tray when Ad is in foreground
+2. Opens on top of lock screen or non Brave App if running in background""
+
+@mandar-brave @anthonypkeane your thoughts please? If you agree we can just close this ticket as `Wont fix`"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1699#issuecomment-502199047,"@alexwykoff can you please make a call on this one? 
+I'm happy with I'm in as it is a better CTA for this modal "
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1782#issuecomment-526413657,@srirambv i verified this issue in pixel3xl  with android Q and samsung s8 plus with android 9. and it seems to be working. can you please confirm ?
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1699#issuecomment-502199047,"@alexwykoff can you please make a call on this one? 
+I'm happy with I'm in as it is a better CTA for this modal "
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/898#issuecomment-442284388,"George can you upload a screenshot of what you are seeing?
+
+It fits flush when I load it up on my phone. A couple of small discrepancies I would fix but I wouldn't say this is unresponsive
+
+![screenshot_20181127-183136_brave](https://user-images.githubusercontent.com/8732757/49122698-c29c0b00-f272-11e8-8654-22d46c808a5f.jpg)
+"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1089#issuecomment-461912869,@jamesmudgett @anthonypkeane what should we use?
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1570#issuecomment-494729050,"Once an Ad notification has been added to the notification list (even if the device is asleep) the Ad will be confirmed as a View. I believe this is working as expected as when a user on Android then taps this Ad (while the device is awake) in the notification area then this would be confirmed as a Click.
+
+Spec (https://docs.google.com/document/d/1QynlNXswjNfhxGeilooS9TjQsIPkYvgpZH8y9FJdRy4/edit#):
+
+""The Heads up format works in the foreground and the background. The basis for Heads up;
+1. Opens in system tray when Ad is in foreground
+2. Opens on top of lock screen or non Brave App if running in background""
+
+@mandar-brave @anthonypkeane your thoughts please? If you agree we can just close this ticket as `Wont fix`"
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1699#issuecomment-502199047,"@alexwykoff can you please make a call on this one? 
+I'm happy with I'm in as it is a better CTA for this modal "
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1699#issuecomment-502199047,"@alexwykoff can you please make a call on this one? 
+I'm happy with I'm in as it is a better CTA for this modal "
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1089#issuecomment-461912869,@jamesmudgett @anthonypkeane what should we use?
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1089#issuecomment-461912869,@jamesmudgett @anthonypkeane what should we use?
+brave/browser-android-tabs,https://github.com/brave/browser-android-tabs/issues/1131#issuecomment-465291440,@jamesmudgett @anthonypkeane do we have to do that on Android? I don't see it in our layout.
+Telegram-FOSS-Team/Telegram-FOSS,https://github.com/Telegram-FOSS-Team/Telegram-FOSS/issues/275#issuecomment-437587427,"Thanks for the report, can confirm!
+
+I'll take a loot at this.
+
+Just to make sure, this works with upstream telegram?"
+Telegram-FOSS-Team/Telegram-FOSS,https://github.com/Telegram-FOSS-Team/Telegram-FOSS/issues/210#issuecomment-360049500,"As I can't reproduce immediately, I don't know whether it affects the 4.6a. Could you try with the beta in the release section please?"
+Telegram-FOSS-Team/Telegram-FOSS,https://github.com/Telegram-FOSS-Team/Telegram-FOSS/issues/144#issuecomment-297072631,"It's a problem with a self-built version?
+There is no multidex in build.gradle here, so it's strange"
