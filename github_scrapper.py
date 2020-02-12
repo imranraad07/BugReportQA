@@ -10,19 +10,26 @@ from utils import mkdir
 # nltk.download('punkt')
 
 github_repos = [
-    "elastic/elasticsearch",
-    "spring-projects/spring-boot",
-    "iluwatar/java-design-patterns",
-    "ReactiveX/RxJava",
-    "mockito/mockito",
-    "google/guava",
-    "square/okhttp",
     "duckduckgo/Android",
-    "PhilippC/keepass2android",
-    "zxing/zxing",
     "AntennaPod/AntennaPod",
     "brave/browser-android-tabs",
-    "Telegram-FOSS-Team/Telegram-FOSS"
+    "mozilla-mobile/focus-android",
+    "Telegram-FOSS-Team/Telegram-FOSS",
+    "bumptech/glide",
+    "elastic/elasticsearch",
+    "spring-projects/spring-boot",
+    "ReactiveX/RxJava",
+    "square/okhttp",
+    "google/guava",
+    "square / retrofit",
+    "PhilJay/MPAndroidChart"
+    "zxing/zxing",
+    "square/leakcanary"
+    "skylot/jadx",
+    "microsoft/CNTK",
+    "libgdx/libgdx",
+    "google/ExoPlayer",
+    "jhipster/generator-jhipster"
 ]
 
 
@@ -33,6 +40,7 @@ def get_comments(url, auth):
 
 
 def get_issues(repo, auth):
+    # url = "https://api.github.com/repos/{repo}/issues?state=closed&sort=comments-desc"
     url = "https://api.github.com/repos/{repo}/issues?state=closed"
     url = url.format(repo=repo)
     return _getter(url, auth)
@@ -79,13 +87,17 @@ def check(sentence):
     return False
 
 
-def read_github_issues(resultFolder, resultFile, auth):
-    mkdir(resultFolder)
+def read_github_issues(result_folder, result_file, auth):
+    mkdir(result_folder)
     total_issues = 0
     for repo in github_repos:
         comment_added_csv_count = 0
         issue_count = 0
         for issue_data in get_issues(repo, auth):
+            # github v3 api considers pull requests as issues. so filter them
+            if 'pull_request' in issue_data:
+                continue
+            # print(issue_count, " ", issue_data['title'])
             issue_count = issue_count + 1
             total_issues = total_issues + 1
             # print(total_issues)
@@ -108,11 +120,14 @@ def read_github_issues(resultFolder, resultFile, auth):
             for label_data in labels:
                 if 'name' not in label_data:
                     print("name is not in label data")
-                else:
-                    label_text = label_data['name']
-                    if "bug" in label_text:
-                        is_label_bug = True
-                        break
+                    continue
+                label_text = label_data['name']
+                label_desc = label_data['description']
+                if label_desc is None:
+                    label_desc = ""
+                if ("bug" in label_text) or ("bug" in label_desc):
+                    is_label_bug = True
+                    break
 
             if 'title' not in issue_data:
                 print("title is not in issue data")
@@ -164,7 +179,7 @@ def read_github_issues(resultFolder, resultFile, auth):
                                 continue
 
                         comment_added_csv_count = comment_added_csv_count + 1
-                        sw = csv.writer(open('{0}/{1}'.format(resultFolder, resultFile), 'a'))
+                        sw = csv.writer(open('{0}/{1}'.format(result_folder, result_file), 'a'))
                         sw.writerow([
                             '{0}'.format(repo),
                             '{0}'.format(comment['html_url']),
