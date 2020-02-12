@@ -10,26 +10,34 @@ from utils import mkdir
 # nltk.download('punkt')
 
 github_repos = [
-    "duckduckgo/Android",
-    "AntennaPod/AntennaPod",
-    "brave/browser-android-tabs",
-    "mozilla-mobile/focus-android",
-    "Telegram-FOSS-Team/Telegram-FOSS",
-    "bumptech/glide",
+    "mockito/mockito",
+    "strongbox/strongbox",
+    "TEAMMATES/teammates",
+    "JabRef/jabref",
     "elastic/elasticsearch",
     "spring-projects/spring-boot",
     "ReactiveX/RxJava",
     "square/okhttp",
     "google/guava",
-    "square / retrofit",
-    "PhilJay/MPAndroidChart"
+    "square/retrofit",
+    "PhilJay/MPAndroidChart",
     "zxing/zxing",
-    "square/leakcanary"
+    "square/leakcanary",
     "skylot/jadx",
     "microsoft/CNTK",
     "libgdx/libgdx",
     "google/ExoPlayer",
-    "jhipster/generator-jhipster"
+    "jhipster/generator-jhipster",
+    "NationalSecurityAgency/ghidra",
+    "commons-app/apps-android-commons",
+    "oshi/oshi",
+    "IQSS/dataverse"
+    # "duckduckgo/Android",
+    # "AntennaPod/AntennaPod",
+    # "brave/browser-android-tabs",
+    # "mozilla-mobile/focus-android",
+    # "Telegram-FOSS-Team/Telegram-FOSS",
+    # "bumptech/glide",
 ]
 
 
@@ -48,9 +56,9 @@ def get_issues(repo, auth):
 
 def _getter(url, auth):
     link = dict(next=url)
-    # print(link)
+    print(link)
     while 'next' in link:
-        print(link)
+        # print(link)
         response = requests.get(link['next'], auth=auth)
         # And.. if we didn't get good results, just bail.
         if response.status_code != 200:
@@ -90,8 +98,8 @@ def check(sentence):
 def read_github_issues(result_folder, result_file, auth):
     mkdir(result_folder)
     total_issues = 0
+    comment_added_csv_count = 0
     for repo in github_repos:
-        comment_added_csv_count = 0
         issue_count = 0
         for issue_data in get_issues(repo, auth):
             # github v3 api considers pull requests as issues. so filter them
@@ -101,8 +109,8 @@ def read_github_issues(result_folder, result_file, auth):
             issue_count = issue_count + 1
             total_issues = total_issues + 1
             # print(total_issues)
-            # consider at most 1000 issues for each repo
-            if issue_count > 1000:
+            # consider at most 2000 issues for each repo
+            if issue_count > 2000:
                 break
 
             # issue_data = json.loads(issue)
@@ -144,8 +152,14 @@ def read_github_issues(result_folder, result_file, auth):
             # print(comment_added_csv_count, " ", issue['comments'], " ", issue['labels'], " ", issue['comments_url'])
             comment_count = 0
             follow_up_question = False
+            if 'comments' not in issue_data:
+                print("comments is not in issue data")
+                continue
             if 'comments_url' not in issue_data:
                 print("comments_url is not in issue data")
+                continue
+            # check if comment count is at least two
+            if issue_data['comments'] < 2:
                 continue
             comments = get_comments(issue_data['comments_url'], auth)
             if comments is None:
@@ -168,13 +182,12 @@ def read_github_issues(result_folder, result_file, auth):
                     continue
                 for sentence in sent_tokenize(comment['body']):
                     if check(sentence):
-
                         # if sentence starts with @someone, check if this @someone is original issue author or not
                         if sentence.startswith("@"):
                             # print(sentence)
                             is_mentioned = sentence.split()[0]
                             github_login = "@{0}".format(issue_data['user']['login'])
-                            print(is_mentioned, " ", github_login, " ", is_mentioned == github_login)
+                            # print(is_mentioned, " ", github_login, " ", is_mentioned == github_login)
                             if is_mentioned != github_login:
                                 continue
 
@@ -182,6 +195,7 @@ def read_github_issues(result_folder, result_file, auth):
                         sw = csv.writer(open('{0}/{1}'.format(result_folder, result_file), 'a'))
                         sw.writerow([
                             '{0}'.format(repo),
+                            '{0}'.format(issue_data['body']),
                             '{0}'.format(comment['html_url']),
                             '{0}'.format(comment['body'])
                         ])
@@ -189,10 +203,7 @@ def read_github_issues(result_folder, result_file, auth):
                         break
                 if follow_up_question:
                     break
-            # # at most 10 comments from each repo
-            # if comment_added_csv_count == 10:
-            #     break
-        print(total_issues)
+        print(total_issues, " ", comment_added_csv_count)
 
 
 if __name__ == '__main__':
