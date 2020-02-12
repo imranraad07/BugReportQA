@@ -1,14 +1,15 @@
 import os
 import io
-import sys
 import time
 import logging
 import requests
-from gensim.utils import to_unicode, to_utf8
+from gensim.utils import to_unicode
 from lxml import etree
 from bs4 import BeautifulSoup
-from nltk import word_tokenize, sent_tokenize
+from nltk import sent_tokenize
 import csv
+
+from utils import mkdir
 
 logger = logging.getLogger('jira')
 os.environ['TZ'] = 'UTC'
@@ -109,19 +110,6 @@ def get_time(date_str):
     date = time.strptime(date_str, data_format)
     # to epoch time - easier to compare
     return int(time.mktime(date))
-
-
-def mkdir(d):
-    # exception handling mkdir -p
-    try:
-        os.makedirs(d)
-    except os.error as e:
-        if 17 == e.errno:
-            # the directory already exists
-            pass
-        else:
-            print('Failed to create "%s" directory!' % d)
-            sys.exit(e.errno)
 
 
 if __name__ == '__main__':
