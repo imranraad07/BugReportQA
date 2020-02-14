@@ -3,6 +3,7 @@ import json
 
 import requests
 from nltk import sent_tokenize
+from nltk import word_tokenize
 
 from utils import mkdir
 
@@ -10,6 +11,10 @@ from utils import mkdir
 # nltk.download('punkt')
 
 github_repos = [
+    "apache/bookkeeper",
+    "prestodb/presto",
+    "UniversalMediaServer/UniversalMediaServer",
+    "zerocracy/farm",
     "mockito/mockito",
     "strongbox/strongbox",
     "TEAMMATES/teammates",
@@ -21,7 +26,6 @@ github_repos = [
     "google/guava",
     "square/retrofit",
     "PhilJay/MPAndroidChart",
-    "zxing/zxing",
     "square/leakcanary",
     "skylot/jadx",
     "microsoft/CNTK",
@@ -32,6 +36,7 @@ github_repos = [
     "commons-app/apps-android-commons",
     "oshi/oshi",
     "IQSS/dataverse"
+    "zxing/zxing",
     # "duckduckgo/Android",
     # "AntennaPod/AntennaPod",
     # "brave/browser-android-tabs",
@@ -151,7 +156,7 @@ def read_github_issues(result_folder, result_file, auth):
 
             # print(comment_added_csv_count, " ", issue['comments'], " ", issue['labels'], " ", issue['comments_url'])
             comment_count = 0
-            follow_up_question = False
+            is_follow_up_question = False
             if 'comments' not in issue_data:
                 print("comments is not in issue data")
                 continue
@@ -180,8 +185,17 @@ def read_github_issues(result_folder, result_file, auth):
                 # if comment author and issue author are same, then discard the comment
                 if comment['user']['id'] == issue_data['user']['id']:
                     continue
+                # just filtering by character count
+                if len(comment['body']) > 300:
+                    continue
+                follow_up_question = comment['body']
                 for sentence in sent_tokenize(comment['body']):
-                    if check(sentence):
+                    sentence = sentence.strip()
+                    if sentence.startswith(">"):
+                        continue
+                    # elif is_follow_up_question:
+                    #     follow_up_question = follow_up_question.join(sentence)
+                    elif check(sentence):
                         # if sentence starts with @someone, check if this @someone is original issue author or not
                         if sentence.startswith("@"):
                             # print(sentence)
@@ -189,19 +203,26 @@ def read_github_issues(result_folder, result_file, auth):
                             github_login = "@{0}".format(issue_data['user']['login'])
                             # print(is_mentioned, " ", github_login, " ", is_mentioned == github_login)
                             if is_mentioned != github_login:
-                                continue
-
-                        comment_added_csv_count = comment_added_csv_count + 1
-                        sw = csv.writer(open('{0}/{1}'.format(result_folder, result_file), 'a'))
-                        sw.writerow([
-                            '{0}'.format(repo),
-                            '{0}'.format(issue_data['body']),
-                            '{0}'.format(comment['html_url']),
-                            '{0}'.format(comment['body'])
-                        ])
-                        follow_up_question = True
+                                break
+                        is_follow_up_question = True
+                        idx = comment['body'].find(sentence)
+                        # print(idx)
+                        # if idx != 0:
+                        follow_up_question = comment['body'][idx:]
+                        # print(idx, " ", follow_up_question, " ", comment['body'])
                         break
-                if follow_up_question:
+
+                if is_follow_up_question:
+                    # print(follow_up_question, " ", comment['body'])
+                    comment_added_csv_count = comment_added_csv_count + 1
+                    sw = csv.writer(open('{0}/{1}'.format(result_folder, result_file), 'a'))
+                    sw.writerow([
+                        '{0}'.format(repo),
+                        '{0}'.format(issue_data['body']),
+                        '{0}'.format(comment['html_url']),
+                        '{0}'.format(follow_up_question)
+                        # '{0}'.format(comment['body'])
+                    ])
                     break
         print(total_issues, " ", comment_added_csv_count)
 
