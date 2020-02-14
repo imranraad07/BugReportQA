@@ -39,8 +39,8 @@ if __name__ == '__main__':
     with open('results/github_data_sample.csv') as csvDataFile:
         csvReader = csv.reader(csvDataFile)
         for row in csvReader:
-            if len(row[3]) > 300:
-                continue
+            # if len(row[3]) > 300:
+            #     continue
 
             issues.append(filerSentence(row[1]))
             comments.append(filerSentence(row[3]))
