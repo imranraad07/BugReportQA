@@ -4,6 +4,7 @@ import json
 import requests
 from nltk import sent_tokenize
 from nltk import word_tokenize
+from datetime import datetime, timedelta
 
 from utils import mkdir
 
@@ -11,38 +12,18 @@ from utils import mkdir
 # nltk.download('punkt')
 
 github_repos = [
-    "apache/bookkeeper",
-    "prestodb/presto",
-    "square/leakcanary",
-    "skylot/jadx",
-    "microsoft/CNTK",
-    "libgdx/libgdx",
-    "google/ExoPlayer",
-    "jhipster/generator-jhipster",
-    "NationalSecurityAgency/ghidra",
-    "oshi/oshi",
-    "IQSS/dataverse",
-    "zxing/zxing",
-    "UniversalMediaServer/UniversalMediaServer",
-    "zerocracy/farm",
-    "mockito/mockito",
-    "strongbox/strongbox",
-    "TEAMMATES/teammates",
-    "JabRef/jabref",
-    "elastic/elasticsearch",
-    "spring-projects/spring-boot",
+    "ReactiveX/RxNetty", "elastic/elasticsearch-hadoop", "springfox/springfox", "google/conscrypt",
+    "google/dagger", "spring-projects/spring-security", "spring-projects/spring-session",
+
+    "socketio/socket.io-client-java", "square/moshi", "scribejava/scribejava", "OpenRefine/OpenRefine",
+    "square/javapoet", "mockito/mockito", "junit-team/junit4", "mybatis/mybatis-3", "bazelbuild/bazel",
+    "orhanobut/logger", "realm/realm-java", "greenrobot/greenDAO", "google/ExoPlayer", "jfeinstein10/SlidingMenu",
+    "android/plaid", "Tencent/tinker", "chrisbanes/PhotoView", "afollestad/material-dialogs",
+    "Netflix/Hystrix", "libgdx/libgdx", "netty/netty", "facebook/fresco", "skylot/jadx", "square/picasso",
+    "greenrobot/EventBus", "zxing/zxing", "square/leakcanary", "airbnb/lottie-android",
+    "JakeWharton/butterknife", "spring-projects/spring-framework", "bumptech/glide", "PhilJay/MPAndroidChart",
+    "google/guava", "spring-projects/spring-boot", "square/okhttp", "square/retrofit", "elastic/elasticsearch",
     "ReactiveX/RxJava",
-    "square/okhttp",
-    "google/guava",
-    "square/retrofit",
-    "PhilJay/MPAndroidChart",
-    "commons-app/apps-android-commons",
-    # "duckduckgo/Android",
-    # "AntennaPod/AntennaPod",
-    # "brave/browser-android-tabs",
-    # "mozilla-mobile/focus-android",
-    # "Telegram-FOSS-Team/Telegram-FOSS",
-    # "bumptech/glide",
 ]
 
 
@@ -114,8 +95,8 @@ def read_github_issues(result_folder, result_file, auth):
             issue_count = issue_count + 1
             total_issues = total_issues + 1
             # print(total_issues)
-            # consider at most 2000 issues for each repo
-            if issue_count > 2000:
+            # consider at most 1000 issues for each repo
+            if issue_count > 1000:
                 break
 
             # issue_data = json.loads(issue)
@@ -180,6 +161,12 @@ def read_github_issues(result_folder, result_file, auth):
                     continue
                 if 'user' not in issue_data:
                     print("user is not in issue data")
+                    continue
+
+                d1 = datetime.strptime(comment['created_at'], "%Y-%m-%dT%H:%M:%SZ")
+                d2 = datetime.strptime(issue_data['created_at'], "%Y-%m-%dT%H:%M:%SZ")
+                if d1 - d2 > timedelta(days=60):
+                    # print(d1-d2)
                     continue
 
                 # if comment author and issue author are same, then discard the comment
