@@ -62,10 +62,10 @@ if __name__ == '__main__':
             # if len(row[3]) > 300:
             #     continue
 
-            issues.append(filerSentence(row[1]))
-            comments.append(filerSentence(modify_comment(row[2])))
-            originalIssues.append(row[1])
-            originalComments.append(row[2])
+            issues.append(filerSentence(row[2]))
+            comments.append(filerSentence(modify_comment(row[3])))
+            originalIssues.append(row[2])
+            originalComments.append(row[3])
 
     print(len(issues))
     # print(comments)
