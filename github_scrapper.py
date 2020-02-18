@@ -3,7 +3,6 @@ import json
 
 import requests
 from nltk import sent_tokenize
-from nltk import word_tokenize
 from datetime import datetime, timedelta
 
 from utils import mkdir
@@ -18,9 +17,10 @@ github_repos = [
     "square/javapoet", "mockito/mockito", "junit-team/junit4", "mybatis/mybatis-3", "bazelbuild/bazel",
     "orhanobut/logger", "realm/realm-java", "google/ExoPlayer", "jfeinstein10/SlidingMenu",
     "android/plaid", "chrisbanes/PhotoView", "afollestad/material-dialogs",
-    "Netflix/Hystrix", "libgdx/libgdx", "netty/netty",
-
-    "facebook/fresco", "skylot/jadx", "square/picasso",
+    "Netflix/Hystrix", "libgdx/libgdx", "netty/netty", "watson-developer-cloud/java-sdk", "line/armeria",
+    "paypal/PayPal-Java-SDK", "firebase/firebase-admin-java", "firebase/firebase-android-sdk",
+    "firebase/FirebaseUI-Android", "aws/aws-sdk-java", "aws/aws-sdk-java-v2",
+    "facebook/stetho", "facebook/facebook-java-business-sdk", "facebook/fresco", "skylot/jadx", "square/picasso",
     "greenrobot/EventBus", "zxing/zxing", "square/leakcanary", "airbnb/lottie-android",
     "JakeWharton/butterknife", "spring-projects/spring-framework", "bumptech/glide", "PhilJay/MPAndroidChart",
     "google/guava", "spring-projects/spring-boot", "square/okhttp", "square/retrofit", "elastic/elasticsearch",
@@ -72,7 +72,7 @@ def _link_field_to_dict(field):
     ])
 
 
-def check(sentence):
+def question_identifier(sentence):
     start_words = ['who', 'what', 'when', 'where', 'why', 'which', 'how', "while", "do", "does", "did", "will", "would",
                    "can", "could", "shall", "should", "may", "might", "must"]
     flag = False
@@ -102,7 +102,7 @@ def is_issue_label_bug(issue_data):
         label_desc = label_data['description']
         if label_desc is None:
             label_desc = ""
-        if ("bug" in label_text) or ("bug" in label_desc):
+        if ("bug" in label_text) or ("defeat" in label_text) or ("bug" in label_desc):
             is_label_bug = True
             break
 
@@ -189,7 +189,7 @@ def read_github_issues(result_folder, result_file, auth):
                         continue
                     # elif is_follow_up_question:
                     #     follow_up_question = follow_up_question.join(sentence)
-                    elif check(sentence):
+                    elif question_identifier(sentence):
                         # if sentence starts with @someone, check if this @someone is original issue author or not
                         if sentence.startswith("@"):
                             # print(sentence)

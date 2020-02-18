@@ -7,7 +7,7 @@ from gensim import corpora, models, similarities
 import jieba
 import re
 
-from nltk import word_tokenize
+from nltk import word_tokenize, sent_tokenize
 from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
 
@@ -37,6 +37,17 @@ def filerSentence(sentence):
     return ret
 
 
+def modify_comment(text):
+    modified_text = ''
+    for sentence in sent_tokenize(text):
+        if sentence.startswith(">") or sentence.startswith("```"):
+            continue
+        else:
+            modified_text = modified_text + " " + sentence
+    # print("1: ", modified_text)
+    return modified_text
+
+
 if __name__ == '__main__':
     issues = []
     comments = []
@@ -45,16 +56,16 @@ if __name__ == '__main__':
     originalComments = []
 
     csv.field_size_limit(sys.maxsize)
-    with open('results/github_data.csv') as csvDataFile:
+    with open('results/github_data_sample.csv') as csvDataFile:
         csvReader = csv.reader(csvDataFile)
         for row in csvReader:
             # if len(row[3]) > 300:
             #     continue
 
             issues.append(filerSentence(row[1]))
-            comments.append(filerSentence(row[3]))
+            comments.append(filerSentence(modify_comment(row[2])))
             originalIssues.append(row[1])
-            originalComments.append(row[3])
+            originalComments.append(row[2])
 
     print(len(issues))
     # print(comments)
@@ -78,8 +89,7 @@ if __name__ == '__main__':
     unique_comments = 0
     idx = 0
     for comment in comments:
-        keyword = comment
-        kw_vector = dictionary.doc2bow(jieba.lcut(keyword))
+        kw_vector = dictionary.doc2bow(jieba.lcut(comment))
         sim = index[tfidf[kw_vector]]
         unique = False
         if sim[idx] > 0.20:
