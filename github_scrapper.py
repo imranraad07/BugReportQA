@@ -11,20 +11,22 @@ from utils import mkdir
 # nltk.download('punkt')
 
 github_repos = [
-    "ReactiveX/RxNetty", "elastic/elasticsearch-hadoop", "springfox/springfox", "google/conscrypt",
-    "google/dagger", "spring-projects/spring-security", "spring-projects/spring-session",
-    "socketio/socket.io-client-java", "square/moshi", "OpenRefine/OpenRefine",
-    "square/javapoet", "mockito/mockito", "junit-team/junit4", "mybatis/mybatis-3", "bazelbuild/bazel",
-    "orhanobut/logger", "realm/realm-java", "google/ExoPlayer", "jfeinstein10/SlidingMenu",
-    "android/plaid", "chrisbanes/PhotoView", "afollestad/material-dialogs",
+    "aws/aws-sdk-java", "aws/aws-sdk-java-v2",
+    "ReactiveX/RxNetty", "ReactiveX/RxJava",
+    "google/conscrypt", "google/guava", "google/dagger", "google/ExoPlayer",
+    "springfox/springfox", "spring-projects/spring-security", "spring-projects/spring-session",
+    "spring-projects/spring-boot", "spring-projects/spring-framework",
+    "square/moshi", "square/okhttp", "square/retrofit", "square/javapoet", "square/leakcanary", "square/picasso",
+    "elastic/elasticsearch", "elastic/elasticsearch-hadoop",
+    "facebook/stetho", "facebook/facebook-java-business-sdk", "facebook/fresco",
+    "firebase/firebase-admin-java", "firebase/firebase-android-sdk", "firebase/FirebaseUI-Android",
+
+    "OpenRefine/OpenRefine", "socketio/socket.io-client-java", "mockito/mockito", "junit-team/junit4",
+    "mybatis/mybatis-3", "bazelbuild/bazel", "orhanobut/logger", "realm/realm-java",
+    "jfeinstein10/SlidingMenu", "android/plaid", "chrisbanes/PhotoView", "afollestad/material-dialogs",
     "Netflix/Hystrix", "libgdx/libgdx", "netty/netty", "watson-developer-cloud/java-sdk", "line/armeria",
-    "paypal/PayPal-Java-SDK", "firebase/firebase-admin-java", "firebase/firebase-android-sdk",
-    "firebase/FirebaseUI-Android", "aws/aws-sdk-java", "aws/aws-sdk-java-v2",
-    "facebook/stetho", "facebook/facebook-java-business-sdk", "facebook/fresco", "skylot/jadx", "square/picasso",
-    "greenrobot/EventBus", "zxing/zxing", "square/leakcanary", "airbnb/lottie-android",
-    "JakeWharton/butterknife", "spring-projects/spring-framework", "bumptech/glide", "PhilJay/MPAndroidChart",
-    "google/guava", "spring-projects/spring-boot", "square/okhttp", "square/retrofit", "elastic/elasticsearch",
-    "ReactiveX/RxJava",
+    "paypal/PayPal-Java-SDK", "skylot/jadx", "greenrobot/EventBus", "zxing/zxing", "airbnb/lottie-android",
+    "JakeWharton/butterknife", "bumptech/glide", "PhilJay/MPAndroidChart",
 ]
 
 
@@ -139,9 +141,11 @@ def read_github_issues(result_folder, result_file, auth):
             if not is_label_bug:
                 continue
 
-            # print(comment_added_csv_count, " ", issue['comments'], " ", issue['labels'], " ", issue['comments_url'])
             comment_count = 0
+            after_question = 0
             is_follow_up_question = False
+            follow_up_question = ''
+            follow_up_question_reply = ''
             if 'comments' not in issue_data:
                 print("comments is not in issue data")
                 continue
@@ -155,11 +159,6 @@ def read_github_issues(result_folder, result_file, auth):
             if comments is None:
                 continue
             for comment in comments:
-                comment_count = comment_count + 1
-                # look up to 3 comments
-                if comment_count > 3:
-                    break
-
                 if 'user' not in comment:
                     print("user is not in comment data")
                     continue
@@ -174,50 +173,48 @@ def read_github_issues(result_folder, result_file, auth):
                     # print(d1-d2)
                     continue
 
-                # if comment author and issue author are same, then discard the comment
-                if comment['user']['id'] == issue_data['user']['id']:
-                    continue
-
-                # just filtering by character count
-                if len(comment['body']) > 300:
-                    continue
-
-                follow_up_question = comment['body']
-                for sentence in sent_tokenize(comment['body']):
-                    sentence = sentence.strip()
-                    if sentence.startswith(">"):
+                # # just filtering by character count
+                # if len(comment['body']) > 300:
+                #     continue
+                if not is_follow_up_question and comment_count < 3:
+                    comment_count = comment_count + 1
+                    # if comment author and issue author are same, then discard the comment
+                    if comment['user']['id'] == issue_data['user']['id']:
                         continue
-                    # elif is_follow_up_question:
-                    #     follow_up_question = follow_up_question.join(sentence)
-                    elif question_identifier(sentence):
-                        # if sentence starts with @someone, check if this @someone is original issue author or not
-                        if sentence.startswith("@"):
-                            # print(sentence)
-                            is_mentioned = sentence.split()[0]
-                            github_login = "@{0}".format(issue_data['user']['login'])
-                            # print(is_mentioned, " ", github_login, " ", is_mentioned == github_login)
-                            if is_mentioned != github_login:
-                                break
-                        is_follow_up_question = True
-                        idx = comment['body'].find(sentence)
-                        # print(idx)
-                        # if idx != 0:
-                        follow_up_question = comment['body'][idx:]
-                        # print(idx, " ", follow_up_question, " ", comment['body'])
+                    follow_up_question = comment['body']
+                    for sentence in sent_tokenize(comment['body']):
+                        sentence = sentence.strip()
+                        if sentence.startswith(">"):
+                            continue
+                        elif question_identifier(sentence):
+                            # if sentence starts with @someone, check if this @someone is original issue author or not
+                            if sentence.startswith("@"):
+                                is_mentioned = sentence.split()[0]
+                                github_login = "@{0}".format(issue_data['user']['login'])
+                                if is_mentioned != github_login:
+                                    break
+                            is_follow_up_question = True
+                            idx = comment['body'].find(sentence)
+                            follow_up_question = comment['body'][idx:]
+                            after_question = 0
+                            break
+                elif follow_up_question and after_question < 3:
+                    after_question = after_question + 1
+                    if issue_data['user']['login'] == comment['user']['login']:
+                        follow_up_question_reply = comment['body']
                         break
 
-                if is_follow_up_question:
-                    # print(follow_up_question, " ", comment['body'])
-                    comment_added_csv_count = comment_added_csv_count + 1
-                    sw = csv.writer(open('{0}/{1}'.format(result_folder, result_file), 'a'))
-                    sw.writerow([
-                        '{0}'.format(repo),
-                        '{0}'.format(issue_data['body']),
-                        '{0}'.format(comment['html_url']),
-                        '{0}'.format(follow_up_question)
-                        # '{0}'.format(comment['body'])
-                    ])
-                    break
+            if is_follow_up_question:
+                # print(follow_up_question, " ", comment['body'])
+                comment_added_csv_count = comment_added_csv_count + 1
+                sw = csv.writer(open('{0}/{1}'.format(result_folder, result_file), 'a'))
+                sw.writerow([
+                    '{0}'.format(repo),
+                    '{0}'.format(issue_data['html_url']),
+                    '{0}'.format(issue_data['body']),
+                    '{0}'.format(follow_up_question),
+                    '{0}'.format(follow_up_question_reply)
+                ])
         print(total_issues, " ", comment_added_csv_count)
 
 
