@@ -82,12 +82,6 @@ if __name__ == '__main__':
         kw_vector = dictionary.doc2bow(jieba.lcut(keyword))
         sim = index[tfidf[kw_vector]]
         unique = False
-        # for i in range(len(sim)):
-        #     if sim[i] > 0.40:
-        #         # print('comment {0} is similar to text{1}: {2}'.format(comment_number, i + 1, sim[i]))
-        #         if i + 1 == comment_number:
-        #             unique = True
-        # if unique:
         if sim[idx] > 0.20:
             unique_comments = unique_comments + 1
             sw = csv.writer(open('{0}/{1}'.format(result_folder, result_file), 'a'))

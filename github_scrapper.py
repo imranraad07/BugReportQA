@@ -14,12 +14,13 @@ from utils import mkdir
 github_repos = [
     "ReactiveX/RxNetty", "elastic/elasticsearch-hadoop", "springfox/springfox", "google/conscrypt",
     "google/dagger", "spring-projects/spring-security", "spring-projects/spring-session",
-
-    "socketio/socket.io-client-java", "square/moshi", "scribejava/scribejava", "OpenRefine/OpenRefine",
+    "socketio/socket.io-client-java", "square/moshi", "OpenRefine/OpenRefine",
     "square/javapoet", "mockito/mockito", "junit-team/junit4", "mybatis/mybatis-3", "bazelbuild/bazel",
-    "orhanobut/logger", "realm/realm-java", "greenrobot/greenDAO", "google/ExoPlayer", "jfeinstein10/SlidingMenu",
-    "android/plaid", "Tencent/tinker", "chrisbanes/PhotoView", "afollestad/material-dialogs",
-    "Netflix/Hystrix", "libgdx/libgdx", "netty/netty", "facebook/fresco", "skylot/jadx", "square/picasso",
+    "orhanobut/logger", "realm/realm-java", "google/ExoPlayer", "jfeinstein10/SlidingMenu",
+    "android/plaid", "chrisbanes/PhotoView", "afollestad/material-dialogs",
+    "Netflix/Hystrix", "libgdx/libgdx", "netty/netty",
+
+    "facebook/fresco", "skylot/jadx", "square/picasso",
     "greenrobot/EventBus", "zxing/zxing", "square/leakcanary", "airbnb/lottie-android",
     "JakeWharton/butterknife", "spring-projects/spring-framework", "bumptech/glide", "PhilJay/MPAndroidChart",
     "google/guava", "spring-projects/spring-boot", "square/okhttp", "square/retrofit", "elastic/elasticsearch",
@@ -72,13 +73,45 @@ def _link_field_to_dict(field):
 
 
 def check(sentence):
-    start_words = ['who', 'what', 'when', 'where', 'why', 'which', 'how']
-    if sentence.endswith('?'):
-        return True
+    start_words = ['who', 'what', 'when', 'where', 'why', 'which', 'how', "while", "do", "does", "did", "will", "would",
+                   "can", "could", "shall", "should", "may", "might", "must"]
+    flag = False
     for word in start_words:
-        if sentence.startswith(word):
-            return True
+        if sentence.lower().startswith(word.lower()):
+            flag = True
+            # return True
+    if flag and sentence.endswith('?'):
+        # print(sentence)
+        return True
     return False
+
+
+def is_issue_label_bug(issue_data):
+    if 'labels' not in issue_data:
+        print("labels is not in issue data")
+        return False
+    is_label_bug = False
+    labels = issue_data['labels']
+    if labels is None:
+        return False
+    for label_data in labels:
+        if 'name' not in label_data:
+            print("name is not in label data")
+            return False
+        label_text = label_data['name']
+        label_desc = label_data['description']
+        if label_desc is None:
+            label_desc = ""
+        if ("bug" in label_text) or ("bug" in label_desc):
+            is_label_bug = True
+            break
+
+    if 'title' not in issue_data:
+        print("title is not in issue data")
+    else:
+        if issue_data['title'] is not None and "bug" in issue_data['title']:
+            is_label_bug = True
+    return is_label_bug
 
 
 def read_github_issues(result_folder, result_file, auth):
@@ -96,42 +129,13 @@ def read_github_issues(result_folder, result_file, auth):
             total_issues = total_issues + 1
             # print(total_issues)
             # consider at most 1000 issues for each repo
-            if issue_count > 1000:
+            if issue_count > 1500:
                 break
 
             # issue_data = json.loads(issue)
 
             # label bug check
-            is_label_bug = False
-
-            if 'labels' not in issue_data:
-                print("labels is not in issue data")
-                continue
-
-            labels = issue_data['labels']
-            if labels is None:
-                continue
-            for label_data in labels:
-                if 'name' not in label_data:
-                    print("name is not in label data")
-                    continue
-                label_text = label_data['name']
-                label_desc = label_data['description']
-                if label_desc is None:
-                    label_desc = ""
-                if ("bug" in label_text) or ("bug" in label_desc):
-                    is_label_bug = True
-                    break
-
-            if 'title' not in issue_data:
-                print("title is not in issue data")
-            else:
-                if issue_data['title'] is not None and "bug" in issue_data['title']:
-                    is_label_bug = True
-
-            # if issue['body'] is not None and "bug" in issue['body']:
-            #     is_label_bug = True
-
+            is_label_bug = is_issue_label_bug(issue_data)
             if not is_label_bug:
                 continue
 
@@ -163,6 +167,7 @@ def read_github_issues(result_folder, result_file, auth):
                     print("user is not in issue data")
                     continue
 
+                # comment within 60 days of issue creation
                 d1 = datetime.strptime(comment['created_at'], "%Y-%m-%dT%H:%M:%SZ")
                 d2 = datetime.strptime(issue_data['created_at'], "%Y-%m-%dT%H:%M:%SZ")
                 if d1 - d2 > timedelta(days=60):
@@ -172,9 +177,11 @@ def read_github_issues(result_folder, result_file, auth):
                 # if comment author and issue author are same, then discard the comment
                 if comment['user']['id'] == issue_data['user']['id']:
                     continue
+
                 # just filtering by character count
                 if len(comment['body']) > 300:
                     continue
+
                 follow_up_question = comment['body']
                 for sentence in sent_tokenize(comment['body']):
                     sentence = sentence.strip()

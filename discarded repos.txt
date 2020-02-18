@@ -9,3 +9,6 @@
 "apache/dubbo",
 "google/gson",
 "nostra13/Android-Universal-Image-Loader",
+"greenrobot/greenDAO",
+"scribejava/scribejava",
+"Tencent/tinker",
