@@ -11,15 +11,14 @@ from utils import mkdir
 # nltk.download('punkt')
 
 github_repos = [
-    "aws/aws-sdk-java", "aws/aws-sdk-java-v2",
-    "ReactiveX/RxNetty", "ReactiveX/RxJava",
-    "google/conscrypt", "google/guava", "google/dagger", "google/ExoPlayer",
-    "springfox/springfox", "spring-projects/spring-security", "spring-projects/spring-session",
-    "spring-projects/spring-boot", "spring-projects/spring-framework",
-    "square/moshi", "square/okhttp", "square/retrofit", "square/javapoet", "square/leakcanary", "square/picasso",
-    "elastic/elasticsearch", "elastic/elasticsearch-hadoop",
-    "facebook/stetho", "facebook/facebook-java-business-sdk", "facebook/fresco",
-    "firebase/firebase-admin-java", "firebase/firebase-android-sdk", "firebase/FirebaseUI-Android",
+    "microsoft/azure-tools-for-java", "microsoft/azure-devops-intellij", "microsoft/vscode-java-debug",
+    "aws/aws-sdk-java", "aws/aws-sdk-java-v2", "ReactiveX/RxNetty", "ReactiveX/RxJava", "google/conscrypt",
+    "google/dagger", "google/ExoPlayer", "springfox/springfox", "spring-projects/spring-security",
+    "spring-projects/spring-session", "spring-projects/spring-boot", "spring-projects/spring-framework", "square/moshi",
+    "square/okhttp", "square/retrofit", "square/leakcanary", "elastic/elasticsearch", "elastic/elasticsearch-hadoop",
+    "facebook/stetho", "facebook/fresco", "firebase/firebase-android-sdk", "firebase/FirebaseUI-Android",
+
+    "quarkusio/quarkus", "spring-projects/spring-petclinic", "TeamNewPipe/NewPipe",
 
     "OpenRefine/OpenRefine", "socketio/socket.io-client-java", "mockito/mockito", "junit-team/junit4",
     "mybatis/mybatis-3", "bazelbuild/bazel", "orhanobut/logger", "realm/realm-java",
@@ -122,6 +121,7 @@ def read_github_issues(result_folder, result_file, auth):
     comment_added_csv_count = 0
     for repo in github_repos:
         issue_count = 0
+        question_this_repo = 0
         for issue_data in get_issues(repo, auth):
             # github v3 api considers pull requests as issues. so filter them
             if 'pull_request' in issue_data:
@@ -207,6 +207,7 @@ def read_github_issues(result_folder, result_file, auth):
             if is_follow_up_question:
                 # print(follow_up_question, " ", comment['body'])
                 comment_added_csv_count = comment_added_csv_count + 1
+                question_this_repo = question_this_repo + 1
                 sw = csv.writer(open('{0}/{1}'.format(result_folder, result_file), 'a'))
                 sw.writerow([
                     '{0}'.format(repo),
@@ -215,7 +216,7 @@ def read_github_issues(result_folder, result_file, auth):
                     '{0}'.format(follow_up_question),
                     '{0}'.format(follow_up_question_reply)
                 ])
-        print(total_issues, " ", comment_added_csv_count)
+        print(total_issues, " ", comment_added_csv_count, " ", question_this_repo)
 
 
 if __name__ == '__main__':

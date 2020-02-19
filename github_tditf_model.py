@@ -38,14 +38,15 @@ def filerSentence(sentence):
 
 
 def modify_comment(text):
-    modified_text = ''
-    for sentence in sent_tokenize(text):
-        if sentence.startswith(">") or sentence.startswith("```"):
+    text = text.replace("\n", " ")
+    modified_text = re.sub(r'```.+```', '', text)
+    return_text = ''
+    for sentence in sent_tokenize(modified_text):
+        if sentence.startswith(">"):
             continue
         else:
-            modified_text = modified_text + " " + sentence
-    # print("1: ", modified_text)
-    return modified_text
+            return_text = return_text + " " + sentence
+    return return_text
 
 
 if __name__ == '__main__':
