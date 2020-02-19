@@ -12,20 +12,17 @@ from utils import mkdir
 
 github_repos = [
     "microsoft/azure-tools-for-java", "microsoft/azure-devops-intellij", "microsoft/vscode-java-debug",
-    "aws/aws-sdk-java", "aws/aws-sdk-java-v2", "ReactiveX/RxNetty", "ReactiveX/RxJava", "google/conscrypt",
-    "google/dagger", "google/ExoPlayer", "springfox/springfox", "spring-projects/spring-security",
-    "spring-projects/spring-session", "spring-projects/spring-boot", "spring-projects/spring-framework", "square/moshi",
-    "square/okhttp", "square/retrofit", "square/leakcanary", "elastic/elasticsearch", "elastic/elasticsearch-hadoop",
-    "facebook/stetho", "facebook/fresco", "firebase/firebase-android-sdk", "firebase/FirebaseUI-Android",
+    "aws/aws-sdk-java", "aws/aws-sdk-java-v2", "ReactiveX/RxJava", "google/dagger", "google/ExoPlayer",
+    "springfox/springfox", "spring-projects/spring-security", "spring-projects/spring-session",
+    "spring-projects/spring-petclinic", "spring-projects/spring-kafka", "spring-projects/spring-boot",
+    "square/moshi", "square/okhttp", "square/leakcanary", "facebook/stetho", "facebook/fresco", "dbeaver/dbeaver",
 
-    "quarkusio/quarkus", "spring-projects/spring-petclinic", "TeamNewPipe/NewPipe",
-
-    "OpenRefine/OpenRefine", "socketio/socket.io-client-java", "mockito/mockito", "junit-team/junit4",
-    "mybatis/mybatis-3", "bazelbuild/bazel", "orhanobut/logger", "realm/realm-java",
-    "jfeinstein10/SlidingMenu", "android/plaid", "chrisbanes/PhotoView", "afollestad/material-dialogs",
-    "Netflix/Hystrix", "libgdx/libgdx", "netty/netty", "watson-developer-cloud/java-sdk", "line/armeria",
-    "paypal/PayPal-Java-SDK", "skylot/jadx", "greenrobot/EventBus", "zxing/zxing", "airbnb/lottie-android",
-    "JakeWharton/butterknife", "bumptech/glide", "PhilJay/MPAndroidChart",
+    "BroadleafCommerce/BroadleafCommerce", "Graylog2/graylog2-server", "quarkusio/quarkus", "TeamNewPipe/NewPipe",
+    "intuit/karate", "jenkinsci/configuration-as-code-plugin", "runelite/runelite", "Netflix/conductor",
+    "Netflix/Hystrix", "OpenRefine/OpenRefine", "mockito/mockito", "junit-team/junit4", "mybatis/mybatis-3",
+    "bazelbuild/bazel", "libgdx/libgdx", "netty/netty", "watson-developer-cloud/java-sdk", "line/armeria",
+    "paypal/PayPal-Java-SDK", "zxing/zxing", "elastic/elasticsearch-hadoop",
+    # "elastic/elasticsearch",
 ]
 
 
@@ -36,8 +33,8 @@ def get_comments(url, auth):
 
 
 def get_issues(repo, auth):
-    # url = "https://api.github.com/repos/{repo}/issues?state=closed&sort=comments-desc"
-    url = "https://api.github.com/repos/{repo}/issues?state=closed"
+    url = "https://api.github.com/repos/{repo}/issues?state=closed&sort=comments-desc"
+    # url = "https://api.github.com/repos/{repo}/issues?state=closed"
     url = url.format(repo=repo)
     return _getter(url, auth)
 
@@ -46,8 +43,8 @@ def _getter(url, auth):
     link = dict(next=url)
     print(link)
     while 'next' in link:
-        # print(link)
         response = requests.get(link['next'], auth=auth)
+        # print(link, " ", response.status_code)
         # And.. if we didn't get good results, just bail.
         if response.status_code != 200:
             print("Bad response code: ", response.status_code)
@@ -126,6 +123,13 @@ def read_github_issues(result_folder, result_file, auth):
             # github v3 api considers pull requests as issues. so filter them
             if 'pull_request' in issue_data:
                 continue
+            if 'comments' not in issue_data:
+                print("comments is not in issue data")
+                continue
+            # check if comment count is at least two
+            if issue_data['comments'] < 2:
+                break
+
             # print(issue_count, " ", issue_data['title'])
             issue_count = issue_count + 1
             total_issues = total_issues + 1
@@ -146,18 +150,14 @@ def read_github_issues(result_folder, result_file, auth):
             is_follow_up_question = False
             follow_up_question = ''
             follow_up_question_reply = ''
-            if 'comments' not in issue_data:
-                print("comments is not in issue data")
-                continue
             if 'comments_url' not in issue_data:
                 print("comments_url is not in issue data")
-                continue
-            # check if comment count is at least two
-            if issue_data['comments'] < 2:
                 continue
             comments = get_comments(issue_data['comments_url'], auth)
             if comments is None:
                 continue
+
+            # reading the comments
             for comment in comments:
                 if 'user' not in comment:
                     print("user is not in comment data")
@@ -173,10 +173,10 @@ def read_github_issues(result_folder, result_file, auth):
                     # print(d1-d2)
                     continue
 
-                # # just filtering by character count
-                # if len(comment['body']) > 300:
-                #     continue
                 if not is_follow_up_question and comment_count < 3:
+                    # just filtering by character count
+                    if len(comment['body']) > 300:
+                        continue
                     comment_count = comment_count + 1
                     # if comment author and issue author are same, then discard the comment
                     if comment['user']['id'] == issue_data['user']['id']:

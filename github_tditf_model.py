@@ -12,7 +12,7 @@ from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
 
 
-def filerSentence(sentence):
+def filter_sentence(sentence):
     porter = PorterStemmer()
     stopWords = set(stopwords.words('english'))
     java_keywords = ["abstract", "assert", "boolean",
@@ -38,68 +38,81 @@ def filerSentence(sentence):
 
 
 def modify_comment(text):
-    text = text.replace("\n", " ")
-    modified_text = re.sub(r'```.+```', '', text)
-    return_text = ''
-    for sentence in sent_tokenize(modified_text):
-        if sentence.startswith(">"):
-            continue
-        else:
-            return_text = return_text + " " + sentence
-    return return_text
+    modified_text = text.replace("\n", " ")
+    modified_text = re.sub(r'```.+```', '', modified_text)
+    return modified_text
 
 
 if __name__ == '__main__':
     issues = []
-    comments = []
+    questions = []
+    answers = []
 
     originalIssues = []
-    originalComments = []
+    originalQuestions = []
+    originalAnswers = []
 
     csv.field_size_limit(sys.maxsize)
     with open('results/github_data_sample.csv') as csvDataFile:
         csvReader = csv.reader(csvDataFile)
         for row in csvReader:
-            # if len(row[3]) > 300:
-            #     continue
-
-            issues.append(filerSentence(row[2]))
-            comments.append(filerSentence(modify_comment(row[3])))
+            issues.append(filter_sentence(row[2]))
+            questions.append(filter_sentence(modify_comment(row[3])))
+            answers.append(filter_sentence(modify_comment(row[4])))
             originalIssues.append(row[2])
-            originalComments.append(row[3])
+            originalQuestions.append(row[3])
+            originalAnswers.append(row[4])
 
     print(len(issues))
     # print(comments)
 
     # space removal from texts
-    texts = [jieba.lcut(text) for text in issues]
-    for text in texts:
+    texts_issues = [jieba.lcut(text) for text in issues]
+    for text in texts_issues:
         while " " in text:
             text.remove(" ")
+    dictionary_issue = corpora.Dictionary(texts_issues)
+    print(dictionary_issue)
+    feature_cnt_issue = len(dictionary_issue.token2id)
+    corpus_issue = [dictionary_issue.doc2bow(text) for text in texts_issues]
+    tfidf_issue = models.TfidfModel(corpus=corpus_issue)
+    index_issue = similarities.SparseMatrixSimilarity(tfidf_issue[corpus_issue], num_features=feature_cnt_issue)
 
-    dictionary = corpora.Dictionary(texts)
-    print(dictionary)
-    feature_cnt = len(dictionary.token2id)
-    corpus = [dictionary.doc2bow(text) for text in texts]
-    tfidf = models.TfidfModel(corpus=corpus)
-    index = similarities.SparseMatrixSimilarity(tfidf[corpus], num_features=feature_cnt)
+    # space removal from texts
+    texts_questions = [jieba.lcut(text) for text in questions]
+    for text in texts_questions:
+        while " " in text:
+            text.remove(" ")
+    dictionary_questions = corpora.Dictionary(texts_questions)
+    print(dictionary_questions)
+    feature_cnt_questions = len(dictionary_questions.token2id)
+    corpus_questions = [dictionary_questions.doc2bow(text) for text in texts_questions]
+    tfidf_questions = models.TfidfModel(corpus=corpus_questions)
+    index_questions = similarities.SparseMatrixSimilarity(tfidf_questions[corpus_questions],
+                                                          num_features=feature_cnt_questions)
 
     result_folder = "results"
     result_file = "tditf_github_data.csv"
     comment_number = 0
     unique_comments = 0
     idx = 0
-    for comment in comments:
-        kw_vector = dictionary.doc2bow(jieba.lcut(comment))
-        sim = index[tfidf[kw_vector]]
+    for question in questions:
+        kw_vector_issue = dictionary_issue.doc2bow(jieba.lcut(question))
+        sim_issue = index_issue[tfidf_issue[kw_vector_issue]]
         unique = False
-        if sim[idx] > 0.20:
+        if sim_issue[idx] > 0.10:
             unique_comments = unique_comments + 1
+
+            kw_vector_question = dictionary_questions.doc2bow(jieba.lcut(answers[idx]))
+            sim_question = index_questions[tfidf_questions[kw_vector_question]]
+
             sw = csv.writer(open('{0}/{1}'.format(result_folder, result_file), 'a'))
             sw.writerow([
                 '{0}'.format(originalIssues[idx]),
-                '{0}'.format(originalComments[idx]),
-                '{0}'.format(sim[idx])
+                '{0}'.format(originalQuestions[idx]),
+                '{0}'.format(sim_issue[idx]),
+                '{0}'.format(originalAnswers[idx]),
+                '{0}'.format(sim_question[idx]),
             ])
         idx = idx + 1
     print(unique_comments)
