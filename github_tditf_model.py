@@ -33,7 +33,6 @@ def filter_sentence(sentence):
         if word not in stopWords and word not in java_keywords:
             if len(word) > 2:
                 ret = ret + porter.stem(word.lower()) + " "
-    # print(ret, " ", sentence)
     return ret
 
 
@@ -54,9 +53,11 @@ if __name__ == '__main__':
     originalAnswers = []
 
     csv.field_size_limit(sys.maxsize)
-    with open('results/github_data_sample.csv') as csvDataFile:
-        csvReader = csv.reader(csvDataFile)
+    with open('results/github_data.csv') as csvDataFile:
+        csvReader = csv.reader((line.replace('\0', '') for line in csvDataFile))
         for row in csvReader:
+            if row[1] in issue_links:
+                continue
             issues.append(filter_sentence(row[2]))
             questions.append(filter_sentence(modify_comment(row[3])))
             answers.append(filter_sentence(modify_comment(row[4])))
@@ -66,7 +67,6 @@ if __name__ == '__main__':
             issue_links.append(row[1])
 
     print(len(issues))
-    # print(comments)
 
     # space removal from texts
     texts_issues = [jieba.lcut(text) for text in issues]

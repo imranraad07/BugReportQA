@@ -11,21 +11,19 @@ from utils import mkdir
 # nltk.download('punkt')
 
 github_repos = [
-    "flyway/flyway", "orientechnologies/orientdb", "crate/crate", "apache/incubator-shardingsphere", "apache/druid",
-    "apache/incubator-shardingsphere", "apache/accumulo", "modelmapper/modelmapper", "mapstruct/mapstruct",
-    "orika-mapper/orika", "DozerMapper/dozer", "jmapper-framework/jmapper-core", "dbeaver/dbeaver",
-    "Microsoft/mssql-jdbc", "pgjdbc/pgjdbc", "mybatis/mybatis-3", "brettwooldridge/HikariCP", "requery/requery",
-    "ebean-orm/ebean", "impossibl/pgjdbc-ng", "prestodb/presto",
-
-    "microsoft/azure-tools-for-java", "aws/aws-sdk-java", "aws/aws-sdk-java-v2", "watson-developer-cloud/java-sdk",
-    "paypal/PayPal-Java-SDK", "microsoft/vscode-java-debug", "ReactiveX/RxJava", "springfox/springfox",
-    "spring-projects/spring-security", "junit-team/junit4", "mockito/mockito", "spring-projects/spring-session",
-    "spring-projects/spring-petclinic", "spring-projects/spring-kafka", "spring-projects/spring-boot",
-    "BroadleafCommerce/BroadleafCommerce", "google/dagger", "netty/netty", "Netflix/Hystrix",
-    "Graylog2/graylog2-server", "intuit/karate", "runelite/runelite", "line/armeria", "elastic/elasticsearch-hadoop",
-
-    # "quarkusio/quarkus", "square/moshi", "square/okhttp", "square/leakcanary", "apache/pulsar", "apache/dubbo",
-    # "apache/incubator-pinot",
+    "apache/accumulo", "apache/pulsar", "apache/dubbo", "apache/incubator-shardingsphere",
+    "aws/aws-sdk-java", "aws/aws-sdk-java-v2", "BroadleafCommerce/BroadleafCommerce", "brettwooldridge/HikariCP",
+    "crate/crate", "dozermapper/dozer", "dbeaver/dbeaver", "ebean-orm/ebean", "elastic/elasticsearch-hadoop",
+    "flyway/flyway", "google/dagger", "Graylog2/graylog2-server", "immutables/immutables", "impossibl/pgjdbc-ng",
+    "jmapper-framework/jmapper-core", "intuit/karate", "junit-team/junit4", "line/armeria", "lettuce-io/lettuce-core",
+    "mapstruct/mapstruct", "microsoft/mssql-jdbc", "microsoft/azure-tools-for-java", "microsoft/vscode-java-debug",
+    "modelmapper/modelmapper", "mockito/mockito", "mybatis/mybatis-3", "neo4j/neo4j", "netty/netty", "Netflix/Hystrix",
+    "orientechnologies/orientdb", "orika-mapper/orika", "objectbox/objectbox-java", "oblac/jodd", "prestodb/presto",
+    "pgjdbc/pgjdbc", "paypal/PayPal-Java-SDK", "quarkusio/quarkus", "redisson/redisson", "requery/requery",
+    "ReactiveX/RxJava", "runelite/runelite", "speedment/speedment", "springfox/springfox",
+    "spring-projects/spring-security", "spring-projects/spring-session", "spring-projects/spring-petclinic",
+    "spring-projects/spring-kafka", "spring-projects/spring-boot", "square/moshi", "square/okhttp", "square/leakcanary",
+    "watson-developer-cloud/java-sdk",
 ]
 
 
@@ -121,6 +119,7 @@ def read_github_issues(result_folder, result_file, auth):
     comment_added_csv_count = 0
     for repo in github_repos:
         issue_count = 0
+        issues_this_repo = 0
         question_this_repo = 0
         for issue_data in get_issues(repo, auth):
             # github v3 api considers pull requests as issues. so filter them
@@ -136,6 +135,7 @@ def read_github_issues(result_folder, result_file, auth):
             # print(issue_count, " ", issue_data['title'])
             issue_count = issue_count + 1
             total_issues = total_issues + 1
+            issues_this_repo = issues_this_repo + 1
             # print(total_issues)
             # consider at most 1000 issues for each repo
             if issue_count > 1500:
@@ -215,11 +215,11 @@ def read_github_issues(result_folder, result_file, auth):
                 sw.writerow([
                     '{0}'.format(repo),
                     '{0}'.format(issue_data['html_url']),
-                    '{0}'.format(issue_data['body']),
+                    '{0}'.format(issue_data['title'] + "\n" + issue_data['body']),
                     '{0}'.format(follow_up_question),
                     '{0}'.format(follow_up_question_reply)
                 ])
-        print(total_issues, " ", comment_added_csv_count, " ", question_this_repo)
+        print(total_issues, " ", comment_added_csv_count, " :::: ", issues_this_repo, " ", question_this_repo)
 
 
 if __name__ == '__main__':
