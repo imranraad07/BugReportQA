@@ -47,6 +47,7 @@ if __name__ == '__main__':
     issues = []
     questions = []
     answers = []
+    issue_links = []
 
     originalIssues = []
     originalQuestions = []
@@ -62,6 +63,7 @@ if __name__ == '__main__':
             originalIssues.append(row[2])
             originalQuestions.append(row[3])
             originalAnswers.append(row[4])
+            issue_links.append(row[1])
 
     print(len(issues))
     # print(comments)
@@ -108,6 +110,7 @@ if __name__ == '__main__':
 
             sw = csv.writer(open('{0}/{1}'.format(result_folder, result_file), 'a'))
             sw.writerow([
+                '{0}'.format(issue_links[idx]),
                 '{0}'.format(originalIssues[idx]),
                 '{0}'.format(originalQuestions[idx]),
                 '{0}'.format(sim_issue[idx]),

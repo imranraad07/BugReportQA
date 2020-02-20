@@ -11,18 +11,21 @@ from utils import mkdir
 # nltk.download('punkt')
 
 github_repos = [
-    "microsoft/azure-tools-for-java", "microsoft/azure-devops-intellij", "microsoft/vscode-java-debug",
-    "aws/aws-sdk-java", "aws/aws-sdk-java-v2", "ReactiveX/RxJava", "google/dagger", "google/ExoPlayer",
-    "springfox/springfox", "spring-projects/spring-security", "spring-projects/spring-session",
-    "spring-projects/spring-petclinic", "spring-projects/spring-kafka", "spring-projects/spring-boot",
-    "square/moshi", "square/okhttp", "square/leakcanary", "facebook/stetho", "facebook/fresco", "dbeaver/dbeaver",
+    "flyway/flyway", "orientechnologies/orientdb", "crate/crate", "apache/incubator-shardingsphere", "apache/druid",
+    "apache/incubator-shardingsphere", "apache/accumulo", "modelmapper/modelmapper", "mapstruct/mapstruct",
+    "orika-mapper/orika", "DozerMapper/dozer", "jmapper-framework/jmapper-core", "dbeaver/dbeaver",
+    "Microsoft/mssql-jdbc", "pgjdbc/pgjdbc", "mybatis/mybatis-3", "brettwooldridge/HikariCP", "requery/requery",
+    "ebean-orm/ebean", "impossibl/pgjdbc-ng", "prestodb/presto",
 
-    "BroadleafCommerce/BroadleafCommerce", "Graylog2/graylog2-server", "quarkusio/quarkus", "TeamNewPipe/NewPipe",
-    "intuit/karate", "jenkinsci/configuration-as-code-plugin", "runelite/runelite", "Netflix/conductor",
-    "Netflix/Hystrix", "OpenRefine/OpenRefine", "mockito/mockito", "junit-team/junit4", "mybatis/mybatis-3",
-    "bazelbuild/bazel", "libgdx/libgdx", "netty/netty", "watson-developer-cloud/java-sdk", "line/armeria",
-    "paypal/PayPal-Java-SDK", "zxing/zxing", "elastic/elasticsearch-hadoop",
-    # "elastic/elasticsearch",
+    "microsoft/azure-tools-for-java", "aws/aws-sdk-java", "aws/aws-sdk-java-v2", "watson-developer-cloud/java-sdk",
+    "paypal/PayPal-Java-SDK", "microsoft/vscode-java-debug", "ReactiveX/RxJava", "springfox/springfox",
+    "spring-projects/spring-security", "junit-team/junit4", "mockito/mockito", "spring-projects/spring-session",
+    "spring-projects/spring-petclinic", "spring-projects/spring-kafka", "spring-projects/spring-boot",
+    "BroadleafCommerce/BroadleafCommerce", "google/dagger", "netty/netty", "Netflix/Hystrix",
+    "Graylog2/graylog2-server", "intuit/karate", "runelite/runelite", "line/armeria", "elastic/elasticsearch-hadoop",
+
+    # "quarkusio/quarkus", "square/moshi", "square/okhttp", "square/leakcanary", "apache/pulsar", "apache/dubbo",
+    # "apache/incubator-pinot",
 ]
 
 
