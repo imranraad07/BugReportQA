@@ -1,15 +1,15 @@
 # https://medium.com/better-programming/introduction-to-gensim-calculating-text-similarity-9e8b55de342d
 # https://www.machinelearningplus.com/nlp/gensim-tutorial/
+# https://kavita-ganesan.com/gensim-word2vec-tutorial-starter-code/#.Xk-JKnVKg5k
 import csv
+import re
 import sys
 
-from gensim import corpora, models, similarities
 import jieba
-import re
-
-from nltk import word_tokenize, sent_tokenize
-from nltk.stem import PorterStemmer
+from gensim import corpora, models, similarities
+from nltk import word_tokenize
 from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
 
 
 def filter_sentence(sentence):
@@ -24,21 +24,29 @@ def filter_sentence(sentence):
                      "return", "short", "static", "strictfp", "super", "switch",
                      "synchronized", "this", "throw", "throws", "transient", "true",
                      "try", "void", "volatile", "while"]
-    res = ''.join([i for i in sentence if not i.isdigit()])
-    res = re.sub(r'\W+', ' ', res)
+
     ret = ''
-    texts = word_tokenize(res)
+    texts = word_tokenize(sentence)
     for word in texts:
         word = word.strip()
         if word not in stopWords and word not in java_keywords:
-            if len(word) > 2:
-                ret = ret + porter.stem(word.lower()) + " "
+            stemmed_word = porter.stem(word)
+            if len(stemmed_word) > 2:
+                ret = ret + stemmed_word + " "
     return ret
 
 
 def modify_comment(text):
+    # remove new lines with space
     modified_text = text.replace("\n", " ")
+    # remove codes
     modified_text = re.sub(r'```.+```', '', modified_text)
+    # remove non-ascii characters
+    modified_text = re.sub("([^\x00-\x7F])+", " ", modified_text)
+    # lower case
+    modified_text = modified_text.lower()
+    # remove special characters
+    modified_text = re.sub('[^A-Za-z]+', ' ', modified_text)
     return modified_text
 
 
@@ -53,12 +61,12 @@ if __name__ == '__main__':
     originalAnswers = []
 
     csv.field_size_limit(sys.maxsize)
-    with open('results/github_data.csv') as csvDataFile:
+    with open('results/github_data_sample.csv') as csvDataFile:
         csvReader = csv.reader((line.replace('\0', '') for line in csvDataFile))
         for row in csvReader:
             if row[1] in issue_links:
                 continue
-            issues.append(filter_sentence(row[2]))
+            issues.append(filter_sentence(modify_comment(row[2])))
             questions.append(filter_sentence(modify_comment(row[3])))
             answers.append(filter_sentence(modify_comment(row[4])))
             originalIssues.append(row[2])
@@ -80,6 +88,28 @@ if __name__ == '__main__':
     tfidf_issue = models.TfidfModel(corpus=corpus_issue)
     index_issue = similarities.SparseMatrixSimilarity(tfidf_issue[corpus_issue], num_features=feature_cnt_issue)
 
+    # print(summarize(' '.join(originalIssues), word_count=200))
+    # print(len(keywords('. '.join(issues))))
+
+    # model = Word2Vec(texts_issues, min_count=0, workers=cpu_count())
+    # print(model)
+    # print(model.most_similar(PorterStemmer().stem("mongodb"), topn=3))
+
+    # pprint.pprint(dictionary_issue.token2id)
+
+    # for doc in corpus_issue:
+    #     print(doc)
+    # d = {dictionary_issue.get(id): value for doc in tfidf_issue[corpus_issue] for id, value in doc}
+    # d = sorted(d.items(), reverse=True, key=lambda x: x[1])
+    # print(d)
+
+    # model = gensim.models.Word2Vec(texts_issues, size=150, window=10, min_count=2, workers=10, iter=10)
+    # print(model.wv.most_similar(positive=["master"], topn=5))
+    # print(model.wv.similarity("json", PorterStemmer().stem("annotation")))
+
+    # tfidf_values = dict(tfidf_issue[dictionary_issue.doc2bow(word_tokenize(questions[1]))])
+    # pprint.pprint(tfidf_values)
+
     # space removal from texts
     texts_questions = [jieba.lcut(text) for text in questions]
     for text in texts_questions:
@@ -93,29 +123,34 @@ if __name__ == '__main__':
     index_questions = similarities.SparseMatrixSimilarity(tfidf_questions[corpus_questions],
                                                           num_features=feature_cnt_questions)
 
+    # d = {dictionary_questions.get(id): value for doc in tfidf_questions[corpus_questions] for id, value in doc}
+    # d = sorted(d.items(), reverse=True, key=lambda x: x[1])
+    # print(d)
+
     result_folder = "results"
     result_file = "tditf_github_data.csv"
     comment_number = 0
     unique_comments = 0
     idx = 0
     for question in questions:
-        kw_vector_issue = dictionary_issue.doc2bow(jieba.lcut(question))
-        sim_issue = index_issue[tfidf_issue[kw_vector_issue]]
+        kw_vector_issue_question = dictionary_issue.doc2bow(jieba.lcut(question))
+        sim_issue_question = index_issue[tfidf_issue[kw_vector_issue_question]]
         unique = False
-        if sim_issue[idx] > 0.10:
+
+        if sim_issue_question[idx] > 0.20:
             unique_comments = unique_comments + 1
 
-            kw_vector_question = dictionary_questions.doc2bow(jieba.lcut(answers[idx]))
-            sim_question = index_questions[tfidf_questions[kw_vector_question]]
+            kw_vector_question_answer = dictionary_questions.doc2bow(jieba.lcut(answers[idx]))
+            sim_question_answer = index_questions[tfidf_questions[kw_vector_question_answer]]
 
             sw = csv.writer(open('{0}/{1}'.format(result_folder, result_file), 'a'))
             sw.writerow([
                 '{0}'.format(issue_links[idx]),
                 '{0}'.format(originalIssues[idx]),
                 '{0}'.format(originalQuestions[idx]),
-                '{0}'.format(sim_issue[idx]),
+                '{0}'.format(sim_issue_question[idx]),
                 '{0}'.format(originalAnswers[idx]),
-                '{0}'.format(sim_question[idx]),
+                '{0}'.format(sim_question_answer[idx]),
             ])
         idx = idx + 1
     print(unique_comments)

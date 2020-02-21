@@ -1,9 +1,9 @@
 import csv
 import json
+from datetime import datetime, timedelta
 
 import requests
 from nltk import sent_tokenize
-from datetime import datetime, timedelta
 
 from utils import mkdir
 
@@ -16,14 +16,16 @@ github_repos = [
     "crate/crate", "dozermapper/dozer", "dbeaver/dbeaver", "ebean-orm/ebean", "elastic/elasticsearch-hadoop",
     "flyway/flyway", "google/dagger", "Graylog2/graylog2-server", "immutables/immutables", "impossibl/pgjdbc-ng",
     "jmapper-framework/jmapper-core", "intuit/karate", "junit-team/junit4", "line/armeria", "lettuce-io/lettuce-core",
-    "mapstruct/mapstruct", "microsoft/mssql-jdbc", "microsoft/azure-tools-for-java", "microsoft/vscode-java-debug",
-    "modelmapper/modelmapper", "mockito/mockito", "mybatis/mybatis-3", "neo4j/neo4j", "netty/netty", "Netflix/Hystrix",
-    "orientechnologies/orientdb", "orika-mapper/orika", "objectbox/objectbox-java", "oblac/jodd", "prestodb/presto",
-    "pgjdbc/pgjdbc", "paypal/PayPal-Java-SDK", "quarkusio/quarkus", "redisson/redisson", "requery/requery",
-    "ReactiveX/RxJava", "runelite/runelite", "speedment/speedment", "springfox/springfox",
-    "spring-projects/spring-security", "spring-projects/spring-session", "spring-projects/spring-petclinic",
-    "spring-projects/spring-kafka", "spring-projects/spring-boot", "square/moshi", "square/okhttp", "square/leakcanary",
-    "watson-developer-cloud/java-sdk",
+    "mapstruct/mapstruct", "microsoft/mssql-jdbc",
+
+    "microsoft/azure-tools-for-java", "microsoft/vscode-java-debug", "modelmapper/modelmapper", "mockito/mockito",
+    "mybatis/mybatis-3", "neo4j/neo4j", "netty/netty", "Netflix/Hystrix", "orientechnologies/orientdb",
+    "orika-mapper/orika", "objectbox/objectbox-java", "oblac/jodd", "prestodb/presto", "paypal/PayPal-Java-SDK",
+    "quarkusio/quarkus", "redisson/redisson", "requery/requery", "ReactiveX/RxJava", "runelite/runelite",
+
+    "speedment/speedment", "springfox/springfox", "spring-projects/spring-security", "spring-projects/spring-session",
+    "spring-projects/spring-petclinic", "spring-projects/spring-kafka", "spring-projects/spring-boot", "square/moshi",
+    "square/okhttp", "square/leakcanary", "watson-developer-cloud/java-sdk",
 ]
 
 
@@ -215,7 +217,7 @@ def read_github_issues(result_folder, result_file, auth):
                 sw.writerow([
                     '{0}'.format(repo),
                     '{0}'.format(issue_data['html_url']),
-                    '{0}'.format(issue_data['title'] + "\n" + issue_data['body']),
+                    '{0}'.format(issue_data['title'] + "\n\n" + issue_data['body']),
                     '{0}'.format(follow_up_question),
                     '{0}'.format(follow_up_question_reply)
                 ])
