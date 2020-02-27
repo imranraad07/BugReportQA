@@ -44,8 +44,8 @@ def get_comments(url, auth):
 
 
 def get_issues(repo, auth):
-    url = "https://api.github.com/repos/{repo}/issues?state=closed&sort=comments-desc"
-    # url = "https://api.github.com/repos/{repo}/issues?state=closed"
+    # url = "https://api.github.com/repos/{repo}/issues?state=closed&sort=comments-desc"
+    url = "https://api.github.com/repos/{repo}/issues?state=closed"
     url = url.format(repo=repo)
     return _getter(url, auth)
 
