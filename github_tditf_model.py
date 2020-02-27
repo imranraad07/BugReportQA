@@ -140,7 +140,7 @@ if __name__ == '__main__':
             kw_vector_question_answer = dictionary_questions.doc2bow(jieba.lcut(answers[idx]))
             sim_question_answer = index_questions[tfidf_questions[kw_vector_question_answer]]
 
-            sample_text = issues[idx] + "      " + questions[idx]
+            sample_text = issues[idx] + "  " + questions[idx]
             tfidf_values = dict(tfidf_issue[dictionary_issue.doc2bow(word_tokenize(sample_text))])
             tfidf_values = sorted(tfidf_values.items(), reverse=True, key=lambda x: x[1])[:3]
 

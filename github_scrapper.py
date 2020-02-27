@@ -1,5 +1,6 @@
 import csv
 import json
+import time
 from datetime import datetime, timedelta
 
 import requests
@@ -31,6 +32,13 @@ github_repos = [
 
 def get_comments(url, auth):
     response = requests.get(url, auth=auth)
+    while response.status_code != 200:
+        print("Comments, Bad response code: ", response.status_code)
+        print("sleeping....", time.ctime())
+        time.sleep(60 * 3)
+        print("trying again....")
+        response = requests.get(url, auth=auth)
+
     if response.status_code == 200:
         return response.json()
 
@@ -44,13 +52,18 @@ def get_issues(repo, auth):
 
 def _getter(url, auth):
     link = dict(next=url)
-    print(link)
+    print(link, time.ctime())
     while 'next' in link:
         response = requests.get(link['next'], auth=auth)
         # print(link, " ", response.status_code)
         # And.. if we didn't get good results, just bail.
-        if response.status_code != 200:
-            print("Bad response code: ", response.status_code)
+        while response.status_code != 200:
+            print("Issues, Bad response code: ", response.status_code)
+            print("sleeping....", time.ctime())
+            time.sleep(60*3)
+            print("trying again....")
+            response = requests.get(link['next'], auth=auth)
+
         #     raise IOError(
         #         "Non-200 status code %r; %r; %r" % (
         #             response.status_code, url, response.json()))
@@ -139,9 +152,9 @@ def read_github_issues(result_folder, result_file, auth):
             total_issues = total_issues + 1
             issues_this_repo = issues_this_repo + 1
             # print(total_issues)
-            # consider at most 1000 issues for each repo
-            if issue_count > 1500:
-                break
+            # # consider at most 1000 issues for each repo
+            # if issue_count > 1500:
+            #     break
 
             # issue_data = json.loads(issue)
 
@@ -180,7 +193,8 @@ def read_github_issues(result_folder, result_file, auth):
 
                 if not is_follow_up_question and comment_count < 3:
                     # just filtering by character count
-                    if len(comment['body']) > 300:
+                    comment_array = comment['body'].split()
+                    if len(comment_array) < 30 and len(comment['body']) < 300:
                         continue
                     comment_count = comment_count + 1
                     # if comment author and issue author are same, then discard the comment
