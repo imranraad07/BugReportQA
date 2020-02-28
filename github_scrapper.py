@@ -8,27 +8,9 @@ from nltk import sent_tokenize
 
 from utils import mkdir
 
+
 # import nltk
 # nltk.download('punkt')
-
-github_repos = [
-    "apache/accumulo", "apache/pulsar", "apache/dubbo", "apache/incubator-shardingsphere",
-    "aws/aws-sdk-java", "aws/aws-sdk-java-v2", "BroadleafCommerce/BroadleafCommerce", "brettwooldridge/HikariCP",
-    "crate/crate", "dozermapper/dozer", "dbeaver/dbeaver", "ebean-orm/ebean", "elastic/elasticsearch-hadoop",
-    "flyway/flyway", "google/dagger", "Graylog2/graylog2-server", "immutables/immutables", "impossibl/pgjdbc-ng",
-    "jmapper-framework/jmapper-core", "intuit/karate", "junit-team/junit4", "line/armeria", "lettuce-io/lettuce-core",
-    "mapstruct/mapstruct", "microsoft/mssql-jdbc",
-
-    "microsoft/azure-tools-for-java", "microsoft/vscode-java-debug", "modelmapper/modelmapper", "mockito/mockito",
-    "mybatis/mybatis-3", "neo4j/neo4j", "netty/netty", "Netflix/Hystrix", "orientechnologies/orientdb",
-    "orika-mapper/orika", "objectbox/objectbox-java", "oblac/jodd", "prestodb/presto", "paypal/PayPal-Java-SDK",
-    "quarkusio/quarkus", "redisson/redisson", "requery/requery", "ReactiveX/RxJava", "runelite/runelite",
-
-    "speedment/speedment", "springfox/springfox", "spring-projects/spring-security", "spring-projects/spring-session",
-    "spring-projects/spring-petclinic", "spring-projects/spring-kafka", "spring-projects/spring-boot", "square/moshi",
-    "square/okhttp", "square/leakcanary", "watson-developer-cloud/java-sdk",
-]
-
 
 def get_comments(url, auth):
     response = requests.get(url, auth=auth)
@@ -128,6 +110,12 @@ def is_issue_label_bug(issue_data):
 
 def read_github_issues(result_folder, result_file, auth):
     mkdir(result_folder)
+
+    file = open("github_repos.txt", "r")
+    github_repos = file.read().split()
+    # print(github_repos)
+    file.close()
+
     total_issues = 0
     comment_added_csv_count = 0
     for repo in github_repos:
