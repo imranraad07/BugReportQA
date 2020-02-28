@@ -33,10 +33,9 @@ github_repos = [
 def get_comments(url, auth):
     response = requests.get(url, auth=auth)
     while response.status_code != 200:
-        print("Comments, Bad response code: ", response.status_code)
-        print("sleeping....", time.ctime())
-        time.sleep(60 * 3)
-        print("trying again....")
+        print("Comments, Bad response code:", response.status_code, "sleeping for a minute....", time.ctime())
+        time.sleep(60)
+        # print("trying again....")
         response = requests.get(url, auth=auth)
 
     if response.status_code == 200:
@@ -58,10 +57,9 @@ def _getter(url, auth):
         # print(link, " ", response.status_code)
         # And.. if we didn't get good results, just bail.
         while response.status_code != 200:
-            print("Issues, Bad response code: ", response.status_code)
-            print("sleeping....", time.ctime())
-            time.sleep(60*3)
-            print("trying again....")
+            print("Issues, Bad response code:", response.status_code, "sleeping for a minute....", time.ctime())
+            time.sleep(60)
+            # print("trying again....")
             response = requests.get(link['next'], auth=auth)
 
         #     raise IOError(
@@ -145,7 +143,8 @@ def read_github_issues(result_folder, result_file, auth):
                 continue
             # check if comment count is at least two
             if issue_data['comments'] < 2:
-                break
+                continue
+                # break
 
             # print(issue_count, " ", issue_data['title'])
             issue_count = issue_count + 1
