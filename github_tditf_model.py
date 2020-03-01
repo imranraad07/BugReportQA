@@ -64,6 +64,8 @@ if __name__ == '__main__':
     with open('results/github_data_sample.csv') as csvDataFile:
         csvReader = csv.reader((line.replace('\0', '') for line in csvDataFile))
         for row in csvReader:
+            if not row:
+                continue
             if row[1] in issue_links:
                 continue
             issues.append(filter_sentence(modify_comment(row[2])))

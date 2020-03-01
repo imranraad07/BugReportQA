@@ -5,9 +5,9 @@ import requests
 
 
 def get_repos(auth, file_name):
-    step = 3000
+    step = 2199
     item_count = 0
-    while step > 90:
+    while step > 0:
         url = "https://api.github.com/search/repositories?q=stars:{star}+language:java"
         # url = "https://api.github.com/search/repositories?q=stars:>=2200+language:java"
         url = url.format(star=step)
