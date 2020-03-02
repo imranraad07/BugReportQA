@@ -80,51 +80,22 @@ if __name__ == '__main__':
 
     texts_issues = [text.split() for text in issues]
     dictionary_issue = corpora.Dictionary(texts_issues)
-    print(dictionary_issue)
+    # print(dictionary_issue)
     feature_cnt_issue = len(dictionary_issue.token2id)
     corpus_issue = [dictionary_issue.doc2bow(text) for text in texts_issues]
     tfidf_issue = models.TfidfModel(corpus=corpus_issue, normalize=True)
     index_issue = similarities.SparseMatrixSimilarity(tfidf_issue[corpus_issue], num_features=feature_cnt_issue)
 
-    print(dictionary_issue.token2id)
-
-    # print(summarize(' '.join(originalIssues), word_count=200))
-    # print(len(keywords('. '.join(issues))))
-
-    # model = Word2Vec(texts_issues, min_count=0, workers=cpu_count())
-    # print(model)
-    # print(model.most_similar(PorterStemmer().stem("mongodb"), topn=3))
-
-    # pprint.pprint(dictionary_issue.token2id)
-
-    # for doc in corpus_issue:
-    #     print(doc)
-
-    # d = {dictionary_issue.get(id): value for doc in tfidf_issue[corpus_issue] for id, value in doc}
-    # d = sorted(d.items(), reverse=True, key=lambda x: x[1])
-    # print(d)
-
-    # model = gensim.models.Word2Vec(texts_issues, size=150, window=10, min_count=2, workers=10, iter=10)
-    # print(model.wv.most_similar(positive=["master"], topn=5))
-    # print(model.wv.similarity("json", PorterStemmer().stem("annotation")))
-
-    # sample_text = issues[1] + "      " + questions[1]
-    # tfidf_values = dict(tfidf_issue[dictionary_issue.doc2bow(word_tokenize(sample_text))])
-    # print(sample_text)
-    # pprint.pprint(tfidf_values)
+    # print(dictionary_issue.token2id)
 
     texts_questions = [text.split() for text in questions]
     dictionary_questions = corpora.Dictionary(texts_questions)
-    print(dictionary_questions)
+    # print(dictionary_questions)
     feature_cnt_questions = len(dictionary_questions.token2id)
     corpus_questions = [dictionary_questions.doc2bow(text) for text in texts_questions]
     tfidf_questions = models.TfidfModel(corpus=corpus_questions, normalize=True)
     index_questions = similarities.SparseMatrixSimilarity(tfidf_questions[corpus_questions],
                                                           num_features=feature_cnt_questions)
-
-    # d = {dictionary_questions.get(id): value for doc in tfidf_questions[corpus_questions] for id, value in doc}
-    # d = sorted(d.items(), reverse=True, key=lambda x: x[1])
-    # print(d)
 
     result_folder = "results"
     result_file = "tditf_github_data.csv"

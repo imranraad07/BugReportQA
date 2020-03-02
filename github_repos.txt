@@ -21995,7 +21995,6 @@ kelinZhou/Banner
 google/play-work
 justauth/justauth-spring-boot-starter
 radkovo/jStyleParser
-thousmile/spring-security-jwt-vue-admin
 unitsofmeasurement/indriya
 gpfduoduo/HttpServerOnAndroid
 kunny/blog_samples
@@ -22418,7 +22417,6 @@ jboss-developer/jboss-jdg-quickstarts
 jeffrey-xiao/competitive-programming
 gat3way/AirPirate
 chdir/aria2-android
-zohar001/runscore
 broadinstitute/Drop-seq
 SquirrelJME/SquirrelJME
 microapp-store/flash-waimai
@@ -31491,7 +31489,6 @@ HuRuWo/ZuJianHua
 artursgirons/spen-digitizer
 google/favcolor-android
 MichaelRocks/CallMeMaybe
-Alex-Cin/RippleWaveView
 geowarin/boot-rethinkdb
 m-click/mcpdf
 aaronc/freactive.core

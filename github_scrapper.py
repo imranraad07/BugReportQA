@@ -37,8 +37,16 @@ def _getter(url, auth):
     while 'next' in link:
         response = requests.get(link['next'], auth=auth)
         # print(link, " ", response.status_code)
+
         # And.. if we didn't get good results, just bail.
         while response.status_code != 200:
+
+            # return if 404
+            if response.status_code == 404:
+                print("Issues, Bad response code:", response.status_code, "returning....", time.ctime())
+                for result in response.json():
+                    yield result
+
             print("Issues, Bad response code:", response.status_code, "sleeping for a minute....", time.ctime())
             time.sleep(60)
             # print("trying again....")
@@ -215,10 +223,13 @@ def read_github_issues(result_folder, result_file, auth):
                 comment_added_csv_count = comment_added_csv_count + 1
                 question_this_repo = question_this_repo + 1
                 sw = csv.writer(open('{0}/{1}'.format(result_folder, result_file), 'a'))
+                column_data = issue_data['title']
+                if issue_data['body'] is not None:
+                    column_data = column_data + "\n\n" + issue_data['body']
                 sw.writerow([
                     '{0}'.format(repo),
                     '{0}'.format(issue_data['html_url']),
-                    '{0}'.format(issue_data['title'] + "\n\n" + issue_data['body']),
+                    '{0}'.format(column_data),
                     '{0}'.format(follow_up_question),
                     '{0}'.format(follow_up_question_reply)
                 ])
