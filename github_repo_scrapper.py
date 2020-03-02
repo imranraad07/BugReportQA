@@ -8,8 +8,13 @@ def get_repos(auth, file_name):
     step = 2199
     item_count = 0
     while step > 0:
-        url = "https://api.github.com/search/repositories?q=stars:{star}+language:java"
-        # url = "https://api.github.com/search/repositories?q=stars:>=2200+language:java"
+        url = "https://api.github.com/search/repositories?q=stars:{star}+language:java+fork:true"
+        # url = "https://api.github.com/search/repositories?q=stars:{star}+language:java+fork:true+created:>=2017-01-01"
+        # url = "https://api.github.com/search/repositories?q=stars:{star}+language:java+fork:true+created:2014-01-01..2016-12-31"
+        # url = "https://api.github.com/search/repositories?q=stars:{star}+language:java+fork:true+created:<2014-01-01"
+        # url = "https://api.github.com/search/repositories?q=stars:>=2500+language:java+fork:true"
+        # url = "https://api.github.com/search/repositories?q=stars:>=2200..2499+language:java+fork:true"
+        # url = "https://api.github.com/search/repositories?q=stars:>=2000..2199+language:java+fork:true"
         url = url.format(star=step)
         step = step - 1
         link = dict(next=url)

@@ -14,19 +14,24 @@ from utils import mkdir
 
 def get_comments(url, auth):
     response = requests.get(url, auth=auth)
+    max_try = 60
     while response.status_code != 200:
-        print("Comments, Bad response code:", response.status_code, "sleeping for a minute....", time.ctime())
-        time.sleep(60)
+        if max_try < 0:
+            break
+        max_try = max_try - 1
+        print("Comments, Bad response code:", response.status_code, "sleeping for 2 minutes....", time.ctime())
+        time.sleep(120)
         # print("trying again....")
         response = requests.get(url, auth=auth)
 
     if response.status_code == 200:
         return response.json()
+    else:
+        return None
 
 
 def get_issues(repo, auth):
-    # url = "https://api.github.com/repos/{repo}/issues?state=closed&sort=comments-desc"
-    url = "https://api.github.com/repos/{repo}/issues?state=closed"
+    url = "https://api.github.com/repos/{repo}/issues?state=all"
     url = url.format(repo=repo)
     return _getter(url, auth)
 
@@ -38,26 +43,28 @@ def _getter(url, auth):
         response = requests.get(link['next'], auth=auth)
         # print(link, " ", response.status_code)
 
+        max_try = 60
         # And.. if we didn't get good results, just bail.
         while response.status_code != 200:
-
             # return if 404
             if response.status_code == 404:
                 print("Issues, Bad response code:", response.status_code, "returning....", time.ctime())
                 for result in response.json():
                     yield result
+            else:
+                if max_try < 0:
+                    break
+                max_try = max_try - 1
+                print("Issues, Bad response code:", response.status_code, "sleeping for 2 minutes....", time.ctime())
+                time.sleep(120)
+                # print("trying again....")
+                response = requests.get(link['next'], auth=auth)
 
-            print("Issues, Bad response code:", response.status_code, "sleeping for a minute....", time.ctime())
-            time.sleep(60)
-            # print("trying again....")
-            response = requests.get(link['next'], auth=auth)
-
-        #     raise IOError(
-        #         "Non-200 status code %r; %r; %r" % (
-        #             response.status_code, url, response.json()))
-
-        for result in response.json():
-            yield result
+        if response.status_code == 200:
+            for result in response.json():
+                yield result
+        else:
+            return None
 
         link = _link_field_to_dict(response.headers.get('link', None))
 
@@ -125,6 +132,7 @@ def read_github_issues(result_folder, result_file, auth):
     file.close()
 
     total_issues = 0
+    repo_count = 0
     comment_added_csv_count = 0
     for repo in github_repos:
         issue_count = 0
@@ -189,7 +197,7 @@ def read_github_issues(result_folder, result_file, auth):
                 if not is_follow_up_question and comment_count < 3:
                     # just filtering by character count
                     comment_array = comment['body'].split()
-                    if len(comment_array) < 30 and len(comment['body']) < 300:
+                    if len(comment_array) > 30 or len(comment['body']) > 500:
                         continue
                     comment_count = comment_count + 1
                     # if comment author and issue author are same, then discard the comment
@@ -233,7 +241,8 @@ def read_github_issues(result_folder, result_file, auth):
                     '{0}'.format(follow_up_question),
                     '{0}'.format(follow_up_question_reply)
                 ])
-        print(total_issues, " ", comment_added_csv_count, " :::: ", issues_this_repo, " ", question_this_repo)
+        repo_count = repo_count + 1
+        print(repo_count, total_issues, comment_added_csv_count, " :::: ", issues_this_repo, question_this_repo)
 
 
 if __name__ == '__main__':
