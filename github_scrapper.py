@@ -196,10 +196,6 @@ def read_github_issues(result_folder, result_file, auth):
                         continue
 
                     if not is_follow_up_question and comment_count < 3:
-                        # just filtering by character count
-                        comment_array = comment['body'].split()
-                        if len(comment_array) > 30 or len(comment['body']) > 500:
-                            continue
                         comment_count = comment_count + 1
                         # if comment author and issue author are same, then discard the comment
                         if comment['user']['id'] == issue_data['user']['id']:
@@ -228,6 +224,11 @@ def read_github_issues(result_folder, result_file, auth):
                             break
 
                 if is_follow_up_question:
+                    # just filtering by character count
+                    comment_array = follow_up_question.split()
+                    if len(comment_array) > 30 or len(follow_up_question) > 500:
+                        continue
+
                     # print(follow_up_question, " ", comment['body'])
                     comment_added_csv_count = comment_added_csv_count + 1
                     question_this_repo = question_this_repo + 1
