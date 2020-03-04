@@ -8,7 +8,6 @@ from nltk import sent_tokenize
 
 from utils import mkdir
 
-
 # import nltk
 # nltk.download('punkt')
 
@@ -126,7 +125,7 @@ def is_issue_label_bug(issue_data):
 def read_github_issues(result_folder, result_file, auth):
     mkdir(result_folder)
 
-    file = open("github_repos.txt", "r")
+    file = open("github_repos/github_repos_name_sorted.txt", "r")
     github_repos = file.read().split()
     # print(github_repos)
     file.close()

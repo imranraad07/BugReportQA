@@ -4045,7 +4045,7 @@ CorvetteCole/PixelWatchFace
 Corvey/Exam-Online
 Coselding/SoftwareEngineeringDesign
 CosimoSguanci/Material-File-Manager
-Cosium/maven-git-code-format
+Cosium/git-code-format-maven-plugin
 Cosium/spring-data-jpa-entity-graph
 CosmosDB/labs
 CottonMC/Cotton
@@ -4781,7 +4781,7 @@ DeveloperPaul123/FilePickerLibrary
 DeveloperPaul123/MaterialLibrary
 DeveloperPaul123/SimpleBluetoothLibrary
 DevelopersOfCydonia/FreeDTouch
-DeviantArt/kafka-connect-s3
+wix-incubator/kafka-connect-s3
 DeviceConnect/DeviceConnect-Android
 DevilMafia/sign-sample
 DevinFu/BottomTabBar
@@ -8076,7 +8076,7 @@ InsooPyo/FusedLocationProviderClient
 Instabug/Instabug-Android
 Instabug/Instabug-React-Native
 Instagram/ig-json-parser
-Instagram/ig-lazy-module-loader
+facebookarchive/ig-lazy-module-loader
 Instamojo/instamojo-java
 InstantWebP2P/node-android
 InstantWebP2P/obd2-android
@@ -24066,7 +24066,7 @@ awslabs/swage
 awvalenti/materialdidatico
 ax003d/sichu_android
 ax3726/ChooseFile
-axbaretto/kafka
+a0x8o/kafka
 axcl/SMACK-API-Android-Demo
 axelfontaine/final-nail
 axeliux/P2P
@@ -31305,7 +31305,7 @@ ddossot/mule-in-action
 ddossot/mule-in-action-2e
 ddragosd/ffmpeg-vod-transcoder
 ddragosd/jax-rs-on-karaf
-ddssingsong/AnyTool_Android
+ddsbear/AnyTool_Android
 ddssingsong/ApprtcDemo
 ddssingsong/AtFriend
 ddssingsong/GestureLock
@@ -34570,7 +34570,6 @@ erg/caltrain-dating
 erghjmncq6643981/SpringCloudNetflix
 erguotou520/weex-uikit
 erh/mongo-irc
-erh/mongo-jdbc
 erhard-lab/gedi
 eric-cho/LuceneQueryExpansion
 eric-jfire/jfireframework
@@ -35152,14 +35151,14 @@ facebook/DelegatedRecoveryReferenceImplementation
 facebook/SoLoader
 facebook/TextLayoutBuilder
 facebook/buck
-facebook/device-year-class
+facebookarchive/device-year-class
 facebook/facebook-android-sdk
 facebook/facebook-java-business-sdk
 facebook/fresco
 facebook/jcommon
 facebook/litho
 facebook/nailgun
-facebook/network-connection-class
+facebookarchive/network-connection-class
 facebook/react-native-fbsdk
 facebook/rebound
 facebook/screenshot-tests-for-android
@@ -40320,13 +40319,13 @@ hejiehui/xState
 hejiehui/xUnit
 hejiheji001/CloudMusicToYunPan
 hejunbinlan/SaveQRCodeDemo
-hejunlin2013/DragVideo
-hejunlin2013/EpisodeListView
-hejunlin2013/LivePlayback
-hejunlin2013/MultiMediaSample
-hejunlin2013/RedPackage
-hejunlin2013/SuperIndicator
-hejunlin2013/TVSample
+smartyuge/DragVideo
+smartyuge/EpisodeListView
+smartyuge/LivePlayback
+smartyuge/MultiMediaSample
+smartyuge/RedPackage
+smartyuge/SuperIndicator
+smartyuge/TVSample
 hekailiang/cloud-config
 hekailiang/squirrel
 hekate-io/hekate
@@ -42605,7 +42604,7 @@ in28minutes/spring-web-services
 inFullMobile/videokit-ffmpeg-android
 inPeige/skin
 inProgress-team/react-native-orientation-controller
-inProgress-team/react-native-youtube
+davidohayon669/react-native-youtube
 inX95/RmKingroot
 inadarei/loadtestio
 inaiat/jqplot4java
@@ -43319,7 +43318,7 @@ ivmartel/dwv-react
 ivnik/telnet-groovysh
 ivorocha90/cordova-simple-video-player
 ivorycirrus/Android2PC
-ivyboy/nettyWebsocket
+nereusyi/nettyWebsocket
 ivylabs/ivy-pdi-git-steps
 iwanttospeak/MvvMFrame
 iwarapter/sonar-puppet
@@ -48825,7 +48824,7 @@ kuangye098/rocketmq
 kuangyufei/fakeapk
 kubernetes-client/java
 kubesphere/devops-java-sample
-kubesys/webfrk
+kubesys/dev-webfrk
 kubode/Wiggle
 kudzumob/redwallandroid
 kuenishi/presto-riak
@@ -51548,8 +51547,8 @@ lovejjfg/ShadowCircleImageView
 lovejjfg/UCPullRefresh
 lovejjfg/ZhiFou_Demo
 lovelifeming/Resource
-loveliu/BaiduBookSuorce
-loveliu/FanTuan
+YandZD/BaiduBookSuorce
+YandZD/FanTuan
 lovely1016/tensquare
 lovely3x/WeightAndHeightMeasurer
 lovemelovemydog/MarkSeekBar
@@ -52640,7 +52639,7 @@ mancj/SlideUp-Android
 mancj/SlimChart
 mandmLeee/FindHim
 mandmLeee/GetApk
-mandome/Touch3DView
+mandome/touch-3d-view
 mandubian/play-crud-siena
 mandubian/play-siena
 mandubian/siena
@@ -52963,7 +52962,7 @@ mari-linhares/mnist-android-tensorflow
 mariamhakobyan/elasticsearch-river-kafka
 marianafranco/missionaries-and-cannibals
 marianbuenosayres/jBPM6-Developer-Guide
-marianmoldovan/panoramagl
+hannesa2/panoramagl
 marianobarrios/linked-blocking-multi-queue
 marianokamp/newsrob
 maricn/logback-slack-appender
@@ -67387,7 +67386,7 @@ sjtuwzx/Filter
 sjtuwzx/LightModule
 sjvc/Home-Assistant-Launcher
 sjwall/MaterialTapTargetPrompt
-sjyuan-cc/rsa-java-js
+yuanshenjian/rsa-java-js
 sk3tch/android-arduino-nes-controller
 sk3tch/rfid-emulator
 sk89q/BiomeAtlas
@@ -74078,7 +74077,7 @@ victorlaerte/jfx-asynctask
 victorminerva/AutoResizeEditText
 victorperin/Exercicios-Java
 victorr/jsqueak
-victorrentea/design-patterns-spring-java8
+victorrentea/design-patterns
 victorrentea/training
 victorssilva/simplecv-mobile-camera
 victoryckl/XBrowser
@@ -75471,7 +75470,6 @@ wenhao/jpa-spec
 wenhuaijun/EasyImageLoader
 wenhuaijun/EasyTagDragView
 wenhuaijun/KeywordsFlowView
-wenhuaijun/SearchPictureTool
 wenjiahui/KanZhiHu
 wenjiang/Bluetooth2
 wenjiangit/LoopBanner
@@ -80036,7 +80034,7 @@ zhaochenpu/CoordinatorLayoutDemo
 zhaochenpu/RecyclerViewDemo
 zhaocq-nlp/Attention-Visualization
 zhaodongxx/spring-boot2-shiro-project
-zhaohaihao/CodeGenerator
+zhaohaihao/code-generator
 zhaohaihao/java-design-patterns
 zhaoheeeeee/wechat-sell
 zhaohongxuan/HelloSSM
