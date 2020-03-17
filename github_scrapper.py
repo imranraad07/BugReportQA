@@ -226,7 +226,7 @@ def read_github_issues(result_folder, result_file, auth):
                 if is_follow_up_question:
                     # just filtering by character count
                     comment_array = follow_up_question.split()
-                    if len(comment_array) > 30 or len(follow_up_question) > 500:
+                    if len(comment_array) > 30 or len(follow_up_question) > 300:
                         continue
 
                     # print(follow_up_question, " ", comment['body'])
