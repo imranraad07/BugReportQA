@@ -1,8 +1,6 @@
 import csv
 import sys
-
 import spacy
-from nltk import sent_tokenize
 
 negative_aux_verbs = ["are not", "aren't", "ain't", "can not", "cannot", "can't", "could not", "couldn't", "does not",
                       "doesn't", "did not", "didn't", "has not", "hasn't", "had not", "hadn't", "have not", "haven't",
@@ -41,17 +39,16 @@ def is_question(sentence):
 # Negative (simple) sentence with auxiliary verbs
 # ([subject]) [negative auxiliary verb] [verb] ([complement])
 def check_s_ob_neg_aux_verb(sentence):
-    if len(sentence) > 300:
+    if len(sentence.text) > 300:
         return False
-    elif is_question(sentence):
+    elif is_question(sentence.text):
         return False
     sen_structure_set1 = ['AUX', 'PART', 'VERB']
     sen_structure_set2 = ['AUX', 'PART', 'ADJ', 'VERB']
     sen_structure_set3 = ['AUX', 'PART', 'ADV', 'VERB']
-    if check_exits(sentence, negative_aux_verbs):
-        doc = nlp(sentence)
+    if check_exits(sentence.text, negative_aux_verbs):
         postag = []
-        for token in doc:
+        for token in sentence:
             postag.append(token.pos_)
         if set(sen_structure_set1).issubset(postag) or set(sen_structure_set2).issubset(postag) or set(
                 sen_structure_set3).issubset(postag):
@@ -63,18 +60,15 @@ def check_s_ob_neg_aux_verb(sentence):
 # (Compound) sentence with a non-auxiliary negative verb
 # (pre-clause) (subject/noun phrase) ([adjective/adverb]) [negative verb] ([complement])
 def check_s_ob_neg_verb(sentence):
-    if len(sentence) > 300:
+    if len(sentence.text) > 300:
         return False
-    elif is_question(sentence):
+    elif is_question(sentence.text):
         return False
     sen_structure_set1 = ['ADJ', 'VERB']
     sen_structure_set2 = ['ADV', 'VERB']
-    if check_exits(sentence, negative_verbs):
-        # nlp = spacy.load("en_core_web_sm")
-        doc = nlp(sentence)
-        # displacy.serve(doc, style="dep")
+    if check_exits(sentence.text, negative_verbs):
         postag = []
-        for token in doc:
+        for token in sentence:
             postag.append(token.pos_)
         if set(sen_structure_set1).issubset(postag) or set(sen_structure_set2).issubset(postag):
             return True
@@ -85,31 +79,24 @@ def check_s_ob_neg_verb(sentence):
 # (Compound) sentence with verb phrase using error and no [negative auxiliary verb]
 # (clause) ([subject]) [verb] ([personal pronoun]) ([prep]) [ERROR_NOUN_PHRASE] [predicate]
 def check_s_ob_verb_error(sentence):
-    if len(sentence) > 300:
+    if len(sentence.text) > 300:
         return False
 
-    if is_question(sentence):
+    if is_question(sentence.text):
         return False
 
-    if check_exits(sentence, error_terms):
-        # doc = nlp(sentence)
-        # print(sentence)
-        # postag = []
-        # for token in doc:
-        #     postag.append(token.pos_)
-        # print(postag)
+    if check_exits(sentence.text, error_terms):
         sen_structure_set1 = ['VERB']
-        for term in error_terms:
-            if term in sentence:
-                predicates = sentence.split(term)
-                # pprint(predicates)
+        for i,token in enumerate(sentence):
+            if token.text in error_terms:
+                predicates = sentence[i+1:]
+                # print(predicates)
                 postag = []
-                doc = nlp(predicates[1])
-                for token in doc:
-                    postag.append(token.pos_)
+                for predicate in predicates:
+                    postag.append(predicate.pos_)
                 # need to do a few tweaks here
                 if set(sen_structure_set1).issubset(postag):
-                    # print(term)
+                    # print(token)
                     # print(sentence)
                     # print("------------")
                     # print(predicates[1])
@@ -128,12 +115,12 @@ if __name__ == '__main__':
         for row in csvReader:
             if not row:
                 continue
-            if row[0] in issue_links:
+            if row[1] in issue_links:
                 continue
-            issue_links.append(row[0])
-            issues.append(row[1])
+            issue_links.append(row[1])
+            issues.append(row[2])
 
-    print("Total issues:", len(issues))
+    print("Total issues:", len(issue_links))
 
     nlp = spacy.load("en_core_web_sm")
     count_s_ob_neg_aux_verb_rule_1 = 0
@@ -151,9 +138,8 @@ if __name__ == '__main__':
         in_rule_1_rule_3 = False
         in_rule_2_rule_3 = False
         in_no_rule = False
-        for sentence in sent_tokenize(issue):
-            sentence = sentence.strip()
-            if sentence.startswith(">"):
+        for sentence in nlp(issue).sents:
+            if sentence.text.startswith(">"):
                 continue
             else:
                 flag_1 = False
