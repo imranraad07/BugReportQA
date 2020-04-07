@@ -15,11 +15,6 @@ negative_verbs = ["affect", "break", "block", "bypass", "clear", "clobber", "clo
                   "refuse", "remain", "reject", "rest", "restart", "revert", "skip", "stop", "stuck up", "suffer",
                   "throw", "time out", "truncate", "vanished", "wipe out", "terminate", "trim"]
 
-# error_terms = ["ambiguity", "breakage", "bug", "collision", "conflict", "confusion", "crash", "cut", "disaster",
-#                "error", "exception", "failure", "fault", "frustration", "glitch", "inability", "issue", "leak",
-#                "leakage", "lock", "loss", "mistake", "NPE", "null", "omission", "pain", "peek", "problem", "race",
-#                "rarity", "runaway", "segfault", "segmentation", "spam", "status", "symptom", "truncation", "typo",
-#                "violation", "wait", "warning", "zombie"]
 error_terms = ["ambiguity", "breakage", "bug", "collision", "conflict", "confusion", "crash", "disaster",
                "error", "exception", "failure", "fault", "frustration", "glitch", "inability", "issue", "leak",
                "leakage", "lock", "loss", "mistake", "NPE", "null", "omission", "pain", "peek", "problem", "race",
@@ -128,10 +123,10 @@ if __name__ == '__main__':
         for row in csvReader:
             if not row:
                 continue
-            if row[0] in issue_links:
+            if row[1] in issue_links:
                 continue
-            issue_links.append(row[0])
-            issues.append(row[1])
+            issue_links.append(row[1])
+            issues.append(row[2])
 
     print("Total issues:", len(issues))
 
