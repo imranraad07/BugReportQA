@@ -61,7 +61,7 @@ if __name__ == '__main__':
     originalAnswers = []
 
     csv.field_size_limit(sys.maxsize)
-    with open('results/github_data_sample.csv') as csvDataFile:
+    with open('results/github_data.csv') as csvDataFile:
         csvReader = csv.reader((line.replace('\0', '') for line in csvDataFile))
         for row in csvReader:
             if not row:

@@ -13,11 +13,6 @@ negative_verbs = ["affect", "break", "block", "bypass", "clear", "clobber", "clo
                   "refuse", "remain", "reject", "rest", "restart", "revert", "skip", "stop", "stuck up", "suffer",
                   "throw", "time out", "truncate", "vanished", "wipe out", "terminate", "trim"]
 
-# error_terms = ["ambiguity", "breakage", "bug", "collision", "conflict", "confusion", "crash", "cut", "disaster",
-#                "error", "exception", "failure", "fault", "frustration", "glitch", "inability", "issue", "leak",
-#                "leakage", "lock", "loss", "mistake", "NPE", "null", "omission", "pain", "peek", "problem", "race",
-#                "rarity", "runaway", "segfault", "segmentation", "spam", "status", "symptom", "truncation", "typo",
-#                "violation", "wait", "warning", "zombie"]
 error_terms = ["ambiguity", "breakage", "bug", "collision", "conflict", "confusion", "crash", "disaster",
                "error", "exception", "failure", "fault", "frustration", "glitch", "inability", "issue", "leak",
                "leakage", "lock", "loss", "mistake", "NPE", "null", "omission", "pain", "peek", "problem", "race",
