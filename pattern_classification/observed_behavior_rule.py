@@ -105,7 +105,7 @@ if __name__ == '__main__':
     issue_links = []
 
     csv.field_size_limit(sys.maxsize)
-    with open('../data/results/github_data.csv') as csvDataFile:
+    with open('../data/bug_reports/github_data.csv') as csvDataFile:
         csvReader = csv.reader((line.replace('\0', '') for line in csvDataFile))
         for row in csvReader:
             if not row:

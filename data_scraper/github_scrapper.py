@@ -261,4 +261,4 @@ if __name__ == '__main__':
     username = data['username']
     password = data['password']
     auth = (username, password)
-    read_github_issues('../data/github_repos/github_repos_name_sorted.txt', '../data/results', 'github_data.csv', auth)
+    read_github_issues('../data/github_repos/github_repos_name_sorted.txt', '../data/bug_reports', 'github_data.csv', auth)
