@@ -5,5 +5,7 @@ venv/*
 __pycache__
 __pycache__/*
 credentials.json
-data/results
-data/bug_reports/*.csv
+data/results/*
+GAN_question_generation/embeddings
+GAN_question_generation/askubuntu_unix_superuser/
+data/bug_reports/github_data.csv
