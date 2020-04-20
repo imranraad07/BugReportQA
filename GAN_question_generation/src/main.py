@@ -68,15 +68,13 @@ def main(args):
         run_seq2seq(q_train_data, q_test_data, word2index, word_embeddings,
                     args.q_encoder_params, args.q_decoder_params,
                     args.max_ques_len, args.n_epochs, args.batch_size, n_layers=2)
-    elif args.pretrain_ans:
+    if args.pretrain_ans:
         run_seq2seq(a_train_data, a_test_data, word2index, word_embeddings,
                     args.a_encoder_params, args.a_decoder_params,
                     args.max_ans_len, args.n_epochs, args.batch_size, n_layers=2)
-    elif args.pretrain_util:
+    if args.pretrain_util:
         run_utility(u_train_data, u_test_data, word_embeddings, index2word, args, n_layers=1)
-    else:
-        print 'Please specify model to pretrain'
-        return
+
 
 
 if __name__ == "__main__":
