@@ -10,9 +10,8 @@
 
 1. Pretrain models: 
 
- Before running the GAN, you need to pretrain question generator, answer generator and discriminator. For details, see Section 2.5 in [1].
-
-* Update filepaths to datasets in `src/run_pretraining.sh`
+   Before running the GAN, you need to pretrain question generator, answer generator and discriminator. For details, see Section 2.5 in [1].
+  * Update filepaths to datasets in `src/run_pretraining.sh`
 * Run `src/run_pretraining.sh`
 * This will genereate params files used as the input for `src/run_GAN_main.sh`
 
