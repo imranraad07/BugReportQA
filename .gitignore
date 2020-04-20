@@ -6,3 +6,4 @@ __pycache__
 __pycache__/*
 credentials.json
 data/results
+data/bug_reports/*.csv
