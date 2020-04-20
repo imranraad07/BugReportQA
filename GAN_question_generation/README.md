@@ -4,6 +4,7 @@
 * Python2.7
 * PyTorch
 * nltk
+* download embeddings from https://go.umd.edu/clarification_questions_embeddings and unzip in `GAN_question_generation`
 
 ### How to run: 
 
