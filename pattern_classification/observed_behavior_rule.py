@@ -27,14 +27,6 @@ count_s_ob_verb_error = 0
 count_s_ob_neg_verb = 0
 count_s_ob_but = 0
 
-# def check_exits(sentence, check_list):
-#     return any(x in sentence for x in check_list)
-#
-# def is_question(sentence):
-#     if sentence.endswith('?'):
-#         return True
-#     return False
-
 
 # S_OB_NEG_AUX_VERB
 # Negative (simple) sentence with auxiliary verbs
@@ -49,23 +41,6 @@ def on_match_s_ob_neg_aux_verb(matcher, doc, id, matches):
     global count_s_ob_neg_aux_verb
     count_s_ob_neg_aux_verb = count_s_ob_neg_aux_verb + 1
     print('S_OB_NEG_AUX_VERB Matched!', doc.text)
-
-# def check_s_ob_neg_aux_verb(sentence):
-#     if len(sentence.text) > 300:
-#         return False
-#     elif is_question(sentence.text):
-#         return False
-#     sen_structure_set1 = ['AUX', 'PART', 'VERB']
-#     sen_structure_set2 = ['AUX', 'PART', 'ADJ', 'VERB']
-#     sen_structure_set3 = ['AUX', 'PART', 'ADV', 'VERB']
-#     if check_exits(sentence.text, negative_aux_verbs):
-#         postag = []
-#         for token in sentence:
-#             postag.append(token.pos_)
-#         if set(sen_structure_set1).issubset(postag) or set(sen_structure_set2).issubset(postag) or set(
-#                 sen_structure_set3).issubset(postag):
-#             return True
-#     return False
 
 
 # S_OB_VERB_ERROR
@@ -83,32 +58,6 @@ def on_match_s_ob_verb_error(matcher, doc, id, matches):
     count_s_ob_verb_error = count_s_ob_verb_error + 1
     print('S_OB_VERB_ERROR Matched!', doc.text)
 
-# def check_s_ob_verb_error(sentence):
-#     if len(sentence.text) > 300:
-#         return False
-#
-#     if is_question(sentence.text):
-#         return False
-#
-#     if check_exits(sentence.text, error_terms):
-#         sen_structure_set1 = ['VERB']
-#         for i,token in enumerate(sentence):
-#             if token.text in error_terms:
-#                 predicates = sentence[i+1:]
-#                 # print(predicates)
-#                 postag = []
-#                 for predicate in predicates:
-#                     postag.append(predicate.pos_)
-#                 # need to do a few tweaks here
-#                 if set(sen_structure_set1).issubset(postag):
-#                     # print(token)
-#                     # print(sentence)
-#                     # print("------------")
-#                     # print(predicates[1])
-#                     # print(postag)
-#                     return True
-#     return False
-
 
 # S_OB_NEG_VERB
 # (Compound) sentence with a non-auxiliary negative verb
@@ -121,21 +70,6 @@ def on_match_s_ob_neg_verb(matcher, doc, id, matches):
     global count_s_ob_neg_verb
     count_s_ob_neg_verb = count_s_ob_neg_verb + 1
     print('S_OB_NEG_VERB Matched!', doc.text)
-
-# def check_s_ob_neg_verb(sentence):
-#     if len(sentence.text) > 300:
-#         return False
-#     elif is_question(sentence.text):
-#         return False
-#     sen_structure_set1 = ['ADJ', 'VERB']
-#     sen_structure_set2 = ['ADV', 'VERB']
-#     if check_exits(sentence.text, negative_verbs):
-#         postag = []
-#         for token in sentence:
-#             postag.append(token.pos_)
-#         if set(sen_structure_set1).issubset(postag) or set(sen_structure_set2).issubset(postag):
-#             return True
-#     return False
 
 
 # S_OB_BUT
