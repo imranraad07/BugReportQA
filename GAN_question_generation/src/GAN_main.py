@@ -13,7 +13,7 @@ import torch.nn as nn
 from torch import optim
 from torch.autograd import Variable
 import torch.nn.functional as F
-from torch.nn.utils.rnn import pad_packed_sequence, pack_padded_sequence#, masked_cross_entropy
+from torch.nn.utils.rnn import pad_packed_sequence, pack_padded_sequence  # , masked_cross_entropy
 
 import numpy as np
 
@@ -76,8 +76,8 @@ def initialize_generator(word_embeddings, word2index):
     baseline_criterion = torch.nn.MSELoss()
 
     return q_encoder, q_decoder, q_encoder_optimizer, q_decoder_optimizer, \
-        a_encoder, a_decoder, a_encoder_optimizer, a_decoder_optimizer, \
-        baseline_model, baseline_optimizer,  baseline_criterion
+           a_encoder, a_decoder, a_encoder_optimizer, a_decoder_optimizer, \
+           baseline_model, baseline_optimizer, baseline_criterion
 
 
 def initialize_discriminator(word_embeddings):
@@ -132,14 +132,14 @@ def run_generator(tr_post_seqs, tr_post_lens, tr_ques_seqs, tr_ques_lens,
                                                                         tr_post_ques_seqs, tr_post_ques_lens,
                                                                         tr_ans_seqs, tr_ans_lens, args.batch_size):
             xe_loss, rl_loss, a_loss, \
-                reward, b_reward = GAN_train(post, pl, ques, ql, ans, al,
-                                             q_encoder, q_decoder,
-                                             q_encoder_optimizer, q_decoder_optimizer,
-                                             a_encoder, a_decoder,
-                                             a_encoder_optimizer, a_decoder_optimizer,
-                                             baseline_model, baseline_optimizer, baseline_criterion,
-                                             context_model, question_model, answer_model, utility_model,
-                                             word2index, index2word, mixer_delta, args)
+            reward, b_reward = GAN_train(post, pl, ques, ql, ans, al,
+                                         q_encoder, q_decoder,
+                                         q_encoder_optimizer, q_decoder_optimizer,
+                                         a_encoder, a_decoder,
+                                         a_encoder_optimizer, a_decoder_optimizer,
+                                         baseline_model, baseline_optimizer, baseline_criterion,
+                                         context_model, question_model, answer_model, utility_model,
+                                         word2index, index2word, mixer_delta, args)
             total_xe_loss += xe_loss
             if mixer_delta != args.max_ques_len:
                 total_u_pred += reward.data.sum() / args.batch_size
@@ -176,28 +176,28 @@ def run_discriminator(tr_post_seqs, tr_post_lens, tr_ques_seqs, tr_ques_lens,
 
     while epoch < args.a_n_epochs:
         epoch += 1
-        data_size = (len(tr_post_seqs)/args.batch_size)*args.batch_size*2
-        post_data = [None]*data_size
-        post_len_data = [None]*data_size
-        ques_data = [None]*data_size
-        ques_len_data = [None]*data_size
-        ans_data = [None]*data_size
-        ans_len_data = [None]*data_size
-        labels_data = [None]*data_size
+        data_size = (len(tr_post_seqs) / args.batch_size) * args.batch_size * 2
+        post_data = [None] * data_size
+        post_len_data = [None] * data_size
+        ques_data = [None] * data_size
+        ques_len_data = [None] * data_size
+        ans_data = [None] * data_size
+        ans_len_data = [None] * data_size
+        labels_data = [None] * data_size
         batch_num = 0
         for post, pl, ques, ql, pq, pql, ans, al in iterate_minibatches(tr_post_seqs, tr_post_lens,
                                                                         tr_ques_seqs, tr_ques_lens,
                                                                         tr_post_ques_seqs, tr_post_ques_lens,
                                                                         tr_ans_seqs, tr_ans_lens, args.batch_size):
             q_pred, ql_pred, a_pred, al_pred, \
-                a_pred_true, al_pred_true = GAN_train(post, pl, ques, ql, ans, al,
-                                                      q_encoder, q_decoder,
-                                                      None, None,
-                                                      a_encoder, a_decoder,
-                                                      None, None,
-                                                      baseline_model, None, baseline_criterion,
-                                                      context_model, question_model, answer_model, utility_model,
-                                                      word2index, index2word, mixer_delta, args, mode='test')
+            a_pred_true, al_pred_true = GAN_train(post, pl, ques, ql, ans, al,
+                                                  q_encoder, q_decoder,
+                                                  None, None,
+                                                  a_encoder, a_decoder,
+                                                  None, None,
+                                                  baseline_model, None, baseline_criterion,
+                                                  context_model, question_model, answer_model, utility_model,
+                                                  word2index, index2word, mixer_delta, args, mode='test')
             # pq_pred = np.concatenate((post, ques), axis=1)
             # pql_pred = np.full(args.batch_size, args.max_post_len + args.max_ques_len)
             # a_pred_true, al_pred_true = evaluate_batch(pq_pred, pql_pred, a_encoder, a_decoder,
@@ -210,36 +210,36 @@ def run_discriminator(tr_post_seqs, tr_post_lens, tr_ques_seqs, tr_ques_lens,
             #     print 'Fake A: %s' % ' '.join([index2word[idx] for idx in a_pred[0]])
             # print
 
-            post_data[batch_num*2*args.batch_size:
-                      batch_num*2*args.batch_size + args.batch_size] = post
-            post_data[batch_num*2*args.batch_size + args.batch_size:
-                      batch_num*2*args.batch_size + 2 * args.batch_size] = post
-            post_len_data[batch_num*2*args.batch_size:
-                          batch_num*2*args.batch_size + args.batch_size] = pl
-            post_len_data[batch_num*2*args.batch_size + args.batch_size:
-                          batch_num*2*args.batch_size + 2 * args.batch_size] = pl
-            ques_data[batch_num*2*args.batch_size:
-                      batch_num*2*args.batch_size + args.batch_size] = ques
-            ques_data[batch_num*2*args.batch_size + args.batch_size:
-                      batch_num*2*args.batch_size + 2 * args.batch_size] = q_pred
-            ques_len_data[batch_num*2*args.batch_size:
-                          batch_num*2*args.batch_size + args.batch_size] = ql
-            ques_len_data[batch_num*2*args.batch_size + args.batch_size:
-                          batch_num*2*args.batch_size + 2 * args.batch_size] = ql_pred
+            post_data[batch_num * 2 * args.batch_size:
+                      batch_num * 2 * args.batch_size + args.batch_size] = post
+            post_data[batch_num * 2 * args.batch_size + args.batch_size:
+                      batch_num * 2 * args.batch_size + 2 * args.batch_size] = post
+            post_len_data[batch_num * 2 * args.batch_size:
+                          batch_num * 2 * args.batch_size + args.batch_size] = pl
+            post_len_data[batch_num * 2 * args.batch_size + args.batch_size:
+                          batch_num * 2 * args.batch_size + 2 * args.batch_size] = pl
+            ques_data[batch_num * 2 * args.batch_size:
+                      batch_num * 2 * args.batch_size + args.batch_size] = ques
+            ques_data[batch_num * 2 * args.batch_size + args.batch_size:
+                      batch_num * 2 * args.batch_size + 2 * args.batch_size] = q_pred
+            ques_len_data[batch_num * 2 * args.batch_size:
+                          batch_num * 2 * args.batch_size + args.batch_size] = ql
+            ques_len_data[batch_num * 2 * args.batch_size + args.batch_size:
+                          batch_num * 2 * args.batch_size + 2 * args.batch_size] = ql_pred
             # ans_data[batch_num*2*args.batch_size:
             #          batch_num*2*args.batch_size + args.batch_size] = ans
-            ans_data[batch_num*2*args.batch_size:
-                     batch_num*2*args.batch_size + args.batch_size] = a_pred_true
-            ans_data[batch_num*2*args.batch_size + args.batch_size:
-                     batch_num*2*args.batch_size + 2 * args.batch_size] = a_pred
+            ans_data[batch_num * 2 * args.batch_size:
+                     batch_num * 2 * args.batch_size + args.batch_size] = a_pred_true
+            ans_data[batch_num * 2 * args.batch_size + args.batch_size:
+                     batch_num * 2 * args.batch_size + 2 * args.batch_size] = a_pred
             # ans_len_data[batch_num*2*args.batch_size:
             #              batch_num*2*args.batch_size + args.batch_size] = al
-            ans_len_data[batch_num*2*args.batch_size:
-                         batch_num*2*args.batch_size + args.batch_size] = al_pred_true
-            ans_len_data[batch_num*2*args.batch_size + args.batch_size:
-                         batch_num*2*args.batch_size + 2 * args.batch_size] = al_pred
-            labels_data[batch_num*2*args.batch_size:
-                        batch_num*2*args.batch_size + 2*args.batch_size] = \
+            ans_len_data[batch_num * 2 * args.batch_size:
+                         batch_num * 2 * args.batch_size + args.batch_size] = al_pred_true
+            ans_len_data[batch_num * 2 * args.batch_size + args.batch_size:
+                         batch_num * 2 * args.batch_size + 2 * args.batch_size] = al_pred
+            labels_data[batch_num * 2 * args.batch_size:
+                        batch_num * 2 * args.batch_size + 2 * args.batch_size] = \
                 np.concatenate((np.ones(len(post)), np.zeros(len(post))), axis=0)
             batch_num += 1
 
@@ -264,30 +264,30 @@ def run_discriminator(tr_post_seqs, tr_post_lens, tr_ques_seqs, tr_ques_lens,
 
 def run_model(train_data, test_data, word_embeddings, word2index, index2word, args):
     print 'Preprocessing train data..'
-    tr_id_seqs, tr_post_seqs, tr_post_lens, tr_ques_seqs, tr_ques_lens,\
-        tr_post_ques_seqs, tr_post_ques_lens, tr_ans_seqs, tr_ans_lens = preprocess_data(train_data, word2index,
-                                                                                         args.max_post_len,
-                                                                                         args.max_ques_len,
-                                                                                         args.max_ans_len)
+    tr_id_seqs, tr_post_seqs, tr_post_lens, tr_ques_seqs, tr_ques_lens, \
+    tr_post_ques_seqs, tr_post_ques_lens, tr_ans_seqs, tr_ans_lens = preprocess_data(train_data, word2index,
+                                                                                     args.max_post_len,
+                                                                                     args.max_ques_len,
+                                                                                     args.max_ans_len)
 
     print 'Preprocessing test data..'
     te_id_seqs, te_post_seqs, te_post_lens, te_ques_seqs, te_ques_lens, \
-        te_post_ques_seqs, te_post_ques_lens, te_ans_seqs, te_ans_lens = preprocess_data(test_data, word2index,
-                                                                                         args.max_post_len,
-                                                                                         args.max_ques_len,
-                                                                                         args.max_ans_len)
+    te_post_ques_seqs, te_post_ques_lens, te_ans_seqs, te_ans_lens = preprocess_data(test_data, word2index,
+                                                                                     args.max_post_len,
+                                                                                     args.max_ques_len,
+                                                                                     args.max_ans_len)
 
     q_encoder, q_decoder, q_encoder_optimizer, q_decoder_optimizer, \
-        a_encoder, a_decoder, a_encoder_optimizer, a_decoder_optimizer, \
-        baseline_model, baseline_optimizer, baseline_criterion = initialize_generator(word_embeddings, word2index)
+    a_encoder, a_decoder, a_encoder_optimizer, a_decoder_optimizer, \
+    baseline_model, baseline_optimizer, baseline_criterion = initialize_generator(word_embeddings, word2index)
 
     context_model, question_model, answer_model, \
-        utility_model, u_optimizer, utility_criterion = initialize_discriminator(word_embeddings)
+    utility_model, u_optimizer, utility_criterion = initialize_discriminator(word_embeddings)
 
     start = time.time()
 
     epoch = 0.
-    n_batches = len(tr_post_seqs)/args.batch_size
+    n_batches = len(tr_post_seqs) / args.batch_size
     mixer_delta = args.max_ques_len
     while epoch < args.n_epochs:
         epoch += 1
@@ -347,11 +347,11 @@ def run_model(train_data, test_data, word_embeddings, word2index, index2word, ar
         torch.save(answer_model.state_dict(), args.answer_params + '.' + args.model + '.epoch%d' % epoch)
         torch.save(utility_model.state_dict(), args.utility_params + '.' + args.model + '.epoch%d' % epoch)
 
-        #print 'Running evaluation...'
-        #out_fname = args.test_pred_question + '.' + args.model + '.epoch%d' % int(epoch)
-        #evaluate_beam(word2index, index2word, q_encoder, q_decoder,
-        #              te_id_seqs, te_post_seqs, te_post_lens, te_ques_seqs, te_ques_lens,
-        #              args.batch_size, args.max_ques_len, out_fname)
+        print 'Running evaluation...'
+        out_fname = args.test_pred_question + '.' + args.model + '.epoch%d' % int(epoch)
+        evaluate_beam(word2index, index2word, q_encoder, q_decoder,
+                      te_id_seqs, te_post_seqs, te_post_lens, te_ques_seqs, te_ques_lens,
+                      args.batch_size, args.max_ques_len, out_fname)
 
 
 def main(args):
@@ -363,14 +363,14 @@ def main(args):
     if args.train_ids is not None:
         train_data = read_data(args.train_context, args.train_question, args.train_answer, args.train_ids,
                                args.max_post_len, args.max_ques_len, args.max_ans_len, mode='train')
-                               #count=args.batch_size*10)
+        # count=args.batch_size*10)
     else:
         train_data = read_data(args.train_context, args.train_question, args.train_answer, None,
                                args.max_post_len, args.max_ques_len, args.max_ans_len, mode='train')
     if args.tune_ids is not None:
         test_data = read_data(args.tune_context, args.tune_question, args.tune_answer, args.tune_ids,
                               args.max_post_len, args.max_ques_len, args.max_ans_len, mode='test')
-                              #count=args.batch_size*5)
+        # count=args.batch_size*5)
     else:
         test_data = read_data(args.tune_context, args.tune_question, args.tune_answer, None,
                               args.max_post_len, args.max_ques_len, args.max_ans_len, mode='test')
@@ -382,36 +382,36 @@ def main(args):
 
 if __name__ == "__main__":
     argparser = argparse.ArgumentParser(sys.argv[0])
-    argparser.add_argument("--train_context", type = str)
-    argparser.add_argument("--train_question", type = str)
-    argparser.add_argument("--train_answer", type = str)
+    argparser.add_argument("--train_context", type=str)
+    argparser.add_argument("--train_question", type=str)
+    argparser.add_argument("--train_answer", type=str)
     argparser.add_argument("--train_ids", type=str)
-    argparser.add_argument("--tune_context", type = str)
-    argparser.add_argument("--tune_question", type = str)
-    argparser.add_argument("--tune_answer", type = str)
+    argparser.add_argument("--tune_context", type=str)
+    argparser.add_argument("--tune_question", type=str)
+    argparser.add_argument("--tune_answer", type=str)
     argparser.add_argument("--tune_ids", type=str)
-    argparser.add_argument("--test_context", type = str)
-    argparser.add_argument("--test_question", type = str)
-    argparser.add_argument("--test_answer", type = str)
+    argparser.add_argument("--test_context", type=str)
+    argparser.add_argument("--test_question", type=str)
+    argparser.add_argument("--test_answer", type=str)
     argparser.add_argument("--test_ids", type=str)
-    argparser.add_argument("--test_pred_question", type = str)
-    argparser.add_argument("--q_encoder_params", type = str)
-    argparser.add_argument("--q_decoder_params", type = str)
-    argparser.add_argument("--a_encoder_params", type = str)
-    argparser.add_argument("--a_decoder_params", type = str)
-    argparser.add_argument("--context_params", type = str)
-    argparser.add_argument("--question_params", type = str)
-    argparser.add_argument("--answer_params", type = str)
-    argparser.add_argument("--utility_params", type = str)
-    argparser.add_argument("--vocab", type = str)
-    argparser.add_argument("--word_embeddings", type = str)
-    argparser.add_argument("--max_post_len", type = int, default=300)
-    argparser.add_argument("--max_ques_len", type = int, default=50)
-    argparser.add_argument("--max_ans_len", type = int, default=50)
-    argparser.add_argument("--n_epochs", type = int, default=20)
+    argparser.add_argument("--test_pred_question", type=str)
+    argparser.add_argument("--q_encoder_params", type=str)
+    argparser.add_argument("--q_decoder_params", type=str)
+    argparser.add_argument("--a_encoder_params", type=str)
+    argparser.add_argument("--a_decoder_params", type=str)
+    argparser.add_argument("--context_params", type=str)
+    argparser.add_argument("--question_params", type=str)
+    argparser.add_argument("--answer_params", type=str)
+    argparser.add_argument("--utility_params", type=str)
+    argparser.add_argument("--vocab", type=str)
+    argparser.add_argument("--word_embeddings", type=str)
+    argparser.add_argument("--max_post_len", type=int, default=300)
+    argparser.add_argument("--max_ques_len", type=int, default=50)
+    argparser.add_argument("--max_ans_len", type=int, default=50)
+    argparser.add_argument("--n_epochs", type=int, default=20)
     argparser.add_argument("--g_n_epochs", type=int, default=1)
     argparser.add_argument("--a_n_epochs", type=int, default=1)
-    argparser.add_argument("--batch_size", type = int, default=256)
+    argparser.add_argument("--batch_size", type=int, default=256)
     argparser.add_argument("--model", type=str)
     args = argparser.parse_args()
     print args
