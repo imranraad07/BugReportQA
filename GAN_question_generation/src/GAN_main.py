@@ -140,12 +140,12 @@ def run_generator(tr_post_seqs, tr_post_lens, tr_ques_seqs, tr_ques_lens,
                                          baseline_model, baseline_optimizer, baseline_criterion,
                                          context_model, question_model, answer_model, utility_model,
                                          word2index, index2word, mixer_delta, args)
-            total_xe_loss += xe_loss
+            total_xe_loss += float(xe_loss)
             if mixer_delta != args.max_ques_len:
-                total_u_pred += reward.data.sum() / args.batch_size
-                total_u_b_pred += b_reward.data.sum() / args.batch_size
-                total_rl_loss += rl_loss
-                total_a_loss += a_loss
+                total_u_pred += float(reward.data.sum() / args.batch_size)
+                total_u_b_pred += float(b_reward.data.sum() / args.batch_size)
+                total_rl_loss += float(rl_loss)
+                total_a_loss += float(a_loss)
 
     total_xe_loss = total_xe_loss / args.g_n_epochs
     total_rl_loss = total_rl_loss / args.g_n_epochs
@@ -255,8 +255,8 @@ def run_discriminator(tr_post_seqs, tr_post_lens, tr_ques_seqs, tr_ques_lens,
         train_data = post_data, post_len_data, ques_data, ques_len_data, ans_data, ans_len_data, labels_data
         train_loss, train_acc = train_fn(context_model, question_model, answer_model, utility_model,
                                          train_data, optimizer, utility_criterion, args)
-        total_loss += train_loss
-        total_acc += train_acc
+        total_loss += float(train_loss)
+        total_acc += float(train_acc)
     total_loss = total_loss / args.a_n_epochs
     total_acc = total_acc / args.a_n_epochs
     return total_loss, total_acc
