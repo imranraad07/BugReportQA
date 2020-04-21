@@ -20,9 +20,12 @@ error_terms = ["ambiguity", "breakage", "bug", "collision", "conflict", "confusi
                "rarity", "runaway", "segfault", "segmentation", "spam", "status", "symptom", "truncation", "typo",
                "violation", "wait", "warning", "zombie"]
 
+contrast_terms = ["although", "but", "however", "nevertheless", "though", "yet"]
+
 count_s_ob_neg_aux_verb = 0
 count_s_ob_verb_error = 0
 count_s_ob_neg_verb = 0
+count_s_ob_but = 0
 
 # def check_exits(sentence, check_list):
 #     return any(x in sentence for x in check_list)
@@ -107,9 +110,6 @@ def on_match_s_ob_verb_error(matcher, doc, id, matches):
 #     return False
 
 
-
-
-
 # S_OB_NEG_VERB
 # (Compound) sentence with a non-auxiliary negative verb
 # (pre-clause) (subject/noun phrase) ([adjective/adverb]) [negative verb] ([complement])
@@ -137,6 +137,18 @@ def on_match_s_ob_neg_verb(matcher, doc, id, matches):
 #             return True
 #     return False
 
+
+# S_OB_BUT
+# Sentence with contrasting terms + affirmative clause
+# ([sentence],) [contrast term] [affirmative clause]
+def setup_s_ob_but(matcher):
+    but_pattern = [{"LOWER": {"IN": contrast_terms}}]
+    matcher.add("S_OB_BUT", on_match_s_ob_but, but_pattern)
+
+def on_match_s_ob_but(matcher, doc, id, matches):
+    global count_s_ob_but
+    count_s_ob_but = count_s_ob_but + 1
+    print('S_OB_BUT Matched!', doc.text)
 
 
 
@@ -168,6 +180,13 @@ if __name__ == '__main__':
 
     issue_matches = []
     for issue in issues:
+
+        # TODO: we need to do some preprocessing here, like remove stack traces
+        # "Specifically, we performed code removal, i.e.,deletion of code snippets,
+        # stack traces, output logs, environment information, etc. This was done by using
+        # regular expressions and heuristics, defined after our observations of the text."
+        #
+
         sent_matches = False
         for sentence in nlp(issue).sents:
             if sentence.text.startswith(">"):
