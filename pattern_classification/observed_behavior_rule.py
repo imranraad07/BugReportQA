@@ -102,7 +102,7 @@ def read_input():
             if row[1] in issue_links:
                 continue
             issue_links.append(row[1])
-            issues.append(row[2])
+            issues.append(row[3])
     return issues, issue_links
 
 if __name__ == '__main__':
