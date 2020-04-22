@@ -6,11 +6,13 @@ from datetime import datetime, timedelta
 import requests
 from nltk import sent_tokenize
 
+from data_scraper.github_post_filter import modify_to_remove_code
 from utils import mkdir
 
 
 # import nltk
 # nltk.download('punkt')
+
 
 def get_comments(url, auth):
     response = requests.get(url, auth=auth)
@@ -170,6 +172,7 @@ def read_github_issues(github_repo_file, result_folder, result_file, auth):
                 comment_count = 0
                 after_question = 0
                 is_follow_up_question = False
+                is_follow_up_question_answer = False
                 follow_up_question = ''
                 follow_up_question_reply = ''
                 if 'comments_url' not in issue_data:
@@ -221,9 +224,10 @@ def read_github_issues(github_repo_file, result_folder, result_file, auth):
                         after_question = after_question + 1
                         if issue_data['user']['login'] == comment['user']['login']:
                             follow_up_question_reply = comment['body']
+                            is_follow_up_question_answer = True
                             break
 
-                if is_follow_up_question:
+                if is_follow_up_question and is_follow_up_question_answer:
                     # just filtering by character count
                     comment_array = follow_up_question.split()
                     if len(comment_array) > 30 or len(follow_up_question) > 300:
@@ -235,10 +239,14 @@ def read_github_issues(github_repo_file, result_folder, result_file, auth):
                     sw = csv.writer(open('{0}/{1}'.format(result_folder, result_file), 'a'))
                     column_data = issue_data['title']
                     if issue_data['body'] is not None:
-                        column_data = column_data + "\n\n" + issue_data['body']
+                        column_data = column_data + "\n\n" + modify_to_remove_code(issue_data['body'])
+                    follow_up_question = modify_to_remove_code(follow_up_question)
+                    follow_up_question_reply = modify_to_remove_code(follow_up_question_reply)
+                    postid = issue_data['html_url'][19:]
+                    postid = postid.replace("/", "_")
                     sw.writerow([
                         '{0}'.format(repo),
-                        '{0}'.format(issue_data['html_url']),
+                        '{0}'.format(postid),
                         '{0}'.format(column_data),
                         '{0}'.format(follow_up_question),
                         '{0}'.format(follow_up_question_reply)
@@ -261,4 +269,5 @@ if __name__ == '__main__':
     username = data['username']
     password = data['password']
     auth = (username, password)
-    read_github_issues('../data/github_repos/github_repos_name_sorted.txt', '../data/bug_reports', 'github_data.csv', auth)
+    read_github_issues('../data/github_repos/github_repos_name_sorted.txt', '../data/bug_reports', 'github_data.csv',
+                       auth)
