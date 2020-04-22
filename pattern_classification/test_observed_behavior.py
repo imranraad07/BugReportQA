@@ -47,13 +47,13 @@ class TestRecPatterns(unittest.TestCase):
     def test_basecase_s_ob_but(self):
         obr.setup_s_ob_but(self.matcher)
         sent_nlp = self.nlp("The files involved where tagged as binary in the repository but were being committed as text.")
-        for token in sent_nlp:
-            print(token.pos_,token.text,token.lemma_)
+        # for token in sent_nlp:
+        #     print(token.pos_,token.text,token.lemma_)
         matches = self.matcher(sent_nlp)
         self.assertTrue(len(matches) == 1)
         start = matches[0][1]
         end = matches[0][2]
-        self.assertEqual(sent_nlp[start:end].text,"but")
+        self.assertEqual(sent_nlp[start:end].text,"but were being committed")
 
 if __name__ == "__main__":
     unittest.main()

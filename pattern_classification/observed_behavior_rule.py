@@ -72,11 +72,15 @@ def on_match_s_ob_neg_verb(matcher, doc, id, matches):
     print('S_OB_NEG_VERB Matched!', doc.text)
 
 
-# S_OB_BUT
+# S_OB_BUT & S_OB_BUT_NEG
 # Sentence with contrasting terms + affirmative clause
+# Sentence with contrasting terms + negative predicates
 # ([sentence],) [contrast term] [affirmative clause]
+# Note: using the existence of a verb as an indication of a clause (affirmative or negative)
 def setup_s_ob_but(matcher):
-    but_pattern = [{"LOWER": {"IN": contrast_terms}}]
+    but_pattern = [{"LOWER": {"IN": contrast_terms}},
+                   {"POS": {"NOT_IN": ["VERB"]}, "OP": "*"},
+                   {"POS": "VERB"}]
     matcher.add("S_OB_BUT", on_match_s_ob_but, but_pattern)
 
 def on_match_s_ob_but(matcher, doc, id, matches):
@@ -111,6 +115,7 @@ if __name__ == '__main__':
     setup_s_ob_neg_aux_verb(matcher)
     setup_s_ob_verb_error(matcher)
     setup_s_ob_neg_verb(matcher)
+    setup_s_ob_but(matcher)
 
     issue_matches = []
     for issue in issues:
@@ -142,3 +147,4 @@ if __name__ == '__main__':
     print("S_OB_NEG_AUX_VERB sentences: ", count_s_ob_neg_aux_verb)
     print("S_OB_VERB_ERROR sentences: ", count_s_ob_verb_error)
     print("S_OB_NEG_VERB sentences: ", count_s_ob_neg_verb)
+    print("S_OB_BUT sentences: ", count_s_ob_but)
