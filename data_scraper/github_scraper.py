@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 import requests
 from nltk import sent_tokenize
 
-from data_scraper.github_post_filter import modify_to_remove_code
+from data_scraper.github_text_filter import modify_to_remove_code
 from utils import mkdir
 
 
@@ -246,6 +246,7 @@ def read_github_issues(github_repo_file, result_folder, result_file, auth):
                     postid = postid.replace("/", "_")
                     sw.writerow([
                         '{0}'.format(repo),
+                        '{0}'.format(issue_data['html_url']),
                         '{0}'.format(postid),
                         '{0}'.format(column_data),
                         '{0}'.format(follow_up_question),
