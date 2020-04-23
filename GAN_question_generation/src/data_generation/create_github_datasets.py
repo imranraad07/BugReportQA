@@ -26,7 +26,7 @@ def run(*args, **kwargs):
     if train_ratio + tune_ratio + test_ratio != 1:
         raise ValueError('Ratios of training + tuning + testing datasets should sum up to 1.')
 
-    dataset = pd.read_csv(in_dataset, names=['repo_id', 'issue_id', 'br', 'question', 'answer'])
+    dataset = pd.read_csv(in_dataset)
     dataset = dataset[dataset['answer'].notnull()]
     # shuffle
     dataset = dataset.sample(frac=1).reset_index(drop=True)
@@ -45,7 +45,7 @@ def prepare_dataset(dataset, type, out_dir):
 
     with open(os.path.join(out_dir, type + '_context.txt'), 'w') as f:
         for index, row in dataset.iterrows():
-            br = preprocess(row['br'])
+            br = preprocess(row['OB'])
             f.write(br + '\n')
 
     with open(os.path.join(out_dir, type + '_answer.txt'), 'w') as f:
@@ -60,7 +60,7 @@ def prepare_dataset(dataset, type, out_dir):
 
     with open(os.path.join(out_dir, type + '_ids.txt'), 'w') as f:
         for index, row in dataset.iterrows():
-            br = preprocess_id(row['issue_id'])
+            br = preprocess_id(row['issue_link'])
             f.write(br + '\n')
 
 
