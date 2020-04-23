@@ -55,5 +55,16 @@ class TestRecPatterns(unittest.TestCase):
         end = matches[0][2]
         self.assertEqual(sent_nlp[start:end].text,"but were being committed")
 
+    def test_basecase_s_ob_cond_pos(self):
+        obr.setup_s_ob_cond_pos(self.matcher)
+        sent_nlp = self.nlp("When pasting multiple lines into IOConsole, they get double spaced.")
+        # for token in sent_nlp:
+        #     print(token.pos_,token.text,token.lemma_)
+        matches = self.matcher(sent_nlp)
+        self.assertTrue(len(matches) > 1)
+        start = matches[0][1]
+        end = matches[0][2]
+        self.assertEqual(sent_nlp[start:end].text,"When pasting multiple lines into IOConsole, they get")
+
 if __name__ == "__main__":
     unittest.main()
