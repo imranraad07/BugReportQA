@@ -34,7 +34,7 @@ def read_data(post_data_tsv, qa_data_tsv):
 			ans_lists[post_id] = [row['a1'], row['a2'], row['a3'], row['a4'], row['a5'], row['a6'], row['a7'], row['a8'], row['a9'], row['a10']]
 	return posts, titles, ques_lists, ans_lists
 
-def read_ids(ids_file):	
+def read_ids(ids_file):
 	ids = [curr_id.strip('\n') for curr_id in open(ids_file, 'r').readlines()]
 	return ids
 
@@ -42,21 +42,26 @@ def generate_neural_vectors(posts, titles, ques_lists, ans_lists, post_ids, voca
 	post_vectors = []
 	ques_list_vectors = []
 	ans_list_vectors = []
+	except_on_data_load = 0
 	for post_id in post_ids:
-		post_vectors.append(get_indices(titles[post_id] + ' ' + posts[post_id], vocab))
-		ques_list_vector = [None]*N
-		ans_list_vector = [None]*N
-		for k in range(N):
-			ques_list_vector[k] = get_indices(ques_lists[post_id][k], vocab)
-			ans_list_vector[k] = get_indices(ans_lists[post_id][k], vocab)
-		ques_list_vectors.append(ques_list_vector)
-		ans_list_vectors.append(ans_list_vector)
+		try:
+			post_vectors.append(get_indices(titles[post_id] + ' ' + posts[post_id], vocab))
+			ques_list_vector = [None]*N
+			ans_list_vector = [None]*N
+			for k in range(N):
+				ques_list_vector[k] = get_indices(ques_lists[post_id][k], vocab)
+				ans_list_vector[k] = get_indices(ans_lists[post_id][k], vocab)
+			ques_list_vectors.append(ques_list_vector)
+			ans_list_vectors.append(ans_list_vector)
+		except:
+			except_on_data_load = except_on_data_load + 1
+	print "except on data load: " + str(except_on_data_load)
 	dirname = os.path.dirname(args.train_ids)
 	p.dump(post_ids, open(os.path.join(dirname, 'post_ids_'+split+'.p'), 'wb'))
 	p.dump(post_vectors, open(os.path.join(dirname, 'post_vectors_'+split+'.p'), 'wb'))
 	p.dump(ques_list_vectors, open(os.path.join(dirname, 'ques_list_vectors_'+split+'.p'), 'wb'))
 	p.dump(ans_list_vectors, open(os.path.join(dirname, 'ans_list_vectors_'+split+'.p'), 'wb'))
-	
+
 def main(args):
 	vocab = p.load(open(args.vocab, 'rb'))
 	train_ids = read_ids(args.train_ids)
