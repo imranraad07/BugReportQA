@@ -153,5 +153,5 @@ if __name__ == '__main__':
     print("S_OB_COND_POS sentences: ", count_s_ob_cond_pos)
 
     ob_issues = issues[issue_matches]
-    ob_issues.assign(post=ob_list)
+    ob_issues = ob_issues.assign(OB=ob_list)
     ob_issues.to_csv("output.csv", index=False)
