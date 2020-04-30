@@ -103,24 +103,24 @@ def create_tsv_files_github(post_data_tsv, qa_data_tsv, post_ids, post_titles, p
             tsv_writer = csv.writer(out_file, delimiter='\t')
             tsv_writer.writerow(row_val)
 
-        with open('test_ids', 'w') as out_file:
-            idx = 0
-            for postId in similar_posts:
-                if idx < 1000:
-                    out_file.write(postId + "\n")
-                idx = idx + 1
-        with open('tune_ids', 'w') as out_file:
-            idx = 1000
-            for postId in similar_posts:
-                if idx >= 1000 and idx < 2000:
-                    out_file.write(postId + "\n")
-                idx = idx + 1
-        with open('train_ids', 'w') as out_file:
-            idx = 2000
-            for postId in similar_posts:
-                if idx >= 2000:
-                    out_file.write(postId + "\n")
-                idx = idx + 1
+    with open('../../data/github/test_ids', 'w') as out_file:
+        idx = 0
+        for postId in similar_posts:
+            if idx < 1000:
+                out_file.write(postId + "\n")
+            idx = idx + 1
+    with open('../../data/github/tune_ids', 'w') as out_file:
+        idx = 1000
+        for postId in similar_posts:
+            if idx >= 1000 and idx < 2000:
+                out_file.write(postId + "\n")
+            idx = idx + 1
+    with open('../../data/github/train_ids', 'w') as out_file:
+        idx = 2000
+        for postId in similar_posts:
+            if idx >= 2000:
+                out_file.write(postId + "\n")
+            idx = idx + 1
 
 
 def main(args):
