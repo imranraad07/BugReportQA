@@ -133,6 +133,9 @@ def read_github_issues(github_repo_file, result_folder, result_file, auth):
     # print(github_repos)
     file.close()
 
+    csv_writer = csv.writer(open('{0}/{1}'.format(result_folder, result_file), 'w'))
+    csv_writer.writerow(['repo', 'issue_link', 'issue_id', 'post', 'question', 'answer'])
+
     total_issues = 0
     repo_count = 0
     comment_added_csv_count = 0
@@ -236,7 +239,7 @@ def read_github_issues(github_repo_file, result_folder, result_file, auth):
                     # print(follow_up_question, " ", comment['body'])
                     comment_added_csv_count = comment_added_csv_count + 1
                     question_this_repo = question_this_repo + 1
-                    sw = csv.writer(open('{0}/{1}'.format(result_folder, result_file), 'a'))
+                    csv_writer = csv.writer(open('{0}/{1}'.format(result_folder, result_file), 'a'))
                     column_data = issue_data['title']
                     if issue_data['body'] is not None:
                         column_data = column_data + "\n\n" + modify_to_remove_code(issue_data['body'])
@@ -244,7 +247,7 @@ def read_github_issues(github_repo_file, result_folder, result_file, auth):
                     follow_up_question_reply = modify_to_remove_code(follow_up_question_reply)
                     postid = issue_data['html_url'][19:]
                     postid = postid.replace("/", "_")
-                    sw.writerow([
+                    csv_writer.writerow([
                         '{0}'.format(repo),
                         '{0}'.format(issue_data['html_url']),
                         '{0}'.format(postid),

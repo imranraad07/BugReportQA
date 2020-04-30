@@ -135,6 +135,7 @@ def main(args):
         idx = 0
         with open(args.github_csv) as csvDataFile:
             csvReader = csv.reader((line.replace('\0', '') for line in csvDataFile))
+            next(csvReader)
             for row in csvReader:
                 post_ids.append(row[2].decode('utf-8', errors='ignore').encode('utf-8'))
                 post_titles.append(row[3].partition('\n')[0].decode('utf-8', errors='ignore').encode('utf-8'))
