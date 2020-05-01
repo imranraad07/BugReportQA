@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 import requests
 from nltk import sent_tokenize
 
-from data_scraper.github_text_filter import modify_to_remove_code
+from data_scraper.github_text_filter import filter_nontext
 from utils import mkdir
 
 
@@ -242,9 +242,9 @@ def read_github_issues(github_repo_file, result_folder, result_file, auth):
                     csv_writer = csv.writer(open('{0}/{1}'.format(result_folder, result_file), 'a'))
                     column_data = issue_data['title']
                     if issue_data['body'] is not None:
-                        column_data = column_data + "\n\n" + modify_to_remove_code(issue_data['body'])
-                    follow_up_question = modify_to_remove_code(follow_up_question)
-                    follow_up_question_reply = modify_to_remove_code(follow_up_question_reply)
+                        column_data = column_data + "\n\n" + filter_nontext(issue_data['body'])
+                    follow_up_question = filter_nontext(follow_up_question)
+                    follow_up_question_reply = filter_nontext(follow_up_question_reply)
                     postid = issue_data['html_url'][19:]
                     postid = postid.replace("/", "_")
                     csv_writer.writerow([
