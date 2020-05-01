@@ -10,7 +10,7 @@ np.random.seed(1234)
 @click.command()
 @click.option('--in-dataset',
               help='Input dataset file',
-              default='/Users/ciborowskaa/VCU/Research/GAN/')
+              required=True)
 @click.option('--out-directory',
               help='Directory to save output dataset files',
               required=True)
@@ -45,7 +45,7 @@ def prepare_dataset(dataset, type, out_dir):
 
     with open(os.path.join(out_dir, type + '_context.txt'), 'w') as f:
         for index, row in dataset.iterrows():
-            br = preprocess(row['OB'])
+            br = preprocess(row['post'])
             f.write(br + '\n')
 
     with open(os.path.join(out_dir, type + '_answer.txt'), 'w') as f:
@@ -67,7 +67,14 @@ def prepare_dataset(dataset, type, out_dir):
 def preprocess(text):
     if len(text) < 10:
         print('Suspiciously short text {0}'.format(text))
-    return text.replace('\r\n', ' ').replace('\n', ' ')
+    text = text.lower().strip().replace('\r\n', ' ').replace('\n', ' ')
+    text_filtered = ''
+    for c in text:
+        if c in '!@$%^&*()[]{};:,./<>?\|`~-=':
+            text_filtered += ' '
+        else:
+            text_filtered += c
+    return text_filtered
 
 
 def preprocess_id(id):
