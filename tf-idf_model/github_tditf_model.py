@@ -63,6 +63,7 @@ if __name__ == '__main__':
     csv.field_size_limit(sys.maxsize)
     with open('../data/bug_reports/github_data.csv') as csvDataFile:
         csvReader = csv.reader((line.replace('\0', '') for line in csvDataFile))
+        next(csvReader)
         for row in csvReader:
             if not row:
                 continue
@@ -71,9 +72,9 @@ if __name__ == '__main__':
             issues.append(filter_sentence(modify_comment(row[2])))
             questions.append(filter_sentence(modify_comment(row[3])))
             answers.append(filter_sentence(modify_comment(row[4])))
-            originalIssues.append(row[2])
-            originalQuestions.append(row[3])
-            originalAnswers.append(row[4])
+            originalIssues.append(row[3])
+            originalQuestions.append(row[4])
+            originalAnswers.append(row[5])
             issue_links.append(row[1])
 
     print(len(issues))
@@ -99,6 +100,12 @@ if __name__ == '__main__':
 
     result_folder = "../data/results"
     result_file = "tditf_github_data.csv"
+
+    csv_writer = csv.writer(open('{0}/{1}'.format(result_folder, result_file), 'w'))
+    csv_writer.writerow(
+        ['issue_link', 'post', 'question', 'quesion_similarity_to_post', 'answer', 'answer_similarity_to_question',
+         'top_terms'])
+
     comment_number = 0
     unique_comments = 0
     idx = 0
@@ -122,16 +129,18 @@ if __name__ == '__main__':
                 top_terms.append(dictionary_issue[value[0]])
             # print(top_terms)
 
-            sw = csv.writer(open('{0}/{1}'.format(result_folder, result_file), 'a'))
-            sw.writerow([
-                '{0}'.format(issue_links[idx]),
-                '{0}'.format(originalIssues[idx]),
-                '{0}'.format(originalQuestions[idx]),
-                '{0}'.format(sim_issue_question[idx]),
-                '{0}'.format(originalAnswers[idx]),
-                '{0}'.format(sim_question_answer[idx]),
-                '{0}'.format(top_terms)
-            ])
+            row_val = []
+            row_val.append(issue_links[idx])
+            row_val.append(originalIssues[idx])
+            row_val.append(originalQuestions[idx])
+            row_val.append(sim_issue_question[idx])
+            row_val.append(originalAnswers[idx])
+            row_val.append(sim_question_answer[idx])
+            row_val.append(top_terms)
+            csvReader = csv.writer(open('{0}/{1}'.format(result_folder, result_file), 'a'))
+            csvReader.writerow(row_val)
+
+            # print (issue_links[idx])
 
         idx = idx + 1
     print(unique_comments)

@@ -108,9 +108,10 @@ def on_match_s_ob_cond_pos(matcher, doc, id, matches):
 
 if __name__ == '__main__':
 
-    issues = pd.read_csv('../data/bug_reports/github_data.csv',
-                         header=None,
-                         names=['repo','issue_link','issue_id','post','question','answer'])
+    # issues = pd.read_csv('../data/bug_reports/github_data.csv',
+    #                      header=None,
+    #                      names=['repo','issue_link','issue_id','post','question','answer'])
+    issues = pd.read_csv('../data/bug_reports/github_data.csv')
 
     print("Total issues:", len(issues["post"]))
 

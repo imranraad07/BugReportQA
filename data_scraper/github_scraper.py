@@ -240,9 +240,9 @@ def read_github_issues(github_repo_file, result_folder, result_file, auth):
                     comment_added_csv_count = comment_added_csv_count + 1
                     question_this_repo = question_this_repo + 1
                     csv_writer = csv.writer(open('{0}/{1}'.format(result_folder, result_file), 'a'))
-                    column_data = issue_data['title']
+                    original_post = issue_data['title']
                     if issue_data['body'] is not None:
-                        column_data = column_data + "\n\n" + filter_nontext(issue_data['body'])
+                        original_post = original_post + "\n\n" + filter_nontext(issue_data['body'])
                     follow_up_question = filter_nontext(follow_up_question)
                     follow_up_question_reply = filter_nontext(follow_up_question_reply)
                     postid = issue_data['html_url'][19:]
@@ -251,7 +251,7 @@ def read_github_issues(github_repo_file, result_folder, result_file, auth):
                         '{0}'.format(repo),
                         '{0}'.format(issue_data['html_url']),
                         '{0}'.format(postid),
-                        '{0}'.format(column_data),
+                        '{0}'.format(original_post),
                         '{0}'.format(follow_up_question),
                         '{0}'.format(follow_up_question_reply)
                     ])
