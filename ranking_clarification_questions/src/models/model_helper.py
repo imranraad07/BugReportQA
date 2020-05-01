@@ -31,12 +31,21 @@ def generate_data(posts, ques_list, ans_list, args):
 	data_ans_list = np.zeros((data_size, N, args.ans_max_len), dtype=np.int32)
 	data_ans_masks_list = np.zeros((data_size, N, args.ans_max_len), dtype=np.float32)
 
+	count_except = 0
+	count_except2 = 0
 	for i in range(data_size):
 		data_posts[i], data_post_masks[i] = get_data_masks(posts[i], args.post_max_len)
 		for j in range(N):
-			data_ques_list[i][j], data_ques_masks_list[i][j] = get_data_masks(ques_list[i][j], args.ques_max_len)
-			data_ans_list[i][j], data_ans_masks_list[i][j] = get_data_masks(ans_list[i][j], args.ans_max_len)
+			try:
+				data_ques_list[i][j], data_ques_masks_list[i][j] = get_data_masks(ques_list[i][j], args.ques_max_len)
+			except:
+				count_except = count_except + 1
+			try:
+				data_ans_list[i][j], data_ans_masks_list[i][j] = get_data_masks(ans_list[i][j], args.ans_max_len)
+			except:
+				count_except2 = count_except2 + 1
 
+	print str(count_except), str(count_except2)
 	return [data_posts, data_post_masks, data_ques_list, data_ques_masks_list, data_ans_list, data_ans_masks_list]	
 
 def iterate_minibatches(posts, post_masks, ques_list, ques_masks_list, ans_list, ans_masks_list, \
