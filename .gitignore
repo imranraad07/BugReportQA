@@ -1,3 +1,4 @@
+.DS_Store
 venv
 venv/*
 .idea
@@ -9,3 +10,4 @@ data/results/*
 GAN_question_generation/embeddings
 GAN_question_generation/askubuntu_unix_superuser/
 data/bug_reports/github_data.csv
+pattern_classification/output.csv

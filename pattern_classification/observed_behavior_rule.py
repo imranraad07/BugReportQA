@@ -110,7 +110,7 @@ if __name__ == '__main__':
 
     issues = pd.read_csv('../data/bug_reports/github_data.csv',
                          header=None,
-                         names = ['repo','issue_link','issue_id','post','question','answer'])
+                         names=['repo','issue_link','issue_id','post','question','answer'])
 
     print("Total issues:", len(issues["post"]))
 
@@ -153,5 +153,6 @@ if __name__ == '__main__':
     print("S_OB_COND_POS sentences: ", count_s_ob_cond_pos)
 
     ob_issues = issues[issue_matches]
+    assert (len(ob_issues) == len(ob_list))
     ob_issues = ob_issues.assign(OB=ob_list)
     ob_issues.to_csv("output.csv", index=False)
