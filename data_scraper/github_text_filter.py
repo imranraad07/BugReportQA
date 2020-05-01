@@ -1,6 +1,13 @@
 import re
 
 
+def remove_blockquotes(text):
+    modified_text = ''
+    for line in text.split('\n'):
+        if not line.strip().startswith('>'):
+            modified_text += line + '\n'
+    return modified_text
+
 def remove_newlines(text):
     # replace new lines with space
     modified_text = text.replace("\n", " ")
@@ -11,6 +18,7 @@ def remove_triple_quotes(text):
     return modified_text
 
 def filter_nontext(text):
+    text = remove_blockquotes(text)
     text = remove_newlines(text)
     text = remove_triple_quotes(text)
     return text
