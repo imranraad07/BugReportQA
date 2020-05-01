@@ -10,8 +10,4 @@ data/results/*
 GAN_question_generation/embeddings
 GAN_question_generation/askubuntu_unix_superuser/
 data/bug_reports/github_data.csv
-<<<<<<< HEAD
-pattern_classification/output.csv
-=======
 *.pyc
->>>>>>> e2426c9999556e3d76a872aeeb929c94e9460f12
