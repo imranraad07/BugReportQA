@@ -56,9 +56,11 @@ def run():
     vocab[UNK_token] = 4
     vocab[SPECIFIC_token] = 5
     vocab[GENERIC_token] = 6
-    for idx, word in enumerate(word_vect.index2word):
+    idx = 7
+    for word in word_vect.index2word:
         if word in br_vocab:
-            vocab[word] = idx + 7
+            vocab[word] = idx
+            idx += 1
 
     f = open(os.path.join(project_dir, 'vocab.p'), 'wb')
     p.dump(vocab, f)
