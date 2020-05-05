@@ -7,7 +7,7 @@ repo_query = Template("""
     remaining
     resetAt
   }
-  search(query: "is:public archived:false pushed:>2019-01-01", after: $cursorStart, type: REPOSITORY, first: 50) {
+  search(query: "is:public archived:false pushed:>2019-01-01 created:$start..$end", after: $cursorStart, type: REPOSITORY, first: 100) {
     repositoryCount
     pageInfo {
       hasNextPage
