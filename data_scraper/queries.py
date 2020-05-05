@@ -45,13 +45,36 @@ repo_query = Template("""
 }
 """)
 
-issues_query = """
+issues_query = Template("""
 {
+  rateLimit {
+    cost
+    remaining
+    resetAt
+  }
+  repository(owner: $owner, name: $name) {
+    issues(first: 100, after=$cursor, filterBy: {labels: ["bug", "problem", "Bug", "BUG", "bug report", "Bug report", "Bug Report"]}) {
+      totalCount
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+      edges {
+        node {
+          ... on Issue {
+            number
+            author {
+              login
+            }
+          }
+        }
+      }
+    }
+  }
 }
-"""
+""")
 
-
-full_query="""
+full_query = """
 {
   rateLimit {
     cost
@@ -105,5 +128,4 @@ full_query="""
     }
   }
 }
-
 """
