@@ -25,11 +25,12 @@ def run_query(query_template, data_out, cursor_out, cursor_start='null'):
             print("Query failed to run by returning code of 502. Try again in 30s...")
             time.sleep(30)
             failed_cnt += 1
+            continue
         else:
             raise Exception("Query failed to run by returning code of {}. {}".format(request.status_code, query))
 
-        if failed_cnt > 0:
-            raise Exception("Failed to process query starting after {0}".format(cursor))
+    if failed_cnt > 0:
+        raise Exception("Failed to process query starting after {0}".format(cursor))
 
 
 def dump_data(result, data_out):
