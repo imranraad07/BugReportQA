@@ -19,7 +19,7 @@ repo_query = Template("""
           url
           name
           createdAt
-          issues(first: 1, after: null, filterBy: {labels: ["bug", "problem", "Bug", "BUG"]}) {
+          issues(first: 1, after: null, filterBy: {labels: ["bug", "problem", "Bug", "BUG", "bug report", "Bug report", "Bug Report"]}) {
             totalCount
           }
           defaultBranchRef {

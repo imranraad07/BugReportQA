@@ -9,7 +9,9 @@ headers = {"Authorization": "Bearer a4a37bc57f01dfef13d3c5f629dbc51800d554ca"}
 def run_query(query_template, data_out, cursor_out, cursor_start='null'):
     cursor = cursor_start
     has_next_page = True
-    while has_next_page is True:
+    failed_cnt = 0
+    while has_next_page is True and failed_cnt < 20:
+        print("")
         query = query_template.substitute(cursorStart=cursor)
         request = requests.post('https://api.github.com/graphql', json={'query': query}, headers=headers)
 
@@ -18,8 +20,16 @@ def run_query(query_template, data_out, cursor_out, cursor_start='null'):
             dump_data(result, data_out)
             cursor, has_next_page = get_cursor(result, cursor_out)
             cursor = "\""+cursor+"\""
+            failed_cnt = 0
+        elif request.status_code == 502:
+            print("Query failed to run by returning code of 502. Try again in 30s...")
+            time.sleep(30)
+            failed_cnt += 1
         else:
             raise Exception("Query failed to run by returning code of {}. {}".format(request.status_code, query))
+
+        if failed_cnt > 0:
+            raise Exception("Failed to process query starting after {0}".format(cursor))
 
 
 def dump_data(result, data_out):
