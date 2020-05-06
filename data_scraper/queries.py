@@ -19,24 +19,9 @@ repo_query = Template("""
           url
           name
           createdAt
-          issues(first: 1, after: null, filterBy: {labels: ["bug", "problem", "Bug", "BUG", "bug report", "Bug report", "Bug Report"]}) {
+          pushedAt
+          issues(first: 1, after: null) {
             totalCount
-          }
-          defaultBranchRef {
-            target {
-              ... on Commit {
-                history(first: 1) {
-                  totalCount
-                  edges {
-                    node {
-                      ... on Commit {
-                        committedDate
-                      }
-                    }
-                  }
-                }
-              }
-            }
           }
         }
       }
@@ -53,7 +38,7 @@ issues_query = Template("""
     resetAt
   }
   repository(owner: $owner, name: $name) {
-    issues(first: 100, after:$cursor, filterBy: {labels: ["bug", "problem", "Bug", "BUG", "bug report", "Bug report", "Bug Report"]}) {
+    issues(first: 100, after:$cursor) {
       totalCount
       pageInfo {
         hasNextPage
