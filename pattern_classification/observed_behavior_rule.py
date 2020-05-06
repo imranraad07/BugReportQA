@@ -137,7 +137,7 @@ if __name__ == '__main__':
                 matches = matcher(sent_nlp)
                 if (len(matches) >= 1):
                     sent_matches = True
-                    ob_str = ob_str + sent
+                    ob_str = ob_str + sent + " "
 
         if sent_matches:
             issue_matches.append(True)
@@ -156,4 +156,4 @@ if __name__ == '__main__':
     ob_issues = issues[issue_matches]
     assert (len(ob_issues) == len(ob_list))
     ob_issues = ob_issues.assign(OB=ob_list)
-    ob_issues.to_csv("output.csv", index=False)
+    ob_issues.to_csv("../data/bug_reports/github_data_OB.csv", index=False)
