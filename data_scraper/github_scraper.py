@@ -7,11 +7,13 @@ import requests
 from nltk import sent_tokenize
 
 from data_scraper.github_text_filter import filter_nontext
+from queries import *
 from utils import mkdir
-
 
 # import nltk
 # nltk.download('punkt')
+
+headers = {"Authorization": "Bearer a4a37bc57f01dfef13d3c5f629dbc51800d554ca"}
 
 
 def get_comments(url, auth):
@@ -266,11 +268,42 @@ def read_github_issues(github_repo_file, result_folder, result_file, auth):
         print(repo_count, total_issues, comment_added_csv_count, " :::: ", issues_this_repo, question_this_repo)
 
 
+def get_edits(repo_url, issue_no):
+    tokens = repo_url.split('/')
+    owner = '\"' + tokens[3] + '\"'
+    name = '\"' + tokens[4] + '\"'
+
+    query = edit_query.substitute(owner=owner, name=name, number=issue_no)
+    failed_cnt = 0
+    while failed_cnt < 20:
+        request = requests.post('https://api.github.com/graphql', json={'query': query}, headers=headers)
+
+        if request.status_code == 200:
+            result = request.json()
+            edits = [x['node']['diff'] for x in result['data']['repository']['issue']['userContentEdits']['edges']]
+            return edits
+        elif request.status_code == 502:
+            print("Query failed to run by returning code of 502 for repo {0} - issue {1}. Try again in 30s...".format(
+                repo_url, issue_no))
+            time.sleep(30)
+            failed_cnt += 1
+            continue
+        elif request.status_code == 403:
+            print('Abusive behaviour mechanism was triggered. Wait 3 min.')
+            time.sleep(180)
+            failed_cnt += 1
+            continue
+        else:
+            raise Exception(
+                "Query failed to run by returning code of {0}. Query params: url:{1}, issue:{2}.".format(
+                    request.status_code, repo_url, issue_no))
+
+
 if __name__ == '__main__':
     with open('../credentials.json') as json_file:
         data = json.load(json_file)
     username = data['username']
     password = data['password']
     auth = (username, password)
-    read_github_issues('../data/github_repos/github_repos_name_sorted.txt', '../data/bug_reports', 'github_data.csv',
-                       auth)
+    read_github_issues('../data/github_repos/github_repos_name_sorted.txt', '../data/bug_reports',
+                       'github_data.csv', auth)

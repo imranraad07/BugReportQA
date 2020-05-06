@@ -30,6 +30,29 @@ repo_query = Template("""
 }
 """)
 
+edit_query = Template("""
+{
+  rateLimit {
+    cost
+    remaining
+    resetAt
+  }
+  repository(owner: $owner, name: $name) {
+    issue(number: $number) {
+      number
+      userContentEdits(first: 100) {
+        totalCount
+        edges {
+          node {
+            diff
+          }
+        }
+      }
+    }
+  }
+}
+""")
+
 issues_query = Template("""
 {
   rateLimit {
