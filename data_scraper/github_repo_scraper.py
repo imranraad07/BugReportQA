@@ -7,6 +7,9 @@ import requests
 def get_repos(auth, file_name):
     step = 2500
     item_count = 0
+
+    myfile = open(file_name, "w")
+
     while step > 0:
         # url = "https://api.github.com/search/repositories?q=stars:{star}+language:java+fork:true+created:>=2017-01-01"
         # url = "https://api.github.com/search/repositories?q=stars:{star}+language:java+fork:true+created:2014-01-01..2016-12-31"
@@ -45,8 +48,7 @@ def get_repos(auth, file_name):
                 print(item_count, item['full_name'], item['stargazers_count'], item['has_issues'])
                 if item['has_issues'] is True:
                     item_count = item_count + 1
-                    with open(file_name, "a") as myfile:
-                        myfile.write(item['full_name'] + "\n")
+                    myfile.write(item['full_name'] + "\n")
 
             link = _link_field_to_dict(response.headers.get('link', None))
 
