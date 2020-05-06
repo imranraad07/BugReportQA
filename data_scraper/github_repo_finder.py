@@ -1,11 +1,45 @@
 import requests
 import os
+import sys
 import time
 import pandas as pd
 from queries import *
 from datetime import datetime, timedelta
+import click
 
 headers = {"Authorization": "Bearer a4a37bc57f01dfef13d3c5f629dbc51800d554ca"}
+
+
+@click.command()
+@click.option('--collect-repos', is_flag=True)
+@click.option('--start-date', type=str, default='Apr 1 208')
+@click.option('--interval', type=int, default=30)
+@click.option('--repos-file', type=str, default='repos.csv')
+@click.option('--params-file', type=str, default='params.csv')
+@click.option('--process-repos', is_flag=True)
+@click.option('--process-repos-out', type=str, default='repos_processed.csv')
+def run(*args, **kwargs):
+    repos_fpath = kwargs['repos_file']
+    params_fpath = kwargs['params_file']
+
+    if kwargs['collect_repos'] is True:
+        start_date = kwargs['collect_repos']
+        interval = kwargs['interval']
+        collect_repos(repos_fpath, params_fpath, start_date, interval)
+    if kwargs['process_repos']:
+        out_fpath = kwargs['process_repos_out']
+        process_repos(repos_fpath, out_fpath)
+        bugs_by_non_contributors(out_fpath)
+
+
+def collect_repos(repos_fpath, params_fpath, start_date, days_interval):
+    if not os.path.exists(repos_fpath):
+        start = datetime.strptime(start_date, '%b %d %Y')
+        interval = days_interval
+        while start < datetime.now() - timedelta(days=10):
+            print('Query for repos created at: {0} - {1}'.format(start, start + timedelta(days=interval)))
+            cnt, interval = run_query(repo_query, repos_fpath, params_fpath, start, interval)
+            start = start + timedelta(days=interval)
 
 
 def run_query(query_template, data_out, params_out, created_at, interval=14, cursor='null'):
@@ -117,48 +151,71 @@ def process_repos(repos_file, repos_out_file):
 
     df = df.drop(columns=['start_epoch', 'end_epoch'])
     df['bugsPerDayAll'] = df['bugReportsNo'] / df['days']
-    df = df.sort_values(by=['bugsPerDayAll'], ascending=False)
-    df.to_csv(repos_out_file)
+    df = df.sort_values(by=['bugsPerDayAll'], ascending=False).reset_index(drop=True)
+    df.to_csv(repos_out_file, index=False)
     print('Done. Processed file saved to {0}'.format(repos_out_file))
 
 
 def bugs_by_non_contributors(repos_file):
-    br_by_non_cotributors = list()
-    with open(repos_file, 'r') as f:
-        # skip header
-        f.readline()
-        for line in f.readlines():
-            repo, url, commitNo, createdAt, lastCommit, bugReportsNo, bugsPerDayAll = line.split(',')
-            contributors = get_contributors(url)
-            author2br = get_br_creators_emails(url)
-            author2br_filtered = cross_reference(contributors, author2br)
-            cnt = sum([len(author2br_filtered[key]) for key in author2br_filtered])
-            br_by_non_cotributors.append(cnt)
-    return br_by_non_cotributors
+    out_file = list()
+    try:
+        with open(repos_file, 'r') as f:
+            # skip header
+            f.readline()
+            for line in f.readlines():
+                repo, url, commitNo, createdAt, lastCommit, bugReportsNo, days, bugsPerDayAll = line.split(',')
+                print('Process repo {0}'.format(url))
+
+                contributors = get_contributors(url)
+                author2br = get_br_creators_emails(url)
+                author2br_filtered = cross_reference(contributors, author2br)
+                cnt = sum([len(author2br_filtered[key]) for key in author2br_filtered])
+                bids = list()
+                for key in author2br_filtered:
+                    bids.extend(author2br_filtered[key])
+                out_file.append(line.strip() + ',' + str(cnt) + ',' + str(cnt / float(days)) + ',' + ','.join(
+                    [str(x) for x in bids]))
+    except Exception as e:
+       print('Exception occurred. Too bad. Save what we collected so far. Exception: {0}'.format(e))
+
+    with open(repos_file, 'w') as f:
+        f.write(
+            'repo,url,commitNo,createdAt,lastCommit,bugReportsNo,days,bugsPerDayAll,bugReportsByNonC,bugsPerDayNonC,BIDs\n')
+        for line in out_file:
+            f.write(line + '\n')
+
+    print('Finished processing file. Save to {0}'.format(repos_file))
 
 
 def get_contributors(url):
     tokens = url.split('/')
-    owner = tokens[2]
-    name = tokens[3]
+    owner = tokens[3]
+    name = tokens[4]
     query = 'https://api.github.com/repos/{0}/{1}/contributors'.format(owner, name)
-    request = requests.get(query)
-    if request.status_code == 200:
-        result = request.json()
-        contributors = set()
-        for user in result:
-            contributors.add(user['login'])
-        return contributors
-    else:
-        raise Exception(
-            'Failed to process query: {0}\n Status code {1}. Request {2}.'.format(query, request.status_code, request))
+    failed_cnt = 0
+    while failed_cnt < 20:
+        request = requests.get(query)
+        if request.status_code == 200:
+            result = request.json()
+            contributors = set()
+            for user in result:
+                contributors.add(user['login'])
+            print('Contributors collected')
+            return contributors
+        elif failed_cnt < 20:
+            print('Cannot get contributors for repo {0}. Try again in 10s...'.format(url))
+            failed_cnt += 1
+        else:
+            raise Exception(
+                'Failed to process query: {0}\n Status code {1}. Request {2}.'.format(query, request.status_code,
+                                                                                      request))
 
 
 def get_br_creators_emails(url):
     print('Get authors of bug reports for repo {0}'.format(url))
     tokens = url.split('/')
-    owner = '\"' + tokens[2] + '\"'
-    name = '\"' + tokens[3] + '\"'
+    owner = '\"' + tokens[3] + '\"'
+    name = '\"' + tokens[4] + '\"'
 
     cursor = 'null'
     author2br = dict()
@@ -190,14 +247,18 @@ def get_br_creators_emails(url):
             raise Exception(
                 "Query failed to run by returning code of {0}. Query params: owner: {1}, name {2}, cursor {3}".format(
                     request.status_code, owner, name, cursor))
+    print('Collected bug reports authors')
     return author2br
 
 
 def process_issues(result, author2br):
     for node in result['data']['repository']['issues']['edges']:
-        issue = node['issue']
+        issue = node['node']
         no = issue['number']
-        author = issue['author']['login']
+        if issue['author'] is not None:
+            author = issue['author']['login']
+        else:
+            author = 'ghost'
         if author not in author2br:
             author2br[author] = list()
         author2br[author].append(no)
@@ -213,9 +274,4 @@ def cross_reference(contributors, author2br):
 
 
 if __name__ == '__main__':
-    start_date = datetime.strptime('Aug 19 2010', '%b %d %Y')
-    interval = 30
-    while start_date < datetime.now() - timedelta(days=10):
-        print('Query for repos created at: {0} - {1}'.format(start_date, start_date + timedelta(days=interval)))
-        cnt, interval = run_query(repo_query, 'repos.csv', 'params.csv', start_date, interval)
-        start_date = start_date + timedelta(days=interval)
+    run(sys.argv[1:])
