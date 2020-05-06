@@ -12,13 +12,13 @@ headers = {"Authorization": "Bearer a4a37bc57f01dfef13d3c5f629dbc51800d554ca"}
 
 @click.command()
 @click.option('--collect-repos', is_flag=True)
-@click.option('--start-date', type=str, default='Apr 1 2008')
-@click.option('--end-date', type=str, default='Dec 31 2008')
+@click.option('--start-date', type=str, default='Jan 1 2009')
+@click.option('--end-date', type=str, default='Dec 31 2009')
 @click.option('--interval', type=int, default=30)
-@click.option('--repos-file', type=str, default='repos2008.csv')
-@click.option('--params-file', type=str, default='params2008.csv')
+@click.option('--repos-file', type=str, default='repos2009.csv')
+@click.option('--params-file', type=str, default='params2009.csv')
 @click.option('--process-repos', is_flag=True)
-@click.option('--process-repos-out', type=str, default='repos_final2008.csv')
+@click.option('--process-repos-out', type=str, default='repos_final2009.csv')
 def run(*args, **kwargs):
     repos_fpath = kwargs['repos_file']
     params_fpath = kwargs['params_file']
@@ -40,11 +40,11 @@ def collect_repos(repos_fpath, params_fpath, start_date, end_date, days_interval
         start = datetime.strptime(start_date, '%b %d %Y')
         end = datetime.strptime(end_date, '%b %d %Y')
         while start < end:
-            print('Query for repos created at: {0} - {1}'.format(start,  start + timedelta(days=interval)))
+            print('Query for repos created at: {0} - {1}'.format(start, start + timedelta(days=interval)))
             cnt, interval = run_query(repo_query, repos_fpath, params_fpath, start, interval)
             start = start + timedelta(days=interval)
             if (start + timedelta(days=interval)) > end:
-                interval = (end - start).days - 1
+                interval = (end - start).days
 
 
 def run_query(query_template, data_out, params_out, created_at, interval=14, cursor='null'):
@@ -161,38 +161,42 @@ def process_repos(repos_file):
 
 def bugs_by_non_contributors(repos_file, out_fpath):
     out_lines = list()
-    # try:
     with open(repos_file, 'r') as f:
         # skip header
         f.readline()
         idx = 0
         for line in f.readlines():
-            idx += 1
-            repo, url, created_at, pushed_at, issue_no, days, bugs_per_day_all = line.split(',')
-            print('Process repo {0}'.format(url))
+            try:
+                idx += 1
+                repo, url, created_at, pushed_at, issue_no, days, bugs_per_day_all = line.split(',')
+                print('Process repo {0}'.format(url))
 
-            contributors = get_contributors(url)
-            author2br = get_br_creators_emails(url, issue_no)
-            author2br_filtered = cross_reference(contributors, author2br)
-            cnt = sum([len(author2br_filtered[key]) for key in author2br_filtered])
-            bids = list()
-            for key in author2br_filtered:
-                bids.extend(author2br_filtered[key])
-            out_lines.append(line.strip() + ',' + str(cnt) + ',' + str(cnt / float(days)) + ',' + ','.join(
-                [str(x) for x in bids]))
-            if idx % 5 == 0:
-                dump_lines2file(out_fpath, out_lines)
-    # except Exception as e:
-    #    print('Exception occurred. Too bad. Save what we collected so far. Exception: {0}'.format(e))
+                contributors = get_contributors(url)
+                author2br = get_br_creators_emails(url, issue_no)
+                author2br_filtered = cross_reference(contributors, author2br)
+                cnt = sum([len(author2br_filtered[key]) for key in author2br_filtered])
+                bids = list()
+                for key in author2br_filtered:
+                    bids.extend(author2br_filtered[key])
+                out_lines.append(line.strip() + ',' + str(cnt) + ',' + str(cnt / float(days)) + ',' + ','.join(
+                    [str(x) for x in bids]))
+                if idx % 5 == 0:
+                    dump_lines2file(out_fpath, out_lines)
+                    out_lines = list()
+            except Exception as e:
+                print('Exception occurred. Too bad. Omit that repo. Exception: {0}'.format(e))
+                continue
 
     dump_lines2file(out_fpath, out_lines)
     print('Finished processing file. Save to {0}'.format(repos_file))
 
 
 def dump_lines2file(fpath, out_lines):
-    with open(fpath, 'w') as f:
-        f.write(
-            'repo,url,createdAt,pushedAt,issueNo,days,issuesPerDayAll,issuesByNonC,issuesPerDayNonC,BIDs\n')
+    if not os.path.exists(fpath):
+        with open(fpath, 'w') as f:
+            f.write(
+                'repo,url,createdAt,pushedAt,issueNo,days,issuesPerDayAll,issuesByNonC,issuesPerDayNonC,BIDs\n')
+    with open(fpath, 'a') as f:
         for line in out_lines:
             f.write(line + '\n')
 
@@ -204,7 +208,7 @@ def get_contributors(url):
     query = 'https://api.github.com/repos/{0}/{1}/contributors'.format(owner, name)
     failed_cnt = 0
     while failed_cnt < 20:
-        request = requests.get(query)
+        request = requests.get(query, headers=headers)
         if request.status_code == 200:
             result = request.json()
             contributors = set()
