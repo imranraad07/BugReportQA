@@ -4,20 +4,22 @@
 * Python2.7
 * PyTorch
 * nltk
-* download embeddings from https://go.umd.edu/clarification_questions_embeddings and unzip in `GAN_question_generation`
+* download embeddings and unzip in `GAN_question_generation`
+  * `askubuntu_unix_superuser` from https://go.umd.edu/clarification_questions_embeddings
+  * `stackoverflow` from  https://drive.google.com/file/d/1JxPJeXfCc8SZ8AkfJZfT37dEp42NBVL-/view?usp=sharing
 
 ### How to run: 
 
 1. Pretrain models: 
 
    Before running the GAN, you need to pretrain question generator, answer generator and discriminator. For details, see Section 2.5 in [1].
-  * Update filepaths to datasets in `src/run_pretraining.sh`
+  * Update filepaths to a dataset and embeddings in `src/run_pretraining.sh`
 * Run `src/run_pretraining.sh`
 * This will genereate params files used as the input for `src/run_GAN_main.sh`
 
 2. Run GAN for question generation:
 
-* Update filepath to datasets and embeddings in `src/run_GAN_main.sh`
+* Update filepath to a dataset and embeddings in `src/run_GAN_main.sh`
 * If you don't have GPU, in `src/constants.py` set `CUDA=False`
 * Run `src/run_GAN_main.sh`
 
