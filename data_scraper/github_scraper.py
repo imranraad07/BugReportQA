@@ -239,7 +239,6 @@ def read_github_issues(github_repo_file, result_folder, result_file, auth):
                     # print(follow_up_question, " ", comment['body'])
                     comment_added_csv_count = comment_added_csv_count + 1
                     question_this_repo = question_this_repo + 1
-                    csv_writer = csv.writer(open('{0}/{1}'.format(result_folder, result_file), 'a'))
                     original_post = issue_data['title']
                     if issue_data['body'] is not None:
                         original_post = original_post + "\n\n" + filter_nontext(issue_data['body'])

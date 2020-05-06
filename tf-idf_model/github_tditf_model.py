@@ -137,8 +137,7 @@ if __name__ == '__main__':
             row_val.append(originalAnswers[idx])
             row_val.append(sim_question_answer[idx])
             row_val.append(top_terms)
-            csvReader = csv.writer(open('{0}/{1}'.format(result_folder, result_file), 'a'))
-            csvReader.writerow(row_val)
+            csv_writer.writerow(row_val)
 
             # print (issue_links[idx])
 
