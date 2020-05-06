@@ -36,7 +36,13 @@ To retrain word embeddings on a newer version of stackexchange datadump, check r
 
 Please contact Sudha Rao (raosudha@cs.umd.edu) if you have any questions or any feedback.
 
-# note on github data:
+# Note on github data:
 
-Please put the github_data.csv in data/github directory
+Please put the github_data.csv in ranking_clarification_questions/data/github directory
 Please put the currect version of java in lucene
+
+# Python library version list
+    theano                    1.0.4
+    lasagne                   0.2.dev1
+    python                    2.7.17
+    conda                     4.8.3
