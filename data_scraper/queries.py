@@ -7,7 +7,7 @@ repo_query = Template("""
     remaining
     resetAt
   }
-  search(query: "is:public archived:false pushed:>2019-01-01 created:$start..$end", after: $cursorStart, type: REPOSITORY, first: 100) {
+  search(query: "is:public archived:false pushed:>2019-01-01 created:$start..$end", after: $cursorStart, type: REPOSITORY, first: 80) {
     repositoryCount
     pageInfo {
       hasNextPage
@@ -53,7 +53,7 @@ issues_query = Template("""
     resetAt
   }
   repository(owner: $owner, name: $name) {
-    issues(first: 100, after=$cursor, filterBy: {labels: ["bug", "problem", "Bug", "BUG", "bug report", "Bug report", "Bug Report"]}) {
+    issues(first: 100, after:$cursor, filterBy: {labels: ["bug", "problem", "Bug", "BUG", "bug report", "Bug report", "Bug Report"]}) {
       totalCount
       pageInfo {
         hasNextPage
