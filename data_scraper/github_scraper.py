@@ -7,7 +7,7 @@ import requests
 from nltk import sent_tokenize
 
 from data_scraper.github_text_filter import filter_nontext
-from queries import *
+from data_scraper.queries import *
 from utils import mkdir
 
 # import nltk
@@ -135,7 +135,8 @@ def read_github_issues(github_repo_file, result_folder, result_file, auth):
     # print(github_repos)
     file.close()
 
-    csv_writer = csv.writer(open('{0}/{1}'.format(result_folder, result_file), 'w'))
+    csv_file = open('{0}/{1}'.format(result_folder, result_file), 'w')
+    csv_writer = csv.writer(csv_file)
     csv_writer.writerow(['repo', 'issue_link', 'issue_id', 'post', 'question', 'answer'])
 
     total_issues = 0
@@ -266,6 +267,8 @@ def read_github_issues(github_repo_file, result_folder, result_file, auth):
                 exf.write(repo + "\n")
         repo_count = repo_count + 1
         print(repo_count, total_issues, comment_added_csv_count, " :::: ", issues_this_repo, question_this_repo)
+    csv_file.close()
+
 
 
 def get_edits(repo_url, issue_no):

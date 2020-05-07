@@ -101,7 +101,8 @@ if __name__ == '__main__':
     result_folder = "../data/results"
     result_file = "tditf_github_data.csv"
 
-    csv_writer = csv.writer(open('{0}/{1}'.format(result_folder, result_file), 'w'))
+    csv_file = open('{0}/{1}'.format(result_folder, result_file), 'w')
+    csv_writer = csv.writer(csv_file)
     csv_writer.writerow(
         ['issue_link', 'post', 'question', 'quesion_similarity_to_post', 'answer', 'answer_similarity_to_question',
          'top_terms'])
@@ -143,3 +144,4 @@ if __name__ == '__main__':
 
         idx = idx + 1
     print(unique_comments)
+    csv_file.close()

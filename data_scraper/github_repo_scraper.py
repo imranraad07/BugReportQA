@@ -51,6 +51,8 @@ def get_repos(auth, file_name):
                     myfile.write(item['full_name'] + "\n")
 
             link = _link_field_to_dict(response.headers.get('link', None))
+    myfile.close()
+
 
 
 def _link_field_to_dict(field):
