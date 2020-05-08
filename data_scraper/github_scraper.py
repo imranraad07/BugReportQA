@@ -270,7 +270,6 @@ def read_github_issues(github_repo_file, result_folder, result_file, auth):
     csv_file.close()
 
 
-
 def get_edits(repo_url, issue_no):
     tokens = repo_url.split('/')
     owner = '\"' + tokens[3] + '\"'
@@ -283,7 +282,7 @@ def get_edits(repo_url, issue_no):
 
         if request.status_code == 200:
             result = request.json()
-            edits = [x['node']['diff'] for x in result['data']['repository']['issue']['userContentEdits']['edges']]
+            edits = [(x['node']['diff'], x['node']['createdAt']) for x in result['data']['repository']['issue']['userContentEdits']['edges']]
             return edits
         elif request.status_code == 502:
             print("Query failed to run by returning code of 502 for repo {0} - issue {1}. Try again in 30s...".format(

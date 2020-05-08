@@ -45,6 +45,7 @@ edit_query = Template("""
         edges {
           node {
             diff
+            createdAt
           }
         }
       }
