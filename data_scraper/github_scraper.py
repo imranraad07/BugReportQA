@@ -194,6 +194,7 @@ def read_github_issues(github_repo, bug_ids, csv_writer):
             csv_writer.writerow(write_row)
             print(write_row)
 
+
 def get_edits(repo_url, issue_no):
     tokens = repo_url.split('/')
     owner = '\"' + tokens[3] + '\"'
@@ -241,11 +242,6 @@ def parse_repos(file_name, result_folder, result_file):
 
 
 if __name__ == '__main__':
-    # with open('../credentials.json') as json_file:
-    #     data = json.load(json_file)
-    # username = data['username']
-    # password = data['password']
-    # auth = (username, password)
     # read_github_issues('../data/github_repos/github_repos_name_sorted.txt', '../data/bug_reports',
     #                    'github_data.csv', auth)
     parse_repos('../data/repos/repos_final2009.csv', '../data/bug_reports', 'github_data_2009.csv')
