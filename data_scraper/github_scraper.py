@@ -106,93 +106,98 @@ def read_github_issues(github_repo, bug_ids, csv_writer):
 
     for issue_id in bug_ids:
         print("issue_id", issue_id)
-        issue_data = get_an_issue(github_repo, issue_id)
-        print(issue_data)
-        # github v3 api considers pull requests as issues. so filter them
-        if 'pull_request' in issue_data:
-            continue
-        if 'comments' not in issue_data:
-            print("comments is not in issue data")
-            continue
-        # check if comment count is at least two
-        if issue_data['comments'] < 2:
-            continue
-
-        comment_count = 0
-        after_question = 0
-        is_follow_up_question = False
-        is_follow_up_question_answer = False
-        follow_up_question = ''
-        follow_up_question_reply = ''
-        if 'comments_url' not in issue_data:
-            print("comments_url is not in issue data")
-            continue
-        comments = get_comments(issue_data['comments_url'])
-        if comments is None:
-            continue
-
-        # reading the comments
-        for comment in comments:
-            if 'user' not in comment:
-                print("user is not in comment data")
+        try:
+            issue_data = get_an_issue(github_repo, issue_id)
+            print(issue_data)
+            if issue_data is None:
                 continue
-            if 'user' not in issue_data:
-                print("user is not in issue data")
+            # github v3 api considers pull requests as issues. so filter them
+            if 'pull_request' in issue_data:
+                continue
+            if 'comments' not in issue_data:
+                print("comments is not in issue data")
+                continue
+            # check if comment count is at least two
+            if issue_data['comments'] < 2:
                 continue
 
-            # comment within 60 days of issue creation
-            d1 = datetime.strptime(comment['created_at'], "%Y-%m-%dT%H:%M:%SZ")
-            d2 = datetime.strptime(issue_data['created_at'], "%Y-%m-%dT%H:%M:%SZ")
-            if d1 - d2 > timedelta(days=60):
-                # print(d1-d2)
+            comment_count = 0
+            after_question = 0
+            is_follow_up_question = False
+            is_follow_up_question_answer = False
+            follow_up_question = ''
+            follow_up_question_reply = ''
+            if 'comments_url' not in issue_data:
+                print("comments_url is not in issue data")
+                continue
+            comments = get_comments(issue_data['comments_url'])
+            if comments is None:
                 continue
 
-            if not is_follow_up_question and comment_count < 3:
-                comment_count = comment_count + 1
-                # if comment author and issue author are same, then discard the comment
-                if comment['user']['id'] == issue_data['user']['id']:
+            # reading the comments
+            for comment in comments:
+                if 'user' not in comment:
+                    print("user is not in comment data")
                     continue
-                follow_up_question = comment['body']
-                for sentence in sent_tokenize(comment['body']):
-                    sentence = sentence.strip()
-                    if sentence.startswith(">"):
+                if 'user' not in issue_data:
+                    print("user is not in issue data")
+                    continue
+
+                # comment within 60 days of issue creation
+                d1 = datetime.strptime(comment['created_at'], "%Y-%m-%dT%H:%M:%SZ")
+                d2 = datetime.strptime(issue_data['created_at'], "%Y-%m-%dT%H:%M:%SZ")
+                if d1 - d2 > timedelta(days=60):
+                    # print(d1-d2)
+                    continue
+
+                if not is_follow_up_question and comment_count < 3:
+                    comment_count = comment_count + 1
+                    # if comment author and issue author are same, then discard the comment
+                    if comment['user']['id'] == issue_data['user']['id']:
                         continue
-                    elif question_identifier(sentence):
-                        # if sentence starts with @someone, check if this @someone is original issue author or not
-                        if sentence.startswith("@"):
-                            is_mentioned = sentence.split()[0]
-                            github_login = "@{0}".format(issue_data['user']['login'])
-                            if is_mentioned != github_login:
-                                break
-                        is_follow_up_question = True
-                        idx = comment['body'].find(sentence)
-                        follow_up_question = comment['body'][idx:]
-                        after_question = 0
+                    follow_up_question = comment['body']
+                    for sentence in sent_tokenize(comment['body']):
+                        sentence = sentence.strip()
+                        if sentence.startswith(">"):
+                            continue
+                        elif question_identifier(sentence):
+                            # if sentence starts with @someone, check if this @someone is original issue author or not
+                            if sentence.startswith("@"):
+                                is_mentioned = sentence.split()[0]
+                                github_login = "@{0}".format(issue_data['user']['login'])
+                                if is_mentioned != github_login:
+                                    break
+                            is_follow_up_question = True
+                            idx = comment['body'].find(sentence)
+                            follow_up_question = comment['body'][idx:]
+                            after_question = 0
+                            break
+                elif follow_up_question and after_question < 3:
+                    after_question = after_question + 1
+                    if issue_data['user']['login'] == comment['user']['login']:
+                        follow_up_question_reply = comment['body']
+                        is_follow_up_question_answer = True
                         break
-            elif follow_up_question and after_question < 3:
-                after_question = after_question + 1
-                if issue_data['user']['login'] == comment['user']['login']:
-                    follow_up_question_reply = comment['body']
-                    is_follow_up_question_answer = True
-                    break
 
-        if is_follow_up_question and is_follow_up_question_answer:
-            # just filtering by character count
-            comment_array = follow_up_question.split()
-            if len(comment_array) > 30 or len(follow_up_question) > 300:
-                continue
+            if is_follow_up_question and is_follow_up_question_answer:
+                # just filtering by character count
+                comment_array = follow_up_question.split()
+                if len(comment_array) > 30 or len(follow_up_question) > 300:
+                    continue
 
-            original_post = issue_data['title']
-            if issue_data['body'] is not None:
-                original_post = original_post + "\n\n" + filter_nontext(issue_data['body'])
-            follow_up_question = filter_nontext(follow_up_question)
-            follow_up_question_reply = filter_nontext(follow_up_question_reply)
-            postid = issue_data['html_url'][19:]
-            postid = postid.replace("/", "_")
-            write_row = [github_repo, issue_data['html_url'], postid, original_post, follow_up_question,
-                         follow_up_question_reply]
-            csv_writer.writerow(write_row)
-            print(write_row)
+                original_post = issue_data['title']
+                if issue_data['body'] is not None:
+                    original_post = original_post + "\n\n" + filter_nontext(issue_data['body'])
+                follow_up_question = filter_nontext(follow_up_question)
+                follow_up_question_reply = filter_nontext(follow_up_question_reply)
+                postid = issue_data['html_url'][19:]
+                postid = postid.replace("/", "_")
+                write_row = [github_repo, issue_data['html_url'], postid, original_post, follow_up_question,
+                             follow_up_question_reply]
+                csv_writer.writerow(write_row)
+                print(write_row)
+        except Exception as ex:
+            print("exception on issue, ", issue_id, str(ex))
 
 
 def get_edits(repo_url, issue_no):
@@ -207,7 +212,8 @@ def get_edits(repo_url, issue_no):
 
         if request.status_code == 200:
             result = request.json()
-            edits = [(x['node']['diff'], x['node']['createdAt']) for x in result['data']['repository']['issue']['userContentEdits']['edges']]
+            edits = [(x['node']['diff'], x['node']['createdAt']) for x in
+                     result['data']['repository']['issue']['userContentEdits']['edges']]
             return edits
         elif request.status_code == 502:
             print("Query failed to run by returning code of 502 for repo {0} - issue {1}. Try again in 30s...".format(
