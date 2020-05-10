@@ -229,7 +229,7 @@ def get_edits(repo_url, issue_no):
 def parse_repos(file_name, result_folder, result_file):
     csv_file = open('{0}/{1}'.format(result_folder, result_file), 'w')
     csv_writer = csv.writer(csv_file)
-    # csv_writer.writerow(['repo', 'issue_link', 'issue_id', 'post', 'question', 'answer'])
+    csv_writer.writerow(['repo', 'issue_link', 'issue_id', 'post', 'question', 'answer'])
 
     with open(file_name) as csvDataFile:
         csvReader = csv.reader((line.replace('\0', '') for line in csvDataFile))
