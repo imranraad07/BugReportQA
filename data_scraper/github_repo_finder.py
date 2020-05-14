@@ -12,13 +12,13 @@ headers = {"Authorization": "Bearer a4a37bc57f01dfef13d3c5f629dbc51800d554ca"}
 
 @click.command()
 @click.option('--collect-repos', is_flag=True)
-@click.option('--start-date', type=str, default='Jan 1 2009')
-@click.option('--end-date', type=str, default='Dec 31 2009')
-@click.option('--interval', type=int, default=30)
-@click.option('--repos-file', type=str, default='repos2009.csv')
-@click.option('--params-file', type=str, default='params2009.csv')
+@click.option('--start-date', type=str, default='Aug 1 2014')
+@click.option('--end-date', type=str, default='Dec 31 2014')
+@click.option('--interval', type=int, default=20)
+@click.option('--repos-file', type=str, default='repos2014-part2.csv')
+@click.option('--params-file', type=str, default='params2014-part2.csv')
 @click.option('--process-repos', is_flag=True)
-@click.option('--process-repos-out', type=str, default='repos_final2009.csv')
+@click.option('--process-repos-out', type=str, default='repos_final2014-part2.csv')
 def run(*args, **kwargs):
     repos_fpath = kwargs['repos_file']
     params_fpath = kwargs['params_file']
@@ -161,14 +161,20 @@ def process_repos(repos_file):
 
 def bugs_by_non_contributors(repos_file, out_fpath):
     out_lines = list()
+    urls = set()
     with open(repos_file, 'r') as f:
         # skip header
         f.readline()
         idx = 0
         for line in f.readlines():
             try:
-                idx += 1
                 repo, url, created_at, pushed_at, issue_no, days, bugs_per_day_all = line.split(',')
+                if int(issue_no) < 5:
+                    continue
+                if url in urls:
+                    continue
+                urls.add(url)
+                idx += 1
                 print('Process repo {0}'.format(url))
 
                 contributors = get_contributors(url)
