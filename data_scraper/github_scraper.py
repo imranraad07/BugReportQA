@@ -2,6 +2,7 @@ import csv
 import json
 import time
 from datetime import datetime, timedelta
+from pprint import pprint
 
 import requests
 from nltk import sent_tokenize
@@ -12,16 +13,18 @@ from data_scraper.queries import *
 # import nltk
 # nltk.download('punkt')
 
-headers = {"Authorization": "Bearer a4a37bc57f01dfef13d3c5f629dbc51800d554ca"}
-with open('../credentials.json') as json_file:
-    data = json.load(json_file)
-username = data['username']
-password = data['password']
-auth = (username, password)
+# headers = {"Authorization": "Bearer a4a37bc57f01dfef13d3c5f629dbc51800d554ca"}
+headers = {'Authorization': 'token e0611cfcb582b98c9d94c3b53a380b5b88d98c2e'}
+
+# with open('../credentials.json') as json_file:
+#     data = json.load(json_file)
+# username = data['username']
+# password = data['password']
+# auth = (username, password)
 
 
 def get_comments(url):
-    response = requests.get(url, auth=auth)
+    response = requests.get(url, headers=headers)
     max_try = 20
     while response.status_code != 200:
         if response.status_code == 404:
@@ -34,7 +37,7 @@ def get_comments(url):
         print("Comments, Bad response code:", response.status_code, "sleeping for 3 minutes....", time.ctime())
         time.sleep(180)
         # print("trying again....")
-        response = requests.get(url, auth=auth)
+        response = requests.get(url, headers=headers)
 
     if response.status_code == 200:
         return response.json()
@@ -46,7 +49,8 @@ def get_an_issue(repo, issue_id):
     url = "https://api.github.com/repos/{repo}/issues/{issue_id}"
     url = url.format(repo=repo, issue_id=issue_id)
 
-    response = requests.get(url, auth=auth)
+    response = requests.get(url, headers=headers)
+    # pprint(response.headers)
     max_try = 20
     while response.status_code != 200:
         if response.status_code == 404:
@@ -58,7 +62,7 @@ def get_an_issue(repo, issue_id):
         max_try = max_try - 1
         print("Issues, Bad response code:", response.status_code, "sleeping for 3 minutes....", time.ctime())
         time.sleep(180)
-        response = requests.get(url, auth=auth)
+        response = requests.get(url, headers=headers)
 
     if response.status_code == 200:
         _json = response.json()
