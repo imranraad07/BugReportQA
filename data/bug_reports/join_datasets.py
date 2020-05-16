@@ -14,7 +14,9 @@ def join_files(dpath, out_fpath):
                     if header is None:
                         header = line
                     for line in f.readlines():
-                        lines.append(line.strip())
+                        line = line.strip()
+                        if len(line) > 0:
+                            lines.append(line)
     print('Done')
     print('Save joined dataset to {0}'.format(out_fpath))
     with open(out_fpath, 'w') as f:
