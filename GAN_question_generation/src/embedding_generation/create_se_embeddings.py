@@ -1,19 +1,20 @@
 import os
 import cPickle as p
 import pandas as pd
+import numpy as np
 from nltk.corpus import stopwords
-from gensim.models.keyedvectors import KeyedVectors
 
 # if you dont have nltk.stopwords uncomment 2 lines below
 # import nltk
 # nltk.download('stopwords')
 
-# download embeddings from: https://github.com/vefstathiou/SO_word2vec
-so_embeddings = '/Users/ciborowskaa/Downloads/SO_vectors_200.bin'
+
+se_embeddings = '/Users/ciborowskaa/Downloads/stackexchange_embeddings/embeddings/word_embeddings.p'
+se_vocab = '/Users/ciborowskaa/Downloads/stackexchange_embeddings/embeddings/vocab.p'
 
 repo_path = '/Users/ciborowskaa/VCU/Research/BugReportQA'
-project_dir = os.path.join(repo_path, 'GAN_question_generation/embeddings/stack_overflow')
-dataset_path = os.path.join(repo_path, 'data/bug_reports/github_data.csv')
+project_dir = os.path.join(repo_path, 'GAN_question_generation/embeddings/stackexchange')
+dataset_path = os.path.join(repo_path, 'data/bug_reports/github_dataset_partial.csv')
 
 # tokens from Sudha Rao's code
 PAD_token = '<PAD>'
@@ -26,20 +27,24 @@ GENERIC_token = '<generic>'
 
 
 def run():
-    word_vect = KeyedVectors.load_word2vec_format(so_embeddings, binary=True)
-    print('SO Embeddings loaded')
+    word_embeddings = p.load(open(se_embeddings, 'rb'))
+    word_embeddings = np.array(word_embeddings)
+    word2index = p.load(open(se_vocab, 'rb'))
+    index2word = reverse_dict(word2index)
+
+    print('SE Embeddings loaded')
 
     br_vocab = get_br_vocab(dataset_path)
 
     vector_list = list()
     # append 0s for special tokens
     for i in range(0, 7):
-        vector_list.append([0] * (word_vect.vectors.shape[1]))
+        vector_list.append([0] * word_embeddings.shape[1])
 
-    for idx, vector in enumerate(word_vect.vectors):
-        word = word_vect.index2word[idx]
+    for idx in range(0, len(index2word)):
+        word = index2word[idx]
         if word in br_vocab:
-            vector_list.append(vector.tolist())
+            vector_list.append(word_embeddings[idx].tolist())
 
     if not os.path.exists(project_dir):
         os.makedirs(project_dir)
@@ -57,7 +62,8 @@ def run():
     vocab[SPECIFIC_token] = 5
     vocab[GENERIC_token] = 6
     idx = 7
-    for word in word_vect.index2word:
+    for index in index2word:
+        word = index2word[index]
         if word in br_vocab:
             vocab[word] = idx
             idx += 1
@@ -96,6 +102,13 @@ def update_vocab(line, vocab):
     # tokens = [w for w in tokens if w not in stop_words]
     vocab.update(tokens)
     return vocab
+
+
+def reverse_dict(word2index):
+    index2word = {}
+    for w, ix in word2index.iteritems():
+        index2word[ix] = w
+    return index2word
 
 
 if __name__ == '__main__':
