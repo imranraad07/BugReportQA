@@ -94,10 +94,12 @@ def create_tsv_files_github(post_data_tsv, qa_data_tsv, post_ids, post_titles, p
 
         row_val = []
         row_val.append(postId)
-        for i in range(10):
+        row_val.append(post_questions[post_id])
+        for i in range(9):
             row_val.append(
                 post_questions[int(similar_posts[postId][i])].decode('utf-8', errors='ignore').encode('utf-8'))
-        for i in range(10):
+        row_val.append(post_answers[post_id])
+        for i in range(9):
             row_val.append(post_answers[int(similar_posts[postId][i])].decode('utf-8', errors='ignore').encode('utf-8'))
         with open(qa_data_tsv, 'a') as out_file:
             tsv_writer = csv.writer(out_file, delimiter='\t')
@@ -106,19 +108,19 @@ def create_tsv_files_github(post_data_tsv, qa_data_tsv, post_ids, post_titles, p
     with open('../../data/github/test_ids', 'w') as out_file:
         idx = 0
         for postId in similar_posts:
-            if idx < 1000:
+            if idx < 2000:
                 out_file.write(postId + "\n")
             idx = idx + 1
     with open('../../data/github/tune_ids', 'w') as out_file:
-        idx = 1000
+        idx = 0
         for postId in similar_posts:
-            if idx >= 1000 and idx < 2000:
+            if idx >= 2000 and idx < 4000:
                 out_file.write(postId + "\n")
             idx = idx + 1
     with open('../../data/github/train_ids', 'w') as out_file:
-        idx = 2000
+        idx = 0
         for postId in similar_posts:
-            if idx >= 2000:
+            if idx >= 4000:
                 out_file.write(postId + "\n")
             idx = idx + 1
 
