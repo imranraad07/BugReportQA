@@ -210,7 +210,7 @@ def evaluate_beam(word2index, index2word, encoder, decoder, id_seqs, input_seqs,
                         else:
                             decoded_words.append(index2word[idx])
                     if out_fname:
-                        out_files[k].write(' '.join(decoded_words)+'\n')
+                        out_files[k].write(id_seqs_batch[b]+','+' '.join(decoded_words)+'\n')
                         if has_ids:
                             out_ids_files[k].write(id_seqs_batch[b]+'\n')
     
