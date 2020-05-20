@@ -367,12 +367,12 @@ def main(args):
     else:
         train_data = read_data(args.train_context, args.train_question, args.train_answer, None,
                                args.max_post_len, args.max_ques_len, args.max_ans_len, mode='train')
-    if args.tune_ids is not None:
-        test_data = read_data(args.tune_context, args.tune_question, args.tune_answer, args.tune_ids,
+    if args.test_ids is not None:
+        test_data = read_data(args.test_context, args.test_question, args.test_answer, args.test_ids,
                               args.max_post_len, args.max_ques_len, args.max_ans_len, mode='test')
         # count=args.batch_size*5)
     else:
-        test_data = read_data(args.tune_context, args.tune_question, args.tune_answer, None,
+        test_data = read_data(args.test_context, args.test_question, args.test_answer, None,
                               args.max_post_len, args.max_ques_len, args.max_ans_len, mode='test')
 
     print 'No. of train_data %d' % len(train_data)
