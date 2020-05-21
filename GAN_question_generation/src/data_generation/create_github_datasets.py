@@ -8,60 +8,50 @@ np.random.seed(1234)
 
 
 @click.command()
-@click.option('--in-dataset',
-              help='Input dataset file',
+@click.option('--in-directory', help='Input directory containing dataset.csv, trainig/tuning/testing ids',
               required=True)
-@click.option('--out-directory',
-              help='Directory to save output dataset files',
-              required=True)
-@click.option('--ratios',
-              help='Ratio of training/tuning/testing dataset. Format: [train_ratio tune_ratio test_ratio]',
-              type=(float, float, float),
-              default=[0.6, 0.2, 0.2],
-              required=True)
+@click.option('--out-directory', help='Directory to save output dataset files', required=True)
 def run(*args, **kwargs):
-    in_dataset = kwargs['in_dataset']
+    in_dir = kwargs['in_directory']
     out_dir = kwargs['out_directory']
-    train_ratio, tune_ratio, test_ratio = kwargs['ratios']
-    if train_ratio + tune_ratio + test_ratio != 1:
-        raise ValueError('Ratios of training + tuning + testing datasets should sum up to 1.')
 
-    dataset = pd.read_csv(in_dataset)
-    dataset = dataset[dataset['answer'].notnull()]
-    # shuffle
-    dataset = dataset.sample(frac=1).reset_index(drop=True)
+    dataset = pd.read_csv(os.path.join(in_dir, 'dataset.csv'))
 
-    train_samples = int(train_ratio * len(dataset))
-    tune_samples = int(tune_ratio * len(dataset))
-
-    prepare_dataset(dataset[0:train_samples], 'train', out_dir)
-    prepare_dataset(dataset[train_samples:train_samples + tune_samples], 'tune', out_dir)
-    prepare_dataset(dataset[train_samples + tune_samples:], 'test', out_dir)
+    prepare_dataset(dataset, in_dir, out_dir, 'train')
+    prepare_dataset(dataset, in_dir, out_dir, 'tune')
+    prepare_dataset(dataset, in_dir, out_dir, 'test')
 
 
-def prepare_dataset(dataset, type, out_dir):
+def prepare_dataset(dataset, in_dir, out_dir, type):
     if not os.path.exists(out_dir):
         os.makedirs(out_dir)
 
+    with open(os.path.join(in_dir, type + '_ids.txt')) as f:
+        ids = set([x.strip() for x in f.readlines()])
+
     with open(os.path.join(out_dir, type + '_context.txt'), 'w') as f:
         for index, row in dataset.iterrows():
-            br = preprocess(row['post'])
-            f.write(br + '\n')
+            if row['issue_id'] in ids:
+                br = preprocess(row['post'])
+                f.write(br + '\n')
 
     with open(os.path.join(out_dir, type + '_answer.txt'), 'w') as f:
         for index, row in dataset.iterrows():
-            br = preprocess(row['answer'])
-            f.write(br + '\n')
+            if row['issue_id'] in ids:
+                answer = preprocess(row['answer'])
+                f.write(answer + '\n')
 
     with open(os.path.join(out_dir, type + '_question.txt'), 'w') as f:
         for index, row in dataset.iterrows():
-            br = preprocess(row['question'])
-            f.write(br + '\n')
+            if row['issue_id'] in ids:
+                question = preprocess(row['question'])
+                f.write(question + '\n')
 
     with open(os.path.join(out_dir, type + '_ids.txt'), 'w') as f:
         for index, row in dataset.iterrows():
-            br = preprocess_id(row['issue_link'])
-            f.write(br + '\n')
+            if row['issue_id'] in ids:
+                id = row['issue_id']
+                f.write(id + '\n')
 
 
 def preprocess(text):

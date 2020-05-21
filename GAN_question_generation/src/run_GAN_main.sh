@@ -17,12 +17,14 @@ EMB_DIR=/fs/clip-amr/clarification_question_generation_pytorch/embeddings/$SITEN
 python $SCRIPT_DIR/GAN_main.py    --train_context $CQ_DATA_DIR/train_context.txt \
                                     --train_ques $CQ_DATA_DIR/train_question.txt \
                                     --train_ans $CQ_DATA_DIR/train_answer.txt \
+                                    --train_ids $CQ_DATA_DIR/train_ids.txt \
                                     --tune_context $CQ_DATA_DIR/tune_context.txt \
                                     --tune_ques $CQ_DATA_DIR/tune_question.txt \
                                     --tune_ans $CQ_DATA_DIR/tune_answer.txt \
                                     --test_context $CQ_DATA_DIR/test_context.txt \
                                     --test_ques $CQ_DATA_DIR/test_question.txt \
                                     --test_ans $CQ_DATA_DIR/test_answer.txt \
+                                    --test_ids $CQ_DATA_DIR/test_ids.txt \
                                     --test_pred_ques $CQ_DATA_DIR/GAN_test_pred_question.txt \
                                     --q_encoder_params $CQ_DATA_DIR/q_encoder_params.epoch100 \
                                     --q_decoder_params $CQ_DATA_DIR/q_decoder_params.epoch100 \

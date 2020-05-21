@@ -1,13 +1,24 @@
 import os
+import sys
+import click
 
 
-def join_files(dpath, out_fpath):
+@click.command()
+@click.option('--input-dir', required=True, default='/Users/ciborowskaa/VCU/Research/BugReportQA/data/bug_reports')
+@click.option('--file-prefix', required=True, default='github_data_20')
+@click.option('--output-file', required=True,
+              default='/Users/ciborowskaa/VCU/Research/BugReportQA/data/datasets/github_partial_2008-2011/dataset.csv')
+def join_files(*args, **kwargs):
+    dpath = kwargs['input_dir']
+    prefix = kwargs['file_prefix']
+    out_fpath = kwargs['output_file']
+
     lines = list()
     header = None
 
     for root, dirs, files in os.walk(dpath):
         for file in files:
-            if 'github_data_20' in file:
+            if prefix in file:
                 print('Processing {0}'.format(file))
                 with open(os.path.join(root, file)) as f:
                     line = f.readline()
@@ -27,6 +38,4 @@ def join_files(dpath, out_fpath):
 
 
 if __name__ == '__main__':
-    dpath = '/Users/ciborowskaa/VCU/Research/BugReportQA/data/bug_reports'
-    out_fpath = os.path.join(dpath, 'github_dataset_partial.csv')
-    join_files(dpath, out_fpath)
+    join_files(sys.argv[1:])
