@@ -4,7 +4,7 @@ from nltk.tokenize import sent_tokenize
 import nltk
 nltk.download('punkt')
 import numpy as np
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 import re
 
 def get_tokens(text):
