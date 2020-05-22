@@ -15,7 +15,8 @@ def get_similar_docs(lucene_similar_docs):
         if len(parts) > 1:
             similar_docs[parts[0]] = parts[1:]
         else:
-            similar_docs[parts[0]] = []
+            print('Skip {0}. No similar posts found.'.format(parts[0]))
+            # similar_docs[parts[0]] = []
     return similar_docs
 
 
@@ -134,8 +135,7 @@ def main(args):
         os.system('cd %s && sh run_lucene.sh %s' % (args.lucene_dir, os.path.dirname(args.post_data_tsv)))
 
         create_tsv_files_github(args.post_data_tsv, args.qa_data_tsv, post_ids, post_titles, post_texts,
-                                post_questions,
-                                post_answers, args.lucene_similar_posts)
+                                post_questions, post_answers, args.lucene_similar_posts)
 
     else:
         start_time = time.time()
@@ -216,21 +216,16 @@ if __name__ == "__main__":
     argparser.add_argument("--posts_xml", type=str)
     argparser.add_argument("--comments_xml", type=str)
     argparser.add_argument("--posthistory_xml", type=str)
-    argparser.add_argument("--lucene_dir", type=str,
-                           default='/Users/ciborowskaa/VCU/Research/BugReportQA/ranking_clarification_questions/lucene')
-    argparser.add_argument("--lucene_docs_dir", type=str,
-                           default='/Users/ciborowskaa/VCU/Research/BugReportQA/ranking_clarification_questions/data/lucene_out')
+    argparser.add_argument("--lucene_dir", type=str)
+    argparser.add_argument("--lucene_docs_dir", type=str)
     argparser.add_argument("--lucene_similar_posts", type=str)
     argparser.add_argument("--word_embeddings", type=str)
     argparser.add_argument("--vocab", type=str)
     argparser.add_argument("--no_of_candidates", type=int, default=10)
     argparser.add_argument("--site_name", type=str, default='github')
-    argparser.add_argument("--post_data_tsv", type=str,
-                           default='/Users/ciborowskaa/VCU/Research/BugReportQA/ranking_clarification_questions/data/post.tsv')
-    argparser.add_argument("--qa_data_tsv", type=str,
-                           default='/Users/ciborowskaa/VCU/Research/BugReportQA/ranking_clarification_questions/data/qa.tsv')
-    argparser.add_argument("--github_csv", type=str,
-                           default='/Users/ciborowskaa/VCU/Research/BugReportQA/ranking_clarification_questions/data/dataset.csv')
+    argparser.add_argument("--post_data_tsv", type=str)
+    argparser.add_argument("--qa_data_tsv", type=str)
+    argparser.add_argument("--github_csv", type=str)
     args = argparser.parse_args()
     print
     args

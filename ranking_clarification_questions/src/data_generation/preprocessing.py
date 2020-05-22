@@ -5,7 +5,6 @@ printable = set(string.printable)
 
 def clear_text(text, keep_punctuation=False):
     text = to_unicode(text)
-    text = text.lower()
     tokenized_text = list()
     for token in text.split(' '):
         word = u''
@@ -34,7 +33,7 @@ def clear_text(text, keep_punctuation=False):
                 word += char
                 code_token += char
             elif char in string.punctuation:
-                if len(word) > 0:
+                if len(word) > 0 and not all(map(lambda x: x.isdigit(), word)):
                     tokenized_text.append(word)
                     if code_token != word:
                         tokenized_text.append(code_token)
@@ -47,7 +46,7 @@ def clear_text(text, keep_punctuation=False):
                 # dont yield punctuation
                 # yield char
             elif char == ' ':
-                if len(word) > 0:
+                if len(word) > 0 and not all(map(lambda x: x.isdigit(), word)):
                     tokenized_text.append(word)
                     if code_token != word:
                         tokenized_text.append(code_token)
@@ -55,10 +54,8 @@ def clear_text(text, keep_punctuation=False):
                 word = u''
                 code_token = u''
             else:
-                if len(word) > 0:
+                if len(word) > 0 and not all(map(lambda x: x.isdigit(), word)):
                     tokenized_text.append(word)
-                    if code_token != word:
-                        tokenized_text.append(code_token)
 
                 # to make sure we have only unicode characters
                 word = u''
@@ -69,8 +66,8 @@ def clear_text(text, keep_punctuation=False):
         if code_token != word:
             tokenized_text.append(code_token)
 
-    # we preserve spaces so we need to remove double-spaces after joining
-    return ' '.join(tokenized_text).replace('  ', ' ')
+    # we preserve spaces as tokens so we need to remove double-spaces after joining
+    return ' '.join(tokenized_text).replace('  ', ' ').lower()
 
 
 def to_unicode(document):
