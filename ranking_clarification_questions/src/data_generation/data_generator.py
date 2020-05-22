@@ -83,9 +83,10 @@ def create_tsv_files_github(post_data_tsv, qa_data_tsv, post_ids, post_titles, p
         tsv_writer = csv.writer(out_file, delimiter='\t')
         tsv_writer.writerow(['postid', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8', 'q9', 'q10',
                              'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9', 'a10'])
-
+    idx = 0
     for postId in similar_posts:
-        post_id = int(postId)
+        post_id = idx
+        idx = idx + 1
         with open(post_data_tsv, 'a') as out_file:
             tsv_writer = csv.writer(out_file, delimiter='\t')
             tsv_writer.writerow(
@@ -93,159 +94,142 @@ def create_tsv_files_github(post_data_tsv, qa_data_tsv, post_ids, post_titles, p
                  post_texts[post_ids[post_id]].decode('utf-8', errors='ignore').encode('utf-8')])
 
             row_val = []
-            row_val.append(post_ids[post_id])
-            row_val.append(post_questions[post_ids[post_id]])
+            row_val.append(postId)
+            row_val.append(post_questions[postId])
             for i in range(9):
                 row_val.append(
-                    post_questions[post_ids[int(similar_posts[postId][i])]].decode('utf-8', errors='ignore').encode(
+                    post_questions[similar_posts[postId][i]].decode('utf-8', errors='ignore').encode(
                         'utf-8'))
-            row_val.append(post_answers[post_id])
+            row_val.append(post_answers[postId])
             for i in range(9):
                 row_val.append(
-                    post_answers[int(similar_posts[postId][i])].decode('utf-8', errors='ignore').encode('utf-8'))
+                    post_answers[similar_posts[postId][i]].decode('utf-8', errors='ignore').encode('utf-8'))
             with open(qa_data_tsv, 'a') as out_file:
                 tsv_writer = csv.writer(out_file, delimiter='\t')
                 tsv_writer.writerow(row_val)
 
-        # with open('../../data/github/test_ids', 'w') as out_file:
-        #     idx = 0
-        #     for postId in similar_posts:
-        #         if idx < 2000:
-        #             out_file.write(postId + "\n")
-        #         idx = idx + 1
-        # with open('../../data/github/tune_ids', 'w') as out_file:
-        #     idx = 0
-        #     for postId in similar_posts:
-        #         if idx >= 2000 and idx < 4000:
-        #             out_file.write(postId + "\n")
-        #         idx = idx + 1
-        # with open('../../data/github/train_ids', 'w') as out_file:
-        #     idx = 0
-        #     for postId in similar_posts:
-        #         if idx >= 4000:
-        #             out_file.write(postId + "\n")
-        #         idx = idx + 1
 
-    def main(args):
-        if args.site_name == "github":
-            print
-            'Parsing github posts...'
-            csv.field_size_limit(sys.maxsize)
-            post_ids = []
-            post_titles = {}
-            post_texts = {}
-            post_questions = {}
-            post_answers = {}
-            idx = 0
-            with open(args.github_csv) as csvDataFile:
-                csvReader = csv.reader((line.replace('\0', '') for line in csvDataFile))
-                next(csvReader)
-                for row in csvReader:
-                    post_ids.append(row[2].decode('utf-8', errors='ignore').encode('utf-8'))
-                    post_titles[row[2]] = (row[3].partition('\n')[0].decode('utf-8', errors='ignore').encode('utf-8'))
-                    post_texts[row[2]] = (row[3].partition('\n')[-1].decode('utf-8', errors='ignore').encode('utf-8'))
-                    post_questions[row[2]](row[4].decode('utf-8', errors='ignore').encode('utf-8'))
-                    post_answers[row[2]] = (row[5].decode('utf-8', errors='ignore').encode('utf-8'))
-                    idx = idx + 1
-            # print idx
-            generate_docs_for_lucene_github(post_titles, post_texts, args.lucene_docs_dir, post_ids)
-            os.system('cd %s && sh run_lucene.sh %s' % (args.lucene_dir, os.path.dirname(args.post_data_tsv)))
-
-            create_tsv_files_github(args.post_data_tsv, args.qa_data_tsv, post_ids, post_titles, post_texts,
-                                    post_questions,
-                                    post_answers, args.lucene_similar_posts)
-
-        else:
-            start_time = time.time()
-            print
-            'Parsing posts...'
-            post_parser = PostParser(args.posts_xml)
-            post_parser.parse()
-            posts = post_parser.get_posts()
-            print
-            'Size: ', len(posts)
-            print
-            'Done! Time taken ', time.time() - start_time
-            print
-
-            start_time = time.time()
-            print
-            'Parsing posthistories...'
-            posthistory_parser = PostHistoryParser(args.posthistory_xml)
-            posthistory_parser.parse()
-            posthistories = posthistory_parser.get_posthistories()
-            print
-            'Size: ', len(posthistories)
-            print
-            'Done! Time taken ', time.time() - start_time
-            print
-
-            start_time = time.time()
-            print
-            'Parsing question comments...'
-            comment_parser = CommentParser(args.comments_xml)
-            comment_parser.parse_all_comments()
-            question_comments = comment_parser.get_question_comments()
-            all_comments = comment_parser.get_all_comments()
-            print
-            'Size: ', len(question_comments)
-            print
-            'Done! Time taken ', time.time() - start_time
-            print
-
-            start_time = time.time()
-            print
-            'Loading vocab'
-            vocab = p.load(open(args.vocab, 'rb'))
-            print
-            'Done! Time taken ', time.time() - start_time
-            print
-
-            start_time = time.time()
-            print
-            'Loading word_embeddings'
-            word_embeddings = p.load(open(args.word_embeddings, 'rb'))
-            word_embeddings = np.asarray(word_embeddings, dtype=np.float32)
-            print
-            'Done! Time taken ', time.time() - start_time
-            print
-
-            start_time = time.time()
-            print
-            'Generating post_ques_ans...'
-            post_ques_ans_generator = PostQuesAnsGenerator()
-            post_ques_answers = post_ques_ans_generator.generate(posts, question_comments, all_comments, posthistories,
-                                                                 vocab,
-                                                                 word_embeddings)
-            print
-            'Size: ', len(post_ques_answers)
-            print
-            'Done! Time taken ', time.time() - start_time
-            print
-
-            generate_docs_for_lucene(post_ques_answers, posts, args.lucene_docs_dir)
-            os.system('cd %s && sh run_lucene.sh %s' % (args.lucene_dir, os.path.dirname(args.post_data_tsv)))
-
-            create_tsv_files(args.post_data_tsv, args.qa_data_tsv, post_ques_answers, args.lucene_similar_posts)
-
-    if __name__ == "__main__":
-        argparser = argparse.ArgumentParser(sys.argv[0])
-        argparser.add_argument("--posts_xml", type=str)
-        argparser.add_argument("--comments_xml", type=str)
-        argparser.add_argument("--posthistory_xml", type=str)
-        argparser.add_argument("--lucene_dir", type=str)
-        argparser.add_argument("--lucene_docs_dir", type=str)
-        argparser.add_argument("--lucene_similar_posts", type=str)
-        argparser.add_argument("--word_embeddings", type=str)
-        argparser.add_argument("--vocab", type=str)
-        argparser.add_argument("--no_of_candidates", type=int, default=10)
-        argparser.add_argument("--site_name", type=str)
-        argparser.add_argument("--post_data_tsv", type=str)
-        argparser.add_argument("--qa_data_tsv", type=str)
-        argparser.add_argument("--github_csv", type=str)
-        args = argparser.parse_args()
+def main(args):
+    if args.site_name == "github":
         print
-        args
+        'Parsing github posts...'
+        csv.field_size_limit(sys.maxsize)
+        post_ids = []
+        post_titles = {}
+        post_texts = {}
+        post_questions = {}
+        post_answers = {}
+        idx = 0
+        with open(args.github_csv) as csvDataFile:
+            csvReader = csv.reader((line.replace('\0', '') for line in csvDataFile))
+            next(csvReader)
+            for row in csvReader:
+                post_ids.append(row[2].decode('utf-8', errors='ignore').encode('utf-8'))
+                post_titles[row[2]] = (row[3].partition('\n')[0].decode('utf-8', errors='ignore').encode('utf-8'))
+                post_texts[row[2]] = (row[3].partition('\n')[-1].decode('utf-8', errors='ignore').encode('utf-8'))
+                post_questions[row[2]] = (row[4].decode('utf-8', errors='ignore').encode('utf-8'))
+                post_answers[row[2]] = (row[5].decode('utf-8', errors='ignore').encode('utf-8'))
+                idx = idx + 1
+        # print idx
+        generate_docs_for_lucene_github(post_titles, post_texts, args.lucene_docs_dir, post_ids)
+        os.system('cd %s && sh run_lucene.sh %s' % (args.lucene_dir, os.path.dirname(args.post_data_tsv)))
+
+        create_tsv_files_github(args.post_data_tsv, args.qa_data_tsv, post_ids, post_titles, post_texts,
+                                post_questions,
+                                post_answers, args.lucene_similar_posts)
+
+    else:
+        start_time = time.time()
         print
-        ""
-        main(args)
+        'Parsing posts...'
+        post_parser = PostParser(args.posts_xml)
+        post_parser.parse()
+        posts = post_parser.get_posts()
+        print
+        'Size: ', len(posts)
+        print
+        'Done! Time taken ', time.time() - start_time
+        print
+
+        start_time = time.time()
+        print
+        'Parsing posthistories...'
+        posthistory_parser = PostHistoryParser(args.posthistory_xml)
+        posthistory_parser.parse()
+        posthistories = posthistory_parser.get_posthistories()
+        print
+        'Size: ', len(posthistories)
+        print
+        'Done! Time taken ', time.time() - start_time
+        print
+
+        start_time = time.time()
+        print
+        'Parsing question comments...'
+        comment_parser = CommentParser(args.comments_xml)
+        comment_parser.parse_all_comments()
+        question_comments = comment_parser.get_question_comments()
+        all_comments = comment_parser.get_all_comments()
+        print
+        'Size: ', len(question_comments)
+        print
+        'Done! Time taken ', time.time() - start_time
+        print
+
+        start_time = time.time()
+        print
+        'Loading vocab'
+        vocab = p.load(open(args.vocab, 'rb'))
+        print
+        'Done! Time taken ', time.time() - start_time
+        print
+
+        start_time = time.time()
+        print
+        'Loading word_embeddings'
+        word_embeddings = p.load(open(args.word_embeddings, 'rb'))
+        word_embeddings = np.asarray(word_embeddings, dtype=np.float32)
+        print
+        'Done! Time taken ', time.time() - start_time
+        print
+
+        start_time = time.time()
+        print
+        'Generating post_ques_ans...'
+        post_ques_ans_generator = PostQuesAnsGenerator()
+        post_ques_answers = post_ques_ans_generator.generate(posts, question_comments, all_comments, posthistories,
+                                                             vocab,
+                                                             word_embeddings)
+        print
+        'Size: ', len(post_ques_answers)
+        print
+        'Done! Time taken ', time.time() - start_time
+        print
+
+        generate_docs_for_lucene(post_ques_answers, posts, args.lucene_docs_dir)
+        os.system('cd %s && sh run_lucene.sh %s' % (args.lucene_dir, os.path.dirname(args.post_data_tsv)))
+
+        create_tsv_files(args.post_data_tsv, args.qa_data_tsv, post_ques_answers, args.lucene_similar_posts)
+
+
+if __name__ == "__main__":
+    argparser = argparse.ArgumentParser(sys.argv[0])
+    argparser.add_argument("--posts_xml", type=str)
+    argparser.add_argument("--comments_xml", type=str)
+    argparser.add_argument("--posthistory_xml", type=str)
+    argparser.add_argument("--lucene_dir", type=str)
+    argparser.add_argument("--lucene_docs_dir", type=str)
+    argparser.add_argument("--lucene_similar_posts", type=str)
+    argparser.add_argument("--word_embeddings", type=str)
+    argparser.add_argument("--vocab", type=str)
+    argparser.add_argument("--no_of_candidates", type=int, default=10)
+    argparser.add_argument("--site_name", type=str)
+    argparser.add_argument("--post_data_tsv", type=str)
+    argparser.add_argument("--qa_data_tsv", type=str)
+    argparser.add_argument("--github_csv", type=str)
+    args = argparser.parse_args()
+    print
+    args
+    print
+    ""
+    main(args)

@@ -85,5 +85,6 @@ if __name__ == "__main__":
 	args = argparser.parse_args()
 	print args
 	print ""
+	csv.field_size_limit(sys.maxsize)
 	main(args)
 
