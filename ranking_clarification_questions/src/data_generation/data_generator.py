@@ -1,6 +1,7 @@
 import argparse
 import csv
 import os
+from preprocessing import clear_text
 
 from parse import *
 from post_ques_ans_generator import *
@@ -29,11 +30,9 @@ def generate_docs_for_lucene(post_ques_answers, posts, output_dir):
 def generate_docs_for_lucene_github(titles, posts, output_dir, post_ids):
     for postId in range(0, len(posts)):
         f = open(os.path.join(output_dir, post_ids[postId] + '.txt'), 'w')
-        # content = titles[postId] + ' ' + posts[postId]
-        # content = content.decode('utf-8', errors='ignore').encode('utf-8')
-        content = ' '.join(titles[post_ids[postId]].decode('utf-8', errors='ignore').encode('utf-8')) + ' ' + ' '.join(
-            posts[post_ids[postId]].decode('utf-8', errors='ignore').encode('utf-8'))
-        f.write(content)
+        content = titles[post_ids[postId]] + ' ' + posts[post_ids[postId]]
+        preprocessed_content = clear_text(content)
+        f.write(preprocessed_content)
         f.close()
 
 
@@ -217,16 +216,21 @@ if __name__ == "__main__":
     argparser.add_argument("--posts_xml", type=str)
     argparser.add_argument("--comments_xml", type=str)
     argparser.add_argument("--posthistory_xml", type=str)
-    argparser.add_argument("--lucene_dir", type=str)
-    argparser.add_argument("--lucene_docs_dir", type=str)
+    argparser.add_argument("--lucene_dir", type=str,
+                           default='/Users/ciborowskaa/VCU/Research/BugReportQA/ranking_clarification_questions/lucene')
+    argparser.add_argument("--lucene_docs_dir", type=str,
+                           default='/Users/ciborowskaa/VCU/Research/BugReportQA/ranking_clarification_questions/data/lucene_out')
     argparser.add_argument("--lucene_similar_posts", type=str)
     argparser.add_argument("--word_embeddings", type=str)
     argparser.add_argument("--vocab", type=str)
     argparser.add_argument("--no_of_candidates", type=int, default=10)
-    argparser.add_argument("--site_name", type=str)
-    argparser.add_argument("--post_data_tsv", type=str)
-    argparser.add_argument("--qa_data_tsv", type=str)
-    argparser.add_argument("--github_csv", type=str)
+    argparser.add_argument("--site_name", type=str, default='github')
+    argparser.add_argument("--post_data_tsv", type=str,
+                           default='/Users/ciborowskaa/VCU/Research/BugReportQA/ranking_clarification_questions/data/post.tsv')
+    argparser.add_argument("--qa_data_tsv", type=str,
+                           default='/Users/ciborowskaa/VCU/Research/BugReportQA/ranking_clarification_questions/data/qa.tsv')
+    argparser.add_argument("--github_csv", type=str,
+                           default='/Users/ciborowskaa/VCU/Research/BugReportQA/ranking_clarification_questions/data/dataset.csv')
     args = argparser.parse_args()
     print
     args
