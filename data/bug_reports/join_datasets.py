@@ -45,7 +45,7 @@ def join_files(*args, **kwargs):
 def filter_duplicates(fpath):
     df = pd.read_csv(fpath)
     df = df.drop_duplicates(subset='issue_id')
-    df.to_csv(fpath)
+    df.to_csv(fpath, index=False)
 
 
 if __name__ == '__main__':
