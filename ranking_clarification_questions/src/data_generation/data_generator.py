@@ -1,6 +1,8 @@
 import argparse
 import csv
 import os
+import sys
+
 from preprocessing import clear_text
 
 from parse import *
@@ -83,15 +85,12 @@ def create_tsv_files_github(post_data_tsv, qa_data_tsv, post_ids, post_titles, p
         tsv_writer = csv.writer(out_file, delimiter='\t')
         tsv_writer.writerow(['postid', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8', 'q9', 'q10',
                              'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9', 'a10'])
-    idx = 0
     for postId in similar_posts:
-        post_id = idx
-        idx = idx + 1
         with open(post_data_tsv, 'a') as out_file:
             tsv_writer = csv.writer(out_file, delimiter='\t')
             tsv_writer.writerow(
-                [post_ids[post_id], post_titles[post_ids[post_id]].decode('utf-8', errors='ignore').encode('utf-8'),
-                 post_texts[post_ids[post_id]].decode('utf-8', errors='ignore').encode('utf-8')])
+                [postId, post_titles[postId].decode('utf-8', errors='ignore').encode('utf-8'),
+                 post_texts[postId].decode('utf-8', errors='ignore').encode('utf-8')])
 
             row_val = []
             row_val.append(postId)
