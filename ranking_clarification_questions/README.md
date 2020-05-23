@@ -41,8 +41,14 @@ Please contact Sudha Rao (raosudha@cs.umd.edu) if you have any questions or any 
 Please put the github_data.csv in ranking_clarification_questions/data/github directory
 Please put the currect version of java in lucene
 
-# Python library version list
-    theano                    1.0.4
-    lasagne                   0.2.dev1
-    python                    2.7.17
-    conda                     4.8.3
+# Installation
+Requirements:
+* Python2.7
+* theano 1.0.4
+* lasagne 0.2.dev1
+
+To instal compatibile version of Lasagne and Theano:
+```
+pip install -r https://raw.githubusercontent.com/Lasagne/Lasagne/master/requirements.txt
+pip install https://github.com/Lasagne/Lasagne/archive/master.zip
+```
