@@ -23,8 +23,8 @@ def run(args):
                 row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10])
     print("qa_data", len(issue_qa_mapping.keys()))
 
-    train_set = open(args.train_ids, 'r')
-    Lines = train_set.readlines()
+    test_ids = open(args.test_ids, 'r')
+    Lines = test_ids.readline
     test_ids = []
     for line in Lines:
         test_ids.append(line.strip())
