@@ -1,6 +1,7 @@
 import os
 import sys
 import click
+import pandas as pd
 
 
 @click.command()
@@ -18,7 +19,7 @@ def join_files(*args, **kwargs):
 
     for root, dirs, files in os.walk(dpath):
         for file in files:
-            if prefix in file:
+            if prefix in file and '.csv' in file:
                 print('Processing {0}'.format(file))
                 with open(os.path.join(root, file)) as f:
                     line = f.readline()
@@ -26,15 +27,25 @@ def join_files(*args, **kwargs):
                         header = line
                     for line in f.readlines():
                         line = line.strip()
+
                         if len(line) > 0:
                             lines.append(line)
+
     print('Done')
     print('Save joined dataset to {0}'.format(out_fpath))
     with open(out_fpath, 'w') as f:
         f.write(header)
         for line in lines:
             f.write(line + '\n')
+
+    filter_duplicates(out_fpath)
     print('Done')
+
+
+def filter_duplicates(fpath):
+    df = pd.read_csv(fpath)
+    df = df.drop_duplicates(subset='issue_id')
+    df.to_csv(fpath)
 
 
 if __name__ == '__main__':
