@@ -30,19 +30,22 @@ def prepare_dataset(dataset, in_dir, out_dir, type):
     with open(os.path.join(out_dir, type + '_context.txt'), 'w') as f:
         for index, row in dataset.iterrows():
             if row['issue_id'] in ids:
-                br = clear_text(row['post'])
+                text = row['post'].replace('\r\n', ' ').replace('\n', ' ').replace('\r', ' ')
+                br = clear_text(text)
                 f.write(br + '\n')
 
     with open(os.path.join(out_dir, type + '_answer.txt'), 'w') as f:
         for index, row in dataset.iterrows():
             if row['issue_id'] in ids:
-                answer = clear_text(row['answer'])
+                text = row['answer'].replace('\r\n', ' ').replace('\n', ' ').replace('\r', ' ')
+                answer = clear_text(text)
                 f.write(answer + '\n')
 
     with open(os.path.join(out_dir, type + '_question.txt'), 'w') as f:
         for index, row in dataset.iterrows():
             if row['issue_id'] in ids:
-                question = clear_text(row['question'])
+                text = row['question'].replace('\r\n', ' ').replace('\n', ' ').replace('\r', ' ')
+                question = clear_text(text)
                 f.write(question + '\n')
 
     with open(os.path.join(out_dir, type + '_ids.txt'), 'w') as f:
