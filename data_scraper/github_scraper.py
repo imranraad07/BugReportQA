@@ -92,7 +92,7 @@ def read_github_issues(github_repo, bug_ids, csv_writer):
                             follow_up_question = comment['body'][idx:]
                             after_question = 0
                             break
-                elif follow_up_question and after_question < 3:
+                elif is_follow_up_question and after_question < 3:
                     after_question = after_question + 1
                     if issue_data['user']['login'] == comment['user']['login']:
                         follow_up_question_reply = comment['body']
