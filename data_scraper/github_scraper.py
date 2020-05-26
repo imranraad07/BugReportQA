@@ -265,7 +265,7 @@ def get_edit_by_issue(repo_url, issue_id, csv_writer):
 
         if len(response) > 0:
             # step 2: get follow up question
-            issue = get_an_issue(repo_url, issue_id, getHeader())
+            issue = get_an_issue(repo_url[19:], issue_id, getHeader())
             if issue is None:
                 return
 
