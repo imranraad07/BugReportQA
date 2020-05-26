@@ -21,13 +21,16 @@ bug_report_counter = 0
 
 
 def read_github_issues(github_repo, bug_ids, csv_writer):
+    global bug_report_counter
     for issue_id in bug_ids:
         print("issue_id", issue_id, "BR count", bug_report_counter)
         try:
             issue_data = get_an_issue(github_repo, issue_id, headers)
-            print(issue_data)
+            #print(issue_data)
+
             if issue_data is None:
                 continue
+
             # github v3 api considers pull requests as issues. so filter them
             if 'pull_request' in issue_data:
                 continue
