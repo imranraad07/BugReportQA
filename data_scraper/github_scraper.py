@@ -21,6 +21,7 @@ bug_report_counter = 0
 
 
 def read_github_issues(github_repo, bug_ids, csv_writer):
+    global bug_report_counter
     for issue_id in bug_ids:
         print("issue_id", issue_id, "BR count", bug_report_counter)
         try:
