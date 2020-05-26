@@ -16,9 +16,14 @@ def remove_newlines(text):
 
 
 def remove_triple_quotes(text):
-    modified_text = re.sub(r'```.+```', '', text)
-    modified_text = re.sub(r'```.+', '', modified_text)
-    return modified_text
+    occurrences = [m.start() for m in re.finditer('```', text)]
+    idx = len(occurrences)
+    for i in range(0, len(occurrences), 2):
+        if idx > 0:
+            text = text[:occurrences[idx - 2]] + text[occurrences[idx - 1]:]
+            idx = idx - 2
+    text = text.replace("`", "")
+    return text
 
 
 def remove_stacktrace(text):
