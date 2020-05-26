@@ -223,7 +223,8 @@ def get_contributors(url):
             print('Contributors collected')
             return contributors
         elif failed_cnt < 20:
-            print('Cannot get contributors for repo {0}. Try again in 10s...'.format(url))
+            print('Cannot get contributors for repo {0}. Try again in 30s...'.format(url))
+            time.sleep(30)
             failed_cnt += 1
         else:
             raise Exception(

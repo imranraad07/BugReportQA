@@ -15,7 +15,6 @@ from utils import question_identifier
 # import nltk
 # nltk.download('punkt')
 
-# headers = {"Authorization": "Bearer a4a37bc57f01dfef13d3c5f629dbc51800d554ca"}
 headers = {'Authorization': 'token e0611cfcb582b98c9d94c3b53a380b5b88d98c2e'}
 bug_report_counter = 0
 
@@ -26,7 +25,7 @@ def read_github_issues(github_repo, bug_ids, csv_writer):
         print("issue_id", issue_id, "BR count", bug_report_counter)
         try:
             issue_data = get_an_issue(github_repo, issue_id, headers)
-            #print(issue_data)
+            # print(issue_data)
 
             if issue_data is None:
                 continue
@@ -83,9 +82,9 @@ def read_github_issues(github_repo, bug_ids, csv_writer):
                         elif question_identifier(sentence):
                             # if sentence starts with @someone, check if this @someone is original issue author or not
                             if sentence.startswith("@"):
-                                is_mentioned = sentence.split()[0]
+                                mentioned_login = sentence.split()[0]
                                 github_login = "@{0}".format(issue_data['user']['login'])
-                                if is_mentioned != github_login:
+                                if mentioned_login != github_login:
                                     break
                             is_follow_up_question = True
                             idx = comment['body'].find(sentence)
@@ -100,7 +99,7 @@ def read_github_issues(github_repo, bug_ids, csv_writer):
                         break
 
             if is_follow_up_question and is_follow_up_question_answer:
-                # just filtering by character count
+                # filter by word count and #characters
                 comment_array = follow_up_question.split()
                 if len(comment_array) > 30 or len(follow_up_question) > 300:
                     continue
@@ -169,8 +168,6 @@ def get_edits(repo_url, issue_no):
             raise Exception(
                 "Query failed to run by returning code of {0}. Query params: url:{1}, issue:{2}.".format(
                     request.status_code, repo_url, issue_no))
-
-
 
 
 def get_follow_up_question(issue):
