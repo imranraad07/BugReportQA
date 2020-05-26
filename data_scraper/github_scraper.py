@@ -173,6 +173,7 @@ def parse_repos(input_file, result_file):
 
 
 #############################################################################################################
+#############################################################################################################
 
 def get_follow_up_question(issue):
     if 'comments' not in issue:
@@ -306,6 +307,10 @@ def get_edit_by_issue(repo_url, issue_id, csv_writer):
                                  follow_up_question[0].strip(), diff.strip()]
                     csv_writer.writerow(write_row)
                     print(write_row)
+
+                    global bug_report_counter
+                    bug_report_counter = bug_report_counter + 1
+                    print("Edit Bug Reports:", bug_report_counter)
                     break
                 idx = idx - 1
     except Exception as e:

@@ -8,22 +8,23 @@ def get_comments(url, headers):
     max_try = 20
     while response.status_code != 200:
         if response.status_code == 404:
-            print("Comments, Bad response code 404 Not Found, returning...", time.ctime())
+            print("Comments, Bad response code 404 Not Found, returning...", url, time.ctime())
             return None
         elif response.status_code == 410:
-            print("Comments, Bad response code: 410 Requested page is no longer available. Returning...", time.ctime())
+            print("Comments, Bad response code: 410 Requested page is no longer available. Returning...", url,
+                  time.ctime())
             return None
         elif response.status_code == 301:
-            print("Comments, Bad response code: 301 Requested page permanently moved. Returning...", time.ctime())
+            print("Comments, Bad response code: 301 Requested page permanently moved. Returning...", url, time.ctime())
             return None
 
         if max_try < 0:
             break
         max_try = max_try - 1
         if response.status_code == 401:
-            print("Comments, Bad response code 401 Bad Credentials, sleeping for 3 minutes...", time.ctime())
+            print("Comments, Bad response code 401 Bad Credentials, sleeping for 3 minutes...", url, time.ctime())
         else:
-            print("Comments, Bad response code:", response.status_code, "sleeping for 3 minutes....", time.ctime())
+            print("Comments, Bad response code:", response.status_code, "sleeping for 3 minutes....", url, time.ctime())
         time.sleep(180)
         response = requests.get(url, headers=headers)
 
@@ -41,22 +42,23 @@ def get_an_issue(repo, issue_id, headers):
     max_try = 20
     while response.status_code != 200:
         if response.status_code == 404:
-            print("Issues, Bad response code: 404 Not Found. Returning...", time.ctime())
+            print("Issues, Bad response code: 404 Not Found. Returning...", url, time.ctime())
             return None
         elif response.status_code == 410:
-            print("Issues, Bad response code: 410 Requested page is no longer available. Returning...", time.ctime())
+            print("Issues, Bad response code: 410 Requested page is no longer available. Returning...", url,
+                  time.ctime())
             return None
         elif response.status_code == 301:
-            print("Issues, Bad response code: 301 Requested page permanently moved. Returning...", time.ctime())
+            print("Issues, Bad response code: 301 Requested page permanently moved. Returning...", url, time.ctime())
             return None
 
         if max_try < 0:
             break
         max_try = max_try - 1
         if response.status_code == 401:
-            print("Issues, Bad response code 401 Bad Credentials, sleeping for 3 minutes...", time.ctime())
+            print("Issues, Bad response code 401 Bad Credentials, sleeping for 3 minutes...", url, time.ctime())
         else:
-            print("Issues, Bad response code:", response.status_code, "sleeping for 3 minutes....", time.ctime())
+            print("Issues, Bad response code:", response.status_code, "sleeping for 3 minutes....", url, time.ctime())
         time.sleep(180)
         response = requests.get(url, headers=headers)
 
