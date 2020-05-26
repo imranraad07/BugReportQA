@@ -121,6 +121,22 @@ def read_github_issues(github_repo, bug_ids, csv_writer):
             print("exception on issue, ", issue_id, str(ex))
 
 
+def parse_repos(input_file, result_file):
+    csv_file = open(result_file, 'w')
+    csv_writer = csv.writer(csv_file)
+    csv_writer.writerow(['repo', 'issue_link', 'issue_id', 'post', 'question', 'answer'])
+
+    with open(input_file) as csvDataFile:
+        csv_reader = csv.reader((line.replace('\0', '') for line in csvDataFile))
+        print(next(csv_reader))
+        for row in csv_reader:
+            read_github_issues(row[1][19:], row[9:], csv_writer)
+    csv_file.close()
+
+
+#############################################################################################################
+#############################################################################################################
+
 def get_edits(repo_url, issue_no):
     tokens = repo_url.split('/')
     owner = '\"' + tokens[3] + '\"'
@@ -155,21 +171,7 @@ def get_edits(repo_url, issue_no):
                     request.status_code, repo_url, issue_no))
 
 
-def parse_repos(input_file, result_file):
-    csv_file = open(result_file, 'w')
-    csv_writer = csv.writer(csv_file)
-    csv_writer.writerow(['repo', 'issue_link', 'issue_id', 'post', 'question', 'answer'])
 
-    with open(input_file) as csvDataFile:
-        csv_reader = csv.reader((line.replace('\0', '') for line in csvDataFile))
-        print(next(csv_reader))
-        for row in csv_reader:
-            read_github_issues(row[1][19:], row[9:], csv_writer)
-    csv_file.close()
-
-
-#############################################################################################################
-#############################################################################################################
 
 def get_follow_up_question(issue):
     if 'comments' not in issue:
@@ -299,7 +301,10 @@ def get_edit_by_issue(repo_url, issue_id, csv_writer):
 
                     postid = issue['html_url'][19:]
                     postid = postid.replace("/", "_")
-                    write_row = [repo_url[19:], issue['html_url'], postid, issue['body'].strip(),
+                    original_post = issue_data['title']
+                    if issue_data['body'] is not None:
+                        original_post = original_post + "\n\n" + filter_nontext(issue_data['body'])
+                    write_row = [repo_url[19:], issue['html_url'], postid, original_post.strip(),
                                  follow_up_question[0].strip(), diff.strip()]
                     csv_writer.writerow(write_row)
                     print(write_row)
