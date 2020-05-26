@@ -298,9 +298,9 @@ def get_edit_by_issue(repo_url, issue_id, csv_writer):
 
                     postid = issue['html_url'][19:]
                     postid = postid.replace("/", "_")
-                    original_post = issue_data['title']
-                    if issue_data['body'] is not None:
-                        original_post = original_post + "\n\n" + filter_nontext(issue_data['body'])
+                    original_post = issue['title']
+                    if issue['body'] is not None:
+                        original_post = original_post + "\n\n" + filter_nontext(issue['body'])
                     write_row = [repo_url[19:], issue['html_url'], postid, original_post.strip(),
                                  follow_up_question[0].strip(), diff.strip()]
                     csv_writer.writerow(write_row)
