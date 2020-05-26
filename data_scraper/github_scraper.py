@@ -1,12 +1,10 @@
 import csv
 import sys
-import time
 from datetime import datetime, timedelta
 
 import argparse
 import difflib
 
-import requests
 from nltk import sent_tokenize
 
 from github_apis_v3 import *
@@ -22,16 +20,11 @@ headers = {'Authorization': 'token e0611cfcb582b98c9d94c3b53a380b5b88d98c2e'}
 bug_report_counter = 0
 
 
-def getHeader():
-    return headers
-
-
 def read_github_issues(github_repo, bug_ids, csv_writer):
-    global bug_report_counter
     for issue_id in bug_ids:
         print("issue_id", issue_id, "BR count", bug_report_counter)
         try:
-            issue_data = get_an_issue(github_repo, issue_id, getHeader())
+            issue_data = get_an_issue(github_repo, issue_id, headers)
             print(issue_data)
             if issue_data is None:
                 continue
@@ -54,7 +47,7 @@ def read_github_issues(github_repo, bug_ids, csv_writer):
             if 'comments_url' not in issue_data:
                 print("comments_url is not in issue data")
                 continue
-            comments = get_comments(issue_data['comments_url'], getHeader())
+            comments = get_comments(issue_data['comments_url'], headers)
             if comments is None:
                 continue
 
@@ -133,7 +126,7 @@ def get_edits(repo_url, issue_no):
     query = edit_query.substitute(owner=owner, name=name, number=issue_no)
     failed_cnt = 0
     while failed_cnt < 20:
-        request = requests.post('https://api.github.com/graphql', json={'query': query}, headers=getHeader())
+        request = requests.post('https://api.github.com/graphql', json={'query': query}, headers=headers)
 
         if request.status_code == 200:
             result = request.json()
@@ -187,7 +180,7 @@ def get_follow_up_question(issue):
     if 'comments_url' not in issue:
         print("comments_url is not in issue data")
         return None
-    comments = get_comments(issue['comments_url'], getHeader())
+    comments = get_comments(issue['comments_url'], headers)
     if comments is None:
         return None
 
@@ -265,7 +258,7 @@ def get_edit_by_issue(repo_url, issue_id, csv_writer):
 
         if len(response) > 0:
             # step 2: get follow up question
-            issue = get_an_issue(repo_url[19:], issue_id, getHeader())
+            issue = get_an_issue(repo_url[19:], issue_id, headers)
             if issue is None:
                 return
 
