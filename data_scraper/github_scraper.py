@@ -148,6 +148,9 @@ def get_edits(repo_url, issue_no):
 
         if request.status_code == 200:
             result = request.json()
+            if is_error(result) is True:
+                failed_cnt += 1
+                continue
             edits = [(x['node']['diff'], x['node']['createdAt']) for x in
                      result['data']['repository']['issue']['userContentEdits']['edges']]
             # if len(edits) > 1:
@@ -168,6 +171,26 @@ def get_edits(repo_url, issue_no):
             raise Exception(
                 "Query failed to run by returning code of {0}. Query params: url:{1}, issue:{2}.".format(
                     request.status_code, repo_url, issue_no))
+
+
+def is_error(result):
+    slept = False
+    if 'errors' in result:
+        for error in result['errors']:
+            if 'type' in error:
+                if error['type'] == 'RATE_LIMITED':
+                    print('API rate limit exceeded. Wait 10 min...')
+                    time.sleep(600)
+                    slept = True
+            elif 'message' in error:
+                print(error['message'])
+
+        if slept is False:
+            print('Dont know these errors. Lets sleep 3 min just in case!')
+            time.sleep(180)
+        return True
+
+    return False
 
 
 def get_follow_up_question(issue):
