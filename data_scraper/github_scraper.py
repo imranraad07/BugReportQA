@@ -276,6 +276,8 @@ def show_diff(text, n_text):
 # 4. check difference between this edit and original post(or edited post right before this edit)
 def get_edit_by_issue(repo_url, issue_id, csv_writer):
     try:
+        print(repo_url, issue_id)
+
         # step 1: get edits
         response = get_edits(repo_url, issue_id)
         if response is None:
@@ -303,8 +305,12 @@ def get_edit_by_issue(repo_url, issue_id, csv_writer):
                 if edit[0] is None or prev_edit[0] is None:
                     continue
 
+                d1 = datetime.strptime(follow_up_question[1], "%Y-%m-%dT%H:%M:%SZ")
+                d2 = datetime.strptime(edit[1], "%Y-%m-%dT%H:%M:%SZ")
+                print(d1, d2, d1 < d2)
+
                 # step 4: check time exists (the first one right after the follow_up_question)
-                if follow_up_question[1] < edit[1]:
+                if d1 < d2:
                     original_text = prev_edit[0]
                     modified_text = edit[0]
 
@@ -312,7 +318,7 @@ def get_edit_by_issue(repo_url, issue_id, csv_writer):
                     diff = show_diff(original_text, modified_text)
                     if not diff:
                         continue
-
+                    diff = filter_nontext(diff.strip())
                     if len(diff.split()) < 4:
                         continue
 
@@ -321,11 +327,11 @@ def get_edit_by_issue(repo_url, issue_id, csv_writer):
 
                     postid = issue['html_url'][19:]
                     postid = postid.replace("/", "_")
-                    original_post = issue['title']
+                    original_post = filter_nontext(issue['title'])
                     if issue['body'] is not None:
                         original_post = original_post + "\n\n" + filter_nontext(issue['body'])
                     write_row = [repo_url[19:], issue['html_url'], postid, original_post.strip(),
-                                 follow_up_question[0].strip(), diff.strip()]
+                                 follow_up_question[0].strip(), diff]
                     csv_writer.writerow(write_row)
                     print(write_row)
 
