@@ -24,12 +24,12 @@ def run(args):
     print("qa_data", len(issue_qa_mapping.keys()))
 
     test_ids = open(args.test_ids, 'r')
-    Lines = test_ids.readline
+    Lines = test_ids.readlines()
     test_ids = []
     for line in Lines:
         test_ids.append(line.strip())
 
-    epoch_test_out_list = [args.epoch0, args.epoch13, args.epch19]
+    epoch_test_out_list = [args.epoch0, args.epoch13, args.epoch19]
     test_csv_out_list = [args.test_predictions_epoch0_csv, args.test_predictions_epoch13_csv,
                          args.test_predictions_epoch19_csv]
 
@@ -87,7 +87,7 @@ if __name__ == '__main__':
     argparser.add_argument("--data_dir", type=str, default='github')
     argparser.add_argument("--qa_data_tsv", type=str)
     argparser.add_argument("--github_csv", type=str)
-    argparser.add_argument("--train_ids", type=str)
+    argparser.add_argument("--test_ids", type=str)
     argparser.add_argument("--epoch0", type=str)
     argparser.add_argument("--epoch13", type=str)
     argparser.add_argument("--epoch19", type=str)
