@@ -3,8 +3,8 @@
 DATA_DIR=data
 SITE_NAME=github
 
-SCRIPTS_DIR=ranking_clarification_questions/src/data_generation
-LUCENE_DIR=ranking_clarification_questions/lucene
+SCRIPTS_DIR=src/data_generation
+LUCENE_DIR=lucene
 
 mkdir -p $DATA_DIR/$SITE_NAME
 
@@ -23,4 +23,3 @@ python $SCRIPTS_DIR/data_generator.py   --lucene_dir $LUCENE_DIR \
                                         --post_data_tsv $DATA_DIR/$SITE_NAME/post_data.tsv \
                                         --qa_data_tsv $DATA_DIR/$SITE_NAME/qa_data.tsv \
                                         --github_csv $DATA_DIR/$SITE_NAME/github_data.csv
-
