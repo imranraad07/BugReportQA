@@ -1,17 +1,4 @@
-import sys
-import argparse
-import theano, lasagne
-import numpy as np
-import cPickle as p
-import theano.tensor as T
-from collections import Counter
-import pdb
-import time
-import random, math
-from baseline_pq import baseline_pq
-from baseline_pa import baseline_pa
-from baseline_pqa import baseline_pqa
-from evpi import evpi
+from evpi_pytorch import evpi
 from model_helper import *
 
 
@@ -39,9 +26,6 @@ def main(args):
     vocab_size = len(word_embeddings)
     word_emb_dim = len(word_embeddings[0])
     print 'word emb dim: ', word_emb_dim
-    freeze = False
-    N = args.no_of_candidates
-
     print 'vocab_size ', vocab_size, ', post_max_len ', args.post_max_len, ' ques_max_len ', args.ques_max_len, ' ans_max_len ', args.ans_max_len
 
     start = time.time()
@@ -50,34 +34,37 @@ def main(args):
     test = generate_data(post_vectors_test, ques_list_vectors_test, ans_list_vectors_test, args)
     train.append(post_ids_train)
     test.append(post_ids_test)
-
-
     print 'done! Time taken: ', time.time() - start
 
     print 'Size of training data: ', len(post_ids_train)
     print 'Size of test data: ', len(post_ids_test)
 
-    if args.model == 'baseline_pq':
-        baseline_pq(word_embeddings, vocab_size, word_emb_dim, freeze, args, train, test)
-    elif args.model == 'baseline_pa':
-        baseline_pa(word_embeddings, vocab_size, word_emb_dim, freeze, args, train, test)
-    elif args.model == 'baseline_pqa':
-        baseline_pqa(word_embeddings, vocab_size, word_emb_dim, freeze, args, train, test)
-    elif args.model == 'evpi':
-        evpi(word_embeddings, vocab_size, word_emb_dim, freeze, args, train, test)
+    if args.model == 'evpi':
+        evpi(word_embeddings, vocab_size, word_emb_dim, args, train, test)
+    else:
+        raise ValueError('Uknown model {0}'.format(args.model))
 
 
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser(sys.argv[0])
-    argparser.add_argument("--post_ids_train", type=str, default='/Users/ciborowskaa/VCU/Research/BugReportQA/ranking_clarification_questions/data/github_partial/post_ids_train.p')
-    argparser.add_argument("--post_vectors_train", type=str, default='/Users/ciborowskaa/VCU/Research/BugReportQA/ranking_clarification_questions/data/github_partial/post_vectors_train.p')
-    argparser.add_argument("--ques_list_vectors_train", type=str, default='/Users/ciborowskaa/VCU/Research/BugReportQA/ranking_clarification_questions/data/github_partial/ques_list_vectors_train.p')
-    argparser.add_argument("--ans_list_vectors_train", type=str, default='/Users/ciborowskaa/VCU/Research/BugReportQA/ranking_clarification_questions/data/github_partial/ans_list_vectors_train.p')
-    argparser.add_argument("--post_ids_test", type=str, default='/Users/ciborowskaa/VCU/Research/BugReportQA/ranking_clarification_questions/data/github_partial/post_ids_test.p')
-    argparser.add_argument("--post_vectors_test", type=str, default='/Users/ciborowskaa/VCU/Research/BugReportQA/ranking_clarification_questions/data/github_partial/post_vectors_test.p')
-    argparser.add_argument("--ques_list_vectors_test", type=str, default='/Users/ciborowskaa/VCU/Research/BugReportQA/ranking_clarification_questions/data/github_partial/ques_list_vectors_test.p')
-    argparser.add_argument("--ans_list_vectors_test", type=str, default='/Users/ciborowskaa/VCU/Research/BugReportQA/ranking_clarification_questions/data/github_partial/ans_list_vectors_test.p')
-    argparser.add_argument("--word_embeddings", type=str, default='/Users/ciborowskaa/VCU/Research/BugReportQA/GAN_question_generation/embeddings/stackexchange_rao/word_embeddings.p' )
+    argparser.add_argument("--post_ids_train", type=str,
+                           default='/Users/ciborowskaa/VCU/Research/BugReportQA/ranking_clarification_questions/data/github_partial/post_ids_train.p')
+    argparser.add_argument("--post_vectors_train", type=str,
+                           default='/Users/ciborowskaa/VCU/Research/BugReportQA/ranking_clarification_questions/data/github_partial/post_vectors_train.p')
+    argparser.add_argument("--ques_list_vectors_train", type=str,
+                           default='/Users/ciborowskaa/VCU/Research/BugReportQA/ranking_clarification_questions/data/github_partial/ques_list_vectors_train.p')
+    argparser.add_argument("--ans_list_vectors_train", type=str,
+                           default='/Users/ciborowskaa/VCU/Research/BugReportQA/ranking_clarification_questions/data/github_partial/ans_list_vectors_train.p')
+    argparser.add_argument("--post_ids_test", type=str,
+                           default='/Users/ciborowskaa/VCU/Research/BugReportQA/ranking_clarification_questions/data/github_partial/post_ids_test.p')
+    argparser.add_argument("--post_vectors_test", type=str,
+                           default='/Users/ciborowskaa/VCU/Research/BugReportQA/ranking_clarification_questions/data/github_partial/post_vectors_test.p')
+    argparser.add_argument("--ques_list_vectors_test", type=str,
+                           default='/Users/ciborowskaa/VCU/Research/BugReportQA/ranking_clarification_questions/data/github_partial/ques_list_vectors_test.p')
+    argparser.add_argument("--ans_list_vectors_test", type=str,
+                           default='/Users/ciborowskaa/VCU/Research/BugReportQA/ranking_clarification_questions/data/github_partial/ans_list_vectors_test.p')
+    argparser.add_argument("--word_embeddings", type=str,
+                           default='/Users/ciborowskaa/VCU/Research/BugReportQA/GAN_question_generation/embeddings/stackexchange_rao/word_embeddings.p')
     argparser.add_argument("--batch_size", type=int, default=256)
     argparser.add_argument("--no_of_epochs", type=int, default=20)
     argparser.add_argument("--hidden_dim", type=int, default=100)
