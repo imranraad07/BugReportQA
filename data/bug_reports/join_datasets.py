@@ -2,13 +2,17 @@ import os
 import sys
 import click
 import pandas as pd
+import numpy as np
+
+np.random.seed(1234)
 
 
 @click.command()
 @click.option('--input-dir', required=True, default='/Users/ciborowskaa/VCU/Research/BugReportQA/data/bug_reports')
 @click.option('--file-prefix', required=True, default='github_data_20')
 @click.option('--output-file', required=True,
-              default='/Users/ciborowskaa/VCU/Research/BugReportQA/data/datasets/github_partial_2008-2011/dataset.csv')
+              default='/Users/ciborowskaa/VCU/Research/BugReportQA/data/datasets/github_partial_2008-2013_part1/dataset.csv')
+@click.option('--subset', help='Fraction of original dataset to sample. If subset=1.0, the whole dataset is preserved.')
 def join_files(*args, **kwargs):
     dpath = kwargs['input_dir']
     prefix = kwargs['file_prefix']
@@ -33,18 +37,34 @@ def join_files(*args, **kwargs):
 
     print('Done')
     print('Save joined dataset to {0}'.format(out_fpath))
+    out_dir = '/'.join(out_fpath.split('/')[:-1])
+    if not os.path.exists(out_dir):
+        os.makedirs(out_dir)
+
     with open(out_fpath, 'w') as f:
         f.write(header)
         for line in lines:
             f.write(line + '\n')
 
-    filter_duplicates(out_fpath)
+    clear_data(out_fpath)
+
+    if kwargs['subset']:
+        generate_subset(out_fpath, kwargs['subset'])
+
     print('Done')
 
 
-def filter_duplicates(fpath):
+def clear_data(fpath):
     df = pd.read_csv(fpath)
     df = df.drop_duplicates(subset='issue_id')
+    df = df[df['answer'].notna()]
+    df = df[df['answer'].apply(lambda x: len(x.split()) > 3)]
+    df.to_csv(fpath, index=False)
+
+
+def generate_subset(fpath, subset_ratio):
+    df = pd.read_csv(fpath)
+    df = df.sample(frac=subset_ratio).reset_index(drop=True)
     df.to_csv(fpath, index=False)
 
 
