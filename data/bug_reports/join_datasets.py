@@ -58,6 +58,8 @@ def clear_data(fpath):
     df = pd.read_csv(fpath)
     df = df.drop_duplicates(subset='issue_id')
     df = df[df['answer'].notna()]
+    df = df[df['post'].notna()]
+    df = df[df['question'].notna()]
     df = df[df['answer'].apply(lambda x: len(x.split()) > 3)]
     df.to_csv(fpath, index=False)
 
