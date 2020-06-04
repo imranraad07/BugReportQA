@@ -1,4 +1,4 @@
-import observed_behavior_rule as obr
+import pattern_classification.observed_behavior_rule as obr
 import spacy
 from spacy.matcher import Matcher
 import unittest
