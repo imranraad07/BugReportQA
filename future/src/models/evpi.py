@@ -103,6 +103,9 @@ def run_evaluation(net, device, w2v_model, test_loader):
             questions_origin = data['question_origin'][0]
 
             outputs = net(posts, questions)
+            if device.type != 'cpu':
+                outputs = outputs.cpu()
+
             a_cap = compute_a_cap(answers, w2v_model).numpy()
 
             sim = cosine_similarity(a_cap, outputs)
