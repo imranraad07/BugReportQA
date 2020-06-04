@@ -1,295 +1,312 @@
-import sys, os
-import argparse
-import theano, lasagne
+import pandas as pd
 import numpy as np
-import cPickle as p
-import theano.tensor as T
-from collections import Counter
-import pdb
-import time
-import random, math
 
-DEPTH = 3
-DEPTH_A = 2
-from lstm_helper import *
-from model_helper import *
+import torch.nn as nn
+import torch
+import torch.optim as optim
+import torch.nn.functional as F
+from torchvision import transforms
+from torch.utils.data import Dataset, DataLoader
 
+import gensim
+from gensim.scripts.glove2word2vec import glove2word2vec
+import spacy
+from spacy.matcher import Matcher
+from difflib import Differ
 
-def cos_sim_fn(v1, v2):
-    numerator = T.sum(v1 * v2, axis=1)
-    denominator = T.sqrt(T.sum(v1 ** 2, axis=1) * T.sum(v2 ** 2, axis=1))
-    val = numerator / denominator
-    return T.gt(val, 0) * val + T.le(val, 0) * 0.001
+import preprocessing as pp
+import pattern_classification.observed_behavior_rule as ob
 
+CUDA = False
 
-def custom_sim_fn(v1, v2):
-    val = cos_sim_fn(v1, v2)
-    val = val - 0.95
-    return T.gt(val, 0) * T.exp(val)
+"""
+TODO Big things:
+1. Evaluation on test set
+2. Ranking
+3. (Done: make sure ids in the dataset are properly divided! One tsv row = 10 data points (p, q_i, a_i))
+4. Padding for batch processing - do it in a new file; it requires more modifications
 
+TODO Small things:
+1. Make sure diff computation makes sense.
+2. Move utility calculator as a part of dataset building set - OB is not changing.
 
-def answer_model(post_out, ques_out, ques_emb_out, ans_out, ans_emb_out, labels, args):
-    # Pr(a|p,q)
-    N = args.no_of_candidates
-    post_ques = T.concatenate([post_out, ques_out[0]], axis=1)
-    hidden_dim = 200
-    l_post_ques_in = lasagne.layers.InputLayer(shape=(args.batch_size, 2 * args.hidden_dim), input_var=post_ques)
-    l_post_ques_denses = [None] * DEPTH_A
-    for k in range(DEPTH_A):
-        if k == 0:
-            l_post_ques_denses[k] = lasagne.layers.DenseLayer(l_post_ques_in, num_units=hidden_dim, \
-                                                              nonlinearity=lasagne.nonlinearities.rectify)
-        else:
-            l_post_ques_denses[k] = lasagne.layers.DenseLayer(l_post_ques_denses[k - 1], num_units=hidden_dim, \
-                                                              nonlinearity=lasagne.nonlinearities.rectify)
+Nice to have:
+1. Evaluation on validation set and saving model that performs best on validation set.
+   We can use that model later on for evaluation with test set.
+"""
 
-    l_post_ques_dense = lasagne.layers.DenseLayer(l_post_ques_denses[-1], num_units=1, \
-                                                  nonlinearity=lasagne.nonlinearities.sigmoid)
-    post_ques_dense_params = lasagne.layers.get_all_params(l_post_ques_denses, trainable=True)
-    # print 'Params in post_ques ', lasagne.layers.count_params(l_post_ques_denses)
+class GithubDataset(Dataset):
 
-    for i in range(1, N):
-        post_ques = T.concatenate([post_out, ques_out[i]], axis=1)
-        l_post_ques_in_ = lasagne.layers.InputLayer(shape=(args.batch_size, 2 * args.hidden_dim), input_var=post_ques)
-        for k in range(DEPTH_A):
-            if k == 0:
-                l_post_ques_dense_ = lasagne.layers.DenseLayer(l_post_ques_in_, num_units=hidden_dim, \
-                                                               nonlinearity=lasagne.nonlinearities.rectify, \
-                                                               W=l_post_ques_denses[k].W, \
-                                                               b=l_post_ques_denses[k].b)
-            else:
-                l_post_ques_dense_ = lasagne.layers.DenseLayer(l_post_ques_dense_, num_units=hidden_dim, \
-                                                               nonlinearity=lasagne.nonlinearities.rectify, \
-                                                               W=l_post_ques_denses[k].W, \
-                                                               b=l_post_ques_denses[k].b)
-        l_post_ques_dense_ = lasagne.layers.DenseLayer(l_post_ques_dense_, num_units=1, \
-                                                       nonlinearity=lasagne.nonlinearities.sigmoid)
+    def __init__(self, post_tsv, qa_tsv, train, transform=None):
+        self.transform = transform
+        self.dataset, self.index2postid = self._build_dataset(post_tsv, qa_tsv, train)
 
-    ques_sim = [None] * (N * N)
-    pq_a_squared_errors = [None] * (N * N)
-    for i in range(N):
-        for j in range(N):
-            ques_sim[i * N + j] = custom_sim_fn(ques_emb_out[i], ques_emb_out[j])
-            pq_a_squared_errors[i * N + j] = 1 - cos_sim_fn(ques_emb_out[i], ans_emb_out[j])
+    def _build_dataset(self, post_tsv, qa_tsv, train):
+        posts = pd.read_csv(post_tsv, sep='\t')[:13]
+        qa = pd.read_csv(qa_tsv, sep='\t')[:13]
+        data = {'post_origin': list(),
+                'question_origin': list(),
+                'answer_origin': list(),
+                'label': list(),
+                'id': list()}
 
-    pq_a_loss = 0.0
-    for i in range(N):
-        pq_a_loss += T.mean(labels[:, i] * pq_a_squared_errors[i * N + i])
-        for j in range(N):
-            if i == j:
+        index2postid = dict()
+        for idx, row in posts.iterrows():
+            # TODO: this should be covered when building dataset
+            if str(row['post']) == 'nan':
                 continue
-            pq_a_loss += T.mean(labels[:, i] * pq_a_squared_errors[i * N + j] * ques_sim[i * N + j])
-
-    return ques_sim, pq_a_squared_errors, pq_a_loss, post_ques_dense_params
-
-
-def utility_calculator(post_out, ques_out, ques_emb_out, ans_out, ques_sim, pq_a_squared_errors, labels, args):
-    # U(p+a)
-    N = args.no_of_candidates
-    pqa_loss = 0.0
-    pqa_preds = [None] * (N * N)
-    post_ques_ans = T.concatenate([post_out, ques_out[0], ans_out[0]], axis=1)
-    l_post_ques_ans_in = lasagne.layers.InputLayer(shape=(args.batch_size, 3 * args.hidden_dim),
-                                                   input_var=post_ques_ans)
-    l_post_ques_ans_denses = [None] * DEPTH
-    for k in range(DEPTH):
-        if k == 0:
-            l_post_ques_ans_denses[k] = lasagne.layers.DenseLayer(l_post_ques_ans_in, num_units=args.hidden_dim, \
-                                                                  nonlinearity=lasagne.nonlinearities.rectify)
-        else:
-            l_post_ques_ans_denses[k] = lasagne.layers.DenseLayer(l_post_ques_ans_denses[k - 1],
-                                                                  num_units=args.hidden_dim, \
-                                                                  nonlinearity=lasagne.nonlinearities.rectify)
-    l_post_ques_ans_dense = lasagne.layers.DenseLayer(l_post_ques_ans_denses[-1], num_units=1, \
-                                                      nonlinearity=lasagne.nonlinearities.sigmoid)
-    pqa_preds[0] = lasagne.layers.get_output(l_post_ques_ans_dense)
-
-    pqa_loss += T.mean(lasagne.objectives.binary_crossentropy(pqa_preds[0], labels[:, 0]))
-
-    for i in range(N):
-        for j in range(N):
-            if i == 0 and j == 0:
-                continue
-            post_ques_ans = T.concatenate([post_out, ques_out[i], ans_out[j]], axis=1)
-            l_post_ques_ans_in_ = lasagne.layers.InputLayer(shape=(args.batch_size, 3 * args.hidden_dim),
-                                                            input_var=post_ques_ans)
-            for k in range(DEPTH):
-                if k == 0:
-                    l_post_ques_ans_dense_ = lasagne.layers.DenseLayer(l_post_ques_ans_in_, num_units=args.hidden_dim, \
-                                                                       nonlinearity=lasagne.nonlinearities.rectify, \
-                                                                       W=l_post_ques_ans_denses[k].W, \
-                                                                       b=l_post_ques_ans_denses[k].b)
+            id_str = row['postid']
+            if id_str not in index2postid:
+                index2postid[id_str] = len(index2postid)
+            id = index2postid[id_str]
+            for i in range(1, 11):
+                data['post_origin'].append(row['title'] + ' ' + row['post'])
+                data['id'].append(id)
+                data['answer_origin'].append(qa.iloc[idx]['a' + str(i)])
+                data['question_origin'].append(qa.iloc[idx]['q' + str(i)])
+                if i == 1:
+                    data['label'].append(1)
                 else:
-                    l_post_ques_ans_dense_ = lasagne.layers.DenseLayer(l_post_ques_ans_dense_,
-                                                                       num_units=args.hidden_dim, \
-                                                                       nonlinearity=lasagne.nonlinearities.rectify, \
-                                                                       W=l_post_ques_ans_denses[k].W, \
-                                                                       b=l_post_ques_ans_denses[k].b)
-            l_post_ques_ans_dense_ = lasagne.layers.DenseLayer(l_post_ques_ans_dense_, num_units=1, \
-                                                               nonlinearity=lasagne.nonlinearities.sigmoid)
-            pqa_preds[i * N + j] = lasagne.layers.get_output(l_post_ques_ans_dense_)
-        pqa_loss += T.mean(lasagne.objectives.binary_crossentropy(pqa_preds[i * N + i], labels[:, i]))
-    post_ques_ans_dense_params = lasagne.layers.get_all_params(l_post_ques_ans_dense, trainable=True)
-    # print 'Params in post_ques_ans ', lasagne.layers.count_params(l_post_ques_ans_dense)
+                    data['label'].append(0)
+        dataset = pd.DataFrame(data)
 
-    return pqa_loss, post_ques_ans_dense_params, pqa_preds
+        instances_no = len(dataset) / 10
+        train_instances = int(instances_no * 0.9)
+        if train is True:
+            dataset = dataset[:(train_instances * 10)]
+        else:
+            dataset = dataset[(train_instances * 10):].reset_index(drop=True)
+        return dataset, index2postid
 
+    def __len__(self):
+        return len(self.dataset)
 
-def build(word_embeddings, len_voc, word_emb_dim, args, freeze=False):
-    # input theano vars
-    posts = T.imatrix()
-    post_masks = T.fmatrix()
-    ques_list = T.itensor3()
-    ques_masks_list = T.ftensor3()
-    ans_list = T.itensor3()
-    ans_masks_list = T.ftensor3()
-    labels = T.imatrix()
-    N = args.no_of_candidates
+    def __getitem__(self, idx):
+        if torch.is_tensor(idx):
+            idx = idx.tolist()
 
-    post_out, post_lstm_params = build_lstm(posts, post_masks, args.post_max_len, \
-                                            word_embeddings, word_emb_dim, args.hidden_dim, len_voc, args.batch_size)
-    ques_out, ques_emb_out, ques_lstm_params = build_list_lstm(ques_list, ques_masks_list, N, args.ques_max_len, \
-                                                               word_embeddings, word_emb_dim, args.hidden_dim, len_voc,
-                                                               args.batch_size)
-    ans_out, ans_emb_out, ans_lstm_params = build_list_lstm(ans_list, ans_masks_list, N, args.ans_max_len, \
-                                                            word_embeddings, word_emb_dim, args.hidden_dim, len_voc,
-                                                            args.batch_size)
+        sample = self.dataset.iloc[idx]
+        sample = self._to_dict(sample)
+        if self.transform:
+            sample = self.transform(sample)
+        return sample
 
-    ques_sim, pq_a_squared_errors, pq_a_loss, post_ques_dense_params \
-        = answer_model(post_out, ques_out, ques_emb_out, ans_out, ans_emb_out, labels, args)
-
-    all_params = post_lstm_params + ques_lstm_params + post_ques_dense_params
-
-    post_out, post_lstm_params = build_lstm(posts, post_masks, args.post_max_len, \
-                                            word_embeddings, word_emb_dim, args.hidden_dim, len_voc, args.batch_size)
-    ques_out, ques_emb_out, ques_lstm_params = build_list_lstm(ques_list, ques_masks_list, N, args.ques_max_len, \
-                                                               word_embeddings, word_emb_dim, args.hidden_dim, len_voc,
-                                                               args.batch_size)
-    ans_out, ans_emb_out, ans_lstm_params = build_list_lstm(ans_list, ans_masks_list, N, args.ans_max_len, \
-                                                            word_embeddings, word_emb_dim, args.hidden_dim, len_voc,
-                                                            args.batch_size)
-
-    pqa_loss, post_ques_ans_dense_params, pqa_preds = utility_calculator(post_out, ques_out, ques_emb_out, ans_out, \
-                                                                         ques_sim, pq_a_squared_errors, labels, args)
-
-    all_params += post_lstm_params + ques_lstm_params + ans_lstm_params
-    all_params += post_ques_ans_dense_params
-
-    loss = pq_a_loss + pqa_loss
-    loss += args.rho * sum(T.sum(l ** 2) for l in all_params)
-
-    updates = lasagne.updates.adam(loss, all_params, learning_rate=args.learning_rate)
-
-    train_fn = theano.function([posts, post_masks, ques_list, ques_masks_list, ans_list, ans_masks_list, labels], \
-                               [loss, pq_a_loss, pqa_loss] + pq_a_squared_errors + ques_sim + pqa_preds,
-                               updates=updates)
-    test_fn = theano.function([posts, post_masks, ques_list, ques_masks_list, ans_list, ans_masks_list, labels], \
-                              [loss, pq_a_loss, pqa_loss] + pq_a_squared_errors + ques_sim + pqa_preds, )
-    return train_fn, test_fn
+    def _to_dict(self, sample):
+        new_sample = {'post_origin': sample['post_origin'],
+                      'id': sample['id'],
+                      'question_origin': sample['question_origin'],
+                      'answer_origin': sample['answer_origin'],
+                      'label': sample['label']}
+        return new_sample
 
 
-def validate(val_fn, fold_name, epoch, fold, args, out_file=None):
-    start = time.time()
-    num_batches = 0
-    cost = 0
-    pq_a_cost = 0
-    utility_cost = 0
-    corr = 0
-    mrr = 0
-    total = 0
-    N = args.no_of_candidates
-    recall = [0] * N
+class Preprocessing(object):
 
-    if out_file:
-        out_file_o = open(out_file + '.epoch%d' % epoch, 'w')
-        out_file_o.close()
-    posts, post_masks, ques_list, ques_masks_list, ans_list, ans_masks_list, post_ids = fold
-    labels = np.zeros((len(post_ids), N), dtype=np.int32)
-    ranks = np.zeros((len(post_ids), N), dtype=np.int32)
-    labels[:, 0] = 1
-    for j in range(N):
-        ranks[:, j] = j
-    ques_list, ques_masks_list, ans_list, ans_masks_list, labels, ranks = shuffle(ques_list, ques_masks_list, \
-                                                                                  ans_list, ans_masks_list, labels,
-                                                                                  ranks)
-    for p, pm, q, qm, a, am, l, r, ids in iterate_minibatches(posts, post_masks, ques_list, ques_masks_list, \
-                                                              ans_list, ans_masks_list, labels, ranks, \
-                                                              post_ids, args.batch_size, shuffle=False):
-        q = np.transpose(q, (1, 0, 2))
-        qm = np.transpose(qm, (1, 0, 2))
-        a = np.transpose(a, (1, 0, 2))
-        am = np.transpose(am, (1, 0, 2))
-
-        out = val_fn(p, pm, q, qm, a, am, l)
-        loss = out[0]
-        pq_a_loss = out[1]
-        pqa_loss = out[2]
-
-        pq_a_errors = out[3: 3 + (N * N)]
-        pq_a_errors = np.transpose(pq_a_errors)
-
-        ques_sim = out[3 + (N * N): 3 + (N * N) + (N * N)]
-        ques_sim = np.transpose(ques_sim)
-
-        pqa_preds = out[3 + (N * N) + (N * N):]
-        pqa_preds = np.array(pqa_preds)[:, :, 0]
-        pqa_preds = np.transpose(pqa_preds)
-
-        cost += loss
-        pq_a_cost += pq_a_loss
-        utility_cost += pqa_loss
-
-        for j in range(args.batch_size):
-            preds = [0.0] * N
-            for k in range(N):
-                preds[k] = pqa_preds[j][k * N + k]
-                for m in range(N):
-                    if m == k:
-                        continue
-                    preds[k] += 0.1 * math.exp(pq_a_errors[j][k * N + m]) * ques_sim[j][k * N + m] * pqa_preds[j][
-                        k * N + m]
-            rank = get_rank(preds, l[j])
-            if rank == 1:
-                corr += 1
-            mrr += 1.0 / rank
-            for index in range(N):
-                if rank <= index + 1:
-                    recall[index] += 1
-            total += 1
-            if out_file:
-                write_test_predictions(out_file, ids[j], preds, r[j], epoch)
-        num_batches += 1
-
-    lstring = '%s: epoch:%d, cost:%f, pq_a_cost:%f, utility_cost:%f, acc:%f, mrr:%f,time:%d\n' % \
-              (fold_name, epoch, cost * 1.0 / num_batches, pq_a_cost * 1.0 / num_batches,
-               utility_cost * 1.0 / num_batches, \
-               corr * 1.0 / total, mrr * 1.0 / total, time.time() - start)
-    recall = [round(curr_r * 1.0 / total, 3) for curr_r in recall]
-    recall_str = '['
-    for r in recall:
-        recall_str += '%.3f ' % r
-    recall_str += ']\n'
-
-    outfile = open(args.stdout_file, 'a')
-    outfile.write(lstring + '\n')
-    outfile.write(recall_str + '\n')
-    outfile.close()
-
-    print lstring
-    print recall
+    def __call__(self, sample):
+        sample['post'] = pp.clear_text(sample['post_origin'], keep_punctuation=True)
+        sample['question'] = pp.clear_text(sample['question_origin'], keep_punctuation=True)
+        sample['answer'] = pp.clear_text(sample['answer_origin'], keep_punctuation=True)
+        return sample
 
 
-def evpi(word_embeddings, vocab_size, word_emb_dim, freeze, args, train, test):
-    outfile = open(args.stdout_file, 'w')
-    outfile.close()
+class Word2Idx(object):
 
-    print 'Compiling graph...'
-    start = time.time()
-    train_fn, test_fn = build(word_embeddings, vocab_size, word_emb_dim, args, freeze=freeze)
-    print 'done! Time taken: ', time.time() - start
+    def __init__(self, word2index):
+        self.word2index = word2index
 
-    # train network
-    for epoch in range(args.no_of_epochs):
-        validate(train_fn, 'TRAIN', epoch, train, args)
-        validate(test_fn, '\t TEST', epoch, test, args, args.test_predictions_output)
-        print "\n"
+    def __call__(self, sample):
+        sample['post'] = self._process(sample['post'])
+        sample['answer'] = self._process(sample['answer'])
+        sample['question'] = self._process(sample['question'])
+        return sample
+
+    def _process(self, text):
+        idxs = [self.word2index[w].index for w in text.split() if w in self.word2index]
+        return idxs
+
+
+class ToTensor(object):
+
+    def __call__(self, sample):
+        sample['post'] = torch.tensor(sample['post'], dtype=torch.long)
+        sample['question'] = torch.tensor(sample['question'], dtype=torch.long)
+        sample['answer'] = torch.tensor(sample['answer'], dtype=torch.long)
+        sample['label'] = torch.tensor(sample['label'], dtype=torch.long)
+        sample['id'] = torch.tensor(sample['id'], dtype=torch.int32)
+        return sample
+
+
+class EvpiModel(nn.Module):
+
+    def __init__(self, weights, hidden_dim=256):
+        super(EvpiModel, self).__init__()
+
+        # layer 1 - embeddings
+        weights = torch.FloatTensor(weights)
+        self.emb_layer = nn.Embedding.from_pretrained(weights)
+        self.emb_layer.requires_grad = False
+
+        # layer 2 - LSTMs
+        self.p_lstm = nn.LSTM(input_size=self.emb_layer.embedding_dim, hidden_size=hidden_dim, batch_first=True)
+        self.q_lstm = nn.LSTM(input_size=self.emb_layer.embedding_dim, hidden_size=hidden_dim, batch_first=True)
+
+        # layer 3 - dense layer
+        self.layer1 = nn.Linear(2 * hidden_dim, 2 * hidden_dim)
+        self.layer2 = nn.Linear(2 * hidden_dim, 2 * hidden_dim)
+        self.layer3 = nn.Linear(2 * hidden_dim, self.emb_layer.embedding_dim)
+        self.layer4 = nn.Linear(self.emb_layer.embedding_dim, self.emb_layer.embedding_dim)
+
+    def forward(self, post, question):
+        p_emb_out = self.emb_layer(post)
+        q_emb_out = self.emb_layer(question)
+        p_lstm_out, test = self.p_lstm(p_emb_out)
+        q_lstm_out, test = self.q_lstm(q_emb_out)
+        lstm_avg = torch.cat((p_lstm_out.mean(dim=1), q_lstm_out.mean(dim=1)), 1)
+        x = F.relu(self.layer1(lstm_avg))
+        x = F.relu(self.layer2(x))
+        x = F.relu(self.layer3(x))
+        answer_representation = self.layer4(x)
+        return answer_representation
+
+
+def get_device():
+    cuda = CUDA and torch.cuda.is_available()
+    if cuda is True:
+        device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+    else:
+        device = torch.device('cpu')
+    return device
+
+
+def get_datasets(post_tsv, qa_tsv, word2index, batch_size=256, shuffle=True):
+    preprocess = Preprocessing()
+    w2idx = Word2Idx(word2index)
+    to_tensor = ToTensor()
+    train_dataset = GithubDataset(post_tsv, qa_tsv, transform=transforms.Compose([preprocess, w2idx, to_tensor]),
+                                  train=True)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=4)
+
+    test_dataset = GithubDataset(post_tsv, qa_tsv, transform=transforms.Compose([preprocess, w2idx, to_tensor]),
+                                 train=False)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=4)
+
+    return train_loader, test_loader
+
+
+def compute_a_cap(answer, w2v_model):
+    words = [w2v_model.index2word[index] for index in answer.numpy().reshape(-1)]
+    mean_vec = np.mean(w2v_model[words], axis=0)
+    return torch.tensor(mean_vec.reshape(1, len(mean_vec)), dtype=torch.float)
+
+
+class Calculator(object):
+
+    def __init__(self):
+        self.nlp = spacy.load('en_core_web_sm')
+        self.matcher = Matcher(self.nlp.vocab, validate=True)
+        ob.setup_s_ob_neg_aux_verb(self.matcher)
+        ob.setup_s_ob_verb_error(self.matcher)
+        ob.setup_s_ob_neg_verb(self.matcher)
+        ob.setup_s_ob_but(self.matcher)
+        ob.setup_s_ob_cond_pos(self.matcher)
+
+    def utility(self, answers, posts):
+        assert len(answers) == len(posts)
+        util = 0
+        for i in range(0, len(answers)):
+            answer = answers[i]
+            post = posts[i]
+            answer_ob = self._get_ob(answer)
+            if len(answer_ob) == 0:
+                return 0
+
+            post_ob = self._get_ob(post)
+            diff = self._get_diff(post_ob.splitlines(keepends=True), answer_ob.splitlines(keepends=True))
+            # it doesnt make sense to put softmax on one number
+            util += len(diff.split()) / float(len(answer_ob.split()))
+
+        return util / float(len(answers))
+
+    def _get_diff(self, text_a, text_b):
+        differ = Differ()
+        diff_lines = differ.compare(text_a, text_b)
+        diff = ' '.join([diff for diff in diff_lines if diff.startswith('+ ')]).replace('+ ', ' ')
+        return diff
+
+    def _get_ob(self, text):
+        ob_str = ''
+        for sentence in self.nlp(text).sents:
+            sent = sentence.text.strip()
+            if sent.startswith('>') or sent.endswith('?'):
+                continue
+            else:
+                sent_nlp = self.nlp(sent)
+                matches = self.matcher(sent_nlp)
+                if len(matches) >= 1:
+                    ob_str += sent + '\n'
+        return ob_str
+
+
+def evpi(vector_fpath, post_tsv, qa_tsv, n_epochs):
+    glove2word2vec(vector_fpath, '../../embeddings_damevski/w2v_vectors.txt')
+    w2v_model = gensim.models.KeyedVectors.load_word2vec_format('../../embeddings_damevski/w2v_vectors.txt')
+    net = EvpiModel(w2v_model.vectors)
+    calculator = Calculator()
+
+    device = get_device()
+    net.to(device)
+    print('Running on {0}'.format(device))
+
+    train_loader, test_loader = get_datasets(post_tsv, qa_tsv, w2v_model.vocab, batch_size=1)
+
+    loss_function = nn.SmoothL1Loss()
+    optimizer = optim.SGD(net.parameters(), lr=0.001)
+
+    for epoch in range(n_epochs):
+        loss_sum = 0.0
+        for i, data in enumerate(train_loader):
+            # get the inputs; data is a list of [post, question, answer, label]
+            if CUDA:
+                posts, questions = data['post'].to(device), data['question'].to(device)
+            else:
+                posts = data['post']
+                questions = data['question']
+
+            answers = data['answer']
+            posts_origin = data['post_origin']
+            answers_origin = data['answer_origin']
+
+            # zero the parameter gradients
+            optimizer.zero_grad()
+            # forward + backward + optimize
+            outputs = net(posts, questions)
+            a_cap = compute_a_cap(answers, w2v_model)
+
+            loss = loss_function(outputs, a_cap)
+            loss += (1 - calculator.utility(answers_origin, posts_origin))
+            loss.backward()
+            optimizer.step()
+            loss_sum += loss.item()
+
+    # evaluate with test set
+    with torch.no_grad():
+        for i, data in enumerate(test_loader):
+            # get the inputs; data is a list of [post, question, answer, label]
+            if CUDA:
+                posts, questions = data['post'].to(device), data['question'].to(device)
+                answers = data['answer']
+            else:
+                posts = data['post']
+                questions = data['question']
+                answers = data['answer']
+
+            outputs = net(posts, questions)
+            a_cap = compute_a_cap(answers, w2v_model)
+            loss = loss_function(outputs, a_cap)
+
+
+if __name__ == '__main__':
+    evpi('../../embeddings_damevski/vectors.txt',
+         '../../data/github_partial_2008-2013_part1_small/post_data.tsv',
+         '../../data/github_partial_2008-2013_part1_small/qa_data.tsv',
+         100)
