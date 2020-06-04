@@ -67,8 +67,7 @@ class EvpiModel(nn.Module):
 
 
 def get_device():
-    cuda = CUDA and torch.cuda.is_available()
-    if cuda is True:
+    if CUDA is True:
         device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     else:
         device = torch.device('cpu')
@@ -145,9 +144,12 @@ def evpi(vector_fpath, post_tsv, qa_tsv, ranking_output, n_epochs):
     for epoch in range(n_epochs):
         loss_sum = 0.0
         for i, data in enumerate(train_loader):
-            # get the inputs; data is a list of [post, question, answer, label]
-            if CUDA:
-                posts, questions = data['post'].to(device), data['question'].to(device)
+            # compute a_cap and send it to device so it can be used for back propagationgit pu
+            answers = data['answer']
+            a_cap = compute_a_cap(answers, w2v_model)
+
+            if CUDA and torch.cuda.is_available():
+                posts, questions, a_cap = data['post'].to(device), data['question'].to(device), a_cap.to(device)
             else:
                 posts = data['post']
                 questions = data['question']
@@ -158,7 +160,6 @@ def evpi(vector_fpath, post_tsv, qa_tsv, ranking_output, n_epochs):
             optimizer.zero_grad()
             # forward + backward + optimize
             outputs = net(posts, questions)
-            a_cap = compute_a_cap(answers, w2v_model)
 
             loss = loss_function(outputs, a_cap)
             loss.backward()
