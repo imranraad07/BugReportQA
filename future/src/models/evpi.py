@@ -7,9 +7,9 @@ import torch.nn.functional as F
 
 import gensim
 from gensim.scripts.glove2word2vec import glove2word2vec
+from scipy import spatial
 
 import models.dataset as dataset
-import models.calculator as calc
 
 import logging
 
@@ -18,14 +18,14 @@ CUDA = False
 
 """
 TODO Big things:
-1. Evaluation on test set
-2. Ranking
-3. (Done: make sure ids in the dataset are properly divided! One tsv row = 10 data points (p, q_i, a_i))
+1. Done: Evaluation on test set
+2. Done: Ranking
+3. Done: make sure ids in the dataset are properly divided! One tsv row = 10 data points (p, q_i, a_i))
 4. Padding for batch processing - do it in a new file; it requires more modifications
 
 TODO Small things:
 1. Make sure diff computation makes sense.
-2. Move utility calculator as a part of dataset building set - OB is not changing.
+2. Done: Move utility calculator as a part of dataset building set - OB is not changing.
 
 Nice to have:
 1. Evaluation on validation set and saving model that performs best on validation set.
@@ -81,11 +81,57 @@ def compute_a_cap(answer, w2v_model):
     return torch.tensor(mean_vec.reshape(1, len(mean_vec)), dtype=torch.float)
 
 
-def evpi(vector_fpath, post_tsv, qa_tsv, n_epochs):
+def cosine_similarity(v1, v2):
+    return 1 - spatial.distance.cosine(v1, v2)
+
+
+# TODO: modify for batch processing
+def run_evaluation(net, device, w2v_model, test_loader):
+    results = {}
+    with torch.no_grad():
+        for i, data in enumerate(test_loader):
+            # get the inputs; data is a list of [post, question, answer, label]
+            if CUDA:
+                posts, questions = data['post'].to(device), data['question'].to(device)
+            else:
+                posts = data['post']
+                questions = data['question']
+
+            postid = data['postid'][0]
+            answers = data['answer']
+            posts_origin = data['post_origin'][0]
+            answers_origin = data['answer_origin'][0]
+            questions_origin = data['question_origin'][0]
+
+            outputs = net(posts, questions)
+            a_cap = compute_a_cap(answers, w2v_model).numpy()
+
+            sim = cosine_similarity(a_cap, outputs)
+
+            score = sim * data['utility']
+            if postid not in results:
+                results[postid] = (posts_origin, list())
+            results[postid][1].append((score, questions_origin, answers_origin))
+    return results
+
+
+def create_ranking(output_file, results):
+    with open(output_file, 'w') as f:
+        f.write('postid,post,' + ','.join(['q{0},a{0}'.format(i) for i in range(1, 11)]) + '\n')
+        for postid in results:
+            post, values = results[postid]
+            f.write('{0},{1},'.format(postid, post.replace(',', ' ')))
+
+            values = sorted(values, key=lambda x: x[0], reverse=True)
+            for score, question, answer in values:
+                f.write('{0},{1},'.format(question.replace(',', ' '), answer.replace(',', ' ')))
+            f.write('\n')
+
+
+def evpi(vector_fpath, post_tsv, qa_tsv, ranking_output, n_epochs):
     glove2word2vec(vector_fpath, '../../embeddings_damevski/w2v_vectors.txt')
     w2v_model = gensim.models.KeyedVectors.load_word2vec_format('../../embeddings_damevski/w2v_vectors.txt')
     net = EvpiModel(w2v_model.vectors)
-    calculator = calc.Calculator()
 
     device = get_device()
     net.to(device)
@@ -107,8 +153,6 @@ def evpi(vector_fpath, post_tsv, qa_tsv, n_epochs):
                 questions = data['question']
 
             answers = data['answer']
-            posts_origin = data['post_origin']
-            answers_origin = data['answer_origin']
 
             # zero the parameter gradients
             optimizer.zero_grad()
@@ -117,30 +161,17 @@ def evpi(vector_fpath, post_tsv, qa_tsv, n_epochs):
             a_cap = compute_a_cap(answers, w2v_model)
 
             loss = loss_function(outputs, a_cap)
-            loss += (1 - calculator.utility(answers_origin, posts_origin))
             loss.backward()
             optimizer.step()
             loss_sum += loss.item()
 
-    # evaluate with test set
-    with torch.no_grad():
-        for i, data in enumerate(test_loader):
-            # get the inputs; data is a list of [post, question, answer, label]
-            if CUDA:
-                posts, questions = data['post'].to(device), data['question'].to(device)
-                answers = data['answer']
-            else:
-                posts = data['post']
-                questions = data['question']
-                answers = data['answer']
-
-            outputs = net(posts, questions)
-            a_cap = compute_a_cap(answers, w2v_model)
-            loss = loss_function(outputs, a_cap)
+    results = run_evaluation(net, device, w2v_model, test_loader)
+    create_ranking(ranking_output, results)
 
 
 if __name__ == '__main__':
     evpi('../../embeddings_damevski/vectors.txt',
          '../../data/github_partial_2008-2013_part1_small/post_data.tsv',
          '../../data/github_partial_2008-2013_part1_small/qa_data.tsv',
-         100)
+         'ranking.csv',
+         1)

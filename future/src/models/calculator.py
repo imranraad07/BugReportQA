@@ -15,22 +15,16 @@ class Calculator(object):
         ob.setup_s_ob_but(self.matcher)
         ob.setup_s_ob_cond_pos(self.matcher)
 
-    def utility(self, answers, posts):
-        assert len(answers) == len(posts)
-        util = 0
-        for i in range(0, len(answers)):
-            answer = answers[i]
-            post = posts[i]
-            answer_ob = self._get_ob(answer)
-            if len(answer_ob) == 0:
-                return 0
+    def utility(self, answer, post):
+        answer_ob = self._get_ob(answer)
+        if len(answer_ob) == 0:
+            return 0
 
-            post_ob = self._get_ob(post)
-            diff = self._get_diff(post_ob.splitlines(keepends=True), answer_ob.splitlines(keepends=True))
-            # it doesnt make sense to put softmax on one number
-            util += len(diff.split()) / float(len(answer_ob.split()))
-
-        return util / float(len(answers))
+        post_ob = self._get_ob(post)
+        diff = self._get_diff(post_ob.splitlines(keepends=True), answer_ob.splitlines(keepends=True))
+        # it doesnt make sense to put softmax on one number
+        util = len(diff.split()) / float(len(answer_ob.split()))
+        return util
 
     def _get_diff(self, text_a, text_b):
         differ = Differ()

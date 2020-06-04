@@ -5,6 +5,7 @@ from torchvision import transforms
 from torch.utils.data import Dataset, DataLoader
 
 import preprocessing as pp
+import models.calculator as calc
 
 
 def get_datasets(post_tsv, qa_tsv, word2index, batch_size=256, shuffle=True):
@@ -26,35 +27,32 @@ class GithubDataset(Dataset):
 
     def __init__(self, post_tsv, qa_tsv, train, transform=None):
         self.transform = transform
-        self.dataset, self.index2postid = self._build_dataset(post_tsv, qa_tsv, train)
+        self.dataset = self._build_dataset(post_tsv, qa_tsv, train)
 
     def _build_dataset(self, post_tsv, qa_tsv, train):
+        calculator = calc.Calculator()
         posts = pd.read_csv(post_tsv, sep='\t')[:13]
         qa = pd.read_csv(qa_tsv, sep='\t')[:13]
-        data = {'post_origin': list(),
+        data = {'postid': list(),
+                'post_origin': list(),
                 'question_origin': list(),
                 'answer_origin': list(),
                 'label': list(),
-                'id': list()}
+                'utility': list()}
 
-        index2postid = dict()
         for idx, row in posts.iterrows():
             # TODO: this should be covered when building dataset
             if str(row['post']) == 'nan':
                 continue
-            id_str = row['postid']
-            if id_str not in index2postid:
-                index2postid[id_str] = len(index2postid)
-            id = index2postid[id_str]
+            postid = row['postid']
+            post = row['title'] + ' ' + row['post']
             for i in range(1, 11):
-                data['post_origin'].append(row['title'] + ' ' + row['post'])
-                data['id'].append(id)
-                data['answer_origin'].append(qa.iloc[idx]['a' + str(i)])
-                data['question_origin'].append(qa.iloc[idx]['q' + str(i)])
-                if i == 1:
-                    data['label'].append(1)
-                else:
-                    data['label'].append(0)
+                question = qa.iloc[idx]['q' + str(i)]
+                answer = qa.iloc[idx]['a' + str(i)]
+                utility = calculator.utility(answer, post)
+
+                data = self._add_values(data, i, postid, post, question, answer, utility)
+
         dataset = pd.DataFrame(data)
 
         instances_no = len(dataset) / 10
@@ -63,7 +61,7 @@ class GithubDataset(Dataset):
             dataset = dataset[:(train_instances * 10)]
         else:
             dataset = dataset[(train_instances * 10):].reset_index(drop=True)
-        return dataset, index2postid
+        return dataset
 
     def __len__(self):
         return len(self.dataset)
@@ -79,12 +77,25 @@ class GithubDataset(Dataset):
         return sample
 
     def _to_dict(self, sample):
-        new_sample = {'post_origin': sample['post_origin'],
-                      'id': sample['id'],
+        new_sample = {'postid': sample['postid'],
+                      'post_origin': sample['post_origin'],
                       'question_origin': sample['question_origin'],
                       'answer_origin': sample['answer_origin'],
+                      'utility': sample['utility'],
                       'label': sample['label']}
         return new_sample
+
+    def _add_values(self, data, index, postid, post, question, answer, utility):
+        data['postid'].append(postid)
+        data['post_origin'].append(post)
+        data['answer_origin'].append(answer)
+        data['question_origin'].append(question)
+        data['utility'].append(utility)
+        if index == 1:
+            data['label'].append(1)
+        else:
+            data['label'].append(0)
+        return data
 
 
 class Preprocessing(object):
@@ -119,5 +130,4 @@ class ToTensor(object):
         sample['question'] = torch.tensor(sample['question'], dtype=torch.long)
         sample['answer'] = torch.tensor(sample['answer'], dtype=torch.long)
         sample['label'] = torch.tensor(sample['label'], dtype=torch.long)
-        sample['id'] = torch.tensor(sample['id'], dtype=torch.int32)
         return sample
