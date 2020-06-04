@@ -1,6 +1,8 @@
 import spacy
 import pandas as pd
 from spacy.matcher import Matcher
+import logging
+
 
 # negative_aux_verbs = ["are not", "aren't", "ain't", "can not", "cannot", "can't", "could not", "couldn't", "does not",
 #                       "doesn't", "did not", "didn't", "has not", "hasn't", "had not", "hadn't", "have not", "haven't",
@@ -32,15 +34,16 @@ count_s_ob_cond_pos = 0
 # Negative (simple) sentence with auxiliary verbs
 # ([subject]) [negative auxiliary verb] [verb] ([complement])
 def setup_s_ob_neg_aux_verb(matcher):
-    aux_verb_pattern = [{"LEMMA": {"IN": ["is","do","have","can"]}},
+    aux_verb_pattern = [{"LEMMA": {"IN": ["is", "do", "have", "can"]}},
                         {"POS": "PART", "TEXT": "not"},
                         {"POS": "VERB"}]
     matcher.add("S_OB_NEG_AUX_VERB", on_match_s_ob_neg_aux_verb, aux_verb_pattern)
 
+
 def on_match_s_ob_neg_aux_verb(matcher, doc, id, matches):
     global count_s_ob_neg_aux_verb
     count_s_ob_neg_aux_verb = count_s_ob_neg_aux_verb + 1
-    print('S_OB_NEG_AUX_VERB Matched!', doc.text)
+    logging.debug('S_OB_NEG_AUX_VERB Matched!', doc.text)
 
 
 # S_OB_VERB_ERROR
@@ -53,10 +56,11 @@ def setup_s_ob_verb_error(matcher):
                           {"LEMMA": {"IN": error_terms}}]
     matcher.add("S_OB_VERB_ERROR", on_match_s_ob_verb_error, verb_error_pattern)
 
+
 def on_match_s_ob_verb_error(matcher, doc, id, matches):
     global count_s_ob_verb_error
     count_s_ob_verb_error = count_s_ob_verb_error + 1
-    print('S_OB_VERB_ERROR Matched!', doc.text)
+    logging.debug('S_OB_VERB_ERROR Matched!', doc.text)
 
 
 # S_OB_NEG_VERB
@@ -66,10 +70,11 @@ def setup_s_ob_neg_verb(matcher):
     neg_verb_pattern = [{"POS": "VERB", "LEMMA": {"IN": negative_verbs}}]
     matcher.add("S_OB_NEG_VERB", on_match_s_ob_neg_verb, neg_verb_pattern)
 
+
 def on_match_s_ob_neg_verb(matcher, doc, id, matches):
     global count_s_ob_neg_verb
     count_s_ob_neg_verb = count_s_ob_neg_verb + 1
-    print('S_OB_NEG_VERB Matched!', doc.text)
+    logging.debug('S_OB_NEG_VERB Matched!', doc.text)
 
 
 # S_OB_BUT & S_OB_BUT_NEG
@@ -83,10 +88,11 @@ def setup_s_ob_but(matcher):
                    {"POS": "VERB"}]
     matcher.add("S_OB_BUT", on_match_s_ob_but, but_pattern)
 
+
 def on_match_s_ob_but(matcher, doc, id, matches):
     global count_s_ob_but
     count_s_ob_but = count_s_ob_but + 1
-    print('S_OB_BUT Matched!', doc.text)
+    logging.debug('S_OB_BUT Matched!', doc.text)
 
 
 # S_OB_COND_POS
@@ -95,19 +101,19 @@ def on_match_s_ob_but(matcher, doc, id, matches):
 # Note: using the existence of a verb as an indication of a clause (affirmative or negative)
 def setup_s_ob_cond_pos(matcher):
     cond_pos_pattern = [{"LEMMA": {"IN": conditional_terms}},
-                        {"LEMMA": {"NOT_IN": eb_modal_terms},  "OP": "+"},
+                        {"LEMMA": {"NOT_IN": eb_modal_terms}, "OP": "+"},
                         {"POS": "VERB"}]
     matcher.add("S_OB_COND_POS", on_match_s_ob_cond_pos, cond_pos_pattern)
+
 
 def on_match_s_ob_cond_pos(matcher, doc, id, matches):
     global count_s_ob_cond_pos
     count_s_ob_cond_pos = count_s_ob_cond_pos + 1
-    print('S_OB_COND_POS Matched!', doc.text)
-
+    logging.debug('S_OB_COND_POS Matched!', doc.text)
 
 
 if __name__ == '__main__':
-
+    logging.basicConfig(level=logging.DEBUG)
     # issues = pd.read_csv('../data/bug_reports/github_data.csv',
     #                      header=None,
     #                      names=['repo','issue_link','issue_id','post','question','answer'])

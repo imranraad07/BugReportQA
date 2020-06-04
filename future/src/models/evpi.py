@@ -17,6 +17,9 @@ from difflib import Differ
 import preprocessing as pp
 import pattern_classification.observed_behavior_rule as ob
 
+import logging
+
+logging.basicConfig(level=logging.INFO)
 CUDA = False
 
 """
@@ -34,6 +37,7 @@ Nice to have:
 1. Evaluation on validation set and saving model that performs best on validation set.
    We can use that model later on for evaluation with test set.
 """
+
 
 class GithubDataset(Dataset):
 
