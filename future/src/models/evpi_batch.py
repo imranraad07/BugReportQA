@@ -175,6 +175,9 @@ def create_ranking(output_file, results):
 def evpi(vector_fpath, post_tsv, qa_tsv, ranking_output, n_epochs):
     glove2word2vec(vector_fpath, '../../embeddings_damevski/w2v_vectors.txt')
     w2v_model = gensim.models.KeyedVectors.load_word2vec_format('../../embeddings_damevski/w2v_vectors.txt')
+    if '<PAD>' not in w2v_model or w2v_model.vocab['<PAD>'].index != 0:
+        raise ValueError('No <PAD> token in embeddings! Provide embeddings with <PAD> token.')
+
     net = EvpiModel(w2v_model.vectors)
 
     device = get_device()
@@ -218,7 +221,7 @@ def evpi(vector_fpath, post_tsv, qa_tsv, ranking_output, n_epochs):
 
 
 if __name__ == '__main__':
-    evpi('../../embeddings_damevski/vectors.txt',
+    evpi('../../embeddings_damevski/vectors_pad.txt',
          '../../data/github_partial_2008-2013_part1_small/post_data.tsv',
          '../../data/github_partial_2008-2013_part1_small/qa_data.tsv',
          'ranking.csv',
