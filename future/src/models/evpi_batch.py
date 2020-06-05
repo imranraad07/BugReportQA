@@ -17,22 +17,6 @@ import logging
 logging.basicConfig(level=logging.INFO)
 CUDA = False
 
-"""
-TODO Big things:
-1. Done: Evaluation on test set
-2. Done: Ranking
-3. Done: make sure ids in the dataset are properly divided! One tsv row = 10 data points (p, q_i, a_i))
-4. Padding for batch processing - do it in a new file; it requires more modifications
-
-TODO Small things:
-1. Make sure diff computation makes sense.
-2. Done: Move utility calculator as a part of dataset building set - OB is not changing.
-
-Nice to have:
-1. Evaluation on validation set and saving model that performs best on validation set.
-   We can use that model later on for evaluation with test set.
-"""
-
 
 class EvpiModel(nn.Module):
 
