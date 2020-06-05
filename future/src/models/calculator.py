@@ -6,9 +6,10 @@ from difflib import Differ
 
 class Calculator(object):
 
-    def __init__(self):
+    def __init__(self, threshold=0.0001):
         self.nlp = spacy.load('en_core_web_sm')
         self.matcher = Matcher(self.nlp.vocab, validate=True)
+        self.threshold = threshold
         ob.setup_s_ob_neg_aux_verb(self.matcher)
         ob.setup_s_ob_verb_error(self.matcher)
         ob.setup_s_ob_neg_verb(self.matcher)
@@ -18,13 +19,13 @@ class Calculator(object):
     def utility(self, answer, post):
         answer_ob = self._get_ob(answer)
         if len(answer_ob) == 0:
-            return 0
+            return self.threshold
 
         post_ob = self._get_ob(post)
         diff = self._get_diff(post_ob.splitlines(keepends=True), answer_ob.splitlines(keepends=True))
         # it doesnt make sense to put softmax on one number
         util = len(diff.split()) / float(len(answer_ob.split()))
-        return util
+        return max(util, self.threshold)
 
     def _get_diff(self, text_a, text_b):
         differ = Differ()
