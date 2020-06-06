@@ -11,6 +11,7 @@
 * download embeddings and unzip in *future/*: https://drive.google.com/drive/u/1/folders/1HDtSsT0__NmGkJVkg7ehJRlvFGpPwlg_
 
 2. Data
+* `mkdir data`
 * download data and unzip in *data/*: https://drive.google.com/drive/u/1/folders/1HDtSsT0__NmGkJVkg7ehJRlvFGpPwlg_
 
 Data contains Lucene output files *post_data.tsv* and *qa_data.tsv*. Files *train_ids.txt* and *test_ids.txt*
