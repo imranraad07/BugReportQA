@@ -10,12 +10,12 @@ import calculator as calc
 
 def get_datasets(word2index, args, shuffle=True):
     train_dataset = GithubDataset(args.post_tsv, args.qa_tsv, word2index, ids=args.train_ids,
-                                  max_post_len=args.max_p_len, max_q_len=args.max_q_len, max_a_len=args.max_a_len)
-    train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=shuffle, num_workers=4)
-
-    test_dataset = GithubDataset(args.post_tsv, args.qa_tsv, word2index, ids=args.args.test_ids,
                                  max_post_len=args.max_p_len, max_q_len=args.max_q_len, max_a_len=args.max_a_len)
-    test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=shuffle, num_workers=4)
+    train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=shuffle, num_workers=0)
+
+    test_dataset = GithubDataset(args.post_tsv, args.qa_tsv, word2index, ids=args.test_ids,
+                                 max_post_len=args.max_p_len, max_q_len=args.max_q_len, max_a_len=args.max_a_len)
+    test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=shuffle, num_workers=0)
 
     return train_loader, test_loader
 
@@ -54,7 +54,7 @@ class GithubDataset(Dataset):
             for i in range(1, 11):
                 question = qa.iloc[idx]['q' + str(i)]
                 answer = qa.iloc[idx]['a' + str(i)]
-                utility = 0#calculator.utility(answer, post)
+                utility = calculator.utility(answer, post)
 
                 data = self._add_values(data, i, postid, post, question, answer, utility)
 
