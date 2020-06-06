@@ -8,17 +8,17 @@ import preprocessing as pp
 import models.calculator as calc
 
 
-def get_datasets(post_tsv, qa_tsv, word2index, batch_size=256, shuffle=True):
+def get_datasets(post_tsv, qa_tsv, word2index, shuffle=True):
     preprocess = Preprocessing()
     w2idx = Word2Idx(word2index)
     to_tensor = ToTensor()
     train_dataset = GithubDataset(post_tsv, qa_tsv, transform=transforms.Compose([preprocess, w2idx, to_tensor]),
                                   train=True)
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=4)
+    train_loader = DataLoader(train_dataset, batch_size=1, shuffle=shuffle, num_workers=4)
 
     test_dataset = GithubDataset(post_tsv, qa_tsv, transform=transforms.Compose([preprocess, w2idx, to_tensor]),
                                  train=False)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=4)
+    test_loader = DataLoader(test_dataset, batch_size=1, shuffle=shuffle, num_workers=4)
 
     return train_loader, test_loader
 
@@ -101,9 +101,9 @@ class GithubDataset(Dataset):
 class Preprocessing(object):
 
     def __call__(self, sample):
-        sample['post'] = pp.clear_text(sample['post_origin'], keep_punctuation=True)
-        sample['question'] = pp.clear_text(sample['question_origin'], keep_punctuation=True)
-        sample['answer'] = pp.clear_text(sample['answer_origin'], keep_punctuation=True)
+        sample['post'] = pp.clear_text(sample['post_origin'], keep_punctuation=False)
+        sample['question'] = pp.clear_text(sample['question_origin'], keep_punctuation=False)
+        sample['answer'] = pp.clear_text(sample['answer_origin'], keep_punctuation=False)
         return sample
 
 

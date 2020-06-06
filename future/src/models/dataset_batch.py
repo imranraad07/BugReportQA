@@ -11,11 +11,11 @@ import calculator as calc
 def get_datasets(post_tsv, qa_tsv, word2index, batch_size, max_post_len, max_q_len, max_a_len, shuffle=True):
     train_dataset = GithubDataset(post_tsv, qa_tsv, word2index, train=True, max_post_len=max_post_len,
                                   max_q_len=max_q_len, max_a_len=max_a_len)
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=0)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=4)
 
     test_dataset = GithubDataset(post_tsv, qa_tsv, word2index, train=False, max_post_len=max_post_len,
                                  max_q_len=max_q_len, max_a_len=max_a_len)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=0)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=4)
 
     return train_loader, test_loader
 
@@ -129,7 +129,7 @@ class GithubDataset(Dataset):
 
     # all data transformations
     def _clear_text(self, text):
-        return pp.clear_text(text, keep_punctuation=True)
+        return pp.clear_text(text, keep_punctuation=False)
 
     def _word2index(self, text):
         return [self.word2index[w].index for w in text.split() if w in self.word2index]

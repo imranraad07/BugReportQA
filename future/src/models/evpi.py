@@ -104,7 +104,7 @@ def evpi(w2v_model, post_tsv, qa_tsv, n_epoch, cuda):
     net = EvpiModel(w2v_model.vectors)
     net.to(device)
 
-    train_loader, test_loader = dataset.get_datasets(post_tsv, qa_tsv, w2v_model.vocab, batch_size=1)
+    train_loader, test_loader = dataset.get_datasets(post_tsv, qa_tsv, w2v_model.vocab)
 
     loss_function = nn.SmoothL1Loss()
     optimizer = optim.SGD(net.parameters(), lr=0.001)
