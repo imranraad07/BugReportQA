@@ -1,5 +1,4 @@
 import sys
-import cPickle as p
 import xml.etree.ElementTree as ET
 from collections import defaultdict
 import re

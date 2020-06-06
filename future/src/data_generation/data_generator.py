@@ -1,7 +1,6 @@
 import argparse
 import csv
 import os
-import sys
 
 from preprocessing import clear_text
 
@@ -89,20 +88,17 @@ def create_tsv_files_github(post_data_tsv, qa_data_tsv, post_ids, post_titles, p
         with open(post_data_tsv, 'a') as out_file:
             tsv_writer = csv.writer(out_file, delimiter='\t')
             tsv_writer.writerow(
-                [postId, post_titles[postId].decode('utf-8', errors='ignore').encode('utf-8'),
-                 post_texts[postId].decode('utf-8', errors='ignore').encode('utf-8')])
+                [postId, post_titles[postId], post_texts[postId]])
 
             row_val = []
             row_val.append(postId)
             row_val.append(post_questions[postId])
             for i in range(9):
-                row_val.append(
-                    post_questions[similar_posts[postId][i]].decode('utf-8', errors='ignore').encode(
-                        'utf-8'))
+                row_val.append(post_questions[similar_posts[postId][i]])
             row_val.append(post_answers[postId])
             for i in range(9):
                 row_val.append(
-                    post_answers[similar_posts[postId][i]].decode('utf-8', errors='ignore').encode('utf-8'))
+                    post_answers[similar_posts[postId][i]])
             with open(qa_data_tsv, 'a') as out_file:
                 tsv_writer = csv.writer(out_file, delimiter='\t')
                 tsv_writer.writerow(row_val)
@@ -123,11 +119,11 @@ def main(args):
             csvReader = csv.reader((line.replace('\0', '') for line in csvDataFile))
             next(csvReader)
             for row in csvReader:
-                post_ids.append(row[2].decode('utf-8', errors='ignore').encode('utf-8'))
-                post_titles[row[2]] = (row[3].partition('\n')[0].decode('utf-8', errors='ignore').encode('utf-8'))
-                post_texts[row[2]] = (row[3].partition('\n')[-1].decode('utf-8', errors='ignore').encode('utf-8'))
-                post_questions[row[2]] = (row[4].decode('utf-8', errors='ignore').encode('utf-8'))
-                post_answers[row[2]] = (row[5].decode('utf-8', errors='ignore').encode('utf-8'))
+                post_ids.append(row[2])
+                post_titles[row[2]] = (row[3].partition('\n')[0])
+                post_texts[row[2]] = (row[3].partition('\n')[-1])
+                post_questions[row[2]] = (row[4])
+                post_answers[row[2]] = (row[5])
                 idx = idx + 1
         # print idx
         generate_docs_for_lucene_github(post_titles, post_texts, args.lucene_docs_dir, post_ids)
