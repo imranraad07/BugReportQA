@@ -11,6 +11,9 @@ from gensim.scripts.glove2word2vec import glove2word2vec
 import gensim
 import logging
 
+logging.basicConfig(format='%(asctime)s %(levelname)-8s %(message)s', level=logging.INFO, datefmt='%Y-%m-%d %H:%M:%S')
+
+
 
 @click.command()
 @click.option('--post-tsv', help='File path to post_tsv produced by Lucene', required=True)
@@ -29,19 +32,19 @@ def run(**kwargs):
     w2v_model = read_w2v_model(kwargs['embeddings'])
     post_tsv = kwargs['post_tsv']
     qa_tsv = kwargs['qa_tsv']
-    n_epoch = kwargs['n_epoch']
+    n_epoch = kwargs['n_epochs']
     batch_size = kwargs['batch_size']
     cuda = True if kwargs['device'] == 'cuda' else False
 
     if kwargs['batch_size'] == 1:
         logging.info('Run evpi with batch_size=1')
-        results = evpi(w2v_model, post_tsv, qa_tsv, n_epoch, cuda)
+        results = evpi.evpi(w2v_model, post_tsv, qa_tsv, n_epoch, cuda)
     else:
         logging.info('Run evpi with batch_size>1')
         max_p_len = kwargs['max_p_len']
         max_q_len = kwargs['max_q_len']
         max_a_len = kwargs['max_a_len']
-        results = evpi_batch(w2v_model, post_tsv, qa_tsv, n_epoch, batch_size, cuda, max_p_len, max_q_len, max_a_len)
+        results = evpi_batch.evpi(w2v_model, post_tsv, qa_tsv, n_epoch, batch_size, cuda, max_p_len, max_q_len, max_a_len)
 
     save_ranking(kwargs['output_ranking_file'], results)
 
@@ -57,10 +60,11 @@ def read_w2v_model(path_in):
 
 def save_ranking(output_file, results):
     with open(output_file, 'w') as f:
-        f.write('postid,post,' + ','.join(['q{0},a{0}'.format(i) for i in range(1, 11)]) + '\n')
+        f.write('postid,post,correct_q,correct_a,' + ','.join(['q{0},a{0}'.format(i) for i in range(1, 11)]) + '\n')
         for postid in results:
-            post, values = results[postid]
-            f.write('{0},{1},'.format(postid, post.replace(',', ' ')))
+            post, values, correct = results[postid]
+            f.write('{0},{1},{2},{3},'.format(postid, post.replace(',', ' '), correct[0].replace(',', ' '),
+                                             correct[1].replace(',', ' ')))
 
             values = sorted(values, key=lambda x: x[0], reverse=True)
             for score, question, answer in values:

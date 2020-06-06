@@ -11,8 +11,6 @@ import dataset as dataset
 
 import logging
 
-logging.basicConfig(level=logging.INFO)
-
 
 class EvpiModel(nn.Module):
 
@@ -81,25 +79,28 @@ def run_evaluation(net, device, w2v_model, test_loader):
             posts_origin = data['post_origin'][0]
             answers_origin = data['answer_origin'][0]
             questions_origin = data['question_origin'][0]
+            label = data['label'][0]
 
             outputs = net(posts, questions)
             if device.type != 'cpu':
                 outputs = outputs.cpu()
 
             a_cap = compute_a_cap(answers, w2v_model).numpy()
-
             sim = cosine_similarity(a_cap, outputs)
 
             score = sim * data['utility']
             if postid not in results:
-                results[postid] = (posts_origin, list())
+                results[postid] = (posts_origin, list(), list())
             results[postid][1].append((score, questions_origin, answers_origin))
+            if label == 1:
+                results[postid][2].extend([questions_origin, answers_origin])
+
     return results
 
 
 def evpi(w2v_model, post_tsv, qa_tsv, n_epoch, cuda):
     device = get_device(cuda)
-    print('Running on {0}'.format(device))
+    logging.info('Running on {0}'.format(device))
 
     net = EvpiModel(w2v_model.vectors)
     net.to(device)

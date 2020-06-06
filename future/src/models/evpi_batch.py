@@ -12,8 +12,6 @@ import dataset_batch as dataset
 
 import logging
 
-logging.basicConfig(level=logging.INFO)
-
 
 class EvpiModel(nn.Module):
 
@@ -116,12 +114,13 @@ def run_evaluation(net, device, w2v_model, test_loader):
                 post_len = data['post_len']
                 q_len = data['q_len']
 
-            postid = data['postid']
+            postids = data['postid']
             answers = data['answer']
             utility = data['utility'].numpy()
             posts_origin = data['post_origin']
             answers_origin = data['answer_origin']
             questions_origin = data['question_origin']
+            labels = data['label']
 
             outputs = net(posts, post_len, questions, q_len)
             if device.type != 'cpu':
@@ -132,12 +131,15 @@ def run_evaluation(net, device, w2v_model, test_loader):
             a_cap = compute_a_cap(answers, w2v_model).numpy()
 
             for idx in range(0, test_loader.batch_size):
+                postid = postids[idx]
                 sim = cosine_similarity(a_cap[idx], outputs[idx])
 
                 score = sim * utility[idx]
-                if postid[idx] not in results:
-                    results[postid[idx]] = (posts_origin[idx], list())
-                results[postid[idx]][1].append((score, questions_origin[idx], answers_origin[idx]))
+                if postid not in results:
+                    results[postid] = (posts_origin[idx], list(), list())
+                results[postid][1].append((score, questions_origin[idx], answers_origin[idx]))
+                if labels[idx] == 1:
+                    results[postid][2].extend([questions_origin[idx], answers_origin[idx]])
 
     return results
 
