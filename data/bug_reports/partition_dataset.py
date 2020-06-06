@@ -12,17 +12,17 @@ numpy.random.seed(1234)
 @click.option('--in-dataset',
               help='Input dataset file',
               required=True,
-              default='/Users/ciborowskaa/VCU/Research/BugReportQA/data/datasets/github_partial_2008-2011/dataset.csv')
+              default='/Users/ciborowskaa/VCU/Research/BugReportQA/data/datasets/github/dataset.csv')
 @click.option('--out-directory',
               help='Directory to save output dataset files',
               required=True,
-              default='/Users/ciborowskaa/VCU/Research/BugReportQA/data/datasets/github_partial_2008-2011')
+              default='/Users/ciborowskaa/VCU/Research/BugReportQA/data/datasets/github')
 @click.option('--ratios',
               help='Ratio of training/tuning/testing dataset. Format: [train_ratio tune_ratio test_ratio]',
               type=(float, float, float),
               default=[0.6, 0.2, 0.2],
               required=True)
-def run(*args, **kwargs):
+def run(**kwargs):
     in_dataset = kwargs['in_dataset']
     out_dir = kwargs['out_directory']
     train_ratio, tune_ratio, test_ratio = kwargs['ratios']

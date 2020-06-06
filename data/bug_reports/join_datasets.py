@@ -11,9 +11,10 @@ np.random.seed(1234)
 @click.option('--input-dir', required=True, default='/Users/ciborowskaa/VCU/Research/BugReportQA/data/bug_reports')
 @click.option('--file-prefix', required=True, default='github_data_20')
 @click.option('--output-file', required=True,
-              default='/Users/ciborowskaa/VCU/Research/BugReportQA/data/datasets/github_partial_2008-2013_part1/dataset.csv')
-@click.option('--subset', help='Fraction of original dataset to sample. If subset=1.0, the whole dataset is preserved.')
-def join_files(*args, **kwargs):
+              default='/Users/ciborowskaa/VCU/Research/BugReportQA/data/datasets/github/dataset.csv')
+@click.option('--fraction',
+              help='Fraction of original dataset to sample. If subset=1.0, the whole dataset is preserved.')
+def join_files(**kwargs):
     dpath = kwargs['input_dir']
     prefix = kwargs['file_prefix']
     out_fpath = kwargs['output_file']
@@ -48,8 +49,8 @@ def join_files(*args, **kwargs):
 
     clear_data(out_fpath)
 
-    if kwargs['subset']:
-        generate_subset(out_fpath, kwargs['subset'])
+    if kwargs['fraction']:
+        generate_subset(out_fpath, kwargs['fraction'])
 
     print('Done')
 
