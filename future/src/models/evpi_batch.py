@@ -145,22 +145,20 @@ def run_evaluation(net, device, w2v_model, test_loader):
     return results
 
 
-def evpi(w2v_model, post_tsv, qa_tsv, train_ids, test_ids, n_epoch, batch_size, cuda, max_p_len, max_q_len, max_a_len):
+def evpi(cuda, w2v_model, args):
     device = get_device(cuda)
     logging.info('Running on {0}'.format(device))
 
     net = EvpiModel(w2v_model.vectors)
     net.to(device)
 
-    train_loader, test_loader = dataset.get_datasets(post_tsv, qa_tsv, w2v_model.vocab, train_ids, test_ids,
-                                                     batch_size=batch_size, max_post_len=max_p_len, max_q_len=max_q_len,
-                                                     max_a_len=max_a_len)
+    train_loader, test_loader = dataset.get_datasets(w2v_model.vocab, args)
 
     loss_function = nn.SmoothL1Loss()
     optimizer = optim.SGD(net.parameters(), lr=0.001)
 
-    for epoch in range(n_epoch):
-        logging.info('Epoch {0}/{1}'.format((epoch + 1), n_epoch))
+    for epoch in range(args.n_epoch):
+        logging.info('Epoch {0}/{1}'.format((epoch + 1), args.n_epoch))
         loss_sum = 0.0
         for data in train_loader:
             # compute a_cap and send it to device so it can be used for back propagation

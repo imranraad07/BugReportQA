@@ -4,7 +4,7 @@ import os
 sys.path.append(os.path.abspath('./src'))
 sys.path.append(os.path.abspath('../pattern_classification'))
 
-import click
+import argparse
 import evpi
 import evpi_batch
 from gensim.scripts.glove2word2vec import glove2word2vec
@@ -14,43 +14,39 @@ import logging
 logging.basicConfig(format='%(asctime)s %(levelname)-8s %(message)s', level=logging.INFO, datefmt='%Y-%m-%d %H:%M:%S')
 
 
-@click.command()
-@click.option('--post-tsv', help='File path to post_tsv produced by Lucene', required=True)
-@click.option('--qa-tsv', help='File path to qa_tsv produced by Lucene', required=True)
-@click.option('--train-ids', help='File path to train ids', required=True)
-@click.option('--test-ids', help='File path to test ids', required=True)
-@click.option('--embeddings', help='File path to embeddings', required=True)
-@click.option('--output-ranking-file', help='Output file to save ranking', required=True)
-@click.option('--max-p-len', help='Max post length. Only when batch_size>1', default=300)
-@click.option('--max-q-len', help='Max question length. Only when batch_size>1', default=100)
-@click.option('--max-a-len', help='Max answer length. Only when batch_size>1', default=100)
-@click.option('--n-epochs', help='Number of epochs', default=10)
-@click.option('--batch-size', help='Batch size', type=int, default=1)
-@click.option('--device', help='Use \"cuda\" or \"cpu\"', type=click.Choice(['cuda', 'cpu']))
-def run(**kwargs):
-    logging.info('Running with parameters: {0}'.format(kwargs))
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--post-tsv', help='File path to post_tsv produced by Lucene', required=True)
+    parser.add_argument('--qa-tsv', help='File path to qa_tsv produced by Lucene', required=True)
+    parser.add_argument('--train-ids', help='File path to train ids', required=True)
+    parser.add_argument('--test-ids', help='File path to test ids', required=True)
+    parser.add_argument('--embeddings', help='File path to embeddings', required=True)
+    parser.add_argument('--output-ranking-file', help='Output file to save ranking', required=True)
+    parser.add_argument('--max-p-len', help='Max post length. Only when batch_size>1', default=300)
+    parser.add_argument('--max-q-len', help='Max question length. Only when batch_size>1', default=100)
+    parser.add_argument('--max-a-len', help='Max answer length. Only when batch_size>1', default=100)
+    parser.add_argument('--n-epochs', help='Number of epochs', default=10)
+    parser.add_argument('--batch-size', help='Batch size', type=int, default=1)
+    parser.add_argument('--device', help='Use \"cuda\" or \"cpu\"', choices=['cuda', 'cpu'])
+    return parser.parse_args()
 
-    w2v_model = read_w2v_model(kwargs['embeddings'])
-    post_tsv = kwargs['post_tsv']
-    qa_tsv = kwargs['qa_tsv']
-    n_epoch = kwargs['n_epochs']
-    batch_size = kwargs['batch_size']
-    train_ids = kwargs['train_ids']
-    test_ids = kwargs['test_ids']
-    cuda = True if kwargs['device'] == 'cuda' else False
 
-    if kwargs['batch_size'] == 1:
+def run():
+    args = parse_args()
+
+    logging.info('Running with parameters: {0}'.format(args))
+
+    w2v_model = read_w2v_model(args.embeddings)
+    cuda = True if args.device == 'cuda' else False
+
+    if args.batch_size == 1:
         logging.info('Run evpi with batch_size=1')
-        results = evpi.evpi(w2v_model, post_tsv, qa_tsv, train_ids, test_ids, n_epoch, cuda)
+        results = evpi.evpi(cuda, w2v_model, args)
     else:
         logging.info('Run evpi with batch_size>1')
-        max_p_len = kwargs['max_p_len']
-        max_q_len = kwargs['max_q_len']
-        max_a_len = kwargs['max_a_len']
-        results = evpi_batch.evpi(w2v_model, post_tsv, qa_tsv, train_ids, test_ids, n_epoch, batch_size, cuda,
-                                  max_p_len, max_q_len, max_a_len)
+        results = evpi_batch.evpi(cuda, w2v_model, args)
 
-    save_ranking(kwargs['output_ranking_file'], results)
+    save_ranking(args.output_ranking_file, results)
 
 
 def read_w2v_model(path_in):
@@ -77,4 +73,4 @@ def save_ranking(output_file, results):
 
 
 if __name__ == '__main__':
-    run(sys.argv[1:])
+    run()

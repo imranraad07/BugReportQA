@@ -8,16 +8,16 @@ from data_generation import preprocessing as pp
 import models.calculator as calc
 
 
-def get_datasets(post_tsv, qa_tsv, word2index, train_ids, test_ids, shuffle=True):
+def get_datasets(word2index, args, shuffle=True):
     preprocess = Preprocessing()
     w2idx = Word2Idx(word2index)
     to_tensor = ToTensor()
-    train_dataset = GithubDataset(post_tsv, qa_tsv, transform=transforms.Compose([preprocess, w2idx, to_tensor]),
-                                  ids=train_ids)
+    data_transform = transforms.Compose([preprocess, w2idx, to_tensor])
+
+    train_dataset = GithubDataset(args.post_tsv, args.qa_tsv, transform=data_transform, ids=args.train_ids)
     train_loader = DataLoader(train_dataset, batch_size=1, shuffle=shuffle, num_workers=4)
 
-    test_dataset = GithubDataset(post_tsv, qa_tsv, transform=transforms.Compose([preprocess, w2idx, to_tensor]),
-                                 ids=test_ids)
+    test_dataset = GithubDataset(args.post_tsv, args.qa_tsv, transform=data_transform, ids=args.test_ids)
     test_loader = DataLoader(test_dataset, batch_size=1, shuffle=shuffle, num_workers=4)
 
     return train_loader, test_loader
