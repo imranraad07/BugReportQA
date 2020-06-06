@@ -5,7 +5,7 @@ EMB_DIR=embeddings
 #SITE_NAME=askubuntu.com
 #SITE_NAME=unix.stackexchange.com
 #SITE_NAME=superuser.com
-SITE_NAME=github
+SITE_NAME=github_partial_2008-2013_part1_small
 
 SCRIPTS_DIR=src/models
 

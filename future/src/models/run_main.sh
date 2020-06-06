@@ -1,36 +1,22 @@
 #!/bin/bash
 
-DATA_DIR=data
-EMB_DIR=embeddings
-#SITE_NAME=askubuntu.com
-#SITE_NAME=unix.stackexchange.com
-#SITE_NAME=superuser.com
-SITE_NAME=askubuntu_unix_superuser
+SCRIPTS_DIR=future/src/models/
+DATA_DIR=future/data
+EMB_DIR=future/embeddings
 
-OUTPUT_DIR=output
-SCRIPTS_DIR=src/models
-#MODEL=baseline_pq
-#MODEL=baseline_pa
-#MODEL=baseline_pqa
-MODEL=evpi
+DATASET=github_partial_2008-2013_part1_small
+RESULTS=$DATA_DIR/$DATASET/ranking.csv
 
-mkdir -p $OUTPUT_DIR
+DEVICE=cuda
 
-source /fs/clip-amr/gpu_virtualenv/bin/activate
-module add cuda/8.0.44
-module add cudnn/v5.1
-
-THEANO_FLAGS=floatX=float32,device=gpu python $SCRIPTS_DIR/main.py \
-                                                --post_ids_train $DATA_DIR/$SITE_NAME/post_ids_train.p \
-                                                --post_vectors_train $DATA_DIR/$SITE_NAME/post_vectors_train.p \
-												--ques_list_vectors_train $DATA_DIR/$SITE_NAME/ques_list_vectors_train.p \
-												--ans_list_vectors_train $DATA_DIR/$SITE_NAME/ans_list_vectors_train.p \
-                                                --post_ids_test $DATA_DIR/$SITE_NAME/post_ids_test.p \
-                                                --post_vectors_test $DATA_DIR/$SITE_NAME/post_vectors_test.p \
-												--ques_list_vectors_test $DATA_DIR/$SITE_NAME/ques_list_vectors_test.p \
-												--ans_list_vectors_test $DATA_DIR/$SITE_NAME/ans_list_vectors_test.p \
-												--word_embeddings $EMB_DIR/word_embeddings.p \
-                                                --batch_size 128 --no_of_epochs 20 --no_of_candidates 10 \
-												--test_predictions_output $DATA_DIR/$SITE_NAME/test_predictions_${MODEL}.out \
-												--stdout_file $OUTPUT_DIR/${SITE_NAME}.${MODEL}.out \
-												--model $MODEL \
+python $SCRIPTS_DIR/main.py \
+        --embeddings $EMB_DIR/vector_pad.txt \
+        --post-tsv $DATA_DIR/$DATASET/post_data.tsv \
+        --qa-tsv $DATA_DIR/$DATASET/qa_data.tsv \
+        --output-ranking-file $RESULTS \
+        --device $DEVICE \
+        --batch-size 1 \
+        --n-epoch 30 \
+        --max-p-len 300 \
+        --max-q-len 100 \
+        --max-a-len 100

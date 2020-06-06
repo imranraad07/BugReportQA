@@ -2,7 +2,7 @@ import argparse
 import csv
 import os
 import sys
-import cPickle as p
+import pickle as p
 import numpy as np
 
 def get_indices(tokens, vocab):
@@ -55,7 +55,7 @@ def generate_neural_vectors(posts, titles, ques_lists, ans_lists, post_ids, voca
 			ans_list_vectors.append(ans_list_vector)
 		except:
 			except_on_data_load = except_on_data_load + 1
-	print "except on data load: " + str(except_on_data_load)
+	print("except on data load: " + str(except_on_data_load))
 	dirname = os.path.dirname(args.train_ids)
 	p.dump(post_ids, open(os.path.join(dirname, 'post_ids_'+split+'.p'), 'wb'))
 	p.dump(post_vectors, open(os.path.join(dirname, 'post_vectors_'+split+'.p'), 'wb'))
@@ -83,8 +83,7 @@ if __name__ == "__main__":
 	argparser.add_argument("--vocab", type = str)
 	argparser.add_argument("--no_of_candidates", type = int, default = 10)
 	args = argparser.parse_args()
-	print args
-	print ""
+	print(args)
 	csv.field_size_limit(sys.maxsize)
 	main(args)
 

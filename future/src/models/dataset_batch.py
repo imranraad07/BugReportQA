@@ -4,12 +4,11 @@ import numpy as np
 import torch
 from torch.utils.data import Dataset, DataLoader
 
-from data_generation import preprocessing as pp
+import preprocessing as pp
 import calculator as calc
 
 
-def get_datasets(post_tsv, qa_tsv, word2index, batch_size=256, shuffle=True, max_post_len=300, max_q_len=100,
-                 max_a_len=100):
+def get_datasets(post_tsv, qa_tsv, word2index, batch_size, max_post_len, max_q_len, max_a_len, shuffle=True):
     train_dataset = GithubDataset(post_tsv, qa_tsv, word2index, train=True, max_post_len=max_post_len,
                                   max_q_len=max_q_len, max_a_len=max_a_len)
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=0)
