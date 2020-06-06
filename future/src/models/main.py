@@ -14,10 +14,11 @@ import logging
 logging.basicConfig(format='%(asctime)s %(levelname)-8s %(message)s', level=logging.INFO, datefmt='%Y-%m-%d %H:%M:%S')
 
 
-
 @click.command()
 @click.option('--post-tsv', help='File path to post_tsv produced by Lucene', required=True)
 @click.option('--qa-tsv', help='File path to qa_tsv produced by Lucene', required=True)
+@click.option('--train-ids', help='File path to train ids', required=True)
+@click.option('--test-ids', help='File path to test ids', required=True)
 @click.option('--embeddings', help='File path to embeddings', required=True)
 @click.option('--output-ranking-file', help='Output file to save ranking', required=True)
 @click.option('--max-p-len', help='Max post length. Only when batch_size>1', default=300)
@@ -34,17 +35,20 @@ def run(**kwargs):
     qa_tsv = kwargs['qa_tsv']
     n_epoch = kwargs['n_epochs']
     batch_size = kwargs['batch_size']
+    train_ids = kwargs['train_ids']
+    test_ids = kwargs['test_ids']
     cuda = True if kwargs['device'] == 'cuda' else False
 
     if kwargs['batch_size'] == 1:
         logging.info('Run evpi with batch_size=1')
-        results = evpi.evpi(w2v_model, post_tsv, qa_tsv, n_epoch, cuda)
+        results = evpi.evpi(w2v_model, post_tsv, qa_tsv, train_ids, test_ids, n_epoch, cuda)
     else:
         logging.info('Run evpi with batch_size>1')
         max_p_len = kwargs['max_p_len']
         max_q_len = kwargs['max_q_len']
         max_a_len = kwargs['max_a_len']
-        results = evpi_batch.evpi(w2v_model, post_tsv, qa_tsv, n_epoch, batch_size, cuda, max_p_len, max_q_len, max_a_len)
+        results = evpi_batch.evpi(w2v_model, post_tsv, qa_tsv, train_ids, test_ids, n_epoch, batch_size, cuda,
+                                  max_p_len, max_q_len, max_a_len)
 
     save_ranking(kwargs['output_ranking_file'], results)
 
@@ -64,7 +68,7 @@ def save_ranking(output_file, results):
         for postid in results:
             post, values, correct = results[postid]
             f.write('{0},{1},{2},{3},'.format(postid, post.replace(',', ' '), correct[0].replace(',', ' '),
-                                             correct[1].replace(',', ' ')))
+                                              correct[1].replace(',', ' ')))
 
             values = sorted(values, key=lambda x: x[0], reverse=True)
             for score, question, answer in values:

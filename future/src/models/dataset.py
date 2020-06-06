@@ -8,16 +8,16 @@ from data_generation import preprocessing as pp
 import models.calculator as calc
 
 
-def get_datasets(post_tsv, qa_tsv, word2index, shuffle=True):
+def get_datasets(post_tsv, qa_tsv, word2index, train_ids, test_ids, shuffle=True):
     preprocess = Preprocessing()
     w2idx = Word2Idx(word2index)
     to_tensor = ToTensor()
     train_dataset = GithubDataset(post_tsv, qa_tsv, transform=transforms.Compose([preprocess, w2idx, to_tensor]),
-                                  train=True)
+                                  ids=train_ids)
     train_loader = DataLoader(train_dataset, batch_size=1, shuffle=shuffle, num_workers=4)
 
     test_dataset = GithubDataset(post_tsv, qa_tsv, transform=transforms.Compose([preprocess, w2idx, to_tensor]),
-                                 train=False)
+                                 ids=test_ids)
     test_loader = DataLoader(test_dataset, batch_size=1, shuffle=shuffle, num_workers=4)
 
     return train_loader, test_loader
@@ -25,14 +25,15 @@ def get_datasets(post_tsv, qa_tsv, word2index, shuffle=True):
 
 class GithubDataset(Dataset):
 
-    def __init__(self, post_tsv, qa_tsv, train, transform=None):
+    def __init__(self, post_tsv, qa_tsv, ids, transform=None):
         self.transform = transform
-        self.dataset = self._build_dataset(post_tsv, qa_tsv, train)
+        self.dataset = self._build_dataset(post_tsv, qa_tsv, ids)
 
-    def _build_dataset(self, post_tsv, qa_tsv, train):
+    def _build_dataset(self, post_tsv, qa_tsv, ids_file):
+        ids = self._read_ids(ids_file)
         calculator = calc.Calculator()
-        posts = pd.read_csv(post_tsv, sep='\t')[:13]
-        qa = pd.read_csv(qa_tsv, sep='\t')[:13]
+        posts = pd.read_csv(post_tsv, sep='\t')
+        qa = pd.read_csv(qa_tsv, sep='\t')
         data = {'postid': list(),
                 'post_origin': list(),
                 'question_origin': list(),
@@ -44,7 +45,11 @@ class GithubDataset(Dataset):
             # TODO: this should be covered when building dataset
             if str(row['post']) == 'nan':
                 continue
+
             postid = row['postid']
+            if postid not in ids:
+                continue
+
             post = row['title'] + ' ' + row['post']
             for i in range(1, 11):
                 question = qa.iloc[idx]['q' + str(i)]
@@ -54,13 +59,6 @@ class GithubDataset(Dataset):
                 data = self._add_values(data, i, postid, post, question, answer, utility)
 
         dataset = pd.DataFrame(data)
-
-        instances_no = len(dataset) / 10
-        train_instances = int(instances_no * 0.9)
-        if train is True:
-            dataset = dataset[:(train_instances * 10)]
-        else:
-            dataset = dataset[(train_instances * 10):].reset_index(drop=True)
         return dataset
 
     def __len__(self):
@@ -75,6 +73,15 @@ class GithubDataset(Dataset):
         if self.transform:
             sample = self.transform(sample)
         return sample
+
+    def _read_ids(self, ids_file):
+        ids = set()
+        with open(ids_file, 'r') as f:
+            for line in f.readlines():
+                line = line.strip()
+                if len(line):
+                    ids.add(line)
+        return ids
 
     def _to_dict(self, sample):
         new_sample = {'postid': sample['postid'],

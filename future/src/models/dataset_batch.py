@@ -8,31 +8,33 @@ from data_generation import preprocessing as pp
 import calculator as calc
 
 
-def get_datasets(post_tsv, qa_tsv, word2index, batch_size, max_post_len, max_q_len, max_a_len, shuffle=True):
-    train_dataset = GithubDataset(post_tsv, qa_tsv, word2index, train=True, max_post_len=max_post_len,
+def get_datasets(post_tsv, qa_tsv, word2index, train_ids, test_ids, batch_size, max_post_len, max_q_len, max_a_len,
+                 shuffle=True):
+    train_dataset = GithubDataset(post_tsv, qa_tsv, word2index, ids=train_ids, max_post_len=max_post_len,
                                   max_q_len=max_q_len, max_a_len=max_a_len)
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=0)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=4)
 
-    test_dataset = GithubDataset(post_tsv, qa_tsv, word2index, train=False, max_post_len=max_post_len,
+    test_dataset = GithubDataset(post_tsv, qa_tsv, word2index, ids=test_ids, max_post_len=max_post_len,
                                  max_q_len=max_q_len, max_a_len=max_a_len)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=0)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=4)
 
     return train_loader, test_loader
 
 
 class GithubDataset(Dataset):
 
-    def __init__(self, post_tsv, qa_tsv, word2index, train, max_post_len, max_q_len, max_a_len):
+    def __init__(self, post_tsv, qa_tsv, word2index, ids, max_post_len, max_q_len, max_a_len):
         self.word2index = word2index
         self.max_post_len = max_post_len
         self.max_q_len = max_q_len
         self.max_a_len = max_a_len
-        self.dataset = self._build_dataset(post_tsv, qa_tsv, train)
+        self.dataset = self._build_dataset(post_tsv, qa_tsv, ids)
 
-    def _build_dataset(self, post_tsv, qa_tsv, train):
+    def _build_dataset(self, post_tsv, qa_tsv, ids_file):
+        ids = self._read_ids(ids_file)
         calculator = calc.Calculator()
-        posts = pd.read_csv(post_tsv, sep='\t')[:30]
-        qa = pd.read_csv(qa_tsv, sep='\t')[:30]
+        posts = pd.read_csv(post_tsv, sep='\t')
+        qa = pd.read_csv(qa_tsv, sep='\t')
         data = {'postid': list(),
                 'post_origin': list(),
                 'question_origin': list(),
@@ -46,6 +48,9 @@ class GithubDataset(Dataset):
                 continue
 
             postid = row['postid']
+            if postid not in ids:
+                continue
+
             post = row['title'] + ' ' + row['post']
             for i in range(1, 11):
                 question = qa.iloc[idx]['q' + str(i)]
@@ -57,12 +62,6 @@ class GithubDataset(Dataset):
         dataset = pd.DataFrame(data)
         dataset = self._preprocess(dataset)
 
-        instances_no = len(dataset) / 10
-        train_instances = int(instances_no * 0.9)
-        if train is True:
-            dataset = dataset[:(train_instances * 10)]
-        else:
-            dataset = dataset[(train_instances * 10):].reset_index(drop=True)
         return dataset
 
     def __len__(self):
@@ -75,6 +74,15 @@ class GithubDataset(Dataset):
         sample = self.dataset.iloc[idx]
         sample = self._to_dict(sample)
         return sample
+
+    def _read_ids(self, ids_file):
+        ids = set()
+        with open(ids_file, 'r') as f:
+            for line in f.readlines():
+                line = line.strip()
+                if len(line):
+                    ids.add(line)
+        return ids
 
     def _to_dict(self, sample):
         new_sample = {'postid': sample['postid'],

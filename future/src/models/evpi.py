@@ -98,14 +98,14 @@ def run_evaluation(net, device, w2v_model, test_loader):
     return results
 
 
-def evpi(w2v_model, post_tsv, qa_tsv, n_epoch, cuda):
+def evpi(w2v_model, post_tsv, qa_tsv, train_ids, test_ids, n_epoch, cuda):
     device = get_device(cuda)
     logging.info('Running on {0}'.format(device))
 
     net = EvpiModel(w2v_model.vectors)
     net.to(device)
 
-    train_loader, test_loader = dataset.get_datasets(post_tsv, qa_tsv, w2v_model.vocab)
+    train_loader, test_loader = dataset.get_datasets(post_tsv, qa_tsv, w2v_model.vocab, train_ids, test_ids, )
 
     loss_function = nn.SmoothL1Loss()
     optimizer = optim.SGD(net.parameters(), lr=0.001)
@@ -134,7 +134,7 @@ def evpi(w2v_model, post_tsv, qa_tsv, n_epoch, cuda):
             optimizer.step()
             loss_sum += loss.item()
 
-        logging.info('Loss: {0}'.format(loss_sum))
+        logging.info('Loss: {0}'.format(loss_sum / len(train_loader)))
 
     results = run_evaluation(net, device, w2v_model, test_loader)
     return results
