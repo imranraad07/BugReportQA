@@ -1,54 +1,48 @@
-# Repository information
+# Running FUTURE
 
-This repository contains data and code for the paper below:
+### Requirements:
+* Python3.6
+* torch
+* torchvision
+* spacy>=2.2.4
 
-<i><a href="http://aclweb.org/anthology/P18-1255">
-Learning to Ask Good Questions: Ranking Clarification Questions using Neural Expected Value of Perfect Information</a></i><br/>
-Sudha Rao (raosudha@cs.umd.edu) and Hal Daumé III (hal@umiacs.umd.edu)<br/>
-Proceedings of The 2018 Association of Computational Lingusitics (ACL 2018)
+### Setup
+1. Embeddings
+* download embeddings and unzip in *future/*: 
 
-# Downloading data
+2. Data
+* download data and unzip in *data/*: 
 
-* Download the clarification questions dataset from google drive here: https://go.umd.edu/clarification_questions_dataset
-* cp clarification_questions_dataset/data ranking_clarification_questions/data
+Data contains Lucene output files *post_data.tsv* and *qa_data.tsv*. Files *train_ids.txt* and *test_ids.txt*
+are used to divide the data for training and evaluation.
 
-* Download word embeddings trained on stackexchange datadump here: https://go.umd.edu/stackexchange_embeddings
-* cp stackexchange_embeddings/embeddings ranking_clarification_questions/embeddings
+If you want to crate a new dataset, follow this step:
+1. Use *data/bug_reports/join_datasets.py* to create one csv file based on github_data*.csv files 
+in the *data/bug_reports/* folder. To obtain a fraction of the whole dataset use `--fraction` option.
+2. Use *data/bug_reports/partition_datasets.py* to generate train\tune\test ids.
+3. Run Lucene on the generated dataset to generate *post_data.tsv* and *qa_data.tsv*. Use 
+*src/data_generation/run_data_generator_github.sh*. To make it work you need to update paths to in 
+*src/data_generation/run_data_generator_github.sh* and *lucene/run_lucene.sh*.
 
-The above dataset contains clarification questions for these three sites of stackexchange: <br/>
-1. askubuntu.com
-2. unix.stackexchange.com
-3. superuser.com
+After this step you should have the following files: *post_data.tsv*, *qa_data.tsv*, *train_ids.txt*, 
+*tune_ids.txt*, *test_ids.txt*.
 
-# Running model on data above
+3. Conda
 
-To run models on a combination of the three sites above, check ranking_clarification_questions/src/models/README
+``
+conda install numpy pandas gensim
+conda install pytorch torchvision cudatoolkit=10.1 -c pytorch
+python -m spacy download en_core_web_sm
+``
 
-# Generating data for other sites
+Conda currently does not provide required version of spacy, so we use pip to install spacy:
 
-To generate clarification questions for a different site of stackexchange, check ranking_clarification_questions/src/data_generation/README
+``
+conda install pip
+pip install spacy==2.2.4
+``
 
-# Retrain stackexchange word embeddings 
+### How to run: 
 
-To retrain word embeddings on a newer version of stackexchange datadump, check ranking_clarification_questions/src/embedding_generation/README
-
-# Contact information
-
-Please contact Sudha Rao (raosudha@cs.umd.edu) if you have any questions or any feedback.
-
-# Note on github data:
-
-Please put the github_data.csv in ranking_clarification_questions/data/github directory
-Please put the currect version of java in lucene
-
-# Installation
-Requirements:
-* Python2.7
-* theano 1.0.4
-* lasagne 0.2.dev1
-
-To instal compatibile version of Lasagne and Theano:
-```
-pip install -r https://raw.githubusercontent.com/Lasagne/Lasagne/master/requirements.txt
-pip install https://github.com/Lasagne/Lasagne/archive/master.zip
-```
+* Update filepaths and parameters in *src/models/run_main.sh*
+* `./src/models/run_main.sh`
