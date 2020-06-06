@@ -127,6 +127,7 @@ def run_evaluation(net, device, w2v_model, test_loader):
             outputs = net(posts, post_len, questions, q_len)
             if device.type != 'cpu':
                 outputs = outputs.cpu()
+                a_cap = a_cap.cpu()
 
             outputs = outputs.numpy()
             a_cap = a_cap.numpy()
