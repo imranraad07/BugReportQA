@@ -11,11 +11,11 @@ import calculator as calc
 def get_datasets(post_tsv, qa_tsv, word2index, batch_size, max_post_len, max_q_len, max_a_len, shuffle=True):
     train_dataset = GithubDataset(post_tsv, qa_tsv, word2index, train=True, max_post_len=max_post_len,
                                   max_q_len=max_q_len, max_a_len=max_a_len)
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=4)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=0)
 
     test_dataset = GithubDataset(post_tsv, qa_tsv, word2index, train=False, max_post_len=max_post_len,
                                  max_q_len=max_q_len, max_a_len=max_a_len)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=4)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=0)
 
     return train_loader, test_loader
 
@@ -31,8 +31,8 @@ class GithubDataset(Dataset):
 
     def _build_dataset(self, post_tsv, qa_tsv, train):
         calculator = calc.Calculator()
-        posts = pd.read_csv(post_tsv, sep='\t')[:13]
-        qa = pd.read_csv(qa_tsv, sep='\t')[:13]
+        posts = pd.read_csv(post_tsv, sep='\t')[:30]
+        qa = pd.read_csv(qa_tsv, sep='\t')[:30]
         data = {'postid': list(),
                 'post_origin': list(),
                 'question_origin': list(),
