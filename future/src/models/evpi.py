@@ -110,8 +110,8 @@ def evpi(cuda, w2v_model, args):
     loss_function = nn.SmoothL1Loss()
     optimizer = optim.SGD(net.parameters(), lr=0.001)
 
-    for epoch in range(args.n_epoch):
-        logging.info('Epoch {0}/{1}'.format((epoch + 1), args.n_epoch))
+    for epoch in range(args.n_epochs):
+        logging.info('Epoch {0}/{1}'.format((epoch + 1), args.n_epochs))
         loss_sum = 0.0
         for data in train_loader:
             # compute a_cap and send it to device so it can be used for back propagation
