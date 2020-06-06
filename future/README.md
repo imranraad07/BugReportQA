@@ -8,10 +8,10 @@
 
 ### Setup
 1. Embeddings
-* download embeddings and unzip in *future/*: 
+* download embeddings and unzip in *future/*: https://drive.google.com/drive/u/1/folders/1HDtSsT0__NmGkJVkg7ehJRlvFGpPwlg_
 
 2. Data
-* download data and unzip in *data/*: 
+* download data and unzip in *data/*: https://drive.google.com/drive/u/1/folders/1HDtSsT0__NmGkJVkg7ehJRlvFGpPwlg_
 
 Data contains Lucene output files *post_data.tsv* and *qa_data.tsv*. Files *train_ids.txt* and *test_ids.txt*
 are used to divide the data for training and evaluation.
@@ -30,7 +30,7 @@ After this step you should have the following files: *post_data.tsv*, *qa_data.t
 3. Conda
 
 ``
-conda install numpy pandas gensim
+conda install numpy pandas gensim jsonschema
 conda install pytorch torchvision cudatoolkit=10.1 -c pytorch
 python -m spacy download en_core_web_sm
 ``
