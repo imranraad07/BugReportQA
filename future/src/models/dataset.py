@@ -4,7 +4,7 @@ import torch
 from torchvision import transforms
 from torch.utils.data import Dataset, DataLoader
 
-import preprocessing as pp
+from data_generation import preprocessing as pp
 import models.calculator as calc
 
 

@@ -1,4 +1,4 @@
-import pattern_classification.observed_behavior_rule as ob
+import observed_behavior_rule as ob
 import spacy
 from spacy.matcher import Matcher
 from difflib import Differ

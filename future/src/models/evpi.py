@@ -69,7 +69,6 @@ def run_evaluation(net, device, w2v_model, test_loader):
     results = {}
     with torch.no_grad():
         for i, data in enumerate(test_loader):
-            # get the inputs; data is a list of [post, question, answer, label]
             if device.type != 'cpu':
                 posts, questions = data['post'].to(device), data['question'].to(device)
             else:

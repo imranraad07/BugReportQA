@@ -1,12 +1,15 @@
 import sys
+import os
+
+sys.path.append(os.path.abspath('./src'))
+sys.path.append(os.path.abspath('../pattern_classification'))
+
 import click
 import evpi
 import evpi_batch
 from gensim.scripts.glove2word2vec import glove2word2vec
 import gensim
 import logging
-
-logging.basicConfig(level=logging.INFO)
 
 
 @click.command()
@@ -16,7 +19,7 @@ logging.basicConfig(level=logging.INFO)
 @click.option('--output-ranking-file', help='Output file to save ranking', required=True)
 @click.option('--max-p-len', help='Max post length. Only when batch_size>1', default=300)
 @click.option('--max-q-len', help='Max question length. Only when batch_size>1', default=100)
-@click.option('--max-a-length', help='Max answer length. Only when batch_size>1', default=100)
+@click.option('--max-a-len', help='Max answer length. Only when batch_size>1', default=100)
 @click.option('--n-epochs', help='Number of epochs', default=10)
 @click.option('--batch-size', help='Batch size', type=int, default=1)
 @click.option('--device', help='Use \"cuda\" or \"cpu\"', type=click.Choice(['cuda', 'cpu']))
