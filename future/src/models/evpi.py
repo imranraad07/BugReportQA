@@ -66,9 +66,10 @@ def cosine_similarity(v1, v2):
 
 
 def run_evaluation(net, device, w2v_model, test_loader):
+    logging.info('Running evaluation...')
     results = {}
     with torch.no_grad():
-        for i, data in enumerate(test_loader):
+        for data in test_loader:
             if device.type != 'cpu':
                 posts, questions = data['post'].to(device), data['question'].to(device)
             else:
@@ -109,8 +110,9 @@ def evpi(w2v_model, post_tsv, qa_tsv, n_epoch, cuda):
     optimizer = optim.SGD(net.parameters(), lr=0.001)
 
     for epoch in range(n_epoch):
+        logging.info('Epoch {0}/{1}'.format((epoch + 1), n_epoch))
         loss_sum = 0.0
-        for i, data in enumerate(train_loader):
+        for data in train_loader:
             # compute a_cap and send it to device so it can be used for back propagationgit pu
             answers = data['answer']
             a_cap = compute_a_cap(answers, w2v_model)
@@ -121,8 +123,6 @@ def evpi(w2v_model, post_tsv, qa_tsv, n_epoch, cuda):
                 posts = data['post']
                 questions = data['question']
 
-            answers = data['answer']
-
             # zero the parameter gradients
             optimizer.zero_grad()
             # forward + backward + optimize
@@ -132,6 +132,8 @@ def evpi(w2v_model, post_tsv, qa_tsv, n_epoch, cuda):
             loss.backward()
             optimizer.step()
             loss_sum += loss.item()
+
+        logging.info('Loss: {0}'.format(loss_sum))
 
     results = run_evaluation(net, device, w2v_model, test_loader)
     return results
