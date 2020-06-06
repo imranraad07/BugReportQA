@@ -104,9 +104,8 @@ def run_evaluation(net, device, w2v_model, test_loader):
     results = {}
     with torch.no_grad():
         for data in test_loader:
-
             answers = data['answer']
-            a_cap = compute_a_cap(answers, w2v_model).numpy()
+            a_cap = compute_a_cap(answers, w2v_model)
 
             if device.type != 'cpu':
                 posts, post_len, questions, q_len, a_cap = data['post'].to(device), data['post_len'].to(device), \
@@ -130,6 +129,7 @@ def run_evaluation(net, device, w2v_model, test_loader):
                 outputs = outputs.cpu()
 
             outputs = outputs.numpy()
+            a_cap = a_cap.numpy()
 
             for idx in range(0, test_loader.batch_size):
                 postid = postids[idx]
