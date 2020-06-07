@@ -18,6 +18,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--post-tsv', help='File path to post_tsv produced by Lucene', required=True)
     parser.add_argument('--qa-tsv', help='File path to qa_tsv produced by Lucene', required=True)
+    parser.add_argument('--utility-tsv', help='File path to utility_tsv produced by Lucene', required=True)
     parser.add_argument('--train-ids', help='File path to train ids', required=True)
     parser.add_argument('--test-ids', help='File path to test ids', required=True)
     parser.add_argument('--embeddings', help='File path to embeddings', required=True)

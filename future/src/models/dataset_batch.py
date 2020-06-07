@@ -5,15 +5,14 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 
 from data_generation import preprocessing as pp
-import calculator as calc
 
 
 def get_datasets(word2index, args, shuffle=True):
-    train_dataset = GithubDataset(args.post_tsv, args.qa_tsv, word2index, ids=args.train_ids,
-                                 max_post_len=args.max_p_len, max_q_len=args.max_q_len, max_a_len=args.max_a_len)
+    train_dataset = GithubDataset(args.post_tsv, args.qa_tsv, args.utility_tsv, word2index, ids=args.train_ids,
+                                  max_post_len=args.max_p_len, max_q_len=args.max_q_len, max_a_len=args.max_a_len)
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=shuffle, num_workers=0)
 
-    test_dataset = GithubDataset(args.post_tsv, args.qa_tsv, word2index, ids=args.test_ids,
+    test_dataset = GithubDataset(args.post_tsv, args.qa_tsv, args.utility_tsv, word2index, ids=args.test_ids,
                                  max_post_len=args.max_p_len, max_q_len=args.max_q_len, max_a_len=args.max_a_len)
     test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=shuffle, num_workers=0)
 
@@ -22,18 +21,19 @@ def get_datasets(word2index, args, shuffle=True):
 
 class GithubDataset(Dataset):
 
-    def __init__(self, post_tsv, qa_tsv, word2index, ids, max_post_len, max_q_len, max_a_len):
+    def __init__(self, post_tsv, qa_tsv, utility_tsv, word2index, ids, max_post_len, max_q_len, max_a_len):
         self.word2index = word2index
         self.max_post_len = max_post_len
         self.max_q_len = max_q_len
         self.max_a_len = max_a_len
-        self.dataset = self._build_dataset(post_tsv, qa_tsv, ids)
+        self.dataset = self._build_dataset(post_tsv, qa_tsv, utility_tsv, ids)
 
-    def _build_dataset(self, post_tsv, qa_tsv, ids_file):
+    def _build_dataset(self, post_tsv, qa_tsv, utility_tsv, ids_file):
         ids = self._read_ids(ids_file)
-        calculator = calc.Calculator()
         posts = pd.read_csv(post_tsv, sep='\t')
         qa = pd.read_csv(qa_tsv, sep='\t')
+        ob = pd.read_csv(utility_tsv, sep='\t')
+
         data = {'postid': list(),
                 'post_origin': list(),
                 'question_origin': list(),
@@ -42,11 +42,12 @@ class GithubDataset(Dataset):
                 'utility': list()}
 
         for idx, row in posts.iterrows():
-            # TODO: this should be covered when building dataset
-            if str(row['post']) == 'nan':
-                continue
-
             postid = row['postid']
+
+            # trust is good control is better!
+            assert postid == qa.iloc[idx]['postid']
+            assert postid == ob.iloc[idx]['postids']
+
             if postid not in ids:
                 continue
 
@@ -54,7 +55,7 @@ class GithubDataset(Dataset):
             for i in range(1, 11):
                 question = qa.iloc[idx]['q' + str(i)]
                 answer = qa.iloc[idx]['a' + str(i)]
-                utility = calculator.utility(answer, post)
+                utility = ob.iloc[idx]['p_a' + str(i)]
 
                 data = self._add_values(data, i, postid, post, question, answer, utility)
 
