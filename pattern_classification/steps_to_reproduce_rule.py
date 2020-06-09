@@ -1,4 +1,6 @@
+import argparse
 import logging
+import sys
 
 import spacy
 import pandas as pd
@@ -41,10 +43,18 @@ def setup_s_sr_code_ref(doc):
 
 
 if __name__ == '__main__':
+    print(sys.argv)
 
-    issues = pd.read_csv('../data/datasets/dataset.csv')
+    argparser = argparse.ArgumentParser(sys.argv[0])
+    argparser.add_argument("--repo_csv", type=str,
+                           default='../data/datasets/dataset.csv')
+    argparser.add_argument("--output_csv", type=str,
+                           default='../data/bug_reports/github_data_s2r.csv')
+    args = argparser.parse_args()
 
+    issues = pd.read_csv(args.repo_csv)
     print("Total issues:", len(issues["post"]))
+
     nlp = spacy.load("en_core_web_sm")
     # matcher = Matcher(nlp.vocab, validate=True)
     # setup_s_sr_code_ref(matcher)
@@ -80,4 +90,4 @@ if __name__ == '__main__':
     s2r_issues = issues[issue_matches]
     assert (len(s2r_issues) == len(s2r_list))
     s2r_issues = s2r_issues.assign(STR=s2r_list)
-    s2r_issues.to_csv("../data/bug_reports/github_data_s2r.csv", index=False)
+    s2r_issues.to_csv(args.output_csv, index=False)
