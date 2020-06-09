@@ -45,6 +45,10 @@ class TestRecPatterns(unittest.TestCase):
         doc = "the code snippet below opens a shell that goes across multiple monitors when there are multiple monitors installed."
         self.assertTrue(s2r.setup_s_sr_code_ref(doc) == True)
 
+    def test_basecase_p_sr_have_sequence(self):
+        doc = "I have FBML in a dialog. I have a div element that is position:absolute."
+        self.assertTrue(s2r.setup_p_sr_have_sequence(doc, self.nlp) == True)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -31,6 +31,23 @@ def setup_p_sr_labeled_paragraph(doc):
     return False
 
 
+# P_SR_HAVE_SEQUENCE
+# Sequence of sentences using the verb "have"
+# Example: I have FBML in a dialog. I have a div element that is position:absolute.
+def setup_p_sr_have_sequence(doc, nlp):
+    doc = doc.lower()
+    have_count = 0
+    match = False
+    for sentence in nlp(doc).sents:
+        if ("i have" in sentence.text) or ("i\'ve" in sentence.text):
+            have_count = have_count + 1
+        else:
+            have_count = 0
+        if have_count > 1:
+            match = True
+    return match
+
+
 # S_SR_CODE_REF
 def setup_s_sr_code_ref(doc):
     doc = doc.lower()
@@ -56,8 +73,6 @@ if __name__ == '__main__':
     print("Total issues:", len(issues["post"]))
 
     nlp = spacy.load("en_core_web_sm")
-    # matcher = Matcher(nlp.vocab, validate=True)
-    # setup_s_sr_code_ref(matcher)
 
     issue_matches = []
     s2r_list = []
@@ -66,7 +81,8 @@ if __name__ == '__main__':
         # paragraph matching steps to reproduce
         paragraph = (issue["post"]).lower()
         matched = False
-        if setup_p_sr_labeled_list(paragraph) or setup_p_sr_labeled_paragraph(paragraph):
+        if setup_p_sr_labeled_list(paragraph) or setup_p_sr_labeled_paragraph(paragraph) \
+                or setup_p_sr_have_sequence(paragraph, nlp):
             matched = True
             s2r_list.append(paragraph)
             count = count + 1
