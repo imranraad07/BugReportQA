@@ -39,7 +39,8 @@ def setup_p_sr_have_sequence(doc, nlp):
     have_count = 0
     match = False
     for sentence in nlp(doc).sents:
-        if ("i have" in sentence.text) or ("i\'ve" in sentence.text):
+        sent = sentence.text.strip()
+        if ("i have" in sent) or ("i\'ve" in sent):
             have_count = have_count + 1
         else:
             have_count = 0
@@ -54,6 +55,16 @@ def setup_s_sr_code_ref(doc):
     match = re.search(
         '.*(code snippet|sample example|live example|test case)(.+?)(attached|below|provided|here|enclosed|following)(.+?)',
         doc)
+    if match is not None:
+        return True
+    return False
+
+
+# S_SR_WHEN_AFTER
+def setup_s_sr_when_after(doc):
+    doc = doc.lower()
+    match = re.search(
+        '^(when|if) (.+?) after (.+?)', doc)
     if match is not None:
         return True
     return False
@@ -81,25 +92,25 @@ if __name__ == '__main__':
         # paragraph matching steps to reproduce
         paragraph = (issue["post"]).lower()
         matched = False
+        s2r_sent = ""
         if setup_p_sr_labeled_list(paragraph) or setup_p_sr_labeled_paragraph(paragraph) \
                 or setup_p_sr_have_sequence(paragraph, nlp):
             matched = True
-            s2r_list.append(paragraph)
-            count = count + 1
-            print(count, index, issue["issue_link"])
-        # # sentence matching steps to reproduce
+            s2r_sent = paragraph
+
+        # sentence matching steps to reproduce
         if not matched:
             s2r_sent = ""
             for sentence in nlp(issue["post"]).sents:
                 sent = sentence.text.strip()
-                flag = setup_s_sr_code_ref(sent)
-                if flag:
+                if setup_s_sr_code_ref(sent) or setup_s_sr_when_after(sent):
                     matched = True
                     s2r_sent = s2r_sent + " " + sent
-            if matched:
-                s2r_list.append(s2r_sent)
-                count = count + 1
-                print(count, index, issue["issue_link"])
+
+        if matched:
+            count = count + 1
+            print(count, index, issue["issue_link"])
+        s2r_list.append(s2r_sent)
         issue_matches.append(matched)
 
     print(count)

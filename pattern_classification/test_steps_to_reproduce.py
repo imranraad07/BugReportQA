@@ -49,6 +49,12 @@ class TestRecPatterns(unittest.TestCase):
         doc = "I have FBML in a dialog. I have a div element that is position:absolute."
         self.assertTrue(s2r.setup_p_sr_have_sequence(doc, self.nlp) == True)
 
+    def test_basecase_s_sr_when_after(self):
+        doc = "When I press the  Publish  button on the facebook interface after entering some text about a post_ I get an empty window with only an  X  in the upper right-hand corner and the app just sits there."
+        self.assertTrue(s2r.setup_s_sr_when_after(doc) == True)
+        doc = "When I press the  Publish  button on the facebook interface, no exception occurs"
+        self.assertTrue(s2r.setup_s_sr_when_after(doc) == False)
+
 
 if __name__ == "__main__":
     unittest.main()
