@@ -110,11 +110,12 @@ if __name__ == '__main__':
         if matched:
             count = count + 1
             print(count, index, issue["issue_link"])
-        s2r_list.append(s2r_sent)
+            s2r_list.append(s2r_sent)
         issue_matches.append(matched)
 
     print(count)
     s2r_issues = issues[issue_matches]
+    print(len(s2r_issues), len(s2r_list))
     assert (len(s2r_issues) == len(s2r_list))
     s2r_issues = s2r_issues.assign(STR=s2r_list)
     s2r_issues.to_csv(args.output_csv, index=False)
