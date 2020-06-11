@@ -78,6 +78,14 @@ def create_tsv_files_github(post_data_tsv, qa_data_tsv, utility_data_tsv, post_t
 def main(args):
     print('Parsing github posts...')
     csv.field_size_limit(sys.maxsize)
+
+    repo_labels = {}
+    with open(args.repo_label_csv) as csv_data_file:
+        csv_reader = csv.reader((line.replace('\0', '') for line in csv_data_file))
+        next(csv_reader)
+        for row in csv_reader:
+            repo_labels[row[0]] = row[1]
+
     post_ids = []
     post_titles = {}
     post_texts = {}
@@ -90,7 +98,7 @@ def main(args):
         for row in csvReader:
             post_ids.append(row[2])
             post_titles[row[2]] = (row[3].partition('\n')[0])
-            post_texts[row[2]] = (row[3].partition('\n')[-1])
+            post_texts[row[2]] = (row[3].partition('\n')[-1]) + "\n\n" + repo_labels[row[0]]
             post_questions[row[2]] = (row[4])
             post_answers[row[2]] = (row[5])
             idx = idx + 1
@@ -114,6 +122,7 @@ if __name__ == "__main__":
     argparser.add_argument("--qa_data_tsv", type=str)
     argparser.add_argument("--utility_data_tsv", type=str)
     argparser.add_argument("--github_csv", type=str)
+    argparser.add_argument("--repo_label_csv", type=str)
     args = argparser.parse_args()
     print(args)
     main(args)

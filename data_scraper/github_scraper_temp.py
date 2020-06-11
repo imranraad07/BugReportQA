@@ -16,7 +16,28 @@ from utils import question_identifier
 # nltk.download('punkt')
 
 headers = {'Authorization': 'token e0611cfcb582b98c9d94c3b53a380b5b88d98c2e'}
+headers1 = {'Authorization': 'token 915e33be5b0f3aca5f8a9b5d621e4bfd27177145'}
+headers2 = {"Authorization": 'token e551fea0cc4c810adf0b5bb3e04faa9eee6327c9'}
+headers3 = {'Authorization': 'token caaa28ea2380831278a1cdc3378fc0d01ccb0062'}
+headers4 = {'Authorization': 'token ba06210a21cbae85560b1498e9e98bc2d736979a'}
+
+counter_header = 0
+run_now = 0
 bug_report_counter = 0
+
+
+def getHeader():
+    global counter_header
+    counter_header = counter_header + 1
+    if counter_header % 5 == 0:
+        return headers1
+    elif counter_header % 5 == 1:
+        return headers2
+    elif counter_header % 5 == 2:
+        return headers3
+    elif counter_header % 5 == 3:
+        return headers4
+    return headers
 
 
 def read_github_issues(github_repo, bug_ids, csv_writer):
@@ -24,7 +45,7 @@ def read_github_issues(github_repo, bug_ids, csv_writer):
     for issue_id in bug_ids:
         print("issue_id", issue_id, "BR count", bug_report_counter)
         try:
-            issue_data = get_an_issue(github_repo, issue_id, headers)
+            issue_data = get_an_issue(github_repo, issue_id, getHeader())
             # print(issue_data)
 
             if issue_data is None:
@@ -49,7 +70,7 @@ def read_github_issues(github_repo, bug_ids, csv_writer):
             if 'comments_url' not in issue_data:
                 print("comments_url is not in issue data")
                 continue
-            comments = get_comments(issue_data['comments_url'], headers)
+            comments = get_comments(issue_data['comments_url'], getHeader())
             if comments is None:
                 continue
 
@@ -104,7 +125,7 @@ def read_github_issues(github_repo, bug_ids, csv_writer):
                 if len(comment_array) > 30 or len(follow_up_question) > 300:
                     continue
 
-                original_post = issue_data['title']
+                original_post = filter_nontext(issue_data['title'])
                 if issue_data['body'] is not None:
                     original_post = original_post + "\n\n" + filter_nontext(issue_data['body'])
                 follow_up_question = filter_nontext(follow_up_question)
@@ -144,7 +165,7 @@ def get_edits(repo_url, issue_no):
     query = edit_query.substitute(owner=owner, name=name, number=issue_no)
     failed_cnt = 0
     while failed_cnt < 20:
-        request = requests.post('https://api.github.com/graphql', json={'query': query}, headers=headers)
+        request = requests.post('https://api.github.com/graphql', json={'query': query}, headers=getHeader())
 
         if request.status_code == 200:
             result = request.json()
@@ -185,9 +206,9 @@ def is_error(result):
             elif 'message' in error:
                 print(error['message'])
 
-        if slept is False:
-            print('Dont know these errors. Lets sleep 3 min just in case!')
-            time.sleep(180)
+        # if slept is False:
+        #     print('Dont know these errors. Lets sleep 3 min just in case!')
+        #     time.sleep(180)
         return True
 
     return False
@@ -205,7 +226,7 @@ def get_follow_up_question(issue):
     if 'comments_url' not in issue:
         print("comments_url is not in issue data")
         return None
-    comments = get_comments(issue['comments_url'], headers)
+    comments = get_comments(issue['comments_url'], getHeader())
     if comments is None:
         return None
 
@@ -276,7 +297,7 @@ def show_diff(text, n_text):
 # 4. check difference between this edit and original post(or edited post right before this edit)
 def get_edit_by_issue(repo_url, issue_id, csv_writer):
     try:
-        print(repo_url, issue_id)
+        # print(repo_url, issue_id)
 
         # step 1: get edits
         response = get_edits(repo_url, issue_id)
@@ -285,7 +306,7 @@ def get_edit_by_issue(repo_url, issue_id, csv_writer):
 
         if len(response) > 0:
             # step 2: get follow up question
-            issue = get_an_issue(repo_url[19:], issue_id, headers)
+            issue = get_an_issue(repo_url[19:], issue_id, getHeader())
             if issue is None:
                 return
 
@@ -334,7 +355,6 @@ def get_edit_by_issue(repo_url, issue_id, csv_writer):
                                  follow_up_question[0].strip(), diff]
                     csv_writer.writerow(write_row)
                     print(write_row)
-
                     global bug_report_counter
                     bug_report_counter = bug_report_counter + 1
                     print("Edit Bug Reports:", bug_report_counter)
@@ -345,15 +365,25 @@ def get_edit_by_issue(repo_url, issue_id, csv_writer):
 
 
 def parse_edits(input_file, result_file):
-    csv_file = open(result_file, 'w')
+    csv_file = open(result_file, 'a')
     csv_writer = csv.writer(csv_file)
-    csv_writer.writerow(['repo', 'issue_link', 'issue_id', 'post', 'question', 'answer'])
+    # csv_writer.writerow(['repo', 'issue_link', 'issue_id', 'post', 'question', 'answer'])
 
+    global run_now
+    global bug_report_counter
     with open(input_file) as csvDataFile:
         csv_reader = csv.reader((line.replace('\0', '') for line in csvDataFile))
         print(next(csv_reader))
         for row in csv_reader:
             for issue_id in row[9:]:
+                if "elastic/elasticsearch" in row[1]:
+                    if int(issue_id) == 7365:
+                        run_now = 1
+                        print("run now is 1")
+                    print("true", issue_id, run_now)
+                if run_now == 0:
+                    continue
+                print(row[1], issue_id, bug_report_counter)
                 get_edit_by_issue(row[1], issue_id, csv_writer)
     csv_file.close()
 
@@ -373,9 +403,9 @@ if __name__ == '__main__':
     argparser = argparse.ArgumentParser(sys.argv[0])
     argparser.add_argument("--type", type=str, default='edit')
     argparser.add_argument("--repo_csv", type=str,
-                           default='/home/imranm3/projects/BugReportQA/data/repos/repos_final2008.csv')
+                           default='/home/imranm3/projects/BugReportQA/data/repos/repos_final2010.csv')
     argparser.add_argument("--output_csv", type=str,
-                           default='/home/imranm3/projects/BugReportQA/data/bug_reports/github_data_2008_edit.csv')
+                           default='/home/imranm3/projects/BugReportQA/data/bug_reports/github_data_2010_edit.csv')
 
     args = argparser.parse_args()
     print(args)
