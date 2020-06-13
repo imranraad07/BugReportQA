@@ -16,7 +16,6 @@ def compute_utilities(post_tsv, qa_tsv, utility_tsv):
         print('Row {0}/{1}'.format(idx + 1, len(posts)))
         postid = row['postid']
         print(postid)
-        print(row['post'])
         post = row['title'] + ' ' + row['post']
         utility_data['postids'].append(postid)
         for i in range(1, 11):

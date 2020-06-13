@@ -98,7 +98,8 @@ def main(args):
         for row in csvReader:
             post_ids.append(row[2])
             post_titles[row[2]] = (row[3].partition('\n')[0])
-            post_texts[row[2]] = (row[3].partition('\n')[-1]) + "\n\n" + repo_labels[row[0]]
+            rl = '' if row[0] not in repo_labels else repo_labels[row[0]]
+            post_texts[row[2]] = (row[3].partition('\n')[-1]) + ' ' + rl
             post_questions[row[2]] = (row[4])
             post_answers[row[2]] = (row[5])
             idx = idx + 1
