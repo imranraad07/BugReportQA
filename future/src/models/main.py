@@ -61,7 +61,7 @@ def read_w2v_model(path_in):
 
 def save_ranking(output_file, results):
     with open(output_file, 'w') as f:
-        f.write('postid,post,correct_q,correct_a,' + ','.join(['q{0},a{0}'.format(i) for i in range(1, 11)]) + '\n')
+        f.write('issueid,post,correct_question,correct_a,' + ','.join(['q{0},a{0}'.format(i) for i in range(1, 11)]) + '\n')
         for postid in results:
             post, values, correct = results[postid]
             f.write('{0},{1},{2},{3},'.format(postid, post.replace(',', ' '), correct[0].replace(',', ' '),
