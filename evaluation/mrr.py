@@ -1,13 +1,8 @@
-import sys
-import click
 import pandas as pd
 
 
-@click.command()
-@click.option('--results-file', required=True)
-@click.option('--output-file', required=True)
-def run(**kwargs):
-    df = pd.read_csv(kwargs['results_file'], sep=',', index_col=False)
+def compute(data_fpath):
+    df = pd.read_csv(data_fpath, sep=',', index_col=False)
 
     ranks = list()
     for index, row in df.iterrows():
@@ -21,8 +16,4 @@ def run(**kwargs):
                 raise ValueError('This shouldnt happen. Row is\n{0}'.format(row))
 
     mrr = sum(ranks) / float(len(ranks))
-    print('MRR {0}'.format(mrr))
-
-
-if __name__ == '__main__':
-    run(sys.argv[1:])
+    return mrr

@@ -1,28 +1,25 @@
-import sys
-import click
 from nltk.translate.bleu_score import corpus_bleu
 
 
-@click.command()
-@click.option('--ref-file', help='Path to file with correct questions', required=True)
-@click.option('--q-file', help='Path to file with questions', required=True)
-def run(**kwargs):
-    refs = extract_ref(kwargs['ref_file'])
-    data = extract_data(kwargs['q_file'])
+def compute(ref_fpath, q_fpath, ref_no):
+    refs = extract_ref(ref_fpath, ref_no)
+    data = extract_data(q_fpath)
 
-    score = corpus_bleu(refs, data)
-
-    print('BLEU score {0}'.format(score))
+    assert len(refs) == len(data)
+    return corpus_bleu(refs, data)
 
 
-def extract_ref(fpath):
+def extract_ref(fpath, ref_no):
     ref_corpus = list()
     with open(fpath, 'r') as f:
-        for line in f.readlines():
+        lines = f.readlines()
+        idx = 0
+        while idx < len(lines):
             refs = list()
-            for ref in line.split('|'):
-                tokens = tokenize(ref)
+            for i in range(ref_no):
+                tokens = tokenize(lines[idx])
                 refs.append(tokens)
+                idx += 1
             ref_corpus.append(refs)
     return ref_corpus
 
@@ -48,7 +45,3 @@ def tokenize(text):
             line_filtered += c
 
     return line_filtered.split(' ')
-
-
-if __name__ == '__main__':
-    run(sys.argv[1:])
