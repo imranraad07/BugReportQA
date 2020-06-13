@@ -132,7 +132,7 @@ def run_evaluation(net, device, w2v_model, test_loader):
             outputs = outputs.numpy()
             a_cap = a_cap.numpy()
 
-            for idx in range(0, test_loader.batch_size):
+            for idx in range(0, len(postids)):
                 postid = postids[idx]
                 sim = cosine_similarity(a_cap[idx], outputs[idx])
 
