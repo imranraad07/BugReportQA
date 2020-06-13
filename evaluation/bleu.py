@@ -1,4 +1,3 @@
-import os
 import sys
 import click
 from nltk.translate.bleu_score import corpus_bleu
@@ -7,9 +6,10 @@ from nltk.translate.bleu_score import corpus_bleu
 @click.command()
 @click.option('--ref-file', help='Path to file with correct questions', required=True)
 @click.option('--q-file', help='Path to file with questions', required=True)
-def run(*args, **kwargs):
+def run(**kwargs):
     refs = extract_ref(kwargs['ref_file'])
     data = extract_data(kwargs['q_file'])
+
     score = corpus_bleu(refs, data)
 
     print('BLEU score {0}'.format(score))
@@ -42,8 +42,8 @@ def tokenize(text):
     # punctuation tokenizing
     line_filtered = ''
     for c in line:
-        if c in '!@$%^&*()[]{};:,.<>/?\|`~-=':
-            line_filtered += ' '
+        if c in '!@$%^&*()[]{};:,\'.<>/?\|`~-=+':
+            line_filtered += ' ' + c + ' '
         else:
             line_filtered += c
 
