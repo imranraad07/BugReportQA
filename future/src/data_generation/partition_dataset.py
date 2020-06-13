@@ -20,7 +20,7 @@ numpy.random.seed(1234)
 @click.option('--ratios',
               help='Ratio of training/tuning/testing dataset. Format: [train_ratio tune_ratio test_ratio]',
               type=(float, float, float),
-              default=[0.6, 0.2, 0.2],
+              default=[0.8, 0.1, 0.1],
               required=True)
 def run(**kwargs):
     in_dataset = kwargs['in_dataset']
@@ -30,7 +30,6 @@ def run(**kwargs):
         raise ValueError('Ratios of training + tuning + testing datasets should sum up to 1.')
 
     dataset = pd.read_csv(in_dataset)
-    dataset = dataset[dataset['answer'].notnull()]
     # shuffle
     dataset = dataset.sample(frac=1).reset_index(drop=True)
     train_samples = int(train_ratio * len(dataset))
