@@ -1,17 +1,15 @@
 import argparse
-import logging
+import re
 import sys
 
-import spacy
 import pandas as pd
-from spacy.matcher import Matcher
-import re
+import spacy
 
 
 # s2r_labels = ["how to reproduce", "what i have tried", "to replicate", "steps to reproduce", "steps to recreate"]
 
 
-def setup_p_sr_labeled_list(doc):
+def match_p_sr_labeled_list(doc):
     doc = doc.lower()
     match = re.search(
         '.*(how to reproduce|what i have tried|to replicate|steps to reproduce|steps to recreate)(.+?)((\d+\.\s.*\n?)+s)(.+?)',
@@ -21,7 +19,7 @@ def setup_p_sr_labeled_list(doc):
     return False
 
 
-def setup_p_sr_labeled_paragraph(doc):
+def match_p_sr_labeled_paragraph(doc):
     doc = doc.lower()
     match = re.search(
         '.*(how to reproduce|what i have tried|to replicate|steps to reproduce|steps to recreate)(.+?)((.)+s)(.+?)',
@@ -34,7 +32,7 @@ def setup_p_sr_labeled_paragraph(doc):
 # P_SR_HAVE_SEQUENCE
 # Sequence of sentences using the verb "have"
 # Example: I have FBML in a dialog. I have a div element that is position:absolute.
-def setup_p_sr_have_sequence(doc, nlp):
+def match_p_sr_have_sequence(doc, nlp):
     doc = doc.lower()
     have_count = 0
     match = False
@@ -50,7 +48,7 @@ def setup_p_sr_have_sequence(doc, nlp):
 
 
 # S_SR_CODE_REF
-def setup_s_sr_code_ref(doc):
+def match_s_sr_code_ref(doc):
     doc = doc.lower()
     match = re.search(
         '.*(code snippet|sample example|live example|test case)(.+?)(attached|below|provided|here|enclosed|following)(.+?)',
@@ -61,13 +59,39 @@ def setup_s_sr_code_ref(doc):
 
 
 # S_SR_WHEN_AFTER
-def setup_s_sr_when_after(doc):
+def match_s_sr_when_after(doc):
     doc = doc.lower()
     match = re.search(
         '^(when|if) (.+?) after (.+?)', doc)
     if match is not None:
         return True
     return False
+
+
+def match_sr(text):
+    nlp = spacy.load("en_core_web_sm")
+    text = text.lower()
+    matched = False
+    s2r_sent = ""
+
+    # paragraph level matching steps to reproduce
+    if match_p_sr_labeled_list(text) or match_p_sr_labeled_paragraph(text) \
+            or match_p_sr_have_sequence(text, nlp):
+        matched = True
+        s2r_sent = text
+
+    # sentence level matching steps to reproduce
+    if not matched:
+        s2r_sent = ""
+        for sentence in nlp(text).sents:
+            sent = sentence.text.strip()
+            if match_s_sr_code_ref(sent) or match_s_sr_when_after(sent):
+                matched = True
+                s2r_sent = s2r_sent + " " + sent
+
+    if matched:
+        return matched, s2r_sent
+    return matched, None
 
 
 if __name__ == '__main__':
@@ -89,31 +113,15 @@ if __name__ == '__main__':
     s2r_list = []
     count = 0
     for index, issue in issues.iterrows():
-        # paragraph matching steps to reproduce
-        paragraph = (issue["post"]).lower()
-        matched = False
-        s2r_sent = ""
-        if setup_p_sr_labeled_list(paragraph) or setup_p_sr_labeled_paragraph(paragraph) \
-                or setup_p_sr_have_sequence(paragraph, nlp):
-            matched = True
-            s2r_sent = paragraph
-
-        # sentence matching steps to reproduce
-        if not matched:
-            s2r_sent = ""
-            for sentence in nlp(issue["post"]).sents:
-                sent = sentence.text.strip()
-                if setup_s_sr_code_ref(sent) or setup_s_sr_when_after(sent):
-                    matched = True
-                    s2r_sent = s2r_sent + " " + sent
-
-        if matched:
+        s2r = match_sr(issue["post"])
+        print(s2r)
+        if s2r[0] is True:
             count = count + 1
             print(count, index, issue["issue_link"])
-            s2r_list.append(s2r_sent)
-        issue_matches.append(matched)
+            s2r_list.append(s2r[1])
+        issue_matches.append(s2r[0])
 
-    print(count)
+    print("Total s2r issues:", count)
     s2r_issues = issues[issue_matches]
     print(len(s2r_issues), len(s2r_list))
     assert (len(s2r_issues) == len(s2r_list))
