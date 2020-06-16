@@ -1,6 +1,7 @@
 import observed_behavior_rule as ob_rule
 import steps_to_reproduce_rule as s2r_rule
 import spacy
+import pandas as pd
 from spacy.matcher import Matcher
 from difflib import Differ
 
@@ -73,3 +74,28 @@ def get_diff(text_a, text_b):
     diff_lines = differ.compare(text_a, text_b)
     diff = ' '.join([diff for diff in diff_lines if diff.startswith('+ ')]).replace('+ ', ' ')
     return diff
+
+
+def compute_utilities(post_tsv, qa_tsv, utility_tsv):
+    calculator = Calculator()
+    posts = pd.read_csv(post_tsv, sep='\t')
+    qa = pd.read_csv(qa_tsv, sep='\t')
+
+    utility_data = {'postids': list()}
+    for i in range(1, 11):
+        utility_data['p_a{0}'.format(i)] = list()
+
+    for idx, row in posts.iterrows():
+        print('Row {0}/{1}'.format(idx + 1, len(posts)))
+        postid = row['postid']
+        print(postid)
+        post = row['title'] + ' ' + row['post']
+        utility_data['postids'].append(postid)
+        for i in range(1, 11):
+            answer = qa.iloc[idx]['a' + str(i)]
+            utility = calculator.utility(answer, post)
+
+            utility_data['p_a{0}'.format(i)].append(utility)
+
+    df = pd.DataFrame(utility_data)
+    df.to_csv(utility_tsv, index=False, sep='\t')
