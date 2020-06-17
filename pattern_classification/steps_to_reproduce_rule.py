@@ -68,7 +68,7 @@ def match_s_sr_when_after(doc):
     return False
 
 
-def match_sr(text):
+def match_sr(text, join_by=' '):
     nlp = spacy.load("en_core_web_sm")
     text = text.lower()
     matched = False
@@ -87,7 +87,7 @@ def match_sr(text):
             sent = sentence.text.strip()
             if match_s_sr_code_ref(sent) or match_s_sr_when_after(sent):
                 matched = True
-                s2r_sent = s2r_sent + " " + sent
+                s2r_sent = s2r_sent + join_by + sent
 
     if matched:
         return matched, s2r_sent

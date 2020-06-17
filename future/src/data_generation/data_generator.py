@@ -7,8 +7,7 @@ sys.path.append(os.path.abspath('../pattern_classification'))
 
 from preprocessing import clear_text
 
-import compute_ob as ob
-from post_ques_ans_generator import *
+from calculator import compute_utilities
 
 
 def get_similar_docs(lucene_similar_docs):
@@ -72,7 +71,7 @@ def create_tsv_files_github(post_data_tsv, qa_data_tsv, utility_data_tsv, post_t
                 tsv_writer = csv.writer(out_file, delimiter='\t')
                 tsv_writer.writerow(row_val)
 
-    ob.compute_utilities(post_data_tsv, qa_data_tsv, utility_data_tsv)
+    compute_utilities(post_data_tsv, qa_data_tsv, utility_data_tsv)
 
 
 def main(args):
