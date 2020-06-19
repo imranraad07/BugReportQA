@@ -1,14 +1,12 @@
+import argparse
 import csv
+import difflib
 import sys
 from datetime import datetime, timedelta
 
-import argparse
-import difflib
-
-from nltk import sent_tokenize
-
 from github_apis_v3 import *
 from github_text_filter import *
+from nltk import sent_tokenize
 from queries import *
 from utils import question_identifier
 
@@ -24,7 +22,9 @@ def read_github_issues(github_repo, bug_ids, csv_writer):
     for issue_id in bug_ids:
         print("issue_id", issue_id, "BR count", bug_report_counter)
         try:
-            issue_data = get_an_issue(github_repo, issue_id, headers)
+            url = "https://api.github.com/repos/{repo}/issues/{issue_id}"
+            url = url.format(repo=github_repo, issue_id=issue_id)
+            issue_data = get_an_issue(url, headers)
             # print(issue_data)
 
             if issue_data is None:
@@ -104,11 +104,13 @@ def read_github_issues(github_repo, bug_ids, csv_writer):
                 if len(comment_array) > 30 or len(follow_up_question) > 300:
                     continue
 
+                # do not filter them when parsing
                 original_post = issue_data['title']
                 if issue_data['body'] is not None:
-                    original_post = original_post + "\n\n" + filter_nontext(issue_data['body'])
-                follow_up_question = filter_nontext(follow_up_question)
-                follow_up_question_reply = filter_nontext(follow_up_question_reply)
+                    original_post = original_post + "\n\n" + issue_data['body']
+                    # original_post = original_post + "\n\n" + filter_nontext(issue_data['body'])
+                # follow_up_question = filter_nontext(follow_up_question)
+                # follow_up_question_reply = filter_nontext(follow_up_question_reply)
                 postid = issue_data['html_url'][19:]
                 postid = postid.replace("/", "_")
                 write_row = [github_repo, issue_data['html_url'], postid, original_post, follow_up_question,
@@ -253,7 +255,8 @@ def get_follow_up_question(issue):
         comment_array = follow_up_question.split()
         if len(comment_array) > 30 or len(follow_up_question) > 300:
             return None
-        follow_up_question = filter_nontext(follow_up_question)
+        # do not filter while parsing
+        # follow_up_question = filter_nontext(follow_up_question)
         return follow_up_question, follow_up_question_time
     return None
 
@@ -318,7 +321,8 @@ def get_edit_by_issue(repo_url, issue_id, csv_writer):
                     diff = show_diff(original_text, modified_text)
                     if not diff:
                         continue
-                    diff = filter_nontext(diff.strip())
+                    # do not filter while parsing
+                    # diff = filter_nontext(diff.strip())
                     if len(diff.split()) < 4:
                         continue
 
@@ -327,9 +331,12 @@ def get_edit_by_issue(repo_url, issue_id, csv_writer):
 
                     postid = issue['html_url'][19:]
                     postid = postid.replace("/", "_")
-                    original_post = filter_nontext(issue['title'])
+                    # do not filter while parsing
+                    # original_post = filter_nontext(issue['title'])
+                    original_post = issue['title']
                     if issue['body'] is not None:
-                        original_post = original_post + "\n\n" + filter_nontext(issue['body'])
+                        original_post = original_post + "\n\n" + issue['body']
+                        # original_post = original_post + "\n\n" + filter_nontext(issue['body'])
                     write_row = [repo_url[19:], issue['html_url'], postid, original_post.strip(),
                                  follow_up_question[0].strip(), diff]
                     csv_writer.writerow(write_row)
@@ -373,9 +380,9 @@ if __name__ == '__main__':
     argparser = argparse.ArgumentParser(sys.argv[0])
     argparser.add_argument("--type", type=str, default='edit')
     argparser.add_argument("--repo_csv", type=str,
-                           default='/home/imranm3/projects/BugReportQA/data/repos/repos_final2008.csv')
+                           default='../data/repos/repos_final2008.csv')
     argparser.add_argument("--output_csv", type=str,
-                           default='/home/imranm3/projects/BugReportQA/data/bug_reports/github_data_2008_edit.csv')
+                           default='../data/bug_reports/github_data_2008_edit.csv')
 
     args = argparser.parse_args()
     print(args)

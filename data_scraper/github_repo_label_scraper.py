@@ -26,8 +26,6 @@ def read_github_repo_label(github_repo):
 
 
 def main(args):
-    csv.field_size_limit(sys.maxsize)
-
     repos_with_labels = []
     labels = []
     for repo_csv_file in args.repos_csv:
@@ -120,6 +118,7 @@ if __name__ == '__main__':
     argparser.add_argument("--repos_csv", type=list, default=repos_csv_list)
     argparser.add_argument("--output_csv", type=str, default=output_file)
 
+    csv.field_size_limit(sys.maxsize)
     args = argparser.parse_args()
     print(args)
     print("")

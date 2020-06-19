@@ -11,10 +11,7 @@ def get_issue_labels(url, headers):
     return execute_query(url, headers, 'labels')
 
 
-def get_an_issue(repo, issue_id, headers):
-    url = "https://api.github.com/repos/{repo}/issues/{issue_id}"
-    url = url.format(repo=repo, issue_id=issue_id)
-
+def get_an_issue(url, headers):
     return execute_query(url, headers, 'Issues')
 
 

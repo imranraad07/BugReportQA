@@ -50,3 +50,43 @@ def filter_nontext(text):
     text = remove_newlines(text)
     text = remove_triple_quotes(text)
     return text
+
+
+def has_non_english_characters(text):
+    try:
+        text.encode(encoding='utf-8').decode('ascii')
+    except UnicodeDecodeError:
+        return True
+    else:
+        return False
+
+
+def has_triple_quote_codes(text):
+    text = remove_newlines(text)
+    occurrences = [m.start() for m in re.finditer('```', text)]
+    if len(occurrences) > 0:
+        return True
+    return False
+
+
+def is_length_short(text):
+    if len(filter_nontext(text).split()) < 4:
+        return True
+    return False
+
+
+def has_keyword_in_text(text):
+    text = text.lower()
+    keywords = ["head", "pull request", "master"]
+    for keyword in keywords:
+        if keyword in text:
+            return True
+    return False
+
+
+def should_question_be_filtered(text):
+    flag = has_non_english_characters(text)
+    flag = flag | has_triple_quote_codes(text)
+    flag = flag | is_length_short(text)
+    flag = flag | has_keyword_in_text(text)
+    return flag
