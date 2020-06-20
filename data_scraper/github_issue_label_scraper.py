@@ -2,7 +2,7 @@ import argparse
 import csv
 import sys
 
-from data_scraper.github_apis_v3 import get_issue_labels
+from github_apis_v3 import get_issue_labels
 
 headers = {'Authorization': 'token e0611cfcb582b98c9d94c3b53a380b5b88d98c2e',
            'Accept': 'application/vnd.github.mercy-preview+json'}
@@ -32,13 +32,13 @@ def main(args):
         for row in csv_reader:
             repo_labels = read_github_issue_label(row[1][19:])
             print(repo_labels)
-            csv_writer.writerow(row[2], repo_labels)
+            csv_writer.writerow([row[2], repo_labels])
     csv_file.close()
 
 
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser(sys.argv[0])
-    argparser.add_argument("--input_file", type=str, default='../data/bug_reports/github_data_2008.csv')
+    argparser.add_argument("--input_file", type=str, default='../data/datasets/github/dataset.csv')
     argparser.add_argument("--output_file", type=str, default='../data/bug_reports/github_issue_labels.csv')
 
     csv.field_size_limit(sys.maxsize)
