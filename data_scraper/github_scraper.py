@@ -5,7 +5,6 @@ import sys
 from datetime import datetime, timedelta
 
 from github_apis_v3 import *
-from github_text_filter import *
 from nltk import sent_tokenize
 from queries import *
 from utils import question_identifier
