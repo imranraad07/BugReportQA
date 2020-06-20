@@ -1,22 +1,26 @@
+import csv
 import os
 import sys
+
 import click
-import pandas as pd
-import numpy as np
 import gensim
-from gensim.scripts.glove2word2vec import glove2word2vec
+import numpy as np
+import pandas as pd
 import preprocessing as pp
+from gensim.scripts.glove2word2vec import glove2word2vec
+
+from future.src.data_generation.github_text_filter import should_question_be_filtered, filter_nontext
 
 np.random.seed(1234)
 
 
 @click.command()
-@click.option('--input-dir', required=True, default='/Users/ciborowskaa/VCU/Research/BugReportQA/data/bug_reports')
+@click.option('--input-dir', required=True, default='../../../data/bug_reports')
 @click.option('--file-prefix', required=True, default='github_data_20')
 @click.option('--embeddings', required=True,
-              default='/Users/ciborowskaa/VCU/Research/BugReportQA/future/embeddings_damevski/vectors_pad.txt')
+              default='../../embeddings_damevski/vectors_pad.txt')
 @click.option('--output-file', required=True,
-              default='/Users/ciborowskaa/VCU/Research/BugReportQA/data/datasets/github/dataset.csv')
+              default='../../../data/datasets/github/dataset.csv')
 @click.option('--fraction',
               help='Fraction of original dataset to sample. If subset=1.0, the whole dataset is preserved.')
 def join_files(**kwargs):
@@ -25,33 +29,49 @@ def join_files(**kwargs):
     out_fpath = kwargs['output_file']
     w2v_model = read_w2v_model(kwargs['embeddings'])
 
-    lines = list()
     header = None
-
+    br_count = 0
+    filtered_br = 0
+    br_reports = []
     for root, dirs, files in os.walk(dpath):
         for file in files:
             if prefix in file and '.csv' in file:
                 print('Processing {0}'.format(file))
                 with open(os.path.join(root, file)) as f:
-                    line = f.readline()
+                    csv_reader = csv.reader((line.replace('\0', '') for line in f))
                     if header is None:
-                        header = line
-                    for line in f.readlines():
-                        line = line.strip()
-
-                        if len(line) > 0:
-                            lines.append(line)
-
+                        header = next(csv_reader)
+                    else:
+                        next(csv_reader)
+                    for row in csv_reader:
+                        repo = row[0]
+                        issue_link = row[1]
+                        issue_id = row[2]
+                        post = row[3]
+                        question = row[4]
+                        answer = row[5]
+                        if should_question_be_filtered(question) is True:
+                            filtered_br = filtered_br + 1
+                            continue
+                        post = filter_nontext(post)
+                        question = filter_nontext(question)
+                        answer = filter_nontext(answer)
+                        br_reports.append([repo, issue_link, issue_id, post, question, answer])
+                        br_count = br_count + 1
+    print("total_bug_reports:", br_count)
+    print("filtered_bug_reports:", filtered_br)
     print('Done')
     print('Save joined dataset to {0}'.format(out_fpath))
     out_dir = '/'.join(out_fpath.split('/')[:-1])
     if not os.path.exists(out_dir):
         os.makedirs(out_dir)
 
-    with open(out_fpath, 'w') as f:
-        f.write(header)
-        for line in lines:
-            f.write(line + '\n')
+    csv_file = open(out_fpath, 'w')
+    csv_writer = csv.writer(csv_file)
+    csv_writer.writerow(header)
+    for br in br_reports:
+        csv_writer.writerow(br)
+    csv_file.close()
 
     clear_data(out_fpath, w2v_model)
 
@@ -104,4 +124,5 @@ def encode(text, w2v_model):
 
 
 if __name__ == '__main__':
+    csv.field_size_limit(sys.maxsize)
     join_files(sys.argv[1:])
