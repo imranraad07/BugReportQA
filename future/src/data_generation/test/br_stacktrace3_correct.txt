@@ -1,0 +1,12 @@
+On RipMe, this is what comes up:
+
+2015-01-10 18:52:02,719 147259580 [Thread-5234] DEBUG utils.RipUtils - Checking http://gfycat.com/NeglectedMellowKoi
+2015-01-10 18:52:02,719 147259580 [Thread-5234] INFO ripper.AbstractRipper - Retrieving http://gfycat.com/NeglectedMellowKoi
+2015-01-10 18:52:02,845 147259706 [Thread-5234] WARN ripper.AbstractRipper - Error while loading http://gfycat.com/NeglectedMellowKoi
+org.jsoup.HttpStatusException: HTTP error fetching URL. Status=403, URL=http://gfycat.com/NeglectedMellowKoi
+
+Sometimes, I get the gfy, most of the time not. I generally get the 403 error. I've tried switching to a different network via VPN, and even switching computers. I still get 403 errors.
+
+I searched around, and it seems like it's a common issue (?), but I'm not savvy enough to know if it's on my end or not.
+
+Thanks!
