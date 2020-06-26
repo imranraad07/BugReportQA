@@ -1,5 +1,5 @@
-import sys
 import os
+import sys
 
 sys.path.append(os.path.abspath('./src'))
 sys.path.append(os.path.abspath('../pattern_classification'))
@@ -9,6 +9,7 @@ import evpi
 import evpi_batch
 from gensim.scripts.glove2word2vec import glove2word2vec
 import gensim
+import csv
 import logging
 
 logging.basicConfig(format='%(asctime)s %(levelname)-8s %(message)s', level=logging.INFO, datefmt='%Y-%m-%d %H:%M:%S')
@@ -60,17 +61,25 @@ def read_w2v_model(path_in):
 
 
 def save_ranking(output_file, results):
-    with open(output_file, 'w') as f:
-        f.write('issueid,post,correct_question,correct_a,' + ','.join(['q{0},a{0}'.format(i) for i in range(1, 11)]) + '\n')
+    with open(output_file, 'w', newline='') as f:
+        writer = csv.writer(f)
+        header = ['issueid', 'post', 'correct_question', 'correct_a']
+        for i in range(1, 11):
+            header.append('q' + str(i))
+            header.append('a' + str(i))
+        writer.writerow(header)
+
         for postid in results:
             post, values, correct = results[postid]
-            f.write('{0},{1},{2},{3},'.format(postid, post.replace(',', ' '), correct[0].replace(',', ' '),
-                                              correct[1].replace(',', ' ')))
+
+            record = [postid, post, correct[0], correct[1]]
 
             values = sorted(values, key=lambda x: x[0], reverse=True)
             for score, question, answer in values:
-                f.write('{0},{1},'.format(question.replace(',', ' '), answer.replace(',', ' ')))
-            f.write('\n')
+                record.append(question)
+                record.append(answer)
+
+            writer.writerow(record)
 
 
 if __name__ == '__main__':

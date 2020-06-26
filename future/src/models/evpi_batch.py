@@ -1,16 +1,14 @@
-import numpy as np
+import logging
 
-import torch.nn as nn
+import numpy as np
 import torch
-import torch.optim as optim
+import torch.nn as nn
 import torch.nn.functional as F
+import torch.optim as optim
+from scipy import spatial
 from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
 
-from scipy import spatial
-
 import dataset_batch as dataset
-
-import logging
 
 
 class EvpiModel(nn.Module):
@@ -30,8 +28,10 @@ class EvpiModel(nn.Module):
         # layer 3 - dense layer
         self.layer1 = nn.Linear(2 * hidden_dim, 2 * hidden_dim)
         self.layer2 = nn.Linear(2 * hidden_dim, 2 * hidden_dim)
-        self.layer3 = nn.Linear(2 * hidden_dim, self.emb_layer.embedding_dim)
-        self.layer4 = nn.Linear(self.emb_layer.embedding_dim, self.emb_layer.embedding_dim)
+        # self.layer3 = nn.Linear(2 * hidden_dim, self.emb_layer.embedding_dim)
+        # self.layer4 = nn.Linear(self.emb_layer.embedding_dim, self.emb_layer.embedding_dim)
+        self.layer3 = nn.Linear(2 * hidden_dim, hidden_dim)
+        self.layer4 = nn.Linear(hidden_dim, 1)
 
     def forward(self, post, post_lengths, question, question_lengths):
         # sort data
@@ -61,7 +61,7 @@ class EvpiModel(nn.Module):
         x = F.relu(self.layer1(lstm_avg))
         x = F.relu(self.layer2(x))
         x = F.relu(self.layer3(x))
-        answer_representation = self.layer4(x)
+        answer_representation = torch.sigmoid(self.layer4(x))
         return answer_representation
 
     def sort_batch(self, data, seq_len):
@@ -134,7 +134,8 @@ def run_evaluation(net, device, w2v_model, test_loader):
 
             for idx in range(0, len(postids)):
                 postid = postids[idx]
-                sim = cosine_similarity(a_cap[idx], outputs[idx])
+                sim = outputs[idx]
+                # sim = cosine_similarity(a_cap[idx], outputs[idx])
 
                 score = sim * utility[idx]
                 if postid not in results:
@@ -155,7 +156,8 @@ def evpi(cuda, w2v_model, args):
 
     train_loader, test_loader = dataset.get_datasets(w2v_model.vocab, args)
 
-    loss_function = nn.SmoothL1Loss()
+    # loss_function = nn.SmoothL1Loss()
+    loss_function = nn.BCELoss()
     optimizer = optim.SGD(net.parameters(), lr=0.001)
 
     for epoch in range(args.n_epochs):
@@ -165,11 +167,13 @@ def evpi(cuda, w2v_model, args):
             # compute a_cap and send it to device so it can be used for back propagation
             answers = data['answer']
             a_cap = compute_a_cap(answers, w2v_model)
+            labels = data['label'].reshape((data['label'].shape[0], 1)).float()
 
             if device.type != 'cpu':
-                posts, post_len, questions, q_len, a_cap = data['post'].to(device), data['post_len'].to(device), \
-                                                           data['question'].to(device), data['q_len'].to(device), \
-                                                           a_cap.to(device)
+                posts, post_len, questions, q_len, a_cap, labels = data['post'].to(device), data['post_len'].to(device), \
+                                                                   data['question'].to(device), data['q_len'].to(
+                    device), \
+                                                                   a_cap.to(device), labels.to(device)
             else:
                 posts = data['post']
                 questions = data['question']
@@ -181,7 +185,8 @@ def evpi(cuda, w2v_model, args):
             # forward + backward + optimize
             outputs = net(posts, post_len, questions, q_len)
 
-            loss = loss_function(outputs, a_cap)
+            # loss = loss_function(outputs, a_cap)
+            loss = loss_function(outputs, labels)
             loss.backward()
             optimizer.step()
             loss_sum += loss.item()

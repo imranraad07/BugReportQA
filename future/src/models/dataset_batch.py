@@ -106,9 +106,9 @@ class GithubDataset(Dataset):
         data['question_origin'].append(question)
         data['utility'].append(utility)
         if index == 1:
-            data['label'].append(1)
+            data['label'].append(1.0)
         else:
-            data['label'].append(0)
+            data['label'].append(0.0)
         return data
 
     def _preprocess(self, dataset):
