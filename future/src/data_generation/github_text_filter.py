@@ -91,10 +91,26 @@ def is_length_short(text):
 
 def has_keyword_in_text(text):
     text = text.lower()
-    keywords = ["head", "pull request", "master"]
+    keywords = ["head", "pull request", "master", "latest git", "pull req", "merged", " pr ", "latest",
+                "commit", "fix"]
     for keyword in keywords:
         if keyword in text:
             return True
+    return False
+
+
+# "what do you think*", "can you verify*", "do/does * answer your question*
+def filer_q_pattern(text):
+    text = text.lower()
+    match = re.search('what do you think*', text)
+    if match is not None:
+        return True
+    match = re.search('can you verify*', text)
+    if match is not None:
+        return True
+    match = re.search('(do/does) * answer your question*', text)
+    if match is not None:
+        return True
     return False
 
 
@@ -105,4 +121,5 @@ def should_question_be_filtered(text):
     flag = flag | has_single_quote(text)
     flag = flag | is_length_short(text)
     flag = flag | has_keyword_in_text(text)
+    flag = flag | filer_q_pattern(text)
     return flag
