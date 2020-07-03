@@ -30,9 +30,9 @@ def main(args):
         csv_reader = csv.reader((line.replace('\0', '') for line in csvDataFile))
         print(next(csv_reader))
         for row in csv_reader:
-            repo_labels = read_github_issue_label(row[1][19:])
-            print(repo_labels)
-            csv_writer.writerow([row[2], repo_labels])
+            issue_labels = read_github_issue_label(row[1][19:])
+            print(issue_labels)
+            csv_writer.writerow([row[2], issue_labels])
     csv_file.close()
 
 

@@ -91,6 +91,13 @@ def main(args):
         for row in csv_reader:
             issue_labels[row[0]] = row[1]
 
+    issue_titles = {}
+    with open(args.issue_title_csv) as csv_data_file:
+        csv_reader = csv.reader((line.replace('\0', '') for line in csv_data_file))
+        next(csv_reader)
+        for row in csv_reader:
+            issue_titles[row[0]] = row[1]
+
     post_ids = []
     post_titles = {}
     post_texts = {}
@@ -102,10 +109,11 @@ def main(args):
         next(csvReader)
         for row in csvReader:
             post_ids.append(row[2])
-            post_titles[row[2]] = (row[3].partition('\n')[0])
+            it = '' if row[0] not in issue_titles else issue_titles[row[0]]
+            post_titles[row[2]] = it
             rl = '' if row[0] not in repo_labels else repo_labels[row[0]]
             il = '' if row[0] not in issue_labels else issue_labels[row[0]]
-            post_texts[row[2]] = (row[3].partition('\n')[-1]) + ' ' + rl + ' ' + il
+            post_texts[row[2]] = row[3] + ' ' + rl + ' ' + il
             post_questions[row[2]] = (row[4])
             post_answers[row[2]] = (row[5])
             idx = idx + 1
@@ -129,8 +137,9 @@ if __name__ == "__main__":
     argparser.add_argument("--qa_data_tsv", type=str)
     argparser.add_argument("--utility_data_tsv", type=str)
     argparser.add_argument("--github_csv", type=str)
+    argparser.add_argument("--issue_title_csv", type=str)
     argparser.add_argument("--repo_label_csv", type=str)
-    argparser.add_argument("--repo_lissue_label_csvabel_csv", type=str)
+    argparser.add_argument("--issue_label_csv", type=str)
     args = argparser.parse_args()
     print(args)
     main(args)

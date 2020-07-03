@@ -23,5 +23,6 @@ python $SCRIPTS_DIR/data_generator.py   --lucene_dir $LUCENE_DIR \
                                         --qa_data_tsv $DATA_DIR/$SITE_NAME/qa_data.tsv \
                                         --utility_data_tsv $DATA_DIR/$SITE_NAME/utility_data.tsv \
                                         --github_csv $DATA_DIR/$SITE_NAME/dataset.csv \
+                                        --issue_title_csv $DATA_DIR/$SITE_NAME/github_issue_titles.csv \
                                         --repo_label_csv $DATA_DIR/$SITE_NAME/github_repo_labels.csv \
                                         --issue_label_csv $DATA_DIR/$SITE_NAME/github_issue_labels.csv
