@@ -3,21 +3,23 @@ import csv
 import sys
 import pattern_classification.observed_behavior_rule as ob_rule
 import pattern_classification.steps_to_reproduce_rule as s2r_rule
+import pattern_classification.expected_behavior_rule as eb_rule
 import spacy
 from spacy.matcher import Matcher
 
 
-class FindOB_S2R(object):
+class FindOB_S2R_EB(object):
 
     def __init__(self, threshold=0.0001):
         self.nlp = spacy.load('en_core_web_sm')
         self.threshold = threshold
         self.ob = FindOB(self.nlp, threshold)
         self.s2r = FindS2R(self.nlp)
+        self.eb = FindEB(self.nlp)
 
     def is_eligible(self, post):
         post = post.strip()
-        if self.ob.is_ob(post) is True or self.s2r.is_s2r(post) is True:
+        if self.ob.is_ob(post) is True or self.s2r.is_s2r(post) is True or self.eb.is_eb(post) is True:
             return False
         return True
 
@@ -52,6 +54,36 @@ class FindOB(object):
         return flag
 
 
+class FindEB(object):
+
+    def __init__(self, nlp, threshold=0.0001):
+        self.nlp = nlp
+        self.matcher = Matcher(self.nlp.vocab, validate=True)
+        self.threshold = threshold
+        eb_rule.setup_s_eb_exp_behavior(self.matcher)
+        eb_rule.setup_s_eb_expected(self.matcher)
+        eb_rule.setup_s_eb_instead_of_expected_behavior(self.matcher)
+        eb_rule.setup_s_eb_should(self.matcher)
+        eb_rule.setup_s_eb_would_be(self.matcher)
+
+    # return true if match
+    def is_eb(self, text):
+        flag = False
+        eb_str = ''
+        for sentence in self.nlp(text).sents:
+            sent = sentence.text.strip()
+            if sent.startswith('>') or sent.endswith('?'):
+                continue
+            else:
+                sent_nlp = self.nlp(sent)
+                matches = self.matcher(sent_nlp)
+                if len(matches) >= 1:
+                    eb_str += sent + '\n'
+                    flag = True
+        # print(flag, eb_str)
+        return flag
+
+
 class FindS2R(object):
 
     def __init__(self, nlp):
@@ -69,7 +101,7 @@ class FindS2R(object):
 
 
 def main(args):
-    findOB_S2R = FindOB_S2R()
+    findOB_S2R_EB = FindOB_S2R_EB()
     count = 0
     filtered = 0
 
@@ -83,7 +115,7 @@ def main(args):
         csv_writer.writerow(header)
         for row in csv_reader:
             count = count + 1
-            if findOB_S2R.is_eligible(row[3]):
+            if findOB_S2R_EB.is_eligible(row[3]):
                 csv_writer.writerow(row)
             else:
                 filtered = filtered + 1
@@ -97,9 +129,9 @@ def main(args):
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser(sys.argv[0])
     argparser.add_argument("--input_file", type=str,
-                           default='data/datasets/github/dataset_filtered.csv')
+                           default='../../../data/datasets/github/dataset_filtered.csv')
     argparser.add_argument("--output_file", type=str,
-                           default='data/datasets/github/dataset.csv')
+                           default='../../../data/datasets/github/dataset.csv')
 
     csv.field_size_limit(sys.maxsize)
     args = argparser.parse_args()
