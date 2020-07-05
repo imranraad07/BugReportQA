@@ -123,3 +123,14 @@ def should_question_be_filtered(text):
     flag = flag | has_keyword_in_text(text)
     flag = flag | filer_q_pattern(text)
     return flag
+
+
+# if it returns true, filter the BR
+def should_title_be_filtered(text):
+    flag = has_non_english_characters(text)
+    return flag
+
+# if it returns true, filter the BR
+def should_post_be_filtered(text):
+    flag = has_non_english_characters(text)
+    return flag

@@ -9,12 +9,13 @@ import pandas as pd
 import preprocessing as pp
 from gensim.scripts.glove2word2vec import glove2word2vec
 
-from future.src.data_generation.github_text_filter import should_question_be_filtered, filter_nontext
+from future.src.data_generation.github_text_filter import *
 
 np.random.seed(1234)
 
 
 @click.command()
+@click.option('--input-issue-titles-dir', required=True, default='../../../data/bug_reports/github_issue_titles.csv')
 @click.option('--input-dir', required=True, default='../../../data/bug_reports')
 @click.option('--file-prefix', required=True, default='github_data_20')
 @click.option('--embeddings', required=True,
@@ -29,12 +30,23 @@ def join_files(**kwargs):
     out_fpath = kwargs['output_file']
     w2v_model = read_w2v_model(kwargs['embeddings'])
 
+    issue_title_path = kwargs['input_issue_titles_dir']
+    print(issue_title_path)
+    issue_titles = {}
+    with open(issue_title_path) as csv_data_file:
+        csv_reader = csv.reader((line.replace('\0', '') for line in csv_data_file))
+        next(csv_reader)
+        for row in csv_reader:
+            issue_titles[row[0]] = row[1]
+
     header = None
     br_count = 0
     filtered_br = 0
     br_reports = []
     for root, dirs, files in os.walk(dpath):
         for file in files:
+            if '_edit.csv' in file:
+                continue
             if prefix in file and '.csv' in file:
                 print('Processing {0}'.format(file))
                 with open(os.path.join(root, file)) as f:
@@ -50,6 +62,12 @@ def join_files(**kwargs):
                         post = row[3]
                         question = row[4]
                         answer = row[5]
+                        if issue_id not in issue_titles or should_title_be_filtered(issue_titles[issue_id]) is True:
+                            filtered_br = filtered_br + 1
+                            continue
+                        if should_post_be_filtered(post) is True:
+                            filtered_br = filtered_br + 1
+                            continue
                         if should_question_be_filtered(question) is True:
                             filtered_br = filtered_br + 1
                             continue

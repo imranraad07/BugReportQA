@@ -109,7 +109,7 @@ def main(args):
         next(csvReader)
         for row in csvReader:
             post_ids.append(row[2])
-            it = '' if row[2] not in issue_titles else issue_titles[row[2]]
+            it = issue_titles[row[2]]
             post_titles[row[2]] = it
             rl = '' if row[0] not in repo_labels else repo_labels[row[0]]
             il = '' if row[2] not in issue_labels else issue_labels[row[2]]
