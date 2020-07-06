@@ -43,11 +43,48 @@ def join_files(**kwargs):
     br_count = 0
     filtered_br = 0
     br_reports = []
+    issue_ids = []
     for root, dirs, files in os.walk(dpath):
         for file in files:
-            if '_edit.csv' in file:
-                continue
             if prefix in file and '.csv' in file:
+                if '_edit.csv' in file:
+                    print('Processing {0}'.format(file))
+                    with open(os.path.join(root, file)) as f:
+                        csv_reader = csv.reader((line.replace('\0', '') for line in f))
+                        if header is None:
+                            header = next(csv_reader)
+                        else:
+                            next(csv_reader)
+                        for row in csv_reader:
+                            if row[2] in issue_ids:
+                                continue
+                            repo = row[0]
+                            issue_link = row[1]
+                            issue_id = row[2]
+                            post = row[3]
+                            question = row[4]
+                            answer = row[5]
+                            if issue_id not in issue_titles or should_title_be_filtered(issue_titles[issue_id]) is True:
+                                filtered_br = filtered_br + 1
+                                continue
+                            if should_post_be_filtered(post) is True:
+                                filtered_br = filtered_br + 1
+                                continue
+                            if should_question_be_filtered(question) is True:
+                                filtered_br = filtered_br + 1
+                                continue
+                            post = filter_nontext(post)
+                            question = filter_nontext(question)
+                            answer = filter_nontext(answer)
+                            br_reports.append([repo, issue_link, issue_id, post, question, answer])
+                            br_count = br_count + 1
+                            issue_ids.append(issue_id)
+
+    for root, dirs, files in os.walk(dpath):
+        for file in files:
+            if prefix in file and '.csv' in file:
+                if '_edit.csv' in file:
+                    continue
                 print('Processing {0}'.format(file))
                 with open(os.path.join(root, file)) as f:
                     csv_reader = csv.reader((line.replace('\0', '') for line in f))
@@ -56,6 +93,8 @@ def join_files(**kwargs):
                     else:
                         next(csv_reader)
                     for row in csv_reader:
+                        if row[2] in issue_ids:
+                            continue
                         repo = row[0]
                         issue_link = row[1]
                         issue_id = row[2]
@@ -76,6 +115,8 @@ def join_files(**kwargs):
                         answer = filter_nontext(answer)
                         br_reports.append([repo, issue_link, issue_id, post, question, answer])
                         br_count = br_count + 1
+                        issue_ids.append(issue_id)
+
     print("total_bug_reports:", br_count)
     print("filtered_bug_reports:", filtered_br)
     print('Done')
