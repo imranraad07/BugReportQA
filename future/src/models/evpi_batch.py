@@ -15,7 +15,7 @@ class EvpiModel(nn.Module):
 
     def __init__(self, weights, hidden_dim=256):
         super(EvpiModel, self).__init__()
-
+        self.hidden_dim = hidden_dim
         # layer 1 - embeddings
         weights = torch.FloatTensor(weights)
         self.emb_layer = nn.Embedding.from_pretrained(weights)
@@ -27,16 +27,18 @@ class EvpiModel(nn.Module):
 
         # layer 3 - dense layer
         self.layer1 = nn.Linear(2 * hidden_dim, 2 * hidden_dim)
-        self.layer2 = nn.Linear(2 * hidden_dim, 2 * hidden_dim)
-        # self.layer3 = nn.Linear(2 * hidden_dim, self.emb_layer.embedding_dim)
-        # self.layer4 = nn.Linear(self.emb_layer.embedding_dim, self.emb_layer.embedding_dim)
-        self.layer3 = nn.Linear(2 * hidden_dim, hidden_dim)
-        self.layer4 = nn.Linear(hidden_dim, 1)
+        self.layer2 = nn.Linear(2 * hidden_dim, hidden_dim)
+        self.layer3 = nn.Linear(hidden_dim, self.emb_layer.embedding_dim)
+        self.layer4 = nn.Linear(self.emb_layer.embedding_dim, self.emb_layer.embedding_dim)
 
-    def forward(self, post, post_lengths, question, question_lengths):
+    def forward(self, post, post_lengths, question, question_lengths, answer):
         # sort data
         post, post_lengths, post_sorted_id = self.sort_batch(post, post_lengths)
         question, question_lengths, question_sorted_id = self.sort_batch(question, question_lengths)
+
+        # process_answers
+        a_emb_out = self.emb_layer(answer)
+        a_mean = a_emb_out.mean(dim=1)
 
         # process posts
         p_emb_out = self.emb_layer(post)
@@ -61,7 +63,7 @@ class EvpiModel(nn.Module):
         x = F.relu(self.layer1(lstm_avg))
         x = F.relu(self.layer2(x))
         x = F.relu(self.layer3(x))
-        answer_representation = torch.sigmoid(self.layer4(x))
+        answer_representation = self.layer4(x)
         return answer_representation
 
     def sort_batch(self, data, seq_len):
@@ -108,9 +110,11 @@ def run_evaluation(net, device, w2v_model, test_loader):
             a_cap = compute_a_cap(answers, w2v_model)
 
             if device.type != 'cpu':
-                posts, post_len, questions, q_len, a_cap = data['post'].to(device), data['post_len'].to(device), \
-                                                           data['question'].to(device), data['q_len'].to(device), \
-                                                           a_cap.to(device)
+                posts, post_len, questions, q_len, a_cap, answers = data['post'].to(device), data['post_len'].to(
+                    device), \
+                                                                    data['question'].to(device), data['q_len'].to(
+                    device), \
+                                                                    a_cap.to(device), data['answer'].to(device)
             else:
                 posts = data['post']
                 questions = data['question']
@@ -124,20 +128,20 @@ def run_evaluation(net, device, w2v_model, test_loader):
             questions_origin = data['question_origin']
             labels = data['label']
 
-            outputs = net(posts, post_len, questions, q_len)
+            outputs = net(posts, post_len, questions, q_len, answers)
+
             if device.type != 'cpu':
                 outputs = outputs.cpu()
-                a_cap = a_cap.cpu()
 
             outputs = outputs.numpy()
-            a_cap = a_cap.numpy()
 
             for idx in range(0, len(postids)):
                 postid = postids[idx]
-                sim = outputs[idx]
-                # sim = cosine_similarity(a_cap[idx], outputs[idx])
+                cos_sim = cosine_similarity(a_cap[idx], outputs[idx])
+                score = cos_sim * utility[idx]
+                print('cosine sim={0}\tutility={1}\tscore={2}\tlabel={3}'.format(cos_sim, utility[idx], score,
+                                                                                 labels[idx]))
 
-                score = sim * utility[idx]
                 if postid not in results:
                     results[postid] = (posts_origin[idx], list(), list())
                 results[postid][1].append((score, questions_origin[idx], answers_origin[idx]))
@@ -156,9 +160,9 @@ def evpi(cuda, w2v_model, args):
 
     train_loader, test_loader = dataset.get_datasets(w2v_model.vocab, args)
 
-    # loss_function = nn.SmoothL1Loss()
-    loss_function = nn.BCELoss()
+    loss_function = torch.nn.CosineEmbeddingLoss()
     optimizer = optim.SGD(net.parameters(), lr=0.001)
+    print(net)
 
     for epoch in range(args.n_epochs):
         logging.info('Epoch {0}/{1}'.format((epoch + 1), args.n_epochs))
@@ -167,7 +171,7 @@ def evpi(cuda, w2v_model, args):
             # compute a_cap and send it to device so it can be used for back propagation
             answers = data['answer']
             a_cap = compute_a_cap(answers, w2v_model)
-            labels = data['label'].reshape((data['label'].shape[0], 1)).float()
+            labels = data['label']
 
             if device.type != 'cpu':
                 posts, post_len, questions, q_len, a_cap, labels = data['post'].to(device), data['post_len'].to(device), \
@@ -183,11 +187,11 @@ def evpi(cuda, w2v_model, args):
             # zero the parameter gradients
             optimizer.zero_grad()
             # forward + backward + optimize
-            outputs = net(posts, post_len, questions, q_len)
+            outputs = net(posts, post_len, questions, q_len, answers)
 
-            # loss = loss_function(outputs, a_cap)
-            loss = loss_function(outputs, labels)
+            loss = loss_function(outputs, a_cap, labels)
             loss.backward()
+
             optimizer.step()
             loss_sum += loss.item()
 
