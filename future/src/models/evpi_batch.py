@@ -22,8 +22,10 @@ class EvpiModel(nn.Module):
         self.emb_layer.requires_grad = False
 
         # layer 2 - LSTMs
-        self.p_lstm = nn.LSTM(input_size=self.emb_layer.embedding_dim, hidden_size=hidden_dim, batch_first=True)
-        self.q_lstm = nn.LSTM(input_size=self.emb_layer.embedding_dim, hidden_size=hidden_dim, batch_first=True)
+        self.p_lstm = nn.LSTM(input_size=self.emb_layer.embedding_dim, hidden_size=hidden_dim, num_layers=5,
+                              batch_first=True)
+        self.q_lstm = nn.LSTM(input_size=self.emb_layer.embedding_dim, hidden_size=hidden_dim, num_layers=5,
+                              batch_first=True)
 
         # layer 3 - dense layer
         self.layer1 = nn.Linear(2 * hidden_dim, 2 * hidden_dim)
@@ -31,14 +33,10 @@ class EvpiModel(nn.Module):
         self.layer3 = nn.Linear(hidden_dim, self.emb_layer.embedding_dim)
         self.layer4 = nn.Linear(self.emb_layer.embedding_dim, self.emb_layer.embedding_dim)
 
-    def forward(self, post, post_lengths, question, question_lengths, answer):
+    def forward(self, post, post_lengths, question, question_lengths):
         # sort data
         post, post_lengths, post_sorted_id = self.sort_batch(post, post_lengths)
         question, question_lengths, question_sorted_id = self.sort_batch(question, question_lengths)
-
-        # process_answers
-        a_emb_out = self.emb_layer(answer)
-        a_mean = a_emb_out.mean(dim=1)
 
         # process posts
         p_emb_out = self.emb_layer(post)
@@ -107,14 +105,12 @@ def run_evaluation(net, device, w2v_model, test_loader):
     with torch.no_grad():
         for data in test_loader:
             answers = data['answer']
-            a_cap = compute_a_cap(answers, w2v_model)
+            a_cap = compute_a_cap(answers, w2v_model).numpy()
 
             if device.type != 'cpu':
-                posts, post_len, questions, q_len, a_cap, answers = data['post'].to(device), data['post_len'].to(
-                    device), \
-                                                                    data['question'].to(device), data['q_len'].to(
-                    device), \
-                                                                    a_cap.to(device), data['answer'].to(device)
+                posts, post_len, questions, q_len, answers = data['post'].to(device), data['post_len'].to(device), \
+                                                             data['question'].to(device), data['q_len'].to(device), \
+                                                             data['answer'].to(device)
             else:
                 posts = data['post']
                 questions = data['question']
@@ -128,7 +124,7 @@ def run_evaluation(net, device, w2v_model, test_loader):
             questions_origin = data['question_origin']
             labels = data['label']
 
-            outputs = net(posts, post_len, questions, q_len, answers)
+            outputs = net(posts, post_len, questions, q_len)
 
             if device.type != 'cpu':
                 outputs = outputs.cpu()
@@ -187,7 +183,7 @@ def evpi(cuda, w2v_model, args):
             # zero the parameter gradients
             optimizer.zero_grad()
             # forward + backward + optimize
-            outputs = net(posts, post_len, questions, q_len, answers)
+            outputs = net(posts, post_len, questions, q_len)
 
             loss = loss_function(outputs, a_cap, labels)
             loss.backward()
