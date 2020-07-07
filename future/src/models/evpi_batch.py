@@ -22,8 +22,8 @@ class EvpiModel(nn.Module):
         self.emb_layer.requires_grad = False
 
         # layer 2 - LSTMs
-        self.p_lstm = nn.LSTM(input_size=self.emb_layer.embedding_dim, hidden_size=hidden_dim, batch_first=True)
-        self.q_lstm = nn.LSTM(input_size=self.emb_layer.embedding_dim, hidden_size=hidden_dim, batch_first=True)
+        self.p_lstm = nn.LSTM(input_size=self.emb_layer.embedding_dim, hidden_size=hidden_dim, num_layers=5, batch_first=True)
+        self.q_lstm = nn.LSTM(input_size=self.emb_layer.embedding_dim, hidden_size=hidden_dim, num_layers=5, batch_first=True)
 
         # layer 3 - dense layer
         self.layer1 = nn.Linear(2 * hidden_dim, 2 * hidden_dim)
