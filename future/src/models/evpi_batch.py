@@ -22,8 +22,10 @@ class EvpiModel(nn.Module):
         self.emb_layer.requires_grad = False
 
         # layer 2 - LSTMs
-        self.p_lstm = nn.LSTM(input_size=self.emb_layer.embedding_dim, hidden_size=hidden_dim, num_layers=5, batch_first=True)
-        self.q_lstm = nn.LSTM(input_size=self.emb_layer.embedding_dim, hidden_size=hidden_dim, num_layers=5, batch_first=True)
+        self.p_lstm = nn.LSTM(input_size=self.emb_layer.embedding_dim, hidden_size=hidden_dim, num_layers=5,
+                              batch_first=True)
+        self.q_lstm = nn.LSTM(input_size=self.emb_layer.embedding_dim, hidden_size=hidden_dim, num_layers=5,
+                              batch_first=True)
 
         # layer 3 - dense layer
         self.layer1 = nn.Linear(2 * hidden_dim, 2 * hidden_dim)
@@ -103,12 +105,12 @@ def run_evaluation(net, device, w2v_model, test_loader):
     with torch.no_grad():
         for data in test_loader:
             answers = data['answer']
-            a_cap = compute_a_cap(answers, w2v_model)
+            a_cap = compute_a_cap(answers, w2v_model).numpy()
 
             if device.type != 'cpu':
-                posts, post_len, questions, q_len, a_cap, answers = data['post'].to(device), data['post_len'].to(device), \
-                                                                    data['question'].to(device), data['q_len'].to(device), \
-                                                                    a_cap.to(device), data['answer'].to(device)
+                posts, post_len, questions, q_len, answers = data['post'].to(device), data['post_len'].to(device), \
+                                                             data['question'].to(device), data['q_len'].to(device), \
+                                                             data['answer'].to(device)
             else:
                 posts = data['post']
                 questions = data['question']
