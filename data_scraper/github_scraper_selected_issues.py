@@ -93,12 +93,11 @@ def read_github_issues(issue_id):
             # filter by word count and #characters
             comment_array = follow_up_question.split()
             if len(comment_array) > 30 or len(follow_up_question) > 300:
-                return
+                return None
 
-            original_post = issue_data['title']
-            if issue_data['body'] is not None:
-                original_post = original_post + "\n\n" + issue_data['body']
-            print(issue_data['labels'])
+            if issue_data['body'] is None:
+                return None
+            original_post = issue_data['body']
             return original_post, follow_up_question, follow_up_question_reply
     except Exception as ex:
         print("exception on issue, ", issue_id, str(ex))

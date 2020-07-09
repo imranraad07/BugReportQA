@@ -29,6 +29,9 @@ def read_github_issues(github_repo, bug_ids, csv_writer):
             if issue_data is None:
                 continue
 
+            if issue_data['body'] is None:
+                continue
+
             # github v3 api considers pull requests as issues. so filter them
             if 'pull_request' in issue_data:
                 continue
@@ -104,12 +107,7 @@ def read_github_issues(github_repo, bug_ids, csv_writer):
                     continue
 
                 # do not filter them when parsing
-                original_post = issue_data['title']
-                if issue_data['body'] is not None:
-                    original_post = original_post + "\n\n" + issue_data['body']
-                    # original_post = original_post + "\n\n" + filter_nontext(issue_data['body'])
-                # follow_up_question = filter_nontext(follow_up_question)
-                # follow_up_question_reply = filter_nontext(follow_up_question_reply)
+                original_post = issue_data['body']
                 postid = issue_data['html_url'][19:]
                 postid = postid.replace("/", "_")
                 write_row = [github_repo, issue_data['html_url'], postid, original_post, follow_up_question,
@@ -291,6 +289,9 @@ def get_edit_by_issue(repo_url, issue_id, csv_writer):
             if issue is None:
                 return
 
+            if issue['body'] is None:
+                return
+
             follow_up_question = get_follow_up_question(issue)
             if follow_up_question is None:
                 return
@@ -332,10 +333,7 @@ def get_edit_by_issue(repo_url, issue_id, csv_writer):
                     postid = postid.replace("/", "_")
                     # do not filter while parsing
                     # original_post = filter_nontext(issue['title'])
-                    original_post = issue['title']
-                    if issue['body'] is not None:
-                        original_post = original_post + "\n\n" + issue['body']
-                        # original_post = original_post + "\n\n" + filter_nontext(issue['body'])
+                    original_post = issue['body']
                     write_row = [repo_url[19:], issue['html_url'], postid, original_post.strip(),
                                  follow_up_question[0].strip(), diff]
                     csv_writer.writerow(write_row)
