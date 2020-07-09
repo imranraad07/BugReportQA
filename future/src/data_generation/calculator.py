@@ -6,6 +6,10 @@ import pandas as pd
 from spacy.matcher import Matcher
 from difflib import Differ
 
+eb_calculated = {}
+ob_calculated = {}
+s2r_calculated = {}
+
 
 class Calculator(object):
 
@@ -16,18 +20,33 @@ class Calculator(object):
         self.eb = CalculatorEB(self.nlp, threshold)
         self.s2r = CalculatorS2R(self.nlp)
 
-    def utility(self, answer, post):
+    def utility(self, postid, answer, post):
         answer = answer.strip()
         # nlp.sents treats * as sentence separator
         answer = answer.replace('*', ' ').replace('...', '.')
         print('Answer: {0}'.format(answer))
-        ob_text = self.ob.get_ob(answer).strip()
+
+        if postid in ob_calculated:
+            ob_text = ob_calculated[postid]
+        else:
+            ob_text = self.ob.get_ob(answer).strip()
+            ob_calculated[postid] = ob_text
         ob_sents = 0 if len(ob_text) == 0 else len(ob_text.split('\n'))
         print('OB: {0}'.format(ob_text))
-        eb_text = self.eb.get_eb(answer).strip()
+
+        if postid in eb_calculated:
+            eb_text = eb_calculated[postid]
+        else:
+            eb_text = self.eb.get_eb(answer).strip()
+            eb_calculated[postid] = eb_text
         eb_sents = 0 if len(eb_text) == 0 else len(eb_text.split('\n'))
         print('EB: {0}'.format(eb_text))
-        s2r_text = self.s2r.get_s2r(answer).strip()
+
+        if postid in s2r_calculated:
+            s2r_text = s2r_calculated[postid]
+        else:
+            s2r_text = self.s2r.get_s2r(answer).strip()
+            s2r_calculated[postid] = s2r_text
         s2r_sents = 0 if len(s2r_text) == 0 else len(s2r_text.split('\n'))
         print('S2R: {0}'.format(s2r_text))
         answer_sents = len(list(self.nlp(answer).sents))
@@ -124,7 +143,7 @@ def compute_utilities(post_tsv, qa_tsv, utility_tsv):
         utility_data['postids'].append(postid)
         for i in range(1, 11):
             answer = qa.iloc[idx]['a' + str(i)]
-            utility = calculator.utility(answer, post)
+            utility = calculator.utility(postid, answer, post)
 
             utility_data['p_a{0}'.format(i)].append(utility)
 
