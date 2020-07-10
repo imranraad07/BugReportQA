@@ -13,23 +13,31 @@ of their potential utility to the bug report.
 
 % overview of the entire process
 Our goal in curating a corpus of bug report-related follow-up questions and their answers
-is to find a large, representative, high-quality corpus. Manually curated corpora are high quality but they
-are difficult to scale-up and to evolve over time. Automatic curation can be affected by
+is to find a large, representative and high-quality corpus. Manually curated corpora are
+high quality but they are difficult to scale-up. Automatic curation can be affected by
 significant noise (e.g., overly specific or non-follow-up questions) unless care is taken
-to filter and sample in a way that such noise is mitigated.
+to filter and sample follow-up questions in a way that such noise is mitigated.
 
-To ensure  GitHub repositories that have high bug reporting activity, as measured by the number of
-issues created in the tracker over some fixed period of time by
+To this end, we start by selecting GitHub repositories that have high bug reporting activity,
+as measured by the number of issues created by non-contributors over some fixed period of time.
+We select issues in those bug repositories that contain rapidly asked and succinct follow-up
+questions, looking in the GitHub issue comments for these responses. Finally, we look for
+a subsequent rapid answer to the follow-up question, encoded as either another comment or as an edit to the
+original issue.
 
 % list of more detailed steps to implement the plan
+In more detail, we use the following heuristics to curate the corpus:
+\begin{enumerate}
+\item We select a set of public non-archived GitHub repositories
 
+\end{enumerate}
 
 
 \subsection{Selecting Candidate Follow-Up Questions}
 
 % <Lucene>
 
-\subsection{Ranking Candidate Follow-Up Questions}
+\subsection{Ranking Follow-Up Questions}
 
 % EVPI(q_i|p) = p(a_i|q_i,p_i) * U(p+a)
 %
