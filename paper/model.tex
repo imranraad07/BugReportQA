@@ -1,0 +1,48 @@
+\section{System Description}
+
+% describe overall system
+As input, our system for retrieving follow-up questions requires: 1) an (incomplete) bug
+report of interest; 2) a corpus of already posed follow-up questions extracted
+from GitHub issues; 3) answers to the each of the follow-up questions posed in (2). As output, our system
+produces a ranked list of follow-up questions appropriate to the particular bug report.
+In the remainder of this section, we describe how we create a large corpus of follow-up questions
+to recommend, how we select questions from this corpus and how we rank these questions in order
+of their potential utility to the bug report.
+
+\subsection{Selecting a Corpus of Bug Reports}
+
+% overview of the entire process
+Our goal in curating a corpus of bug report-related follow-up questions and their answers
+is to find a large, representative and high-quality corpus. Manually curated corpora are
+high quality but they are difficult to scale-up. Automatic curation can be affected by
+significant noise (e.g., overly specific or non-follow-up questions) unless care is taken
+to filter and sample follow-up questions in a way that such noise is mitigated.
+
+To this end, we start by selecting GitHub repositories that have high bug reporting activity,
+as measured by the number of issues created by non-contributors over some fixed period of time.
+We select issues in those bug repositories that contain rapidly asked and succinct follow-up
+questions, looking in the GitHub issue comments for these responses. Finally, we look for
+a subsequent rapid answer to the follow-up question, encoded as either another comment or as an edit to the
+original issue.
+
+% list of more detailed steps to implement the plan
+In more detail, we use the following heuristics to curate the corpus:
+\begin{enumerate}
+\item We select a set of public non-archived GitHub repositories
+
+\end{enumerate}
+
+
+\subsection{Selecting Candidate Follow-Up Questions}
+
+% <Lucene>
+
+\subsection{Ranking Follow-Up Questions}
+
+% EVPI(q_i|p) = p(a_i|q_i,p_i) * U(p+a)
+%
+% p(a_i|q_i,p_i) is estimated via a 5-layer feed-forward NN.
+%
+% U(p+a) = softmax(d_OB+d_EB+dS2R), where dOB = OBa_i - OBp, and similarly dEB and dS2R
+%
+% OB_x is the number of OB sentences in document x, as defined by Chaparro et al.
