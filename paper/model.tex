@@ -18,7 +18,7 @@ high quality but they are difficult to scale-up. Automatic curation can be affec
 significant noise (e.g., overly specific or non-follow-up questions) unless care is taken
 to filter and sample follow-up questions in a way that such noise is mitigated.
 
-To this end, we start by selecting GitHub repositories that have high bug reporting activity,
+To automatically curate a corpus, we start by selecting GitHub repositories that have high bug reporting activity,
 as measured by the number of issues created by non-contributors over some fixed period of time.
 We select issues in those bug repositories that contain rapidly asked and succinct follow-up
 questions, looking in the GitHub issue comments for these responses. Finally, we look for
@@ -26,16 +26,49 @@ a subsequent rapid answer to the follow-up question, encoded as either another c
 original issue.
 
 % list of more detailed steps to implement the plan
-In more detail, we use the following heuristics to curate the corpus:
+In more detail, we used the following set of steps and heuristics to curate the corpus:
 \begin{enumerate}
-\item We select a set of public non-archived GitHub repositories
-
+\item We scraped a set of public GitHub repositories, sorted by the number of
+non-contributor created issues, where a non-contributor is a GitHub user that has never
+committed any code in the specific repository. In order to somewhat limit the amount of repositories,
+we focused on longer-running projects, specifically, created between 2008-2014, and recently
+active with new issues created in the repository after Jan 1, 2019.
+\item For each repository in their sorted order from the previous step, we selected issues in the GitHub issue tracker
+that contain follow-up questions as on of the issue comments.  Follow-up questions were identified as sentences starting with a question word and ending with a question mark. In order to ensure we selected follow-up questions and not just
+any questions, we filtered based on time. That is, the comment containing the follow-up question must be posted
+within 60 days of the issue creation date and must occur as one of the first 3 comments to the post. Just as an additional safety mechanism,
+we ensured that the comment was authored by a different user from the author of the issue.
+\item The set of issues and candidate follow-up questions from the previous step were further filtered to
+ensure an answer was provided. A key characteristic of the answer that we searched for is that it was authored
+by the original issue creator. We allowed for answers to be posted as comments, as long as they occurred as the next sequential comment
+to the follow-up question. We also allowed for answers to be encoded as edits to the original issue text, which we limited to add at least 4 additional words to avoid minor spelling or grammar modifications.
+\item {\bf TODO: how can we claim these were bugs and not feature requests?}
 \end{enumerate}
 
+Finally, we stopped the collection process when we gathered a dataset of N GitHub issues. These triples of
+issue, follow-up question, and answer formed the primary corpus we used to retrieve a rank follow-up questions
+for a given incomplete bug report.
 
 \subsection{Selecting Candidate Follow-Up Questions}
 
-% <Lucene>
+Given the corpus of follow-up questions and an incomplete bug report, selecting the
+most likely candidate follow-up questions can be formed as an information retrieval
+problem. That is, given the incomplete bug report as a query and an inverted index
+created from the corpus (using Lucene), using tf*idf as the ranking mechanism, we
+retrieve a set of 10 candidate follow-up questions, including also their original issue
+and answer.
+
+More specifically, we create a Lucene index by following the following set of steps
+on the corpus.
+\begin{itemize}
+\item
+\end{itemize}
+
+To create a query out of the incomplete bug report, we do the following:
+\begin{itemize}
+\item
+\end{itemize}
+
 
 \subsection{Ranking Follow-Up Questions}
 
