@@ -6,28 +6,29 @@ At the same time, numerous bug reports lack sufficient actionable information fo
 %
 Practitioners and reseachers have observed this problem of bug report incompleteness, reporting that over 60\% of bug reports lack any steps to reproduce and over 40\% lack any description of the expected behavior~\cite{chaparro17detecting}.
 %
-While some software projects publish bug reporting guidelines (e.g., specific templates bug reports must follow), there are some cases where such guidelines are not followed and many cases where bug reports lack crucial context or detail that would allow bug triagers to fully interpret them.
+While some software projects publish bug reporting guidelines (e.g., specific templates bug reports must follow), there are many cases where such guidelines are not followed and numerous cases where bug reports lack crucial context or detail that would allow bug triagers to fully interpret them.
 %
-Bug triagers posing quick follow up questions in order to elicit additional information from bug reporters is one means to augment the bug reports with necessary information.
+Bug triagers posing quick follow up questions in order to elicit additional information from bug reporters is one method to augment the bug reports with necessary information.
 %
 However follow-up questions are only effective if they are posed quickly, before the bug reporter loses focus on the specific bug.
 %
-In this paper, we examine how the posing such follow-up questions for incomplete bug reports can be performed automatically, reducing bug triage effort and improving overall bug report quality.
+In this paper, we examine how the posing such follow-up questions for incomplete bug reports can be performed automatically, designing and describing a system to reduce bug triage effort and improving overall bug report quality by automatically posing follow-up questions for inadequate bug reports.
 
-In this paper, we design and describe a system to automatically pose follow-up questions for inadequate bug reports.
 %
-We base our automatic follow-up system on the idea that: 1) relevant follow-up question are common and have already been posed in other prior bug reports; 2) similar bug reports necessitate similar follow-up questions; and 3) the utility of the answer provided to a prior follow up question is indicative of its value.
+We base our automatic follow-up question posing system on the idea that: 1) relevant follow-up question are common and have already been posed in other prior bug reports; 2) similar bug reports necessitate similar follow-up questions; and 3) the utility of the answer provided to a prior similar follow up question is indicative of its value to the current bug report.
 %
-Therefore the task our system performs is to retrieve the most relevant and useful follow-up question for a given incomplete bug reports, given a large corpus of previous bug reports, follow-up questions, and their answers.
+Therefore the task our system performs is to retrieve the most relevant and useful follow-up question for a specific incomplete bug report, given a large corpus of previous bug reports, follow-up questions, and their answers.
 %
 For instance, consider the example shown in Figure 1, where the bug report ....
 
-To curate a corpus of prior bug reports, follow-up questions, and answers we leverage GitHub, where we focus on popular repositories that have a high level of activity. We look for follow-up questions in GitHub that have been posed in comments and gather answers that occur as comments or as edits to the original bug report text. To estimate the utility of an answer we use the patterns to identify Observable Behavior (OB), Expected Behavior (EB) and Steps to Reproduce (S2R), published by Chaparro et al. We evaluate our prototype in two ways, based on the ability to predict a held out set of follow-up questions, and based on a developer survey that aims to gage the perceived value of specific follow up questions. The results indicate that the techniques is viable, with X MRR and Y% of respondents indicating that the follow-up question is “bla bla bla”.
+To curate a corpus of prior bug reports, follow-up questions, and answers we leverage GitHub, where we focus on popular repositories that have a high level of activity and therefore a likely to have utilized the follow-up questions mechanism. We look for follow-up questions that have been posed in comments and gather answers that occur as comments or as edits to the original bug report text. To estimate the utility of an answer we use the patterns to identify Observable Behavior (OB), Expected Behavior (EB) and Steps to Reproduce (S2R), published by Chaparro et al. We evaluate our prototype in two ways, based on the ability to predict a held out set of follow-up questions, and based on a developer survey that aims to gage the perceived value of specific follow up questions. The results indicate that the techniques is viable, with X MRR and Y% of respondents indicating that the follow-up question is “bla bla bla”.
 
-Relative to the prior efforts by the software engineering research community towards improving the quality of bug reports, this paper is the first to use follow-up questions and to propose a specific mechanism for this purpose. Automatically posing follow-up has been used in other domains for improving the quality of Web forum posts~\cite{rao-daume-iii-2018-learning}, product reviews in online retail, and improving query quality in Web search. More specifically, the contributions of this paper are:
+Relative to the prior efforts by the software engineering research community towards improving the quality of bug reports, this paper is the first to use follow-up questions and to propose a specific mechanism for this purpose. Automatically posing follow-up has been used in other domains for improving the quality of Web forum posts~\cite{rao-daume-iii-2018-learning}, product reviews in online retail, and improving query quality in Web search.
 
-\begin{itemize}
-\item x
-\item y
-\item z
-\end{itemize}
+% More specifically, the contributions of this paper are:
+%
+% \begin{itemize}
+% \item x
+% \item y
+% \item z
+% \end{itemize}
