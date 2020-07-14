@@ -135,8 +135,8 @@ def run_evaluation(net, device, w2v_model, test_loader):
                 postid = postids[idx]
                 cos_sim = cosine_similarity(a_cap[idx], outputs[idx])
                 score = cos_sim * utility[idx]
-                print('cosine sim={0}\tutility={1}\tscore={2}\tlabel={3}'.format(cos_sim, utility[idx], score,
-                                                                                 labels[idx]))
+                print('postid={4}\tcosine sim={0}\tutility={1}\tscore={2}\tlabel={3}'.format(cos_sim, utility[idx], score,
+                                                                                 labels[idx], postid))
 
                 if postid not in results:
                     results[postid] = (posts_origin[idx], list(), list())
