@@ -4,9 +4,9 @@ In many popular software projects, bug reports arrive with frequency and in burs
 %
 At the same time, numerous bug reports lack sufficient actionable information for bug triagers to reproduce the bug.
 %
-Practitioners and reseachers have observed this problem of bug report inadequacy, reporting that over 60\% of bug reports lack any steps to reproduce and over 40\% lack any description of the expected behavior~\cite{chaparro17detecting}.
+Practitioners and researchers have observed this problem of bug report inadequacy, reporting that over 60\% of bug reports lack any steps to reproduce and over 40\% lack any description of the expected behavior~\cite{chaparro17detecting}.
 %
-While some software projects publish bug reporting guidelines (e.g., specific templates bug reports must follow), there are many cases where such guidelines are not followed and numerous cases where bug reports lack crucial context or detail that would allow bug triagers to fully interpret them.
+While some software projects publish bug reporting guidelines (e.g., specific templates bug reports must follow), there are many cases where such guidelines are not followed and numerous cases where bug reports still lack crucial context or detail that would allow bug triagers to fully interpret them.
 %
 Bug triagers posing quick follow up questions in order to elicit additional information from bug reporters is one method to augment the bug reports with necessary information.
 %
@@ -21,7 +21,7 @@ Therefore the task our system performs is to retrieve the most relevant and usef
 %
 For instance, consider the example shown in Figure 1, where the bug report ....
 
-To curate a corpus of prior bug reports, follow-up questions, and answers we leverage GitHub, where we focus on popular repositories that have a high level of activity and therefore a likely to have utilized the follow-up questions mechanism. We look for follow-up questions that have been posed in comments and gather answers that occur as comments or as edits to the original bug report text. To estimate the utility of an answer we use the patterns to identify Observable Behavior (OB), Expected Behavior (EB) and Steps to Reproduce (S2R), published by Chaparro et al. We evaluate our prototype in two ways, based on the ability to predict a held out set of follow-up questions, and based on a developer survey that aims to gage the perceived value of specific follow up questions. The results indicate that the techniques is viable, with X MRR and Y% of respondents indicating that the follow-up question is “bla bla bla”.
+To curate a corpus of prior bug reports, follow-up questions, and answers we leverage GitHub, where we focus on popular repositories that have a high level of activity and therefore a likely to have utilized the follow-up questions mechanism. We look for follow-up questions that have been posed in comments and gather answers that occur as comments or as edits to the original bug report text. To estimate the utility of an answer we use the patterns to identify Observable Behavior (OB), Expected Behavior (EB) and Steps to Reproduce (S2R), published by Chaparro et al. We evaluate our prototype in two ways, based on the ability to predict a held out set of follow-up questions, and based on a developer survey that aims to gage the perceived value of specific follow up questions. The results indicate that the techniques is viable, with X MRR and Y\% of respondents indicating that the follow-up question is “bla bla bla”.
 
 Relative to the prior efforts by the software engineering research community towards improving the quality of bug reports, this paper is the first to use follow-up questions and to propose a specific mechanism for this purpose. Automatically posing follow-up has been used in other domains for improving the quality of Web forum posts~\cite{rao-daume-iii-2018-learning}, product reviews in online retail, and improving query quality in Web search.
 

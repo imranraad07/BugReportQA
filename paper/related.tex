@@ -1,10 +1,33 @@
 \section{Related Work}
-
-To our knowledge, ours is the first  effort towards leveraging follow-up questions for
-improving bug report quality. The related work can be grouped into two categories, techniques
+To our knowledge, ours is the first effort towards leveraging follow-up questions for
+improving bug report quality. The related research can be grouped into two categories, techniques
 for determining and improving bug report quality, and uses of follow-up questions in other domains,
 external to bug reports and software engineering.
 
-%bug report quality
-Measuring the quality of bug reports can be conceptualized in a few different ways.
-Chaparro does it based on constituent pieces, others do it as valid and invalid...
+%bug report quality (focus first on measuring, then on improving)
+\noindent
+{\em Analyzing the quality of bug reports.} The quality of user written bug reports,
+in the era of open source development, is a topic several researchers have been interested
+in. Bettenburg et al. proposed techniques for automatically identifying stack traces, code
+snippets, and other structures in bug reports~\cite{bettenburg08extracting}. Linstead and Baldi
+applied LDA to a large corpus of bug reports to determine semantic coherence of these
+documents~\cite{linstead09mining}. Davies et al. manually analyzed a corpus of bug reports
+from four popular open source projects observing
+that observable behavior and expected behavior were the most consistently found parts
+of a bug report~\cite{davies14whats}. Using surveys, researchers observed that developers
+consider steps to reproduce, test cases and stack traces most helpful in bug reports, but
+many of those parts were also the hardest for users to supply. Chaparro et al. developed a
+technique to automatically extract observable behavior, expected behavior, and the steps to
+reproduce from a bug report~\cite{chaparro17detecting}
+
+\noindent
+{\em Improving bug report quality.} Researchers have approached improving the quality of
+bug reports along a few different dimensions. One line of work, with numerous techniques,
+is to detect duplicate bug reports~\cite{chaparro19reformulating}. Another research avenue
+is to classify bug reports into valid vs. invalid or easy vs. difficult~\cite{fan20chaff,hooimeijer07modeling}.
+More recently, researchers have attempted to automatically improve parts of bug reports. Moran et al. provided
+auto-completion for the steps to reproduce portion of bug reports by leveraging image processing
+of screenshots taken from the application's UI~\cite{moran15autocompleting}.
+
+\noindent
+{\em Automatically posing follow-up questions.}
