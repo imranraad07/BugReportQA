@@ -8,6 +8,7 @@ DATASET=github_partial_2008-2013_part1_small
 RESULTS=$DATA_DIR/$DATASET/ranking.csv
 
 DEVICE=cuda
+CUDA_NO=0
 
 python $SCRIPTS_DIR/main.py \
         --embeddings $EMB_DIR/vectors_pad.txt \
@@ -18,8 +19,9 @@ python $SCRIPTS_DIR/main.py \
         --utility-tsv $DATA_DIR/$DATASET/utility_data.tsv \
         --output-ranking-file $RESULTS \
         --device $DEVICE \
-        --batch-size 10 \
-        --n-epochs 30 \
+        --cuda-no $CUDA_NO \
+        --batch-size 256 \
+        --n-epochs 10 \
         --max-p-len 300 \
         --max-q-len 100 \
         --max-a-len 100

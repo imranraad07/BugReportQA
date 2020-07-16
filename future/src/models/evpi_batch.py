@@ -78,9 +78,9 @@ class EvpiModel(nn.Module):
         return sorted_data, sorted_len
 
 
-def get_device(cuda):
+def get_device(cuda, cuda_no):
     if cuda is True:
-        device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+        device = torch.device('cuda:'+str(cuda_no) if torch.cuda.is_available() else 'cpu')
     else:
         device = torch.device('cpu')
     return device
@@ -147,8 +147,8 @@ def run_evaluation(net, device, w2v_model, test_loader):
     return results
 
 
-def evpi(cuda, w2v_model, args):
-    device = get_device(cuda)
+def evpi(cuda, cuda_no, w2v_model, args):
+    device = get_device(cuda, cuda_no)
     logging.info('Running on {0}'.format(device))
 
     net = EvpiModel(w2v_model.vectors)
@@ -196,9 +196,3 @@ def evpi(cuda, w2v_model, args):
     results = run_evaluation(net, device, w2v_model, test_loader)
     return results
 
-
-if __name__ == '__main__':
-    evpi('../../embeddings_damevski/vectors_pad.txt',
-         '../../data/github_partial_2008-2013_part1_small/post_data.tsv',
-         '../../data/github_partial_2008-2013_part1_small/qa_data.tsv',
-         1)

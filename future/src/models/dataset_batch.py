@@ -10,11 +10,13 @@ from data_generation import preprocessing as pp
 def get_datasets(word2index, args, shuffle=True):
     train_dataset = GithubDataset(args.post_tsv, args.qa_tsv, args.utility_tsv, word2index, ids=args.train_ids,
                                   max_post_len=args.max_p_len, max_q_len=args.max_q_len, max_a_len=args.max_a_len)
-    train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=shuffle, num_workers=0)
+    weights = torch.tensor(train_dataset.dataset['weight'], dtype=torch.float)
+    sampler = torch.utils.data.sampler.WeightedRandomSampler(weights, len(weights))
+    train_loader = DataLoader(train_dataset, batch_size=args.batch_size, sampler=sampler, num_workers=0)
 
     test_dataset = GithubDataset(args.post_tsv, args.qa_tsv, args.utility_tsv, word2index, ids=args.test_ids,
                                  max_post_len=args.max_p_len, max_q_len=args.max_q_len, max_a_len=args.max_a_len)
-    test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=shuffle, num_workers=0)
+    test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=0)
 
     return train_loader, test_loader
 
@@ -39,6 +41,7 @@ class GithubDataset(Dataset):
                 'question_origin': list(),
                 'answer_origin': list(),
                 'label': list(),
+                'weight': list(),
                 'utility': list()}
 
         for idx, row in posts.iterrows():
@@ -96,7 +99,8 @@ class GithubDataset(Dataset):
                       'question_origin': sample['question_origin'],
                       'answer_origin': sample['answer_origin'],
                       'utility': sample['utility'],
-                      'label': sample['label']}
+                      'label': sample['label'],
+                      'weight': sample['weight']}
         return new_sample
 
     def _add_values(self, data, index, postid, post, question, answer, utility):
@@ -107,8 +111,10 @@ class GithubDataset(Dataset):
         data['utility'].append(utility)
         if index == 1:
             data['label'].append(1)
+            data['weight'].append(1.0)
         else:
             data['label'].append(-1)
+            data['weight'].append(0.1)
         return data
 
     def _preprocess(self, dataset):

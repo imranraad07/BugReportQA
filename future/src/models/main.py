@@ -30,6 +30,7 @@ def parse_args():
     parser.add_argument('--n-epochs', help='Number of epochs', default=10, type=int)
     parser.add_argument('--batch-size', help='Batch size', type=int, default=1)
     parser.add_argument('--device', help='Use \"cuda\" or \"cpu\"', choices=['cuda', 'cpu'])
+    parser.add_argument('--cuda-no', help='Works only when device=cuda', type=int)
     return parser.parse_args()
 
 
@@ -39,14 +40,20 @@ def run():
     logging.info('Running with parameters: {0}'.format(args))
 
     w2v_model = read_w2v_model(args.embeddings)
-    cuda = True if args.device == 'cuda' else False
+
+    if args.device == 'cuda':
+        cuda = True
+        cuda_no = args.cuda_no
+    else:
+        cuda = False
+        cuda_no = None
 
     if args.batch_size == 1:
         logging.info('Run evpi with batch_size=1')
         results = evpi.evpi(cuda, w2v_model, args)
     else:
         logging.info('Run evpi with batch_size>1')
-        results = evpi_batch.evpi(cuda, w2v_model, args)
+        results = evpi_batch.evpi(cuda, cuda_no, w2v_model, args)
 
     save_ranking(args.output_ranking_file, results)
 
