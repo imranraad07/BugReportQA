@@ -31,6 +31,40 @@ def mean_reciprocal_rank(rs):
     """
     rs = (np.asarray(r).nonzero()[0] for r in rs)
     return np.mean([1. / (r[0] + 1) if r.size else 0. for r in rs])
+
+def precision_at_k(r, k):
+    """Score is precision @ k
+
+    Relevance is binary (nonzero is relevant).
+
+    >>> r = [0, 0, 1]
+    >>> precision_at_k(r, 1)
+    0.0
+    >>> precision_at_k(r, 2)
+    0.0
+    >>> precision_at_k(r, 3)
+    0.33333333333333331
+    >>> precision_at_k(r, 4)
+    Traceback (most recent call last):
+        File "<stdin>", line 1, in ?
+    ValueError: Relevance score length < k
+
+
+    Args:
+        r: Relevance scores (list or numpy) in rank order
+            (first element is the first item)
+
+    Returns:
+        Precision @ k
+
+    Raises:
+        ValueError: len(r) must be >= k
+    """
+    assert k >= 1
+    r = np.asarray(r)[:k] != 0
+    if r.size != k:
+        raise ValueError('Relevance score length < k')
+    return np.mean(r)
 #
 #########
 
@@ -48,7 +82,8 @@ def convert_to_valid_indices(human_df):
 def evaluate_model(human_df, model_df):
 	col_to_idx_dict = { 'q1':0, 'q2':1, 'q3':2, 'q4':3, 'q5':4, 'q6':5, 'q7':6, 'q8':7, 'q9':8, 'q10':9 }
 
-	rank_of_ranks = []
+	min_rank_of_ranks = []
+	all_rank_of_ranks = []
 	for curr_issue in human_df.issue_id.unique():
 		ranking = [0] * 10
 
@@ -68,10 +103,23 @@ def evaluate_model(human_df, model_df):
 					model_indices.append(col_to_idx_dict[col])
 
 		ranking[min(model_indices)] = 1
-		rank_of_ranks.append(ranking)
+		min_rank_of_ranks.append(ranking)
 
-	mrr = mean_reciprocal_rank(rank_of_ranks)
-	return mrr
+		n_ranking = np.array(ranking)
+		n_ranking[model_indices] = 1
+		all_rank_of_ranks.append(list(n_ranking))
+
+	mrr = mean_reciprocal_rank(min_rank_of_ranks)
+	p_1, p_3, p_5 = 0.0, 0.0, 0.0
+	for rank in all_rank_of_ranks:
+		p_1 += precision_at_k(rank,1)
+		p_3 += precision_at_k(rank,3)
+		p_5 += precision_at_k(rank,5)
+	p_1 = p_1 / len(all_rank_of_ranks)
+	p_3 = p_3 / len(all_rank_of_ranks)
+	p_5 = p_5 / len(all_rank_of_ranks)
+
+	return mrr,p_1,p_3,p_5
 
 def read_model_predictions(model_predictions_file):
 	model_predictions = {}
@@ -90,9 +138,11 @@ def main(args):
 		li.append(df)
 	human_df = pd.concat(li, axis=0, ignore_index=True)
 
-	mrr = evaluate_model(human_df, model_df)
+	mrr,p_1,p_3,p_5 = evaluate_model(human_df, model_df)
 	print("MRR = " + str(mrr))
-
+	print("P@1 = " + str(p_1))
+	print("P@3 = " + str(p_3))
+	print("P@5 = " + str(p_5))
 
 if __name__ == '__main__':
 	argparser = argparse.ArgumentParser(sys.argv[0])
