@@ -1,159 +1,125 @@
 import argparse
 import numpy as np
-import pdb
-import random
+import pandas as pd
 from sklearn.metrics import average_precision_score
 import sys
 
-BAD_QUESTIONS="unix_56867 unix_136954 unix_160510 unix_138507".split() + \
-			"askubuntu_791945 askubuntu_91332 askubuntu_704807 askubuntu_628216 askubuntu_688172 askubuntu_727993".split() + \
-			"askubuntu_279488 askubuntu_624918 askubuntu_527314 askubuntu_182249 askubuntu_610081 askubuntu_613851 askubuntu_777774 askubuntu_624498".split() + \
-			"superuser_356658 superuser_121201 superuser_455589 superuser_38460 superuser_739955 superuser_931151".split() + \
-			"superuser_291105 superuser_627439 superuser_584013 superuser_399182 superuser_632675 superuser_706347".split() + \
-			"superuser_670748 superuser_369878 superuser_830279 superuser_927242 superuser_850786".split()
+#####
+# https://gist.github.com/bwhite/3726239
+def mean_reciprocal_rank(rs):
+    """Score is reciprocal of the rank of the first relevant item
 
-def get_annotations(line):
-	set_info, post_id, best, valids, confidence = line.split(',')
-	annotator_name = set_info.split('_')[0]
-	sitename = set_info.split('_')[1]
-	best = int(best)
-	valids = [int(v) for v in valids.split()]
-	confidence = int(confidence)
-	return post_id, annotator_name, sitename, best, valids, confidence
+    First element is 'rank 1'.  Relevance is binary (nonzero is relevant).
 
-def calculate_precision(model_pred_indices, best, valids):
-	bp1, bp3, bp5 = 0., 0., 0.
-	vp1, vp3, vp5 = 0., 0., 0.
-	bp1 = len(set(model_pred_indices[:1]).intersection(set(best)))*1.0
-	bp3 = len(set(model_pred_indices[:3]).intersection(set(best)))*1.0/3
-	bp5 = len(set(model_pred_indices[:5]).intersection(set(best)))*1.0/5
+    Example from http://en.wikipedia.org/wiki/Mean_reciprocal_rank
+    >>> rs = [[0, 0, 1], [0, 1, 0], [1, 0, 0]]
+    >>> mean_reciprocal_rank(rs)
+    0.61111111111111105
+    >>> rs = np.array([[0, 0, 0], [0, 1, 0], [1, 0, 0]])
+    >>> mean_reciprocal_rank(rs)
+    0.5
+    >>> rs = [[0, 0, 0, 1], [1, 0, 0], [1, 0, 0]]
+    >>> mean_reciprocal_rank(rs)
+    0.75
 
-	vp1 = len(set(model_pred_indices[:1]).intersection(set(valids)))*1.0
-	vp3 = len(set(model_pred_indices[:3]).intersection(set(valids)))*1.0/3
-	vp5 = len(set(model_pred_indices[:5]).intersection(set(valids)))*1.0/5
-	return bp1, bp3, bp5, vp1, vp3, vp5
+    Args:
+        rs: Iterator of relevance scores (list or numpy) in rank order
+            (first element is the first item)
 
-def calculate_avg_precision(model_probs, best, valids):
-	best_bool = [0]*10
-	valids_bool = [0]*10
-	for i in range(10):
-		if i in best:
-			best_bool[i] = 1
-		if i in valids:
-			valids_bool[i] = 1
-	bap = average_precision_score(best_bool, model_probs)
-	if 1 in valids_bool:
-		vap = average_precision_score(valids_bool, model_probs)
-	else:
-		vap = 0.
-	if 1 in best_bool[1:]:
-		bap_on9 = average_precision_score(best_bool[1:], model_probs[1:])
-	else:
-		bap_on9 = 0.
-	if 1 in valids_bool[1:]:
-		vap_on9 = average_precision_score(valids_bool[1:], model_probs[1:])
-	else:
-		vap_on9 = 0.
-	return bap, vap, bap_on9, vap_on9	
+    Returns:
+        Mean reciprocal rank
+    """
+    rs = (np.asarray(r).nonzero()[0] for r in rs)
+    return np.mean([1. / (r[0] + 1) if r.size else 0. for r in rs])
 
-def get_pred_indices(model_predictions, asc=False):
-	preds = np.array(model_predictions)
-	pred_indices = np.argsort(preds)
-	if not asc:
-		pred_indices = pred_indices[::-1] #since ascending sort and we want descending
-	return pred_indices
+def precision_at_k(r, k):
+    """Score is precision @ k
 
-def convert_to_probalitites(model_predictions):
-	tot = sum(model_predictions)
-	model_probs = [0]*10
-	for i,v in enumerate(model_predictions):
-		model_probs[i] = v*1./tot
-	return model_probs
+    Relevance is binary (nonzero is relevant).
 
-def evaluate_model_on_org(model_predictions, asc=False):
-	br1_tot, br3_tot, br5_tot = 0., 0., 0.
-	for post_id in model_predictions:
-		model_probs = convert_to_probalitites(model_predictions[post_id])
-		model_pred_indices = get_pred_indices(model_probs, asc)
-		br1, br3, br5, vr1, vr3, vr5 = calculate_precision(model_pred_indices, [0], [0])
-		br1_tot += br1	
-		br3_tot += br3	
-		br5_tot += br5
-	N = len(model_predictions)
-	return br1_tot*100.0/N, br3_tot*100.0/N, br5_tot*100.0/N	
+    >>> r = [0, 0, 1]
+    >>> precision_at_k(r, 1)
+    0.0
+    >>> precision_at_k(r, 2)
+    0.0
+    >>> precision_at_k(r, 3)
+    0.33333333333333331
+    >>> precision_at_k(r, 4)
+    Traceback (most recent call last):
+        File "<stdin>", line 1, in ?
+    ValueError: Relevance score length < k
 
-def read_human_annotations(human_annotations_filename):
-	human_annotations_file = open(human_annotations_filename, 'r')
-	annotations = {}
-	for line in human_annotations_file.readlines():
-		line = line.strip('\n')
-		splits = line.split('\t')
-		post_id1, annotator_name1, sitename1, best1, valids1, confidence1 = get_annotations(splits[0])
-		post_id2, annotator_name2, sitename2, best2, valids2, confidence2 = get_annotations(splits[1])		
-		assert(sitename1 == sitename2)
-		assert(post_id1 == post_id2)
-		post_id = sitename1+'_'+post_id1
-		best_union = list(set([best1, best2]))
-		valids_inter = list(set(valids1).intersection(set(valids2)))
-		annotations[post_id] = (best_union, valids_inter)
-	return annotations
 
-def evaluate_model(human_annotations_filename, model_predictions, asc=False):
-	human_annotations_file = open(human_annotations_filename, 'r')
-	br1_tot, br3_tot, br5_tot = 0., 0., 0.
-	vr1_tot, vr3_tot, vr5_tot = 0., 0., 0.
-	br1_on9_tot, br3_on9_tot, br5_on9_tot = 0., 0., 0.
-	vr1_on9_tot, vr3_on9_tot, vr5_on9_tot = 0., 0., 0.
-	bap_tot, vap_tot = 0., 0.
-	bap_on9_tot, vap_on9_tot = 0., 0.
-	N = 0
-	for line in human_annotations_file.readlines():
-		line = line.strip('\n')
-		splits = line.split('\t')
-		post_id1, annotator_name1, sitename1, best1, valids1, confidence1 = get_annotations(splits[0])
-		post_id2, annotator_name2, sitename2, best2, valids2, confidence2 = get_annotations(splits[1])		
-		assert(sitename1 == sitename2)
-		assert(post_id1 == post_id2)
-		post_id = sitename1+'_'+post_id1
-		if post_id in BAD_QUESTIONS:
-			continue
-		best_union = list(set([best1, best2]))
-		valids_inter = list(set(valids1).intersection(set(valids2)))
-		valids_union = list(set(valids1+valids2))
+    Args:
+        r: Relevance scores (list or numpy) in rank order
+            (first element is the first item)
 
-		model_probs = convert_to_probalitites(model_predictions[post_id])	
-		model_pred_indices = get_pred_indices(model_probs, asc)
+    Returns:
+        Precision @ k
 
-		br1, br3, br5, vr1, vr3, vr5 = calculate_precision(model_pred_indices, best_union, valids_inter)
-		br1_tot += br1	
-		br3_tot += br3	
-		br5_tot += br5	
-		vr1_tot += vr1	
-		vr3_tot += vr3	
-		vr5_tot += vr5
-		bap, vap, bap_on9, vap_on9 = calculate_avg_precision(model_probs, best_union, valids_inter)
-		bap_tot += bap
-		vap_tot += vap
-		bap_on9_tot += bap_on9
-		vap_on9_tot += vap_on9
-	
-		model_pred_indices = np.delete(model_pred_indices, 0)
-		
-		br1_on9, br3_on9, br5_on9, vr1_on9, vr3_on9, vr5_on9 = calculate_precision(model_pred_indices, best_union, valids_inter)
-		
-		br1_on9_tot += br1_on9	
-		br3_on9_tot += br3_on9	
-		br5_on9_tot += br5_on9	
-		vr1_on9_tot += vr1_on9	
-		vr3_on9_tot += vr3_on9
-		vr5_on9_tot += vr5_on9
+    Raises:
+        ValueError: len(r) must be >= k
+    """
+    assert k >= 1
+    r = np.asarray(r)[:k] != 0
+    if r.size != k:
+        raise ValueError('Relevance score length < k')
+    return np.mean(r)
+#
+#########
 
-		N += 1
-	
-	human_annotations_file.close()
-	return br1_tot*100.0/N, br3_tot*100.0/N, br5_tot*100.0/N, vr1_tot*100.0/N, vr3_tot*100.0/N, vr5_tot*100.0/N, \
-			br1_on9_tot*100.0/N, br3_on9_tot*100.0/N, br5_on9_tot*100.0/N, vr1_on9_tot*100.0/N, vr3_on9_tot*100.0/N, vr5_on9_tot*100.0/N, \
-			bap_tot*100./N, vap_tot*100./N, bap_on9_tot*100./N, vap_on9_tot*100./N
+def convert_to_valid_indices(human_df):
+	col_to_idx_dict = { 'a1':'q1', 'a2':'q2', 'a3':'q3', 'a4':'q4', 'a5':'q5', 'a6':'q6', 'a7':'q7', 'a8':'q8', 'a9':'q9', 'a10':'q10' }
+	indices = []
+	for col in col_to_idx_dict.keys():
+		seriesObj = human_df.apply(lambda x: True if 'v' in str(x[col]).lower() else False, axis=1)
+		# valid only if all agree (i.e., set intersection)
+		if seriesObj.all(): indices.append(col_to_idx_dict[col])
+	#assert(len(indices) > 0)
+	return indices
+
+
+def evaluate_model(human_df, model_df):
+	col_to_idx_dict = { 'q1':0, 'q2':1, 'q3':2, 'q4':3, 'q5':4, 'q6':5, 'q7':6, 'q8':7, 'q9':8, 'q10':9 }
+
+	min_rank_of_ranks = []
+	all_rank_of_ranks = []
+	for curr_issue in human_df.issue_id.unique():
+		ranking = [0] * 10
+
+		curr_human_df = human_df.loc[human_df['issue_id'] == curr_issue]
+		valid_indices = convert_to_valid_indices(curr_human_df)
+		if len(valid_indices) == 0: continue
+
+		curr_model_df = model_df.loc[model_df['issueid'] == curr_issue]
+		assert(curr_model_df.shape[0] > 0)
+
+		model_indices = []
+		for col in col_to_idx_dict.keys():
+			for valid_idx in valid_indices:
+				valid_q = curr_human_df[valid_idx].iloc[0]
+				curr_q = curr_model_df[col].iloc[0]
+				if curr_q.strip() == valid_q.strip():
+					model_indices.append(col_to_idx_dict[col])
+
+		ranking[min(model_indices)] = 1
+		min_rank_of_ranks.append(ranking)
+
+		n_ranking = np.array(ranking)
+		n_ranking[model_indices] = 1
+		all_rank_of_ranks.append(list(n_ranking))
+
+	mrr = mean_reciprocal_rank(min_rank_of_ranks)
+	p_1, p_3, p_5 = 0.0, 0.0, 0.0
+	for rank in all_rank_of_ranks:
+		p_1 += precision_at_k(rank,1)
+		p_3 += precision_at_k(rank,3)
+		p_5 += precision_at_k(rank,5)
+	p_1 = p_1 / len(all_rank_of_ranks)
+	p_3 = p_3 / len(all_rank_of_ranks)
+	p_5 = p_5 / len(all_rank_of_ranks)
+
+	return mrr,p_1,p_3,p_5
 
 def read_model_predictions(model_predictions_file):
 	model_predictions = {}
@@ -164,58 +130,26 @@ def read_model_predictions(model_predictions_file):
 		model_predictions[post_id] = predictions
 	return model_predictions
 
-def print_numbers(br1, br3, br5, vr1, vr3, vr5, br1_on9, br3_on9, br5_on9, vr1_on9, vr3_on9, vr5_on9, bmap, vmap, bmap_on9, vmap_on9, br1_org, br3_org, br5_org):
-	print 'Best'
-	print 'p@1 %.1f' % (br1)
-	print 'p@3 %.1f' % (br3)
-	print 'p@5 %.1f' % (br5)
-	print 'map %.1f' % (bmap)
-	print
-	print 'Valid'
-	print 'p@1 %.1f' % (vr1)
-	print 'p@3 %.1f' % (vr3)
-	print 'p@5 %.1f' % (vr5)
-	print 'map %.1f' % (vmap)
-	print
-	print 'Best on 9'
-	print 'p@1 %.1f' % (br1_on9)
-	print 'p@3 %.1f' % (br3_on9)
-	print 'p@5 %.1f' % (br5_on9)
-	print 'map %.1f' % (bmap_on9)
-	print
-	print 'Valid on 9'
-	print 'p@1 %.1f' % (vr1_on9)
-	print 'p@3 %.1f' % (vr3_on9)
-	print 'p@5 %.1f' % (vr5_on9)
-	print 'map %.1f' % (vmap_on9)
-	print 
-	print 'Original'
-	print 'p@1 %.1f' % (br1_org)
-	#print 'p@3 %.1f' % (br3_org)
-	#print 'p@5 %.1f' % (br5_org)
-
 def main(args):
-	model_predictions_file = open(args.model_predictions_filename, 'r')
-	asc=False
-	model_predictions = read_model_predictions(model_predictions_file)
-	br1, br3, br5, vr1, vr3, vr5, \
-	br1_on9, br3_on9, br5_on9, \
-	vr1_on9, vr3_on9, vr5_on9, \
-	bmap, vmap, bmap_on9, vmap_on9 = evaluate_model(args.human_annotations_filename, model_predictions, asc)
-	br1_org, br3_org, br5_org = evaluate_model_on_org(model_predictions)
+	model_df = pd.read_csv(args.model_predictions_filename)
+	li = []
+	for haf in args.human_annotations_filename:
+		df = pd.read_csv(haf)
+		li.append(df)
+	human_df = pd.concat(li, axis=0, ignore_index=True)
 
-	print_numbers(br1, br3, br5, vr1, vr3, vr5, \
-					br1_on9, br3_on9, br5_on9, \
-					vr1_on9, vr3_on9, vr5_on9, \
-					bmap, vmap, bmap_on9, vmap_on9, \
-					br1_org, br3_org, br5_org)
+	mrr,p_1,p_3,p_5 = evaluate_model(human_df, model_df)
+	print("MRR = " + str(mrr))
+	print("P@1 = " + str(p_1))
+	print("P@3 = " + str(p_3))
+	print("P@5 = " + str(p_5))
 
 if __name__ == '__main__':
 	argparser = argparse.ArgumentParser(sys.argv[0])
-	argparser.add_argument("--human_annotations_filename", type = str)
-	argparser.add_argument("--model_predictions_filename", type = str)
+	argparser.add_argument("--human_annotations_filename", type=str, nargs='+')
+	argparser.add_argument("--model_predictions_filename", type=str)
 	args = argparser.parse_args()
-	print args
-	print ""
+	print(args)
+	print("")
 	main(args)
 
