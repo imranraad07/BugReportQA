@@ -14,7 +14,7 @@ def parse_args():
     parser.add_argument('--test-ids', help='File path to test ids',
                         default='../data/datasets/datasets_final_tag/test_ids.txt', )
     parser.add_argument('--output-ranking-file', help='Output file to save ranking',
-                        default='../results/datasets_final_tag/ranking_baseline.csv')
+                        default='../results/datasets_final_tag/ranking_baseline_utility.csv')
     return parser.parse_args()
 
 
