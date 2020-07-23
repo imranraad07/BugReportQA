@@ -9,12 +9,10 @@ def parse_args():
                         default='../data/datasets/datasets_final_tag/post_data.tsv', )
     parser.add_argument('--qa-tsv', help='File path to qa_tsv produced by Lucene',
                         default='../data/datasets/datasets_final_tag/qa_data.tsv', )
-    parser.add_argument('--utility-tsv', help='File path to qa_tsv produced by Lucene',
-                        default='../data/datasets/datasets_final_tag/utility_data.tsv', )
     parser.add_argument('--test-ids', help='File path to test ids',
                         default='../data/datasets/datasets_final_tag/test_ids.txt', )
     parser.add_argument('--output-ranking-file', help='Output file to save ranking',
-                        default='../results/datasets_final_tag/ranking_baseline.csv')
+                        default='../results/datasets_final_tag/ranking_baseline_lucene.csv')
     return parser.parse_args()
 
 
@@ -22,16 +20,15 @@ def run():
     args = parse_args()
     post_data = pd.read_csv(args.post_tsv, sep='\t')
     qa_data = pd.read_csv(args.qa_tsv, sep='\t')
-    utility_data = pd.read_csv(args.utility_tsv, sep='\t')
     with open(args.test_ids) as f:
         ids = set([x.strip() for x in f.readlines()])
-    ranking = utility_ranking(post_data, qa_data, utility_data, ids)
+    ranking = lucene_ranking(post_data, qa_data, ids)
     save_ranking(args.output_ranking_file, ranking)
 
 
-def utility_ranking(post_data, qa_data, utility_data, ids):
+def lucene_ranking(post_data, qa_data, ids):
     dataset = dict()
-    print("calculating utility ranking...")
+    print("calculating lucene ranking...")
     for idx, row in post_data.iterrows():
         postid = row['postid']
         if postid in ids:
@@ -44,7 +41,7 @@ def utility_ranking(post_data, qa_data, utility_data, ids):
             for i in range(1, 11):
                 question = qa_data.iloc[idx]['q' + str(i)]
                 answer = qa_data.iloc[idx]['a' + str(i)]
-                score = utility_data.iloc[idx][i]
+                score = i
                 # print(postid, score)
                 dataset[postid][1].append((score, question, answer))
     print("done")
@@ -66,7 +63,7 @@ def save_ranking(output_file, results):
 
             record = [postid, post, correct[0], correct[1]]
 
-            values = sorted(values, key=lambda x: x[0], reverse=True)
+            values = sorted(values, key=lambda x: x[0])
             for score, question, answer in values:
                 record.append(question)
                 record.append(answer)
