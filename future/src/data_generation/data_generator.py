@@ -49,6 +49,7 @@ def create_tsv_files_github(post_data_tsv, qa_data_tsv, utility_data_tsv, post_t
         tsv_writer = csv.writer(out_file, delimiter='\t')
         tsv_writer.writerow(['postid', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8', 'q9', 'q10',
                              'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9', 'a10'])
+    qa_post_ids = {}
     for postId in similar_posts:
         with open(post_data_tsv, 'a') as out_file:
             tsv_writer = csv.writer(out_file, delimiter='\t')
@@ -62,15 +63,19 @@ def create_tsv_files_github(post_data_tsv, qa_data_tsv, utility_data_tsv, post_t
             row_val.append(post_questions[postId])
             for i in range(9):
                 row_val.append(post_questions[similar_posts[postId][i]])
+
+            qa_ids = []
+            qa_ids.append(postId)
             row_val.append(post_answers[postId])
             for i in range(9):
-                row_val.append(
-                    post_answers[similar_posts[postId][i]])
+                row_val.append(post_answers[similar_posts[postId][i]])
+                qa_ids.append(similar_posts[postId][i])
+            qa_post_ids[postId] = qa_ids
             with open(qa_data_tsv, 'a') as out_file:
                 tsv_writer = csv.writer(out_file, delimiter='\t')
                 tsv_writer.writerow(row_val)
 
-    compute_utilities(post_data_tsv, qa_data_tsv, utility_data_tsv)
+    compute_utilities(post_data_tsv, qa_data_tsv, qa_post_ids, utility_data_tsv)
 
 
 def main(args):

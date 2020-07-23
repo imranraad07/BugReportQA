@@ -1,3 +1,8 @@
+# import sys
+# import os
+# sys.path.append(os.path.abspath('pattern_classification/observed_behavior_rule'))
+# sys.path.append(os.path.abspath('pattern_classification/steps_to_reproduce_rule'))
+# sys.path.append(os.path.abspath('pattern_classification/expected_behavior_rule'))
 import observed_behavior_rule as ob_rule
 import steps_to_reproduce_rule as s2r_rule
 import expected_behavior_rule as eb_rule
@@ -24,7 +29,7 @@ class Calculator(object):
         answer = answer.strip()
         # nlp.sents treats * as sentence separator
         answer = answer.replace('*', ' ').replace('...', '.')
-        print('Answer: {0}'.format(answer))
+        # print('Answer: {0}'.format(answer))
 
         if postid in ob_calculated:
             ob_text = ob_calculated[postid]
@@ -32,7 +37,7 @@ class Calculator(object):
             ob_text = self.ob.get_ob(answer).strip()
             ob_calculated[postid] = ob_text
         ob_sents = 0 if len(ob_text) == 0 else len(ob_text.split('\n'))
-        print('OB: {0}'.format(ob_text))
+        # print('OB: {0}'.format(ob_text))
 
         if postid in eb_calculated:
             eb_text = eb_calculated[postid]
@@ -40,7 +45,7 @@ class Calculator(object):
             eb_text = self.eb.get_eb(answer).strip()
             eb_calculated[postid] = eb_text
         eb_sents = 0 if len(eb_text) == 0 else len(eb_text.split('\n'))
-        print('EB: {0}'.format(eb_text))
+        # print('EB: {0}'.format(eb_text))
 
         if postid in s2r_calculated:
             s2r_text = s2r_calculated[postid]
@@ -48,7 +53,7 @@ class Calculator(object):
             s2r_text = self.s2r.get_s2r(answer).strip()
             s2r_calculated[postid] = s2r_text
         s2r_sents = 0 if len(s2r_text) == 0 else len(s2r_text.split('\n'))
-        print('S2R: {0}'.format(s2r_text))
+        # print('S2R: {0}'.format(s2r_text))
         answer_sents = len(list(self.nlp(answer).sents))
         utility = (ob_sents + s2r_sents + eb_sents) / float(answer_sents)
         print('Utility: {0} + {1} + {2} / {3} = {4}\n\n'.format(ob_sents, eb_sents, s2r_sents, answer_sents, utility))
@@ -126,7 +131,7 @@ def get_diff(text_a, text_b):
     return diff
 
 
-def compute_utilities(post_tsv, qa_tsv, utility_tsv):
+def compute_utilities(post_tsv, qa_tsv, qa_post_ids, utility_tsv):
     calculator = Calculator()
     posts = pd.read_csv(post_tsv, sep='\t')
     qa = pd.read_csv(qa_tsv, sep='\t')
@@ -141,10 +146,11 @@ def compute_utilities(post_tsv, qa_tsv, utility_tsv):
         print(postid)
         post = row['title'] + ' ' + row['post']
         utility_data['postids'].append(postid)
+        answer_post_ids = qa_post_ids[postid]
         for i in range(1, 11):
             answer = qa.iloc[idx]['a' + str(i)]
-            utility = calculator.utility(postid, answer, post)
-
+            print(i, answer_post_ids[i - 1], answer)
+            utility = calculator.utility(answer_post_ids[i - 1], answer, post)
             utility_data['p_a{0}'.format(i)].append(utility)
 
     df = pd.DataFrame(utility_data)
