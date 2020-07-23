@@ -28,13 +28,13 @@ class EvpiModel(nn.Module):
         # layer 3 - dense layer
         self.layer1 = nn.Linear(hidden_dim, hidden_dim)
         self.layer2 = nn.Linear(hidden_dim, hidden_dim)
-        self.layer3 = nn.Linear(hidden_dim, 2*self.emb_layer.embedding_dim)
-        self.layer4 = nn.Linear(2*self.emb_layer.embedding_dim, 2*self.emb_layer.embedding_dim)
+        self.layer3 = nn.Linear(hidden_dim, self.emb_layer.embedding_dim)
+        self.layer4 = nn.Linear(self.emb_layer.embedding_dim, self.emb_layer.embedding_dim)
 
     def forward(self, post):
         p_emb_out = self.emb_layer(post)
         p_lstm_out, test = self.p_lstm(p_emb_out)
-        x = F.relu(self.layer1(p_lstm_out))
+        x = F.relu(self.layer1(p_lstm_out.mean(dim=1)))
         x = F.relu(self.layer2(x))
         x = F.relu(self.layer3(x))
         answer_representation = self.layer4(x)
