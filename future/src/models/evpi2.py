@@ -28,8 +28,8 @@ class EvpiModel(nn.Module):
         # layer 3 - dense layer
         self.layer1 = nn.Linear(hidden_dim, hidden_dim)
         self.layer2 = nn.Linear(hidden_dim, hidden_dim)
-        self.layer3 = nn.Linear(hidden_dim, self.emb_layer.embedding_dim)
-        self.layer4 = nn.Linear(self.emb_layer.embedding_dim, self.emb_layer.embedding_dim)
+        self.layer3 = nn.Linear(hidden_dim, 2*self.emb_layer.embedding_dim)
+        self.layer4 = nn.Linear(2*self.emb_layer.embedding_dim, 2*self.emb_layer.embedding_dim)
 
     def forward(self, post):
         p_emb_out = self.emb_layer(post)
@@ -52,7 +52,7 @@ def get_device(cuda):
 def compute_qa_cap(question, answer, w2v_model):
     a_words = [w2v_model.index2word[index] for index in answer.numpy().reshape(-1)]
     q_words = [w2v_model.index2word[index] for index in question.numpy().reshape(-1)]
-    mean_vec = np.mean(np.concatenate(w2v_model[a_words],w2v_model[q_words]), axis=0)
+    mean_vec = np.mean(np.concatenate((w2v_model[a_words],w2v_model[q_words])), axis=0)
     return torch.tensor(mean_vec.reshape(1, len(mean_vec)), dtype=torch.float)
 
 

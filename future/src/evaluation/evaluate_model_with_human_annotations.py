@@ -82,6 +82,7 @@ def convert_to_valid_indices(human_df):
 def evaluate_model(human_df, model_df):
 	col_to_idx_dict = { 'q1':0, 'q2':1, 'q3':2, 'q4':3, 'q5':4, 'q6':5, 'q7':6, 'q8':7, 'q9':8, 'q10':9 }
 
+	num_valid = []
 	min_rank_of_ranks = []
 	all_rank_of_ranks = []
 	for curr_issue in human_df.issue_id.unique():
@@ -90,6 +91,7 @@ def evaluate_model(human_df, model_df):
 		curr_human_df = human_df.loc[human_df['issue_id'] == curr_issue]
 		valid_indices = convert_to_valid_indices(curr_human_df)
 		if len(valid_indices) == 0: continue
+		num_valid.append(len(valid_indices))
 
 		curr_model_df = model_df.loc[model_df['issueid'] == curr_issue]
 		assert(curr_model_df.shape[0] > 0)
@@ -108,6 +110,8 @@ def evaluate_model(human_df, model_df):
 		n_ranking = np.array(ranking)
 		n_ranking[model_indices] = 1
 		all_rank_of_ranks.append(list(n_ranking))
+
+	print("Avg. valid follow-up Qs: " + str(np.mean(num_valid)))
 
 	mrr = mean_reciprocal_rank(min_rank_of_ranks)
 	p_1, p_3, p_5 = 0.0, 0.0, 0.0
