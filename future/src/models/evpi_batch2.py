@@ -73,11 +73,15 @@ def get_device(cuda, cuda_no):
     return device
 
 
-def compute_qa_cap(question, answer, w2v_model):
-    a_words = [w2v_model.index2word[index] for index in answer.numpy().reshape(-1)]
-    q_words = [w2v_model.index2word[index] for index in question.numpy().reshape(-1)]
-    mean_vec = np.mean(np.concatenate((w2v_model[a_words],w2v_model[q_words])), axis=0)
-    return torch.tensor(mean_vec.reshape(1, len(mean_vec)), dtype=torch.float)
+def compute_qa_cap(questions, answers, w2v_model):
+    answers = answers.numpy()
+    questions = questions.numpy()
+    a_cap = np.ndarray((answers.shape[0], w2v_model.vectors.shape[1]))
+    for idx, (q, a) in enumerate(zip(questions,answers)):
+        a_words = [w2v_model.index2word[index] for index in a]
+        q_words = [w2v_model.index2word[index] for index in q]
+        a_cap[idx] = np.mean(np.concatenate((w2v_model[a_words],w2v_model[q_words])), axis=0)
+    return torch.tensor(a_cap, dtype=torch.float)
 
 
 # def compute_a_cap(answer, w2v_model):
