@@ -27,7 +27,9 @@ We base our automatic follow-up question posing system on the idea that: 1) rele
 %
 Therefore the task our system performs is to retrieve the most relevant and useful follow-up question for a specific inadequate bug report, given a large corpus of previous bug reports, follow-up questions, and their answers.
 %
-For instance, consider the example shown in Figure 1, where the bug report ....
+For instance, consider the example shown in Figure 1, where the bug report boostrap-sass \#829 is similar to several other bug reports with follow-up questions, as denoted by the length of the arrows.
+%
+Our system locates such candidate follow-up questions from our large-scale corpus and then ranks them in order of their perceived utility to the bug report of interest.
 
 To curate a corpus of prior bug reports, follow-up questions, and answers we leverage GitHub, where we focus on popular repositories that have a high level of activity and therefore a likely to have utilized the follow-up questions mechanism. We look for follow-up questions that have been posed in comments and gather answers that occur as comments or as edits to the original bug report text. To estimate the utility of an answer we use the patterns to identify Observable Behavior (OB), Expected Behavior (EB) and Steps to Reproduce (S2R), published by Chaparro et al. We evaluate our prototype in two ways, based on the ability to predict an annotated held-out set of follow-up questions, and based on a developer survey that aims to gage the perceived value of specific follow up questions. The results indicate that the techniques is viable, with X MRR on the held-out set and Y\% of respondents indicating that the follow-up question is “bla bla bla”.
 
