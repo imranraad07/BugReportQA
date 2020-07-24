@@ -159,7 +159,7 @@ def evpi(cuda, cuda_no, w2v_model, args):
             # compute a_cap and send it to device so it can be used for back propagation
             answers = data['answer']
             questions = data['question']
-            qa_cap = compute_qa_cap(answers, w2v_model)
+            qa_cap = compute_qa_cap(questions, answers, w2v_model)
             labels = data['label']
 
             if device.type != 'cpu':
