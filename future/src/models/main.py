@@ -5,8 +5,8 @@ sys.path.append(os.path.abspath('./src'))
 sys.path.append(os.path.abspath('../pattern_classification'))
 
 import argparse
-import evpi
-import evpi_batch
+import evpi, evpi2
+import evpi_batch, evpi_batch2
 from gensim.scripts.glove2word2vec import glove2word2vec
 import gensim
 import csv
@@ -50,10 +50,10 @@ def run():
 
     if args.batch_size == 1:
         logging.info('Run evpi with batch_size=1')
-        results = evpi.evpi(cuda, w2v_model, args)
+        results = evpi2.evpi(cuda, w2v_model, args)
     else:
         logging.info('Run evpi with batch_size>1')
-        results = evpi_batch.evpi(cuda, cuda_no, w2v_model, args)
+        results = evpi_batch2.evpi(cuda, cuda_no, w2v_model, args)
 
     save_ranking(args.output_ranking_file, results)
 
