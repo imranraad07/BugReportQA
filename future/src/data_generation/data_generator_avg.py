@@ -123,8 +123,8 @@ def main(args):
             post_answers[row[2]] = (row[5])
             idx = idx + 1
     # print idx
-    # generate_docs_for_lucene_github(post_titles, post_texts, args.lucene_docs_dir, post_ids)
-    # os.system('cd %s && sh run_lucene.sh %s' % (args.lucene_dir, os.path.dirname(args.post_data_tsv)))
+    generate_docs_for_lucene_github(post_titles, post_texts, args.lucene_docs_dir, post_ids)
+    os.system('cd %s && sh run_lucene.sh %s' % (args.lucene_dir, os.path.dirname(args.post_data_tsv)))
 
     create_tsv_files_github(args, post_titles, post_texts, post_questions, post_answers)
 

@@ -162,7 +162,7 @@ def compute_utilities(answer_ob_eb_s2r_csv, data_avg_tsv, post_tsv, qa_tsv, qa_p
         else:
             utility_a = post_utility[post]
         avg_utility[item] = utility_a
-        print(row[0], post_utility[row[0]], utility_a)
+        # print(row[0], post_utility[row[0]], utility_a)
 
     print("computing utilities...")
     posts = pd.read_csv(post_tsv, sep='\t')

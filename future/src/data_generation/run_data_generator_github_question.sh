@@ -16,8 +16,12 @@ rm -r $DATA_DIR/$SITE_NAME/ques_docs
 rm -r $DATA_DIR/$SITE_NAME/ques_doc_indices
 mkdir -p $DATA_DIR/$SITE_NAME/ques_docs
 
+#question/question_answer
+TYPE=question_answer
+
 python $SCRIPTS_DIR/data_generator_question.py --lucene_dir $LUCENE_DIR \
+  --type $TYPE \
   --lucene_docs_dir $DATA_DIR/$SITE_NAME/post_docs \
   --lucene_similar_posts $DATA_DIR/$SITE_NAME/lucene_similar_posts_qa.txt \
-  --qa_data_tsv $DATA_DIR/$SITE_NAME/data_avg_qa.tsv \
+  --data_avg_file $DATA_DIR/$SITE_NAME/data_avg_qa.tsv \
   --github_csv $DATA_DIR/$SITE_NAME/dataset.csv
