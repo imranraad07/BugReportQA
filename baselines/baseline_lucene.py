@@ -6,11 +6,11 @@ import csv
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--post-tsv', help='File path to post_tsv produced by Lucene',
-                        default='../data/datasets/datasets_final_tag/post_data.tsv', )
+                        default='data/datasets_final_tag/post_data.tsv', )
     parser.add_argument('--qa-tsv', help='File path to qa_tsv produced by Lucene',
-                        default='../data/datasets/datasets_final_tag/qa_data.tsv', )
+                        default='data/datasets_final_tag/qa_data.tsv', )
     parser.add_argument('--test-ids', help='File path to test ids',
-                        default='../data/datasets/datasets_final_tag/test_ids.txt', )
+                        default='data/datasets_final_tag/test_ids.txt', )
     parser.add_argument('--output-ranking-file', help='Output file to save ranking',
                         default='../results/datasets_final_tag/ranking_baseline_lucene.csv')
     return parser.parse_args()
@@ -38,12 +38,15 @@ def lucene_ranking(post_data, qa_data, ids):
             dataset[postid][2].append(correct_question)
             dataset[postid][2].append(correct_answer)
 
-            for i in range(1, 11):
+            for i in range(2, 11):
                 question = qa_data.iloc[idx]['q' + str(i)]
                 answer = qa_data.iloc[idx]['a' + str(i)]
                 score = i
                 # print(postid, score)
                 dataset[postid][1].append((score, question, answer))
+
+            # putting the correct q&a to the back of the list
+            dataset[postid][1].append((11, correct_question, correct_answer))
     print("done")
     return dataset
 
