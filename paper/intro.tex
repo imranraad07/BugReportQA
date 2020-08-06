@@ -35,6 +35,13 @@ Our system locates such candidate follow-up questions from our large-scale corpu
 
 To curate a corpus of prior bug reports, follow-up questions, and answers we leverage GitHub, where we focus on popular repositories that have a high level of activity and therefore are likely to have numerous relevant follow-up questions, encoded as GitHub issue comments. We gather the answers to these follow-up questions that occur either as additional GitHub issue comments or as edits to the original bug report text. We base our estimate of the utility of an answer using the patterns to identify Observable Behavior (OB), Expected Behavior (EB) and Steps to Reproduce (S2R), published by Chaparro et al~\cite{chaparro17detecting}. We evaluate our prototype in two ways, based on the ability to predict an annotated held-out set of follow-up questions, and based on a developer survey that aims to gage the perceived value of specific follow up questions. The results indicate that the techniques is viable, with X MRR on the held-out set and Y\% of respondents indicating that the follow-up question is “bla bla bla”.
 
+To summarize, the primary contributions of this paper are:
+\begin{enumerate}
+\item idea of using follow-up questions to aid with inadequate but reports
+\item technique to compute the utility of follow-up questions for a specific bug report
+\item process to curate a large corpus of existing follow-up question that can be used for recommendation
+\end{enumerate}
+
 Relative to the prior efforts by the software engineering research community towards improving the quality of bug reports, this paper is the first to use follow-up questions and to propose a specific mechanism for this purpose. Automatically posing follow-up has been used in other domains for improving the quality of Web forum posts~\cite{rao-daume-iii-2018-learning}, product reviews in online retail, and improving query quality in Web search.
 
 % More specifically, the contributions of this paper are:
