@@ -1,13 +1,14 @@
 \section{System Description}
 
 % describe overall system
-As input, our system for retrieving follow-up questions requires: 1) an (inadequate) bug
+As input, our system for retrieving follow-up questions requires: 1) an inadequate bug
 report of interest; 2) a corpus of already posed follow-up questions extracted
-from GitHub issues; 3) answers to the each of the follow-up questions posed in (2). As output, our system
-produces a ranked list of follow-up questions appropriate to the particular bug report.
-In this section, we describe our system, including how we create a large corpus of follow-up questions
-to recommend, how we select candidate follow-up questions from this corpus for a specific incomplete
-bug report, and how we rank these questions in descending order of their potential utility to the bug report.
+from GitHub issues, including their corresponding bug reports and answers. As output, our system
+produces a ranked list of follow-up questions appropriate to the inadequate bug report.
+In this section, we describe our system, including how we create as a input
+a large corpus of follow-up questions to recommend, how we select candidate follow-up questions from
+this corpus for a specific incomplete bug report, and how we rank these questions in descending order of
+their potential utility to the bug report.
 
 \subsection{Selecting a Corpus of Bug Reports}
 
@@ -21,10 +22,14 @@ bug report, and how we rank these questions in descending order of their potenti
 
 % overview of the entire process
 Our goal in curating a corpus of bug report-related follow-up questions and their answers
-is to find a large, representative and high-quality corpus. Manually curated corpora are
-high quality but they are difficult to scale-up. Automatic curation can be affected by
-significant noise, leading to low data quality, unless care is taken
-to filter and sample follow-up questions in a way that noise is mitigated.
+is to find a large, representative and high-quality corpus. Manually curated corpora are of
+high quality but they are difficult to scale-up. Automatic curation can easily scale but it
+can be affected by significant noise, leading to low data quality, unless care is taken
+to filter and sample follow-up questions in a way that noise is mitigated. As corpus size
+is an important factor in our system, we opt for an automated approach with numerous filters
+to ensure the data is of highest possible quality. With the number of active repositories available
+on GitHub providing a very large input space, we can afford to be err on the side of being overly
+restrictive in our filtering.
 
 To automatically curate a corpus, we start by selecting GitHub repositories that have high bug reporting activity,
 as measured by the number of issues created by non-contributors over some fixed period of time.
@@ -39,13 +44,13 @@ In more detail, we used the following set of steps and heuristics to curate the 
 \begin{enumerate}
 \item We scraped a set of public GitHub repositories, sorted by the number of
 non-contributor created issues, where a non-contributor is a GitHub user that has never
-committed any code in the specific repository. In order to somewhat limit the amount of repositories,
+committed any code in the specific repository. In order to somewhat constrain the amount of repositories,
 we focused on longer-running projects, specifically, created between 2008-2014, and recently
 active with new issues created in the repository after Jan 1, 2019.
-\item For each repository in their sorted order from the previous step, we selected issues in the GitHub issue tracker
-that are labeled as "bug", "crash", "fix" or unlabeled. We further selected only issues contain follow-up questions as one of the issue comments (Step 2 in Figure~\ref{fig:sample_br}).  Follow-up questions were identified as sentences starting with a question word and ending with a question mark. In order to ensure we selected follow-up questions and not just
-any questions, we filtered based on time. That is, the comment containing the follow-up question must be posted
-within 60 days of the issue creation date and must occur as a comment immediately following the post. Just as an additional safety mechanism,
+\item For each repository, in their sorted order from the previous step, we selected issues in the GitHub issue tracker
+that are labeled as "bug", "crash", "fix" or unlabeled. We further selected only issues that contain follow-up questions as one of the issue comments (Step 2 in Figure~\ref{fig:sample_br}).  Follow-up questions were identified as sentences starting with a question word and ending with a question mark. In order to ensure we selected follow-up questions and not just
+any questions, we constrained our selection based on time. That is, the comment containing the follow-up question must be posted
+within 60 days of the issue creation date and must occur as a comment immediately following the post. As an additional safety mechanism,
 we ensured that the comment was authored by a different user from the author of the issue. In selecting GitHub issues
 we didn't use issue labels (or tags), e.g., to focus only on issues labeled as "bug", because we observed the labels were not
 used consistently enough across most repositories.
@@ -55,11 +60,12 @@ by the original issue creator. We allowed for answers to be posted as comments, 
 to the follow-up question. We also allowed for answers to be encoded as edits to the original issue text, which we limited to add at least 4 additional words to avoid minor spelling or grammar modifications.
 \end{enumerate}
 
-Finally, we stopped the collection process when we gathered a dataset of N GitHub issues. These triples of
-issue, follow-up question, and answer formed the primary corpus we used to retrieve a rank follow-up questions
-for a given inadequate bug report.
+Finally, we stopped the collection process when we gathered a dataset of 25KGitHub issues, which we deemed to be
+sufficient for our purpose. Each data point is a triple of
+issue, follow-up question, and answer. Together, the 25K triples form the primary corpus we use to
+retrieve and rank follow-up questions for a given inadequate bug report.
 
-\subsection{Selecting Candidate Follow-Up Questions}
+\subsection{Selecting Candidate Follow-Up Questions for an Incomplete Bug Report}
 
 Given the corpus of follow-up questions and an specific incomplete bug report of interest, selecting the
 most likely candidate follow-up questions can be formed as an information retrieval
@@ -90,7 +96,7 @@ To create a query out of the incomplete bug report, we tokenize the query use th
 the one we performed on the bug reports in the corpus.
 
 
-\subsection{Ranking Follow-Up Questions}
+\subsection{Ranking the Candidate Follow-Up Questions}
 
 To rank the set of candidate follow-up questions for a specific bug report we reformulate
 the notion of the Expected Value of Perfect Information (EVPI), initially proposed as a
