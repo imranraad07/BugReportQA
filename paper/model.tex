@@ -30,16 +30,11 @@ is an important factor in our system, we opt for an automated approach with nume
 to ensure the data is of highest possible quality. With the number of active repositories available
 on GitHub providing a very large input space, we can afford to be err on the side of being overly
 restrictive in our filtering.
-
-To automatically curate a corpus, we start by selecting GitHub repositories that have high bug reporting activity,
-as measured by the number of issues created by non-contributors over some fixed period of time.
-We select issues in those bug repositories that contain rapidly asked and succinct follow-up
-questions, looking in the GitHub issue comments for these responses. Finally, because our system leverages
-the answers of follow-up questions for ranking, we look for
-a subsequent rapid answer to the follow-up question, encoded as either another comment or as an edit to the
+To automatically curate our corpus, we: 1) select GitHub repositories that have high bug reporting activity,
+as measured by the number of issues created by non-contributors over some fixed period of time; 2) select issues in those bug repositories that contain rapidly asked and succinct follow-up questions, contained in GitHub issue comments; 3) locate
+answers to the follow-up questions encoded as either another comment or as an edit to the
 original issue.
 
-% list of more detailed steps to implement the plan
 In more detail, we used the following set of steps and heuristics to curate the corpus:
 \begin{enumerate}
 \item We scraped a set of public GitHub repositories, sorted by the number of
