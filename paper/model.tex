@@ -35,32 +35,32 @@ as measured by the number of issues created by non-contributors over some fixed 
 answers to the follow-up questions encoded as either another comment or as an edit to the
 original issue.
 
-In more detail, we used the following set of steps and heuristics to curate the corpus:
+In more detail, we used the following sequence of steps to curate the corpus:
 \begin{enumerate}
-\item We scraped a set of public GitHub repositories, sorted by the number of
+\item We scraped a set of public GitHub repositories with a high rate of
 non-contributor created issues, where a non-contributor is a GitHub user that has never
-committed any code in the specific repository. In order to somewhat constrain the amount of repositories,
-we focused on longer-running projects, specifically, created between 2008-2014, and recently
-active with new issues created in the repository after Jan 1, 2019.
-\item For each repository, in their sorted order from the previous step, we selected issues in the GitHub issue tracker
-that are labeled as "bug", "crash", "fix" or unlabeled. We further selected only issues that contain follow-up questions as one of the issue comments (Step 2 in Figure~\ref{fig:sample_br}).  Follow-up questions were identified as sentences starting with a question word and ending with a question mark. In order to ensure we selected follow-up questions and not just
-any questions, we constrained our selection based on time. That is, the comment containing the follow-up question must be posted
-within 60 days of the issue creation date and must occur as a comment immediately following the post. As an additional safety mechanism,
-we ensured that the comment was authored by a different user from the author of the issue. In selecting GitHub issues
-we didn't use issue labels (or tags), e.g., to focus only on issues labeled as "bug", because we observed the labels were not
-used consistently enough across most repositories.
+committed any code in the specific repository. Repositories with these characteristics form
+the target population of software projects that are more likely to use our technique. In order
+to somewhat constrain  the amount of repositories, we focused on longer-running projects,
+specifically, created between 2008-2014, and recently active with new issues created in the repository after Jan 1, 2019.
+\item For each of these repositories, in their descending order of activity as defined in the previous step,
+we selected issues in the GitHub issue tracker that are labeled as "bug", "crash", "fix", or unlabeled. Our goal for this step was
+to avoid feature requests and focus on bug reports although we noticed that labels were not used consistently enough
+in projects, which is why we nonetheless opted to include unlabeled issues.
+\item We further selected only issues that contain follow-up questions in one of the issue comments.  We identified follow-up questions as sentences starting with a question word and ending with a question mark. In order to ensure we selected follow-up questions and not just
+any questions, we constrained our selection based on time and sequential order. That is, the comment containing the follow-up question must be posted within 60 days of the issue creation date and must occur as a comment immediately following the post. We also ensured that the comment was authored by a different user from the author of the issue.
 \item The set of issues and candidate follow-up questions from the previous step were further filtered to
-ensure an answer was provided. A key characteristic of the answer that we searched for is that it was authored
-by the original issue creator. We allowed for answers to be posted as comments, as long as they occurred as the next sequential comment
-to the follow-up question. We also allowed for answers to be encoded as edits to the original issue text, which we limited to add at least 4 additional words to avoid minor spelling or grammar modifications.
+retain issues and follow-up questions where an answer was provided. A key heuristic for recognizing an answer was  that it was authored
+by the original issue creator and occurred as the the next sequential comment
+to the follow-up question. We also searched for answers that were encoded as edits to the original issue text by the author, which we limited to add at least 4 additional words to the original text in order to avoid minor spelling or grammar modifications.
 \end{enumerate}
 
-Finally, we stopped the collection process when we gathered a dataset of 25KGitHub issues, which we deemed to be
-sufficient for our purpose. Each data point is a triple of
-issue, follow-up question, and answer. Together, the 25K triples form the primary corpus we use to
+The highlights of the corpus curation process are also illustrated in Figure~\ref{fig:sample_br}. We stopped the collection process when we gathered a dataset of 25KGitHub issues, which we deemed to be sufficient for our purpose. Each data point is a triple of
+issue, follow-up question, and answer. Together, the 25K triples form the primary corpus we used to
 retrieve and rank follow-up questions for a given inadequate bug report.
 
-\subsection{Selecting Candidate Follow-Up Questions for an Incomplete Bug Report}
+
+\subsection{Selecting Candidate Follow-Up Questions}
 
 Given the corpus of follow-up questions and an specific incomplete bug report of interest, selecting the
 most likely candidate follow-up questions can be formed as an information retrieval
