@@ -100,8 +100,8 @@ bug report.
 
 To rank the set of candidate follow-up questions we reformulate and apply towards bug reporting
 the notion of the Expected Value of Perfect Information (EVPI), initially proposed as a means to
-rank follow-up quesitons by Rao et al.~\cite{rao-daume-iii-2018-learning}. For EVPI proposes that
-the means to evaluate a follow-up question is by using the value of its answer. In other words, for an
+rank follow-up quesitons by Rao et al.~\cite{rao-daume-iii-2018-learning}. To evaluate a follow-up question EVPI suggests
+using the (expected) value of its answer. In other words, for an
 incomplete bug report, EVPI estimates the value of the information provided by the answer to the
 follow-up question. The higher the EVPI the higher we rank a candidate follow-up question from our
 set.
@@ -112,7 +112,7 @@ the probability of a specific question occurring for that bug report, $P(q_{i}|b
 
 $$EVPI(q_{i}|br) = P(q_{i}|br) * U(q_{i})$$
 
-The utility of a question is expressed in terms of the answers it has received, i.e.,
+The utility of a question is further expressed in terms of the answers it has received, i.e.,
 
 $$U(q_{i}) = \sum_{a \in A_{i}}^{} \frac{OB(a)+EB(a)+S2R(a)}{|a|} * \frac{1}{|A_{i}|}$$
 
