@@ -36,7 +36,7 @@ as measured by the number of issues created by non-contributors over some fixed 
 answers to the follow-up questions encoded as either comments or as edits to the
 original bug report.
 
-In more detail, we used the following sequence of steps to curate the corpus:
+In more detail, we used the following sequence of steps to curate the corpus. The highlights of the corpus curation process are also illustrated in Figure~\ref{fig:sample_br}.
 \begin{enumerate}
 \item We scraped a set of public GitHub repositories with a high rate of
 non-contributor created issues, where a non-contributor is a GitHub user that has never
@@ -56,7 +56,7 @@ by the original issue creator and occurred as the the next sequential comment
 to the follow-up question. We also searched for answers that were encoded as edits to the original issue text by the author, which occurred after the follow-up question was posted and were limited to add at least 4 additional words to the original text in order to avoid minor spelling or grammar modifications.
 \end{enumerate}
 
-The highlights of the corpus curation process are also illustrated in Figure~\ref{fig:sample_br}. We stopped the collection process when we gathered a dataset of 25K GitHub issues, which we deemed to be sufficient for our purpose. Each data point in our dataset is a triple of
+ We stopped the collection process when we gathered a dataset of 25K GitHub issues, which we deemed to be sufficient for our purpose. Each data point in our dataset is a triple of
 issue, follow-up question, and answer. Together, the 25K triples form the primary corpus we used to
 retrieve and rank follow-up questions for a given inadequate bug report.
 
@@ -98,21 +98,33 @@ bug report.
 
 \subsection{Ranking the Candidate Follow-Up Questions}
 
-To rank the set of candidate follow-up questions for a specific bug report we reformulate
-the notion of the Expected Value of Perfect Information (EVPI), initially proposed as a
-neurally computed quantity by Rao et al., towards bug reports and their inadequacy. EVPI estimates
-the value to the incomplete bug report of the answer to the follow-up question. We express
-the EVPI of a specific follow-up question $q_{i}$ from our candidate set, given an inadequate
-bug report $br$, as the product of the probability of obtaining a specific answer $a_{i}$ and
-the utility that answer would provide to $br$, i.e., the utility of $br$ augmented by $a_{i}$.
+To rank the set of candidate follow-up questions we reformulate and apply towards bug reporting
+the notion of the Expected Value of Perfect Information (EVPI), initially proposed as a means to
+rank follow-up quesitons by Rao et al.~\cite{rao-daume-iii-2018-learning}. For EVPI proposes that
+the means to evaluate a follow-up question is by using the value of its answer. In other words, for an
+incomplete bug report, EVPI estimates the value of the information provided by the answer to the
+follow-up question. The higher the EVPI the higher we rank a candidate follow-up question from our
+set.
 
-\medskip
-$EVPI(q_{i}|br) = P(a_{i}|q_{i},br) * U(br+a)$
-\medskip
+We express the EVPI of a specific follow-up question $q_{i}$ from our candidate set, given an inadequate
+bug report $br$ of interest, as the appropriateness of a specific follow up question to the bug report, i.e.,
+the probability of a specific question occurring for that bug report, $P(q_{i}|br)$, and the utility of that question, $U(q_{i})$.
 
-In other words, this formulation scales the utility of an answer to a follow-up question by the
-likelihood we are to receive this answer, given the follow-up question and the bug report.
-To compute the utility of the augmented bug report, $U(br+a)$, we resort to the pattern based
+$$EVPI(q_{i}|br) = P(q_{i}|br) * U(q_{i})$$
+
+The utility of a question is expressed in terms of the answers it has received, i.e.,
+
+$$U(q_{i}) = \sum_{a \in A_{i}}^{} \frac{OB(a)+EB(a)+S2R(a)}{|a|} * \frac{1}{|A_{i}|}$$
+
+,where $A_{i}$ is the set of answers $q_{i}$ has received in the corpus, $a$ is one of those answers, and
+$OB(a)$, $EB(a)$ and $S2R(a)$ are the number of sentences describing Observable Behavior (OB), Expected Behavior (EB), or
+Steps to Reproduce (S2R) found in the answer. The idea is that questions whose set of answers have a high proportion
+of these pieces of a bug report have higher utility than do questions whose answers do not contribute much in
+terms of Observable Behavior, Expected Behavior, or Steps to Reproduce.
+
+To compute the probability of a follow-up question occurring for a given bug report, $P(q_{i}|br)$, we use...
+
+To compute the utility of the follow-up question, $U(q_{i})$, we resort to the pattern based
 identification of the constituent pieces of a bug report (rxpected Behavior,...) proposed by Chaparro et al.
 We implement 5 of the most common pattern from the pattern catalogue, which rely on key words
 and part-of-speech tagging to ensure high precision.
