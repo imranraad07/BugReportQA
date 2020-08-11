@@ -100,35 +100,42 @@ bug report.
 
 To rank the set of candidate follow-up questions we reformulate and apply towards bug reporting
 the notion of the Expected Value of Perfect Information (EVPI), initially proposed as a means to
-rank follow-up quesitons by Rao et al.~\cite{rao-daume-iii-2018-learning}. To evaluate a follow-up question EVPI suggests
-using the (expected) value of its answer. In other words, for an
+rank follow-up quesitons by Rao et al.~\cite{rao-daume-iii-2018-learning}. To evaluate a follow-up question, EVPI suggests
+using the (expected) value of its answer, i.e., for an
 incomplete bug report, EVPI estimates the value of the information provided by the answer to the
-follow-up question. The higher the EVPI the higher we rank a candidate follow-up question from our
+follow-up question. The higher the EVPI the higher we rank a follow-up question from the candidate
 set.
 
-We express the EVPI of a specific follow-up question $q_{i}$ from our candidate set, given an inadequate
-bug report $br$ of interest, as the appropriateness of a specific follow up question to the bug report, i.e.,
-the probability of a specific question occurring for that bug report, $P(q_{i}|br)$, and the utility of that question, $U(q_{i})$.
+Given an inadequate bug report of interest, $br$, we express the EVPI of a specific follow-up question $q_{i}$ from our candidate set
+as the product of: 1)the appropriateness of a specific follow up question to the bug report, i.e.,
+the probability of a specific question and answer pair occurring for that bug report, $P(q_{i}+a_{i}|br)$, and 2) the utility of that question, $U(q_{i})$.
 
-$$EVPI(q_{i}|br) = P(q_{i}|br) * U(q_{i})$$
+$$EVPI(q_{i}|br) = P(q_{i}+a_{i}|br) * U(q_{i})$$
 
-The utility of a question is further expressed in terms of the answers it has received, i.e.,
+The utility of a question is further expressed in terms of the average quality of answers it has received, i.e.,
 
-$$U(q_{i}) = \sum_{a \in A_{i}}^{} \frac{OB(a)+EB(a)+S2R(a)}{|a|} * \frac{1}{|A_{i}|}$$
+$$U(q_{i}) = \sum_{a \in A}^{} \frac{|OB(a)|+|EB(a)|+|S2R(a)|}{|a|} * \frac{1}{|A|}$$
 
-,where $A_{i}$ is the set of answers $q_{i}$ has received in the corpus, $a$ is one of those answers, and
-$OB(a)$, $EB(a)$ and $S2R(a)$ are the number of sentences describing Observable Behavior (OB), Expected Behavior (EB), or
-Steps to Reproduce (S2R) found in the answer. The idea is that questions whose set of answers have a high proportion
-of these pieces of a bug report have higher utility than do questions whose answers do not contribute much in
-terms of Observable Behavior, Expected Behavior, or Steps to Reproduce.
+\noindent
+,where $A$ is the set of answers $q_{i}$ has received in the corpus, $a$ is one of those answers, and
+$OB(a)$, $EB(a)$ and $S2R(a)$ are the sentences describing Observable Behavior (OB), Expected Behavior (EB), or
+Steps to Reproduce (S2R) found in the answer. We use the $|\cdot|$ operator to denote the cardinality of a set.
+The idea of this metric is that questions whose set of answers have a high proportion
+of OB,EB, or S2R of a bug report have higher utility than do questions whose answers do not contribute much in
+terms of this information.
 
-To compute the probability of a follow-up question occurring for a given bug report, $P(q_{i}|br)$, we use...
+To compute the probability of a follow-up question occurring for a given bug report, $P(q_{i}+a_{i}|br)$, we use a neural
+network approximation, consisting of a deep NN consisting of 3 layers. As the first layer we encode
+the bug report text with GloVE embeddings trained on the entirety of Stack Overflow posts. As the second layer we train
+a LSTM and compute an average of the hidden layer. As the third and final layer we use a dense neural network consisting
+of 4 inter-connected layers. We train this neural architecture using the actually posed follow-up questions and answers, which we concatenate, as positive labeled examples and others in the candidate set as negatively labeled. We use weighing to manage the resulting class imbalance as the negative examples significantly outnumber the positive ones.
 
-To compute the utility of the follow-up question, $U(q_{i})$, we resort to the pattern based
-identification of the constituent pieces of a bug report (rxpected Behavior,...) proposed by Chaparro et al.
-We implement 5 of the most common pattern from the pattern catalogue, which rely on key words
-and part-of-speech tagging to ensure high precision.
-
+To compute the utility of the follow-up question, $U(q_{i})$, we leverage the pattern based
+identification of the constituent pieces of a bug report (OB,EB and S2R) created by Chaparro et al.~\cite{chaparro17detecting}
+We implement 5 of the most common and most productive patterns for each of OB,EB and S2R, as described by
+the authors. Each of the 15 patterns rely on predefined sets of keywords and part-of-speech tagging to ensure high precision.
+In order to compute the average utility of the answers for a particular question in the corpus, we rely on Lucene to provide matching
+between questions and we reserve 10 of the most similar question variants for each queried follow-up question.
 
 
 %
