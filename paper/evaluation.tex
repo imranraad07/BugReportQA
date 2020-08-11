@@ -9,21 +9,35 @@ dimensions, i.e., their usefulness, novelty and specificity.
 
 \subsection{Quality of Follow-Up Question Ranking}
 
-One way of evaluating the system based on a held-out dataset (of bug reports and candidate follow-up questions) is
+One way of evaluating the ranking system, based on a held-out dataset (of bug reports and candidate follow-up questions), is
 by using the posed questions as the ground truth. However, this simple setup has a serious deficiency in that the posed question
 may not always be the most optimal among the set of candidate follow-up questions. More importantly, several of
 the remaining candidate questions may be valid and (more) relevant to the bug report and therefore should
 not be considered as negatively labeled instances for evaluation. Therefore, in order to provide an evaluation
-set that identifies all of the valid questions in the candidate set we perform manual annotation that clearly
+set that identifies all of the valid questions in the candidate set, we perform manual annotation that clearly
 identifies all of the valid follow-up questions for a specific bug report.
 
 \subsubsection{Annotation}
-
 We annotated 400 randomly chosen bug reports that were held out from our original corpus of 25K. The annotation
-was performed by two of the authors following a predefined procedure. For each bug report, the annotator 1)
+was performed by two of the authors following an agreed-upon predefined procedure. For each bug report, an annotator 1)
 read the bug report carefully, spending a few minutes to understand its context, e.g., by looking at the purpose of the overall GitHub
-project and the types of technologies it relies on; 2) marked all of the follow-up questions that were valid.
-Both of the annotators processed the set of 400 bug reports, marking an average of 3.45/10 of the follow up questions
-as valid with an inter-annotator agreement (Cohen's kappa) of X. 
+project and the types of technologies it relies on; 2) marked all of the follow-up questions for the candidate set of 10
+that were valid. Both of the annotators processed the set of 400 bug reports, marking an average of 3.45/10 of the follow up questions
+as valid with an inter-annotator agreement (Cohen's kappa) of X.
+
+\subsubsection{Baselines}
+The baselines we identified were meant to convey both straightforward approaches to ranking (e.g., using the Lucene output) and
+ablation, i.e., using one part of our ranking function but not the other (e.g., ranking based on the utility, $U(q_{i})$). We did not
+find appropriate prior research work to compare against, since the research direction is novel and models from other domains with a similar
+purpose are too different in form. Below is an enumerated list of all of the baselines we used.
+\begin{itemize}
+\item 
+\end{itemize}
+
+\subsubsection{Metrics}
+
+
+\subsubsection{Results}
+
 
 \subsection{Developer Survey}
