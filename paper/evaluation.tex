@@ -29,9 +29,12 @@ as valid with an inter-annotator agreement (Cohen's kappa) of X.
 The baselines we identified were meant to convey both straightforward approaches to ranking (e.g., using the Lucene output) and
 ablation, i.e., using one part of our ranking function but not the other (e.g., ranking based on the utility, $U(q_{i})$). We did not
 find appropriate prior research work to compare against, since the research direction is novel and models from other domains with a similar
-purpose are too different in form. Below is an enumerated list of all of the baselines we used.
+purpose are too different in form. Below is an enumerated list of all of the ranking baselines we used.
 \begin{itemize}
-\item 
+\item {\em Random} --
+\item {\em Lucene} --
+\item {\em Utility only} ($U(q_{i})$) --
+\item {\em Compatibility only} ($P(q_{i}+a_{i}|br)$) --
 \end{itemize}
 
 \subsubsection{Metrics}
