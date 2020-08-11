@@ -7,13 +7,23 @@ Second, we use a survey of software developers to evaluate the follow-up questio
 dimensions, i.e., their usefulness, novelty and specificity.
 
 
-\subsection{Recommendation Quality}
+\subsection{Quality of Follow-Up Question Ranking}
 
-Can't use held
+One way of evaluating the system based on a held-out dataset (of bug reports and candidate follow-up questions) is
+by using the posed questions as the ground truth. However, this simple setup has a serious deficiency in that the posed question
+may not always be the most optimal among the set of candidate follow-up questions. More importantly, several of
+the remaining candidate questions may be valid and (more) relevant to the bug report and therefore should
+not be considered as negatively labeled instances for evaluation. Therefore, in order to provide an evaluation
+set that identifies all of the valid questions in the candidate set we perform manual annotation that clearly
+identifies all of the valid follow-up questions for a specific bug report.
 
+\subsubsection{Annotation}
 
-With "B" we mark the most useful and most appropriate follow-up question in the list (always 1), with "V" we rank all other questions that are appropriate to the BR.
-
-
+We annotated 400 randomly chosen bug reports that were held out from our original corpus of 25K. The annotation
+was performed by two of the authors following a predefined procedure. For each bug report, the annotator 1)
+read the bug report carefully, spending a few minutes to understand its context, e.g., by looking at the purpose of the overall GitHub
+project and the types of technologies it relies on; 2) marked all of the follow-up questions that were valid.
+Both of the annotators processed the set of 400 bug reports, marking an average of 3.45/10 of the follow up questions
+as valid with an inter-annotator agreement (Cohen's kappa) of X. 
 
 \subsection{Developer Survey}
