@@ -107,12 +107,12 @@ follow-up question. The higher the EVPI the higher we rank a follow-up question 
 set.
 
 Given an inadequate bug report of interest, $br$, we express the EVPI of a specific follow-up question $q_{i}$ from our candidate set
-as the product of: 1)the appropriateness of a specific follow up question to the bug report, i.e.,
+as the product of: 1) the appropriateness of a specific follow up question to the bug report, i.e.,
 the probability of a specific question and answer pair occurring for that bug report, $P(q_{i}+a_{i}|br)$, and 2) the utility of that question, $U(q_{i})$.
 
 $$EVPI(q_{i}|br) = P(q_{i}+a_{i}|br) * U(q_{i})$$
 
-The utility of a question is further expressed in terms of the average quality of answers it has received, i.e.,
+The utility of a question is further expressed in terms of the average quality of the answers it has received, i.e.,
 
 $$U(q_{i}) = \sum_{a \in A}^{} \frac{|OB(a)|+|EB(a)|+|S2R(a)|}{|a|} * \frac{1}{|A|}$$
 
@@ -125,17 +125,15 @@ of OB,EB, or S2R of a bug report have higher utility than do questions whose ans
 terms of this information.
 
 To compute the probability of a follow-up question occurring for a given bug report, $P(q_{i}+a_{i}|br)$, we use a neural
-network approximation, consisting of a deep NN consisting of 3 layers. As the first layer we encode
-the bug report text with GloVE embeddings trained on the entirety of Stack Overflow posts. As the second layer we train
-a LSTM and compute an average of the hidden layer. As the third and final layer we use a dense neural network consisting
-of 4 inter-connected layers. We train this neural architecture using the actually posed follow-up questions and answers, which we concatenate, as positive labeled examples and others in the candidate set as negatively labeled. We use weighing to manage the resulting class imbalance as the negative examples significantly outnumber the positive ones.
+network approximation, using a deep NN consisting of 3 layers. As the first layer, in order to introduce semantics, we encode
+the bug report text with GloVE word embeddings that we pre-trained on the entirety of Stack Overflow. As the second layer, in order to capture the word sequence, we train a LSTM and compute an average across the hidden LSTM layer. As the third and final layer we use a dense neural network consisting of 4 inter-connected layers. The output is the concatenation of the average word embeddings of $q_{i}$ and $a_{i}$. We train this neural architecture using the actually posed follow-up questions and answers as positive labeled examples and the remaining question-answer pairs in the candidate set as negatively labeled. We use weight balancing to manage the resulting class imbalance as the negative examples significantly outnumber the positive ones.
 
 To compute the utility of the follow-up question, $U(q_{i})$, we leverage the pattern based
 identification of the constituent pieces of a bug report (OB,EB and S2R) created by Chaparro et al.~\cite{chaparro17detecting}
 We implement 5 of the most common and most productive patterns for each of OB,EB and S2R, as described by
-the authors. Each of the 15 patterns rely on predefined sets of keywords and part-of-speech tagging to ensure high precision.
-In order to compute the average utility of the answers for a particular question in the corpus, we rely on Lucene to provide matching
-between questions and we reserve 10 of the most similar question variants for each queried follow-up question.
+the authors. Each of the total 15 patterns we implemented rely on predefined sets of keywords and part-of-speech tagging to ensure high
+precision. In order to compute the average utility of the answers for a particular question in the corpus, we rely on Lucene to provide
+matching between questions and we reserve 10 of the most similar question variants for each queried follow-up question.
 
 
 %
