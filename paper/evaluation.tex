@@ -18,11 +18,11 @@ identifies all of the valid follow-up questions for a specific bug report.
 
 \subsubsection{Annotation}
 We annotated 400 randomly chosen bug reports that were held out from our original corpus of 25K. The annotation
-was performed by two of the authors following an agreed-upon predefined procedure. For each bug report, an annotator 1)
+was performed by two of the authors following an agreed-upon predefined procedure. For each bug report, each annotator 1)
 read the bug report carefully, spending a few minutes to understand its context, e.g., by looking at the purpose of the overall GitHub
 project and the types of technologies it relies on; 2) marked all of the follow-up questions for the candidate set of 10
 that were valid. Both of the annotators processed the set of 400 bug reports, marking an average of 3.45/10 of the follow up questions
-as valid with an inter-annotator agreement (Cohen's kappa) of X.
+as valid with an inter-annotator agreement (Cohen's kappa) of X. We use the set of follow-up questions that both annotators agreed were valid, i.e., the intersection between their annotation.
 
 \subsubsection{Baselines}
 The baselines we identified are meant to convey both straightforward approaches to ranking (e.g., directly using the Lucene output) and
@@ -47,16 +47,16 @@ The goal of Precision@$n$ is to measure the number of valid results when conside
 
 \begin{table}[t]
 \centering
-\begin{tabular}{lcccc}
-                          & \multicolumn{4}{c}{$V_{1} \cap V_{2}$} \\
-                          & MRR  & P@1  & P@3  & P@5  \\\hline
+\caption{Eooo.}
+\begin{tabular}{p{3cm}cccc}
+%                          & \multicolumn{4}{c}{$V_{1} \cap V_{2}$} \\\hline
+                          & {\bf MRR}  & {\bf P@1}  & {\bf P@3}  & {\bf P@5}  \\\hline
 {\em Random}              & 0.52 & 0.32 & 0.33 & 0.34 \\
 {\em Lucene}              & 0.53 & 0.35 & 0.32 & 0.32 \\
-{\em Utility only}        &      &      &      &      \\
-{\em Compatibility only}  &      &      &      &      \\
+{\em Utility only}        & 0.65 & 0.47 & 0.44 & 0.41 \\
+{\em Compatibility only}  & 0.61 & 0.43 & 0.38 & 0.38 \\
 {\em EVPI}                & 0.67 & 0.49 & 0.49 & 0.45 \\
 \end{tabular}
-\caption{Eooo.}
 \label{tab:results}
 \end{table}
 
@@ -68,3 +68,5 @@ baselines in Table~\ref{tab:results}.
 
 
 \subsection{Developer Survey}
+
+\subsection{Threats to Validity}
