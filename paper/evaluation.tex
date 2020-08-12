@@ -26,19 +26,24 @@ that were valid. Both of the annotators processed the set of 400 bug reports, ma
 as valid with an inter-annotator agreement (Cohen's kappa) of X.
 
 \subsubsection{Baselines}
-The baselines we identified were meant to convey both straightforward approaches to ranking (e.g., using the Lucene output) and
-ablation, i.e., using one part of our ranking function but not the other (e.g., ranking based on the utility, $U(q_{i})$). We did not
-find appropriate prior research work to compare against, since the research direction is novel and models from other domains with a similar
-purpose are too different in form. Below is an enumerated list of all of the ranking baselines we used.
+The baselines we identified are meant to convey both straightforward approaches to ranking (e.g., directly using the Lucene output) and
+ablation, i.e., using one part of our ranking function but not the other (e.g., ranking based only on the question utility, $U(q_{i})$).
+We did not find appropriate prior research work to compare against, since the research direction is novel and models from other domains
+with a similar purpose are too different in form. Below is an enumerated list of all of the ranking baselines we used.
 \begin{itemize}
-\item {\em Random} --
-\item {\em Lucene} --
-\item {\em Utility only} ($U(q_{i})$) --
-\item {\em Compatibility only} ($P(q_{i}+a_{i}|br)$) --
+\item {\em Random} -- A random permutation of the candidate follow-up question list. We present metrics averaged over 10 runs.
+\item {\em Lucene} -- Lucene uses the vector space model (i.e., tf*idf) to rank follow-up questions based on the similarity between the bug reports. This baseline just transfers Lucene's ranking, which we use to generate our candidate set of 10 follow-up questions, as the system's output.
+\item {\em Utility only} ($U(q_{i})$) -- The utility function, described in detail in Section~\ref{sec:ranking}, computes the average amount of OB,EB or S2R found in the answers to the specific follow-up question.
+\item {\em Compatibility only} ($P(q_{i}+a_{i}|br)$) -- The compatibility function computes the probability a bug report can be combined with a specific follow-up question and answer pair. The implementation uses a deep NN architecture to compute this quantity.
 \end{itemize}
 
 \subsubsection{Metrics}
+We use a two popular information retrieval metrics: Mean Reciprocal Rank (MRR) and Precision @ $n$ (P@$n$). We use values of 1, 3 and 5 for $n$.
 
+The goal of MRR is to evaluate how effective is our technique, or a baseline, in locating the first valid follow-up question. It is
+computed as: $$ MRR = \frac{1}{|B|} \sum_{i=1}^{|B|} \frac{1}{rank_{i}}$$, where $B$ is the set of bug reports in the test set and $rank_{i}$ is the ordered position of the first relevant document for the $i^{th}$ query.
+
+The goal of Precision @ $n$ is to measure the number of valid results of our technique, or a baseline, when considering the top $n$ positions in the ranking. It is computed as: $$P@n = $$
 
 \subsubsection{Results}
 
