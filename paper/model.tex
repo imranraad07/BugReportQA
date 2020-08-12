@@ -114,7 +114,7 @@ $$EVPI(q_{i}|br) = P(q_{i}+a_{i}|br) * U(q_{i})$$
 
 The utility of a question is further expressed in terms of the average quality of the answers it has received, i.e.,
 
-$$U(q_{i}) = \sum_{a \in A}^{} \frac{|OB(a)|+|EB(a)|+|S2R(a)|}{|a|} * \frac{1}{|A|}$$
+$$U(q_{i}) = \frac{1}{|A|} * \sum_{a \in A}^{} \frac{|OB(a)|+|EB(a)|+|S2R(a)|}{|a|}$$
 
 \noindent
 ,where $A$ is the set of answers $q_{i}$ has received in the corpus, $a$ is one of those answers, and
