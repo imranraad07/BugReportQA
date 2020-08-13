@@ -78,19 +78,19 @@ instance, a follow-up question may be overly generic, lacking detail or context 
 To investigate how \evpi performs across several such dimensions of interest we conducted a software developer survey.
 
 %\subsubsection{Participants}
-Through personal contacts, we e-mailed 8 software developers about the survey, providing the basic context of our project, a link to a Web form containing the survey and the expected time span of the survey (30 minutes). None of the developers were
-aware about the details of our technique. The developers were half from academia (graduate students at
+Through personal contacts, we e-mailed 8 software developers about the survey, providing the basic context of our project
+and a link to a Web form containing the survey. None of the developers were
+aware about the details of our technique. The developers were half (4) from academia (graduate students at
 institutions in the U.S. and Europe) and half professional developers from industry. All had programming
 experience of 4 or more years with popular languages like Java or Python.
 
 %Procedure
-Each developer was assigned 12 instances of a bug reports and a follow-up question pair, where all of the follow-up questions
-were the top-1 recommended by \evpi. We selected bug reports from our corpus to belong to GitHub projects where Java or Python were
-the primary technologies used, without any additional filtering to avoid bias. For each one of the 12 bug reports, a developer
-was presented with a screenshot from GitHub containing the title and text of the bug report, the follow-up question, and a link to the project the bug report came from. The developers were asked to read both the bug report and the follow-up question before answering the provided set of survey questions. The first preliminary survey question, which was posed on a separate screen, asked "Is the follow-up question valid?". A negative response indicated that the follow-up question was invalid and unusable, so, therefore we asked no additional survey questions for that bug report. The remaining survey questions only appeared for follow-up questions deemed valid by a developer.
-
+Each developer was assigned 12 instances of bug report and follow-up question pairs, where all of the follow-up questions
+were the top-1 recommended by \evpi. We divided the developers into two groups with equal amount of professionals and students and provided 12 bug reports to each group, 24 in total. We selected bug reports from our corpus to belong to GitHub projects where Java or Python were the primary technologies used, without any additional filtering to avoid bias. For each one of the assigned bug reports, a developer
+was presented with a screenshot from GitHub containing the title and text of the bug report, the follow-up question, and a link to the project the bug report came from. The developers were asked to read both the bug report and the follow-up question before answering the provided set of survey questions. The first preliminary survey question, which was posed on an initial screen, asked {\em Is the follow-up question valid?}. A negative response indicated that the follow-up question was invalid and unusable, so, therefore we asked no additional survey questions for that bug report. The remaining survey questions only appeared for follow-up questions deemed valid by a developer.
 
 %Measures
+For a valid follow-up question, we posed a yes/no survey questions interrogating {\em Does the follow-up question ask for new information currently not included in the description?}, followed by two Likert score questions (5 point; Strongly Disagree, Disagree, Neutral, Agree, Strongly Agree) interrogating {\em The follow-up question is specific to the bug report} and {\em The follow-up question is useful to the bug report}. In the following, we refer to the first (yes/no) survey question as measuring New Information, the second measuring Specificity, and the third measuring Usefulness.
 
 %Results
 
