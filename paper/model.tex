@@ -77,7 +77,7 @@ for more accurate matching. GitHub issues use markdown so we remove all text sur
 by triple-quotes as this is typically how source code and stack traces are encoded. We also
 remove quoted text (i.e., lines that start with the greater than symbol) as these typically
 refer to some external information, which, again, is often stack traces, code, or project documentation.
-\item {\em Tokenizing.} We perform standard tokenization used in software engineering applications
+\item {\em Tokenization.} We perform standard tokenization used in software engineering applications
 of information retrieval~\cite{marcus2004information,shepherd2012sando}. We tokenize on white space, remove
 punctuation (except for horizontal dashes)
 and split on camel case and dashes, while also keeping the original unsplit tokens.
@@ -96,7 +96,7 @@ takes more factors into account when choosing which follow-up question to pose t
 bug report.
 
 
-\subsection{Ranking the Candidate Follow-Up Questions}
+\subsection{Ranking the Candidate Follow-Up Questions}\label{sec:ranking}
 
 To rank the set of candidate follow-up questions we reformulate and apply towards bug reporting
 the notion of the Expected Value of Perfect Information (EVPI), initially proposed as a means to
@@ -107,14 +107,14 @@ follow-up question. The higher the EVPI the higher we rank a follow-up question 
 set.
 
 Given an inadequate bug report of interest, $br$, we express the EVPI of a specific follow-up question $q_{i}$ from our candidate set
-as the product of: 1) the appropriateness of a specific follow up question to the bug report, i.e.,
+as the product of: 1) the compatibility of a specific follow up question to the bug report, i.e.,
 the probability of a specific question and answer pair occurring for that bug report, $P(q_{i}+a_{i}|br)$, and 2) the utility of that question, $U(q_{i})$.
 
 $$EVPI(q_{i}|br) = P(q_{i}+a_{i}|br) * U(q_{i})$$
 
 The utility of a question is further expressed in terms of the average quality of the answers it has received, i.e.,
 
-$$U(q_{i}) = \sum_{a \in A}^{} \frac{|OB(a)|+|EB(a)|+|S2R(a)|}{|a|} * \frac{1}{|A|}$$
+$$U(q_{i}) = \frac{1}{|A|} * \sum_{a \in A}^{} \frac{|OB(a)|+|EB(a)|+|S2R(a)|}{|a|}$$
 
 \noindent
 ,where $A$ is the set of answers $q_{i}$ has received in the corpus, $a$ is one of those answers, and
