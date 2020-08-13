@@ -21,8 +21,8 @@ We annotated 400 randomly chosen bug reports that were held out from our origina
 was performed by two of the authors following an agreed-upon predefined procedure. For each bug report, each annotator 1)
 read the bug report carefully, spending a few minutes to understand its context, e.g., by looking at the purpose of the overall GitHub
 project and the types of technologies it relies on; 2) marked all of the follow-up questions for the candidate set of 10
-that were valid. Both of the annotators processed the set of 400 bug reports, marking an average of 3.45/10 of the follow up questions
-as valid with an inter-annotator agreement (Cohen's kappa) of X. We use the set of follow-up questions that both annotators agreed were valid, i.e., the intersection between their annotation.
+that were valid. Both of the annotators processed the same set of 400 bug reports, marking an average of 3.45/10 of the follow up questions as valid with an inter-annotator agreement (Cohen's kappa) of 0.60.
+We use the set of follow-up questions that both annotators agreed were valid, i.e., the intersection between their annotation.
 
 \subsubsection{Baselines}
 The baselines we identified are meant to convey both straightforward approaches to ranking (e.g., directly using the Lucene output) and
@@ -37,36 +37,61 @@ with a similar purpose are too different in form. Below is an enumerated list of
 \end{itemize}
 
 \subsubsection{Metrics}
-We use a two popular information retrieval evaluation metrics: Mean Reciprocal Rank (MRR) and Precision@$n$ ($P@n$).
+We use a two popular information retrieval evaluation metrics: Mean Reciprocal Rank (MRR) and Precision@n (P@n).
 
 The goal of MRR is to evaluate how effective is our technique, or a baseline, in locating the first valid follow-up question, as, presumably, this is a proxy for the ease with which an end-user would locate a follow-up question in the ranking. It is
 computed as: $$MRR = \frac{1}{|B|} \sum_{i=1}^{|B|} \frac{1}{rank_{i}}$$ ,where $B$ is the set of bug reports in the test set and $rank_{i}$ is the ranked position of the first valid follow-up question for the $i^{th}$ bug report.
 
-The goal of Precision@$n$ is to measure the number of valid results when considering the top $n$ positions in the ranking. Unlike MRR, it consider all, not only the topmost ranked, results. It is computed as: $$P@n = \frac{1}{|B|} \sum_{i=1}^{|B|} \frac{|v|}{n}$$ ,where, as before, $B$ is the set of bug reports in the test set and $v$ is the set of valid follow-up questions ranked in the top $n$ positions. We use values of 1, 3 and 5 for $n$.
+The goal of Precision@n is to measure the number of valid results when considering the top $n$ positions in the ranking. Unlike MRR, it consider all, not only the topmost ranked, results. It is computed as: $$P@n = \frac{1}{|B|} \sum_{i=1}^{|B|} \frac{|v|}{n}$$ ,where, as before, $B$ is the set of bug reports in the test set and $v$ is the set of valid follow-up questions ranked in the top $n$ positions. We use values of 1, 3 and 5 for $n$.
 
 
 \begin{table}[t]
 \centering
-\caption{Eooo.}
+\caption{Evaluation results contrasting our system (\evpi) relative to several baselines.}
 \begin{tabular}{p{3cm}cccc}
+\hline
 %                          & \multicolumn{4}{c}{$V_{1} \cap V_{2}$} \\\hline
                           & {\bf MRR}  & {\bf P@1}  & {\bf P@3}  & {\bf P@5}  \\\hline
 {\em Random}              & 0.52 & 0.32 & 0.33 & 0.34 \\
 {\em Lucene}              & 0.53 & 0.35 & 0.32 & 0.32 \\
 {\em Utility only}        & 0.65 & 0.47 & 0.44 & 0.41 \\
 {\em Compatibility only}  & 0.61 & 0.43 & 0.38 & 0.38 \\
-{\em EVPI}                & 0.67 & 0.49 & 0.49 & 0.45 \\
+{\em \evpi}                & 0.67 & 0.49 & 0.49 & 0.45 \\ \hline
 \end{tabular}
 \label{tab:results}
 \end{table}
 
 
-\subsubsection{Results} We summarize the results of our technique (EVPI) versus the identified
-baselines in Table~\ref{tab:results}.
-
-
+\subsubsection{Results} We summarize the results of our technique (\evpi) versus the identified
+baselines in Table~\ref{tab:results}. Our results indicate that \evpi outperforms all of the baselines,
+with the ablation-type baselines performing better than the simple baselines. The Lucene ranking
+does surprisingly poor, basically in line with the Random baseline. The Utility only baseline is
+the ones that comes closest to the performance of the full system. Perhaps the most intuitive result
+is $P@1$, where \evpi scores 0.49, indicating that just about half of all of the top recommended follow-up
+questions by our system were valid.
 
 
 \subsection{Developer Survey}
+While a recommended follow-up question may be valid, it may not possess other properties that would
+encourage its use in a system that automatically poses follow-up questions for incomplete bug reports. For
+instance, a follow-up question may be overly generic and lack detail or context specific to the bug report.
+To investigate how our system performs across several such dimensions of interest we conducted a software developer survey.
+
+%\subsubsection{Participants}
+Through personal contacts, we e-mailed 8 software developers about our survey. None of the developers were
+aware about the nature of our project outside of the content of our e-mail, which provided only
+the most basic project context. After a positive response on our e-mail, we provided each developer with a
+link to a Web form containing the survey. The participants were half from academia (graduate students at
+institutions in the U.S. and Europe) and half professional developers from industry. All had programming
+experience of 4 or more years with popular languages like Java or Python.
+
+%Procedure
+Each developer was assigned 12 instances of a bug reports and a follow-up question pair, where all of the follow-up questions
+were the top-1 recommended by our \evpi system. 
+
+%Measures
+
+%Results
+
 
 \subsection{Threats to Validity}
