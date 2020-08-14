@@ -12,7 +12,7 @@ def main(args):
     df = pd.DataFrame({'Org': ['Novelty', 'Novelty'],
                        'response': ['Yes', 'No'],
                        'percent': [94.42, 5.58],
-                       'value': [5.88, 94.12],
+                       'value': [4, 60],
                        'position': [2.5, 8.5]})
 
     color_scale = alt.Scale(

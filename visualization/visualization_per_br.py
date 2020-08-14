@@ -34,7 +34,7 @@ def main(args):
         x=alt.X('percentage:Q', title='Percentage',
                 axis=alt.Axis(format='.0f')),
         y=alt.Y('id:N', axis=y_axis,
-                sort=["BR14", "BR22", "BR3", "BR8", "BR9", "BR18", "BR17", "BR19", "BR6", "BR5", "BR12", "BR2"]),
+                sort=["BR9", "BR8", "BR14", "BR22", "BR12", "BR18", "BR17", "BR19", "BR2", "BR6", "BR3", "BR5", ]),
         color=alt.Color(
             'type:N',
             legend=alt.Legend(orient='bottom', title='', padding=-12),
@@ -44,6 +44,9 @@ def main(args):
             'order',
             sort='ascending'
         ),
+    ).properties(
+        width=300,
+        height=200
     ).facet(
         column=alt.Column("quality:N", title=None, sort=["Specificity", "Usefulness", "Novelty"])
     )
