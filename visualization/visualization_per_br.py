@@ -19,7 +19,7 @@ def main(args):
             "No",
             "Yes"
         ],
-        range=["#c30d24", "#f3a583", "#cccccc", "#94c6da", "#1770ab", "#1E1E1E", "#006312"]
+        range=["#c30d24", "#f3a583", "#cccccc", "#94c6da", "#1770ab", "#1E1E1E", "#62c983"]
     )
 
     y_axis = alt.Axis(
@@ -34,7 +34,7 @@ def main(args):
         x=alt.X('percentage:Q', title='Percentage',
                 axis=alt.Axis(format='.0f')),
         y=alt.Y('id:N', axis=y_axis,
-                sort=["BR9", "BR8", "BR14", "BR22", "BR12", "BR18", "BR17", "BR19", "BR2", "BR6", "BR3", "BR5", ]),
+                sort=["BR9", "BR8", "BR14", "BR22", "BR10", "BR12", "BR18", "BR17", "BR19", "BR2", "BR6", "BR3", "BR5", ]),
         color=alt.Color(
             'type:N',
             legend=alt.Legend(orient='bottom', title='', padding=-12),
@@ -45,7 +45,7 @@ def main(args):
             sort='ascending'
         ),
     ).properties(
-        width=300,
+        width=200,
         height=200
     ).facet(
         column=alt.Column("quality:N", title=None, sort=["Specificity", "Usefulness", "Novelty"])

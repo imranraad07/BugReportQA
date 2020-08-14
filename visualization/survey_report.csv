@@ -143,3 +143,15 @@
 174,BR12,Usefulness,Strongly agree,0,0,5
 175,BR12,Novelty,No,0,0,1
 176,BR12,Novelty,Yes,3,100,2
+177,BR10,Specificity,Strongly disagree,0,0,1
+178,BR10,Specificity,Disagree,1,0,2
+179,BR10,Specificity,Neutral,1,33.33,3
+180,BR10,Specificity,Agree,0,33.33,4
+181,BR10,Specificity,Strongly agree,1,33.34,5
+182,BR10,Usefulness,Strongly disagree,0,0,1
+183,BR10,Usefulness,Disagree,1,0,2
+184,BR10,Usefulness,Neutral,1,33.33,3
+185,BR10,Usefulness,Agree,0,66.67,4
+186,BR10,Usefulness,Strongly agree,1,0,5
+187,BR10,Novelty,No,1,33.33,1
+188,BR10,Novelty,Yes,2,66.67,2
