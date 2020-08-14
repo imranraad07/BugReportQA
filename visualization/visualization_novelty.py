@@ -9,7 +9,7 @@ alt.renderers.enable('altair_viewer')
 
 
 def main(args):
-    df = pd.DataFrame({'Org': ['Novelty', 'Novelty'],
+    df = pd.DataFrame({'Org': ['New Information', 'New Information'],
                        'response': ['Yes', 'No'],
                        'percent': [94.42, 5.58],
                        'value': [4, 60],
