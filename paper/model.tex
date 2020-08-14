@@ -47,7 +47,7 @@ specifically, created between 2008-2014, and recently active with new issues cre
 \item For each of these repositories, in their descending order of activity as defined in the previous step,
 we selected issues in their GitHub issue tracker that are labeled as "bug", "crash", "fix", or unlabeled. Our goal for this step was
 to avoid feature requests and focus on bug reports. We observed that issue labels were not used consistently enough
-in projects, which is why we opted to include unlabeled issues.
+in projects, which is why we opted to include unlabeled issues. Since we are interested in incomplete bug reports, we select bug reports that do not contain Observable Behavior, Expected Behavior or Steps to Reproduce. While focusing on incompleteness in one of these categories is possible, for simplicity, we chose bug reports that lacked all three.
 \item We further selected only issues that contain follow-up questions in one of the issue comments.  We identified follow-up questions as GitHub comments containing only questions, identified by both starting with an interrogative word and ending with a question mark. In order to ensure we selected follow-up questions and not just
 any questions, we constrained our selection based on time and comment sequence. That is, the comment containing the follow-up question must have been posted within 60 days of the issue creation date and must have occurred as the comment immediately following the post. We also ignored follow-up posts by the issue author by ensuring that the comment was authored by a different user from the author of the issue.
 \item The set of issues and candidate follow-up questions from the previous step were further filtered to

@@ -6,10 +6,11 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
+\usepackage{xspace}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
- \newcommand{\evpi}{EVPI } 
+ \newcommand{\evpi}{EVPI\xspace}
 
 \begin{document}
 
@@ -34,7 +35,30 @@ kdamevski@vcu.edu}
 \maketitle
 
 \begin{abstract}
-This document is
+% quality bug reporting is important
+The quality of information contained in bug reports created by software users is key
+to efficiently fixing software faults.
+%
+Automatically improving and augmenting information in bug reports that are incomplete or
+inadequate can make bug triagers more effective and improve software maintenance.
+%
+In this paper, we propose a system for automatically posing follow-up questions for
+inadequate bug reports that are intended to elicit answers that add value and provide
+missing information to a bug report.
+%
+Our system is based on a ranking a large corpus of already posed follow-up questions.
+%
+We use a combination of neural networks and information retrieval to rank and select
+follow-up questions using the similarity of the text of their bug report to the current
+bug report of interest and by estimating the utility the expected answer to the question would provide
+to the bug report.
+%
+Evaluation of our system based on a manually annotated held out data set indicates improved
+performance over a set of baselines.
+%
+A survey of software developers indicates that the follow-up questions are useful and specific to a bug
+report most of the time and can provide new information some of the time.
+
 \end{abstract}
 
 \begin{IEEEkeywords}
