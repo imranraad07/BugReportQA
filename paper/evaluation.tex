@@ -73,27 +73,46 @@ questions by our system were valid.
 
 \subsection{Developer Survey}
 While a recommended follow-up question may be valid, it may not possess other properties that would
-encourage its use in practice, in a system that automatically poses follow-up questions for incomplete bug reports. For
+encourage its use in practice, i.e., in a system that automatically poses follow-up questions for incomplete bug reports. For
 instance, a follow-up question may be overly generic, lacking detail or context specific to the bug report (e.g., {\em Can you provide
 additional information?}). To investigate how \evpi performs across several such dimensions of interest we conducted a survey with
 software developers.
 
 %\subsubsection{Participants}
-Through personal contacts, we e-mailed 8 software developers about the study, providing the basic context of our project
+Through personal contacts, we e-mailed 10 software developers about the study, providing the basic context of our project
 and a link to a Web form containing the survey. None of the developers were
-aware about the details of our technique. The developers were half (4) from academia (graduate students at
+aware about the details of our technique. The developers were half (5) from academia (graduate students at
 institutions in the U.S. and Europe) and half professional developers from industry. All had programming
 experience of 4 or more years with popular languages like Java and Python and all indicated one of their primary
 responsibilities was developing software.
 
 %Procedure
-The developers were assigned into two groups of 4 and each group was assigned 12 instances of bug report and follow-up question pairs, where all of the follow-up questions were the top-1 selected by \evpi. We selected bug reports from our corpus to belong to GitHub projects where Java or Python were the primary technologies used. For each one of the assigned bug reports, a developer
-was presented with a screenshot from GitHub containing the title and text of the bug report, the follow-up question, and a link to the project the bug report came from for context. The developers were asked to read both the bug report and the follow-up question before answering the provided set of survey questions. A preliminary survey question, which was posed on an initial screen, asked {\em Is the follow-up question valid?}. A negative response indicated that the follow-up question was invalid and unusable, so, therefore we asked no additional survey questions for that specific bug report - follow-up question pair. The remaining survey questions only appeared for follow-up questions deemed valid by a developer.
+We randomly assigned the developers into two groups of 5 and each group was assigned 12 instances of bug report and follow-up question pairs, where all of the follow-up questions were the top-1 selected by \evpi. Each group was presented with bug reports from our corpus that belong to GitHub projects where Java or Python were the primary technologies used. For each one of the assigned bug reports, a developer
+was presented with a screenshot from GitHub containing the title and text of the bug report, the follow-up question, and a link to the project the bug report came from for context. Prior to beginning the survey, we gave instructions to the developers to read both the bug report and the follow-up question before answering the provided set of survey questions. A preliminary survey question, which was posed on an initial screen, asked {\em Is the follow-up question valid?}. A negative response indicated that the follow-up question was invalid and unusable, so, therefore we asked no additional survey questions for that specific bug report - follow-up question pair. The remaining survey questions only appeared for instances deemed valid by a developer.
 
 %Measures
 For a valid follow-up question, we posed a yes/no survey question interrogating {\em Does the follow-up question ask for new information currently not included in the description?}, followed by two Likert score survey questions (5 point; Strongly Disagree, Disagree, Neutral, Agree, Strongly Agree) interrogating {\em The follow-up question is specific to the bug report} and {\em The follow-up question is useful to the bug report}. In the following, we refer to the first (yes/no) survey question as measuring New Information, the second measuring Specificity, and the third measuring Usefulness.
 
+\begin{table}[t]
+\centering
+\caption{Inter-rater agreement for developer survey.}
+\begin{tabular}{p{3cm}c}
+\hline
+                          & {\bf Cohen's Kappa}   \\\hline
+{\em Validity}                & 0.00  \\
+{\em New Information}         & 0.00  \\
+{\em Specificity}             & 0.00  \\
+{\em Usefulness}              & 0.00  \\ \hline
+\end{tabular}
+\label{tab:kappa}
+\end{table}
+
 %Results
-The survey results showed that out of the 24 different bug report - follow-up question pairs, a majority of participants considered 10 follow-up questions as valid, and Y as invalid. This is analogous to the results we observed for Precision@1 in the held-out set evaluation above.
+The survey results showed that out of the 24 different bug report - follow-up question pairs, a majority of participants (at least 3 out of 5) considered 12 follow-up questions as valid, and 12 as invalid. This is analogous to the results we observed for Precision@1 in the held-out set evaluation above, giving more confidence in the soundness of both of the studies.
+
+The results of the survey, along each dimension, are presented both at the granularity of individual response in Figure X and at the granularity of a bug report (and follow-up question pair) in Figure Y. Figure X shows that ... In Figure Y we observe that
+The inter-rater agreement, computed along each survey question, is shown in Table~\ref{tab:kappa}.
+
+
 
 \subsection{Threats to Validity}
