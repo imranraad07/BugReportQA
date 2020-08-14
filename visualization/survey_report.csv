@@ -1,121 +1,145 @@
 ,id,quality,type,value,percentage,order
-0,BR3,Specificity,Strongly disagree,2,50,1
+0,BR3,Specificity,Strongly disagree,3,60,1
 1,BR3,Specificity,Disagree,0,0,2
 2,BR3,Specificity,Neutral,0,0,3
-3,BR3,Specificity,Agree,2,50,4
+3,BR3,Specificity,Agree,2,40,4
 4,BR3,Specificity,Strongly agree,0,0,5
 5,BR3,Usefulness,Strongly disagree,0,0,1
 6,BR3,Usefulness,Disagree,0,0,2
-7,BR3,Usefulness,Neutral,1,25,3
-8,BR3,Usefulness,Agree,2,50,4
-9,BR3,Usefulness,Strongly agree,1,25,5
+7,BR3,Usefulness,Neutral,2,40,3
+8,BR3,Usefulness,Agree,2,40,4
+9,BR3,Usefulness,Strongly agree,1,20,5
 10,BR3,Novelty,No,0,0,1
-11,BR3,Novelty,Yes,4,100,2
-12,BR5,Specificity,Strongly disagree,1,25,1
-13,BR5,Specificity,Disagree,2,50,2
+11,BR3,Novelty,Yes,5,100,2
+12,BR5,Specificity,Strongly disagree,1,20,1
+13,BR5,Specificity,Disagree,3,60,2
 14,BR5,Specificity,Neutral,0,0,3
 15,BR5,Specificity,Agree,0,0,4
 16,BR5,Specificity,Strongly agree,0,0,5
-17,BR5,Usefulness,Strongly disagree,1,25,1
-18,BR5,Usefulness,Disagree,1,25,2
-19,BR5,Usefulness,Neutral,0,0,3
-20,BR5,Usefulness,Agree,1,25,4
+17,BR5,Usefulness,Strongly disagree,1,20,1
+18,BR5,Usefulness,Disagree,1,20,2
+19,BR5,Usefulness,Neutral,1,20,3
+20,BR5,Usefulness,Agree,1,20,4
 21,BR5,Usefulness,Strongly agree,0,0,5
-22,BR5,Novelty,No,0,0,1
-23,BR5,Novelty,Yes,3,75,2
-24,BR6,Specificity,Strongly disagree,1,25,1
+22,BR5,Novelty,No,1,20,1
+23,BR5,Novelty,Yes,3,60,2
+24,BR6,Specificity,Strongly disagree,2,40,1
 25,BR6,Specificity,Disagree,0,0,2
-26,BR6,Specificity,Neutral,1,25,3
-27,BR6,Specificity,Agree,1,25,4
+26,BR6,Specificity,Neutral,1,20,3
+27,BR6,Specificity,Agree,1,20,4
 28,BR6,Specificity,Strongly agree,0,0,5
 29,BR6,Usefulness,Strongly disagree,0,0,1
 30,BR6,Usefulness,Disagree,0,0,2
-31,BR6,Usefulness,Neutral,1,25,3
-32,BR6,Usefulness,Agree,1,25,4
-33,BR6,Usefulness,Strongly agree,1,25,5
+31,BR6,Usefulness,Neutral,2,40,3
+32,BR6,Usefulness,Agree,1,20,4
+33,BR6,Usefulness,Strongly agree,1,20,5
 34,BR6,Novelty,No,0,0,1
-35,BR6,Novelty,Yes,3,75,2
+35,BR6,Novelty,Yes,4,80,2
 36,BR8,Specificity,Strongly disagree,0,0,1
 37,BR8,Specificity,Disagree,0,0,2
-38,BR8,Specificity,Neutral,1,25,3
-39,BR8,Specificity,Agree,0,0,4
-40,BR8,Specificity,Strongly agree,2,50,5
+38,BR8,Specificity,Neutral,1,20,3
+39,BR8,Specificity,Agree,1,20,4
+40,BR8,Specificity,Strongly agree,2,40,5
 41,BR8,Usefulness,Strongly disagree,0,0,1
 42,BR8,Usefulness,Disagree,0,0,2
-43,BR8,Usefulness,Neutral,1,25,3
-44,BR8,Usefulness,Agree,0,0,4
-45,BR8,Usefulness,Strongly agree,2,50,5
+43,BR8,Usefulness,Neutral,1,20,3
+44,BR8,Usefulness,Agree,1,20,4
+45,BR8,Usefulness,Strongly agree,2,40,5
 46,BR8,Novelty,No,0,0,1
-47,BR8,Novelty,Yes,3,75,2
+47,BR8,Novelty,Yes,4,80,2
 48,BR9,Specificity,Strongly disagree,0,0,1
 49,BR9,Specificity,Disagree,0,0,2
 50,BR9,Specificity,Neutral,0,0,3
-51,BR9,Specificity,Agree,1,25,4
-52,BR9,Specificity,Strongly agree,2,50,5
+51,BR9,Specificity,Agree,2,40,4
+52,BR9,Specificity,Strongly agree,2,40,5
 53,BR9,Usefulness,Strongly disagree,0,0,1
 54,BR9,Usefulness,Disagree,0,0,2
-55,BR9,Usefulness,Neutral,1,25,3
-56,BR9,Usefulness,Agree,1,25,4
-57,BR9,Usefulness,Strongly agree,1,25,5
-58,BR9,Novelty,No,1,25,1
-59,BR9,Novelty,Yes,2,50,2
+55,BR9,Usefulness,Neutral,1,20,3
+56,BR9,Usefulness,Agree,2,40,4
+57,BR9,Usefulness,Strongly agree,1,20,5
+58,BR9,Novelty,No,1,20,1
+59,BR9,Novelty,Yes,3,60,2
 60,BR14,Specificity,Strongly disagree,0,0,1
 61,BR14,Specificity,Disagree,0,0,2
-62,BR14,Specificity,Neutral,0,0,3
-63,BR14,Specificity,Agree,2,50,4
-64,BR14,Specificity,Strongly agree,2,50,5
+62,BR14,Specificity,Neutral,1,20,3
+63,BR14,Specificity,Agree,2,40,4
+64,BR14,Specificity,Strongly agree,2,40,5
 65,BR14,Usefulness,Strongly disagree,0,0,1
 66,BR14,Usefulness,Disagree,0,0,2
-67,BR14,Usefulness,Neutral,0,0,3
-68,BR14,Usefulness,Agree,1,25,4
-69,BR14,Usefulness,Strongly agree,3,75,5
+67,BR14,Usefulness,Neutral,1,20,3
+68,BR14,Usefulness,Agree,1,20,4
+69,BR14,Usefulness,Strongly agree,3,60,5
 70,BR14,Novelty,No,0,0,1
-71,BR14,Novelty,Yes,4,100,2
+71,BR14,Novelty,Yes,5,100,2
 72,BR17,Specificity,Strongly disagree,0,0,1
-73,BR17,Specificity,Disagree,1,25,2
-74,BR17,Specificity,Neutral,1,25,3
-75,BR17,Specificity,Agree,1,25,4
-76,BR17,Specificity,Strongly agree,1,25,5
+73,BR17,Specificity,Disagree,1,20,2
+74,BR17,Specificity,Neutral,1,20,3
+75,BR17,Specificity,Agree,1,20,4
+76,BR17,Specificity,Strongly agree,1,20,5
 77,BR17,Usefulness,Strongly disagree,0,0,1
 78,BR17,Usefulness,Disagree,0,0,2
-79,BR17,Usefulness,Neutral,1,25,3
-80,BR17,Usefulness,Agree,2,50,4
-81,BR17,Usefulness,Strongly agree,1,25,5
+79,BR17,Usefulness,Neutral,1,20,3
+80,BR17,Usefulness,Agree,2,40,4
+81,BR17,Usefulness,Strongly agree,1,20,5
 82,BR17,Novelty,No,0,0,1
-83,BR17,Novelty,Yes,4,100,2
+83,BR17,Novelty,Yes,4,80,2
 84,BR18,Specificity,Strongly disagree,0,0,1
-85,BR18,Specificity,Disagree,1,25,2
-86,BR18,Specificity,Neutral,1,25,3
-87,BR18,Specificity,Agree,0,0,4
-88,BR18,Specificity,Strongly agree,1,25,5
+85,BR18,Specificity,Disagree,1,20,2
+86,BR18,Specificity,Neutral,1,20,3
+87,BR18,Specificity,Agree,1,20,4
+88,BR18,Specificity,Strongly agree,1,20,5
 89,BR18,Usefulness,Strongly disagree,0,0,1
 90,BR18,Usefulness,Disagree,0,0,2
 91,BR18,Usefulness,Neutral,0,0,3
-92,BR18,Usefulness,Agree,2,50,4
-93,BR18,Usefulness,Strongly agree,1,25,5
+92,BR18,Usefulness,Agree,2,40,4
+93,BR18,Usefulness,Strongly agree,2,40,5
 94,BR18,Novelty,No,0,0,1
-95,BR18,Novelty,Yes,3,75,2
+95,BR18,Novelty,Yes,4,80,2
 96,BR19,Specificity,Strongly disagree,0,0,1
-97,BR19,Specificity,Disagree,1,25,2
+97,BR19,Specificity,Disagree,1,20,2
 98,BR19,Specificity,Neutral,0,0,3
-99,BR19,Specificity,Agree,2,50,4
+99,BR19,Specificity,Agree,3,60,4
 100,BR19,Specificity,Strongly agree,0,0,5
 101,BR19,Usefulness,Strongly disagree,0,0,1
 102,BR19,Usefulness,Disagree,0,0,2
 103,BR19,Usefulness,Neutral,0,0,3
-104,BR19,Usefulness,Agree,3,75,4
-105,BR19,Usefulness,Strongly agree,0,0,5
+104,BR19,Usefulness,Agree,3,60,4
+105,BR19,Usefulness,Strongly agree,1,20,5
 106,BR19,Novelty,No,0,0,1
-107,BR19,Novelty,Yes,3,75,2
+107,BR19,Novelty,Yes,4,80,2
 132,BR22,Specificity,Strongly disagree,0,0,1
 133,BR22,Specificity,Disagree,0,0,2
 134,BR22,Specificity,Neutral,0,0,3
-135,BR22,Specificity,Agree,3,75,4
-136,BR22,Specificity,Strongly agree,1,25,5
+135,BR22,Specificity,Agree,3,60,4
+136,BR22,Specificity,Strongly agree,2,40,5
 137,BR22,Usefulness,Strongly disagree,0,0,1
 138,BR22,Usefulness,Disagree,0,0,2
 139,BR22,Usefulness,Neutral,0,0,3
-140,BR22,Usefulness,Agree,3,75,4
-141,BR22,Usefulness,Strongly agree,1,25,5
+140,BR22,Usefulness,Agree,3,60,4
+141,BR22,Usefulness,Strongly agree,2,40,5
 142,BR22,Novelty,No,0,0,1
-143,BR22,Novelty,Yes,4,100,2
+143,BR22,Novelty,Yes,5,100,2
+144,BR2,Specificity,Strongly disagree,0,0,1
+145,BR2,Specificity,Disagree,1,20,2
+146,BR2,Specificity,Neutral,1,20,3
+147,BR2,Specificity,Agree,1,20,4
+148,BR2,Specificity,Strongly agree,0,0,5
+149,BR2,Usefulness,Strongly disagree,0,0,1
+150,BR2,Usefulness,Disagree,0,0,2
+151,BR2,Usefulness,Neutral,0,0,3
+152,BR2,Usefulness,Agree,3,60,4
+153,BR2,Usefulness,Strongly agree,0,0,5
+154,BR2,Novelty,No,1,20,1
+155,BR2,Novelty,Yes,2,40,2
+156,BR12,Specificity,Strongly disagree,0,0,1
+157,BR12,Specificity,Disagree,0,0,2
+158,BR12,Specificity,Neutral,1,20,3
+159,BR12,Specificity,Agree,2,40,4
+160,BR12,Specificity,Strongly agree,0,0,5
+170,BR12,Usefulness,Strongly disagree,0,0,1
+171,BR12,Usefulness,Disagree,0,0,2
+172,BR12,Usefulness,Neutral,1,20,3
+173,BR12,Usefulness,Agree,2,40,4
+174,BR12,Usefulness,Strongly agree,0,0,5
+175,BR12,Novelty,No,0,0,1
+176,BR12,Novelty,Yes,3,60,2
