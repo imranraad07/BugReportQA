@@ -98,7 +98,7 @@ For a valid follow-up question, we posed a yes/no survey question interrogating 
 \caption{Inter-rater agreement for developer survey.}
 \begin{tabular}{p{3cm}c}
 \hline
-                          & {\bf Cohen's Kappa}   \\\hline
+                          & {\bf Fleiss' Kappa}   \\\hline
 {\em Validity}                & 0.00  \\
 {\em New Information}         & 0.00  \\
 {\em Specificity}             & 0.00  \\
@@ -107,8 +107,15 @@ For a valid follow-up question, we posed a yes/no survey question interrogating 
 \label{tab:kappa}
 \end{table}
 
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.99\linewidth]{figures/viz_group.pdf}
+\caption{D.}
+\label{fig:survey}
+\end{figure*}
+
 %Results
-The survey results showed that out of the 24 different bug report - follow-up question pairs, a majority of participants (at least 3 out of 5) considered 12 follow-up questions as valid, and 12 as invalid. This is analogous to the results we observed for Precision@1 in the held-out set evaluation above, giving more confidence in the soundness of both of the studies.
+The survey results showed that out of the 24 different bug report - follow-up question pairs, a majority of participants (at least 3 out of 5) considered 13 follow-up questions as valid, and 11 as invalid. This ratio is analogous to the results we observed for Precision@1 in the held-out set evaluation above, confirming expectations.
 
 The results of the survey, along each dimension, are presented both at the granularity of individual response in Figure X and at the granularity of a bug report (and follow-up question pair) in Figure Y. Figure X shows that ... In Figure Y we observe that
 The inter-rater agreement, computed along each survey question, is shown in Table~\ref{tab:kappa}.
