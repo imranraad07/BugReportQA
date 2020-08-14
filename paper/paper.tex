@@ -36,21 +36,25 @@ kdamevski@vcu.edu}
 
 \begin{abstract}
 % quality bug reporting is important
-The quality of information contained in bug reports created by software users is key
-to efficiently fixing software faults.
+The quality and quantity of information contained in bug reports created by software users is key
+to fixing software faults.
+%
+% Despite the success of efforts to make bug reporting consistent and detailed, numerous bug reports still lack
+% sufficient important information.
 %
 Automatically improving and augmenting information in bug reports that are incomplete or
-inadequate can make bug triagers more effective and improve software maintenance.
+inadequate can make software maintenance more effective and improve software quality.
 %
-In this paper, we propose a system for automatically posing follow-up questions for
-inadequate bug reports that are intended to elicit answers that add value and provide
-missing information to a bug report.
+In this paper, we propose a system that addresses inadequate bug reports by automatically posing follow-up questions,
+which are intended to elicit answers that add value and provide missing information to a bug report.
 %
-Our system is based on a ranking a large corpus of already posed follow-up questions.
+Our system is based on a selecting follow-up questions for a bug report by leveraging a large corpus of already posed follow-up questions.
 %
-We use a combination of neural networks and information retrieval to rank and select
-follow-up questions using the similarity of the text of their bug report to the current
-bug report of interest and by estimating the utility the expected answer to the question would provide
+We use a combination of information retrieval and deep neural networks to rank and select
+follow-up questions for a bug report by using the similarity between the text in pairs of bug
+reports.
+%
+As another component in our selection, we estimate the utility the expected answer to the follow-up question would provide
 to the bug report.
 %
 Evaluation of our system based on a manually annotated held out data set indicates improved
