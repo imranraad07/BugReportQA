@@ -20,7 +20,7 @@ def main(args):
             "No",
             "Yes"
         ],
-        range=["#1E1E1E", "#006312"]
+        range=["#CCCC00", "#62c983"]
         # range=["#c30d24", "#1770ab"]
     )
 
