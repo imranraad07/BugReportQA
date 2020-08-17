@@ -7,9 +7,11 @@ import requests
 from nltk import sent_tokenize
 
 from data_generation.calculator import Calculator
+from data_scraper.github_repo_finder import get_contributors
 from utils import question_identifier
 
 logger = logging.getLogger('follow-up-questions')
+headers = {"Authorization": "Bearer a4a37bc57f01dfef13d3c5f629dbc51800d554ca"}
 
 repos = [
     'golang/go', 'kubernetes/kubernetes', 'rust-lang/rust', 'ansible/ansible', 'microsoft/TypeScript',
@@ -23,7 +25,7 @@ query_template = Template("""
     resetAt
   }
   repository(owner: "$owner", name: "$name") {
-   issues(last: $n, filterBy: {states:CLOSED}){
+   issues(first: $n, filterBy: {states:CLOSED, labels: ["bug", "Bug", ">bug", "crash", "type: bug/fix","kind/bug", "WaitingForInfo", "UX", "NeedsInvestigation", "NeedsFix", "kind/bug", "C-bug", "I-ICE"]}){
     totalCount
     nodes{
       ... on Issue{
@@ -52,8 +54,8 @@ query_template = Template("""
 }
 """)
 
+
 def extract_data(issue):
-    # check if comment count is at least two
     comment_count = 0
     after_question = 0
     has_follow_up_question = False
@@ -62,8 +64,8 @@ def extract_data(issue):
     follow_up_question = ''
     follow_up_question_reply = ''
 
-    if len(issue['comments']['nodes']) < 2 or issue['body'] is None:
-        return has_follow_up_question, has_follow_up_answer, is_OB_EB_S2R
+    if len(issue['comments']['nodes']) < 2 or issue['body'] is None or issue['author'] is None:
+        return None
 
     comments = issue['comments']['nodes']
     for comment in comments:
@@ -74,6 +76,8 @@ def extract_data(issue):
             continue
 
         if not has_follow_up_question and comment_count < 3:
+            if comment['author'] is None:
+                continue
             comment_count = comment_count + 1
             # if comment author and issue author are same, then discard the comment
             if comment['author']['login'] == issue['author']['login']:
@@ -111,13 +115,8 @@ def extract_data(issue):
         calc = Calculator(threshold=0)
         if calc.utility(issue['number'], follow_up_question_reply, '') > 0:
             is_OB_EB_S2R = True
-        else:
-            is_OB_EB_S2R = False
 
     return has_follow_up_question, has_follow_up_answer, is_OB_EB_S2R
-
-
-headers = {"Authorization": "Bearer a4a37bc57f01dfef13d3c5f629dbc51800d554ca"}
 
 
 def get_issues(owner, repo, n):
@@ -159,7 +158,7 @@ def get_issues(owner, repo, n):
 
 
 if __name__ == '__main__':
-    n = 50
+    n = 100
     results = dict()
 
     for repo in repos:
@@ -167,16 +166,22 @@ if __name__ == '__main__':
         results[repo] = (list(), list(), list())
         owner, name = repo.split('/')
         issues = get_issues(owner, name, n)
-
+        #contributors = get_contributors('///'+repo)
         for issue in issues:
-            followup, answer, ob = extract_data(issue)
-            logger.info('Issue {0}: {1}, {2}, {3}'.format(issue['number'], followup, answer, ob))
-            results[repo][0].append(followup)
-            results[repo][1].append(answer)
-            results[repo][2].append(ob)
 
-        #plot(results['repo'])
-        print('{0}'.format(results[repo]))
+            #filter out issues created by devs
+            if issue['author'] is None: #or issue['author']['login'] in contributors:
+                continue
 
+            data = extract_data(issue)
+            if data is None:
+                continue
+            results[repo][0].append(data[0])
+            results[repo][1].append(data[1])
+            results[repo][2].append(data[2])
 
-
+        # plot(results['repo'])
+        # print('{0}'.format(results[repo]))
+        print(
+            'Repo {0} has {1}/{2} follow-up questions, {3}/{1} has been answered, {4}/{3} answers has OB/EB/S2R'.format(
+                repo, sum(results[repo][0]), len(results[repo][0]), sum(results[repo][1]), sum(results[repo][2])))
