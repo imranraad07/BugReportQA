@@ -149,9 +149,9 @@
 180,FQ10,Specificity,Agree,0,33.33,4
 181,FQ10,Specificity,Strongly agree,1,33.34,5
 182,FQ10,Usefulness,Strongly disagree,0,0,1
-183,FQ10,Usefulness,Disagree,1,0,2
+183,FQ10,Usefulness,Disagree,1,33.33,2
 184,FQ10,Usefulness,Neutral,1,33.33,3
-185,FQ10,Usefulness,Agree,0,66.67,4
+185,FQ10,Usefulness,Agree,0,33.34,4
 186,FQ10,Usefulness,Strongly agree,1,0,5
 187,FQ10,Novelty,No,1,33.33,1
 188,FQ10,Novelty,Yes,2,66.67,2
