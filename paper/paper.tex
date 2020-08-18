@@ -43,25 +43,21 @@ to rapidly fixing software faults.
 % Despite the success of efforts to make bug reporting consistent and detailed, numerous bug reports still lack
 % sufficient important information.
 %
-Improving bug reports that are incomplete or inadequate, which are numerous in popular and actively developed open source software projects, can make software maintenance more effective and improve software quality.
+Improving incomplete or inadequate bug reports, numerous in many popular and actively developed open source software projects, can make software maintenance more effective and improve software quality.
 %
-In this paper, we propose a system that addresses the problem of inadequate bug reports by automatically posing follow-up questions,
+In this paper, we propose a system that addresses the problem of bug report incompleteness by automatically posing follow-up questions,
 which are intended to elicit answers that add value and provide missing information to a bug report.
 %
-Our system is based on a selecting follow-up questions for a bug report by leveraging a large corpus of already posed follow-up questions.
+Our system is based on a selecting follow-up questions from a large corpus of already posed follow-up questions on GitHub.
 %
-We use a combination of information retrieval and deep neural networks to rank and select
-follow-up questions for a bug report by using the similarity between the text in pairs of bug
-reports.
+To find adequate follow-up questions we use a combination of information retrieval and deep neural networks.
 %
-As another component in our selection, we estimate the utility the expected answer to the follow-up question would provide
-to the bug report.
+Using information retrieval we retrieve a candidate set of follow-up questions, while using deep neural networks we estimate the utility the expected answer to the follow-up question would provide to the bug report.
 %
 Evaluation of our system based on a manually annotated held out data set indicates improved
-performance over a set of baselines.
+performance over a set of simple and ablation baselines.
 %
-A survey of software developers indicates that the follow-up questions are useful and specific to a bug
-report most of the time and can provide new information some of the time.
+A survey of software developers confirms the held-out set evaluation result that about half of the selected follow-up questions are considered valid. The developer survey also indicates that the valid follow-up questions are useful and can provide new information to a bug report most of the time and are specific to a bug report some of the time.
 
 \end{abstract}
 
