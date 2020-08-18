@@ -46,7 +46,7 @@ def main(args):
 
     chart = alt.Chart(source).mark_bar(size=12).encode(
         x=alt.X('percentage:Q', title='Percentage'),
-        y=alt.Y('question:N', axis=y_axis),
+        y=alt.Y('question:N', axis=y_axis, sort=["Usefulness","Specificity"]),
         color=alt.Color(
             'type:N',
             legend=alt.Legend(orient='bottom', title='', padding=-12),
@@ -60,7 +60,7 @@ def main(args):
 
     text = alt.Chart(source).mark_text(dx=6, color='white').encode(
         x=alt.X('Percentage start:Q', title=''),
-        y=alt.Y('question:N'),
+        y=alt.Y('question:N', sort=["Usefulness","Specificity"] ),
         detail='type:N',
         text=alt.Text('value:Q', format='.0f'),
     )
