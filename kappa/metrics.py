@@ -476,8 +476,6 @@ class Krippendorff():
                                                   data_type=data_type)
         expected_disagreement = self.disagreement(obs_or_exp="expected",
                                                   data_type=data_type)
-        print("observed disagreement:", observed_disagreement)
-        print("expected disagreement:", expected_disagreement)
         if expected_disagreement == 0:
             return 1.
 

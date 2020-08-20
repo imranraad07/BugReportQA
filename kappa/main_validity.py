@@ -7,18 +7,11 @@ import kappa.metrics as metrics
 import pandas as pd
 
 validity_annotations = {
-    "a": [0, 0, 0, 0, 0],
-    "b": [0, 1, 1, 0, 1],
-    "c": [1, 1, 1, 1, 1],
-    "d": [1, 0, 1, 0, 0],
-    "e": [1, 1, 0, 1, 1],
-    "f": [1, 1, 1, 0, 1],
-    "g": [0, 0, 0, 0, 1],
-    "h": [0, 1, 1, 1, 1],
-    "i": [0, 1, 1, 1, 1],
-    "j": [0, 1, 1, 0, 1],
-    "k": [0, 0, 0, 0, 1],
-    "l": [1, 1, 1, 0, 0],
+    "a": [0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0],
+    "b": [1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1],
+    "c": [0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1],
+    "d": [1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0],
+    "e": [0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1],
 }
 df = pd.DataFrame(validity_annotations)
 
@@ -33,6 +26,18 @@ if __name__ == "__main__":
     bidis.agreements_summary()
     print("==============================")
 
+    alpha = kripp.alpha(data_type="interval")
+    alpha = float("{:.3f}".format(alpha))
+    print("Krippendorff interval", alpha)
+
+    alpha = kripp.alpha(data_type="ratio")
+    alpha = float("{:.3f}".format(alpha))
+    print("Krippendorff ratio", alpha)
+
     alpha = kripp.alpha(data_type="ordinal")
     alpha = float("{:.3f}".format(alpha))
     print("Krippendorff ordinal", alpha)
+
+    alpha = kripp.alpha(data_type="nominal")
+    alpha = float("{:.3f}".format(alpha))
+    print("Krippendorff nominal", alpha)
