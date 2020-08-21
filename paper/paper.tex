@@ -48,13 +48,15 @@ Improving incomplete or deficient bug reports, numerous in many popular and acti
 In this paper, we propose a system that addresses the problem of bug report incompleteness by automatically posing follow-up questions,
 which are intended to elicit answers that add value and provide missing information to a bug report.
 %
-Our system is based on a selecting follow-up questions from a large corpus of already posed follow-up questions on GitHub.
+Our system is based on selecting follow-up questions from a large corpus of already posted follow-up questions on GitHub.
 %
 To find adequate follow-up questions we use a combination of information retrieval and deep neural networks.
 %
-Using information retrieval we retrieve a candidate set of follow-up questions, while using deep neural networks we estimate the utility the expected answer to the follow-up question would provide to the bug report.
+Using information retrieval we retrieve a candidate set of follow-up questions, while neural networks is responsible for estimating the improvement in the quality of a bug report when an answer for a follow-up question is provided.
 %
-Evaluation of our system based on a manually annotated held out data set indicates improved
+% the utility the expected answer to the follow-up question would provide to the bug report.
+%
+Evaluation of our system, based on a manually annotated held out data set, indicates improved
 performance over a set of simple and ablation baselines.
 %
 A survey of software developers confirms the held-out set evaluation result that about half of the selected follow-up questions are considered valid. The developer survey also indicates that the valid follow-up questions are useful and can provide new information to a bug report most of the time and are specific to a bug report some of the time.

@@ -5,7 +5,7 @@ As input, our system for retrieving follow-up questions requires: 1) an incomple
 report of interest; 2) a corpus of already posed follow-up questions extracted
 from GitHub issues, including their corresponding bug reports and answers. As output, our system
 produces a ranked list of follow-up questions appropriate to the deficient bug report.
-In this section, we describe our system, including how we create as a input
+In this section, we describe our system, including how we create
 a large corpus of follow-up questions to recommend, how we select candidate follow-up questions from
 this corpus for a specific incomplete bug report, and how we rank these questions in descending order of
 their potential utility to the bug report.
@@ -88,7 +88,7 @@ GitHub repository is tagged with (e.g., {\em java, linux, web-server}). The form
 latter usually denotes technologies or the project uses or broad categories it belongs to.
 \end{itemize}
 
-To create a query out of the incomplete bug report, we tokenize the its title and body
+To create a query out of the incomplete bug report, we tokenize its title and body
 using the equivalent process to the one we performed on the bug reports in the corpus.
 While obtaining a ranked list of follow-up questions from Lucene, we obtain and list of 10
 triples and ignore the ranking. In the following section, we describe a customized ranking, which
