@@ -17,15 +17,13 @@ considerable burden for bug triagers and it motivates the need for the type of w
 as described in this paper, which intends to make bug triage more efficient and less of
 a burden for project maintainers.
 
+
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.99\linewidth]{figures/popular_repos.pdf}
-\caption{Daily issue creation activity in 2019 for a selection of ten highly active
-(by number of commits) repositories on GitHub.}
-\label{fig:repo_activity}
+\includegraphics[width=0.99\linewidth]{figures/bug_report.pdf}
+\caption{Bug report with follow-up question and OB in answer.}
+\label{fig:bug_report}
 \end{figure}
-
-
 
 % The preconditions are present, i.e., there are a lot of follow-up questions on GitHub -- we could
 % use the same set of 10 repos to show this.
@@ -39,14 +37,8 @@ of the three key parts of a bug report: Observable Behavior (OB), Expected Behav
 We found that follow-up questions were present in 24\% (122/500) of bug reports and about half (52\% or 63/122) of them were
 answered with 55\% (35/63) of the answers containing Observable Behavior, Expected Behavior or Steps to Reproduce.
 
-We highlight one of the bug reports we examined in Figure~\ref{fig:bug_report}. The follow-up question {\em What OS/version of
-Ansible was this on?} elicits an answer that provides key OB to the bug triagers, leading to a quick subsequent
-bug fix.
-
-
-Motivate EB, OB and S2R as a way of ranking by a follow-up question.
-{\em Agnieszka: cite What makes a good bug report - developers value S2R as the most helpful, OB is 4th.}
-
-The availability of existing follow-up questions on social coding platforms like GitHub provides the
-preconditions for the approach described in this paper, which leverages such existing follow-up questions
+We highlight one of the bug reports we examined ({\bf ansible/ansible \#3933}) in Figure~\ref{fig:bug_report}. The follow-up question {\em What OS/version of
+Ansible was this on?} elicited an answer that provided key OB to this bug report, leading to its quick subsequent fix.
+Developer surveys have confirmed the importance of OB, EB and S2R in bug reports , noting that S2R is among the most valuable aspects of a bug report
+with OB and EB closely behind~\cite{zimmermann10whatmakes,laukkanen2011survey}. The availability of existing follow-up questions on social coding platforms like GitHub provides the preconditions for the approach described in this paper, which leverages such existing follow-up questions
 to automatically rank and select the most appropriate of them for a newly written, incomplete bug report.
