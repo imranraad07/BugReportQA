@@ -26,23 +26,6 @@ a burden for project maintainers.
 \end{figure}
 
 
-\begin{table}[t]
-\centering
-\caption{Evaluation results contrasting our system (\evpi) relative to several baselines.}
-\begin{tabular}{p{3cm}cccc}
-\hline
-%                          & \multicolumn{4}{c}{$V_{1} \cap V_{2}$} \\\hline
-                          & {\bf MRR}  & {\bf P@1}  & {\bf P@3}  & {\bf P@5}  \\\hline
-{\em Random}              & 0.52 & 0.32 & 0.33 & 0.34 \\
-{\em Lucene}              & 0.53 & 0.35 & 0.32 & 0.32 \\
-{\em Utility only}        & 0.65 & 0.47 & 0.44 & 0.41 \\
-{\em Compatibility only}  & 0.61 & 0.43 & 0.38 & 0.38 \\
-{\em \evpi}                & 0.67 & 0.49 & 0.49 & 0.45 \\ \hline
-\end{tabular}
-\label{tab:results}
-\end{table}
-
-
 
 % The preconditions are present, i.e., there are a lot of follow-up questions on GitHub -- we could
 % use the same set of 10 repos to show this.
@@ -50,19 +33,20 @@ Posing follow-up questions is an already practiced mitigation strategy for defic
 reports. To lend support for this claim and to quantify how wide spread is the use of
 follow-up questions, we performed a small scale study of the prevalence
 of follow-up questions on GitHub, focusing on the 10 active projects used in Figure~\ref{fig:repo_activity}.
-We randomly sampled 50 closed bug reports for each of the 10 repositories (500 in total) and manually examined them
+From each of the 10 repositories, we randomly sampled 50 closed bug reports (500 in total) and manually examined them
 for follow-up questions. We were also interested whether the answers to those questions (if they are present) provide any
-of the three key parts of a bug report: Observable Behavior, Expected Behavior or Steps to Reproduce.
-Table~\ref{tab:sample} shows that...
+of the three key parts of a bug report: Observable Behavior (OB), Expected Behavior (EB) or Steps to Reproduce (S2R).
+We found that follow-up questions were present in 24\% (122/500) of bug reports and about half (52\% or 63/122) of them were
+answered with 55\% (35/63) of the answers containing Observable Behavior, Expected Behavior or Steps to Reproduce.
 
-
-
-
-The availability of existing follow-up questions on social coding platforms like GitHub provides the
-preconditions for the approach described in this paper, which leverages such existing follow-up questions
-to automatically rank and select the most appropriate of them for a newly written, incomplete bug report.
-
+We highlight one of the bug reports we examined in Figure~\ref{fig:bug_report}. The follow-up question {\em What OS/version of
+Ansible was this on?} elicits an answer that provides key OB to the bug triagers, leading to a quick subsequent
+bug fix.
 
 
 Motivate EB, OB and S2R as a way of ranking by a follow-up question.
 {\em Agnieszka: cite What makes a good bug report - developers value S2R as the most helpful, OB is 4th.}
+
+The availability of existing follow-up questions on social coding platforms like GitHub provides the
+preconditions for the approach described in this paper, which leverages such existing follow-up questions
+to automatically rank and select the most appropriate of them for a newly written, incomplete bug report.
