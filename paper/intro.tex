@@ -4,7 +4,7 @@ In many popular software projects, bug reports arrive with frequency and in burs
 %
 At the same time, a significant proportion of the arriving bug reports lack sufficient actionable information for bug triagers to reproduce the bug.
 %
-Researchers have observed this problem of bug report incompleteness (or inadequacy), e.g., reporting that over 60\% of bug reports lack any steps to reproduce and over 40\% lack any description of the expected behavior~\cite{chaparro17detecting}.
+Researchers have observed this problem of bug report deficiency (or incompleteness), e.g., reporting that over 60\% of bug reports lack any steps to reproduce and over 40\% lack any description of the expected behavior~\cite{chaparro17detecting}.
 %
 Missing information in bug reports was also a key concern in the first open letter to GitHub from the maintainers of open source projects~\cite{deargithub}~\cite{breu2010information}, which was partially addressed via a bug report template mechanism.
 %
@@ -14,7 +14,7 @@ Bug triagers posing quick follow-up questions in order to elicit additional info
 %
 However follow-up questions are only effective if they are posed quickly, before the user reporting the bug loses focus on the specifics.
 %
-In this paper, we examine how the posing such follow-up questions for inadequate bug reports can be performed automatically, designing and describing a system to reduce bug triage effort and improving overall bug report quality by automatically posing follow-up questions for inadequate bug reports.
+In this paper, we examine how the posing such follow-up questions for incomplete bug reports can be performed automatically, designing and describing a system to reduce bug triage effort and improving overall bug report quality by automatically posing follow-up questions for deficient bug reports.
 
 \begin{figure}[t]
 \centering
@@ -27,7 +27,7 @@ In this paper, we examine how the posing such follow-up questions for inadequate
 %
 We base our automatic follow-up question posing system on the following assumptions and ideas: 1) relevant follow-up question are common, not overly specific, and have already been posed in other prior bug reports in the current project or in others; 2) similar bug reports necessitate similar follow-up questions; and 3) the utility of the answer provided to a prior similar follow-up question is indicative of its value to the current bug report.
 %
-Based on this, our system performs an information retrieval task, locating the most relevant and useful follow-up question for a specific inadequate bug report, given a large corpus of previous bug reports, follow-up questions, and their answers.
+Based on this, our system performs an information retrieval task, locating the most relevant and useful follow-up question for a specific deficient bug report, given a large corpus of previous bug reports, follow-up questions, and their answers.
 %
 For instance, consider the example shown in Figure 1, where the text of the bug report {\em boostrap-sass} \#829 is similar to several other bug reports on GitHub with existing follow-up questions.
 %
@@ -39,7 +39,7 @@ To curate a corpus of prior bug reports, follow-up questions, and their answers 
 
 To summarize, the primary contributions of this paper are:
 \begin{enumerate}
-\item mechanism for automatically posing follow-up questions to aid with inadequate bug reports
+\item mechanism for automatically posing follow-up questions to aid with incomplete bug reports
 \item metric to rank follow-up questions for a specific bug report based on their utility
 \item process to curate a large corpus of existing follow-up question that can be used for recommendation
 \end{enumerate}
