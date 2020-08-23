@@ -73,7 +73,10 @@ with the ablation-type baselines performing better than the simple baselines. Th
 does surprisingly poor, basically in line with the Random baseline. The Utility only baseline is
 the ones that comes closest to the performance of the full system. Perhaps the most intuitive result
 is $P@1$, where \evpi scores 0.49, indicating that just about half of all of the top selected follow-up
-questions by our system were valid.
+questions by our system were valid. The Wilcoxon signed rank test and the Cliff's delta confirm the observations from
+the raw metric values, i.e., that Utility only has a strong similarity to \evpi and could be strong contributing
+factor to the approach's effectiveness. They also confirm that \evpi has a strong advantage over the simple
+baselines.
 
 
 \subsection{Developer Survey}
