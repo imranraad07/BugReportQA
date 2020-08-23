@@ -24,6 +24,26 @@ project and the types of technologies it relies on; 2) marked all of the follow-
 that were valid. Both of the annotators processed the same set of 400 bug reports, marking an average of 3.45/10 of the follow up questions as valid with an inter-annotator agreement (Cohen's kappa) of 0.60.
 We use the set of follow-up questions that both annotators agreed were valid, i.e., the intersection between their annotation.
 
+
+\begin{table*}[t]
+\centering
+\caption{Evaluation results contrasting our system (\evpi) relative to several baselines.}
+\begin{tabular}{p{3cm}|ccc|ccc|ccc|ccc}
+\hline
+%                          & \multicolumn{4}{c}{$V_{1} \cap V_{2}$} \\\hline
+& \multirow{2}{*}{\bf MRR} & Wilcoxon & effect & \multirow{2}{*}{\bf P@1} & Wilcoxon & effect & \multirow{2}{*}{\bf P@3} & Wilcoxon & effect & \multirow{2}{*}{\bf P@5} & Wilcoxon & effect \\
+&                          & p-value  & size   &                          & p-value  & size   &                          & p-value  & size   &                          & p-value  & size \\ \hline
+
+{\em Random}              & 0.52 & p = 0.02 & & 0.32 & & & 0.33 & & & 0.34 & &  \\
+{\em Lucene}              & 0.53 & p $<$ 0.01 & & 0.35 & & & 0.32 & & & 0.32 & &  \\
+{\em Utility only}        & 0.65 & & & 0.47 & & & 0.44 & & & 0.41 & &  \\
+{\em Compatibility only}  & 0.61 & & & 0.43 & & & 0.38 & & & 0.38 & &  \\
+{\em \evpi}               & {\bf 0.67} & & & {\bf 0.49} & & & {\bf 0.49} & & & {\bf 0.45} & &  \\ \hline
+\end{tabular}
+\label{tab:results}
+\end{table*}
+
+
 \subsubsection{Baselines}
 The baselines we identified are meant to convey both straightforward approaches to ranking (e.g., directly using the Lucene output) and
 ablation, i.e., using one part of our ranking function but not the other (e.g., ranking based only on the question utility, $U(q_{i})$).
@@ -43,25 +63,6 @@ The goal of MRR is to evaluate how effective is our technique, or a baseline, in
 computed as: $$MRR = \frac{1}{|B|} \sum_{i=1}^{|B|} \frac{1}{rank_{i}}$$ ,where $B$ is the set of bug reports in the test set and $rank_{i}$ is the ranked position of the first valid follow-up question for the $i^{th}$ bug report.
 
 The goal of Precision@n is to measure the number of valid results when considering the top $n$ positions in the ranking. Unlike MRR, it consider all, not only the topmost ranked, results. It is computed as: $$P@n = \frac{1}{|B|} \sum_{i=1}^{|B|} \frac{|v|}{n}$$ ,where, as before, $B$ is the set of bug reports in the test set and $v$ is the set of valid follow-up questions ranked in the top $n$ positions. We use values of 1, 3 and 5 for $n$.
-
-
-\begin{table*}[t]
-\centering
-\caption{Evaluation results contrasting our system (\evpi) relative to several baselines.}
-\begin{tabular}{p{3cm}|ccc|ccc|ccc|ccc}
-\hline
-%                          & \multicolumn{4}{c}{$V_{1} \cap V_{2}$} \\\hline
-&           & Wilcoxon & effect &           & Wilcoxon & effect &           & Wilcoxon & effect &           & Wilcoxon & effect \\
-& {\bf MRR} & p-value  & size   & {\bf P@1} & p-value  & size   & {\bf P@3} & p-value  & size   & {\bf P@5} & p-value  & size \\ \hline
-
-{\em Random}              & 0.52 & & & 0.32 & & & 0.33 & & & 0.34 & &  \\
-{\em Lucene}              & 0.53 & & & 0.35 & & & 0.32 & & & 0.32 & &  \\
-{\em Utility only}        & 0.65 & & & 0.47 & & & 0.44 & & & 0.41 & &  \\
-{\em Compatibility only}  & 0.61 & & & 0.43 & & & 0.38 & & & 0.38 & &  \\
-{\em \evpi}               & {\bf 0.67} & & & 0.49 & & & 0.49 & & & 0.45 & &  \\ \hline
-\end{tabular}
-\label{tab:results}
-\end{table*}
 
 
 \subsubsection{Results} We summarize the results of our technique (\evpi) versus the identified
