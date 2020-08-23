@@ -21,7 +21,7 @@ def main(args):
         ],
         range=[
             '#b32929', '#b05b5b', '#CFCFCF', '#59B362', '#248F2E',
-            '#bf5b17', '#7fc97f',
+            "#CCCC00", '#1770ab'
         ]
     )
 
@@ -62,12 +62,12 @@ def main(args):
     chart.show()
 
 
-import bokeh.palettes as bp
+#import bokeh.palettes as bp
 
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser(sys.argv[0])
 
-    print(bp.Accent7)
+    #print(bp.Accent7)
 
     argparser.add_argument("--input_file", type=str, default='survey_report.csv')
 

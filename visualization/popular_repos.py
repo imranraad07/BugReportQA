@@ -7,7 +7,6 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import seaborn as sns
 
 
 # golang/go, kubernetes/kubernetes, rust-lang/rust, ansible/ansible, microsoft/TypeScript, elastic/elasticsearch,

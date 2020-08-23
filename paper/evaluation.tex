@@ -45,21 +45,23 @@ computed as: $$MRR = \frac{1}{|B|} \sum_{i=1}^{|B|} \frac{1}{rank_{i}}$$ ,where 
 The goal of Precision@n is to measure the number of valid results when considering the top $n$ positions in the ranking. Unlike MRR, it consider all, not only the topmost ranked, results. It is computed as: $$P@n = \frac{1}{|B|} \sum_{i=1}^{|B|} \frac{|v|}{n}$$ ,where, as before, $B$ is the set of bug reports in the test set and $v$ is the set of valid follow-up questions ranked in the top $n$ positions. We use values of 1, 3 and 5 for $n$.
 
 
-\begin{table}[t]
+\begin{table*}[t]
 \centering
 \caption{Evaluation results contrasting our system (\evpi) relative to several baselines.}
-\begin{tabular}{p{3cm}cccc}
+\begin{tabular}{p{3cm}|ccc|ccc|ccc|ccc}
 \hline
 %                          & \multicolumn{4}{c}{$V_{1} \cap V_{2}$} \\\hline
-                          & {\bf MRR}  & {\bf P@1}  & {\bf P@3}  & {\bf P@5}  \\\hline
-{\em Random}              & 0.52 & 0.32 & 0.33 & 0.34 \\
-{\em Lucene}              & 0.53 & 0.35 & 0.32 & 0.32 \\
-{\em Utility only}        & 0.65 & 0.47 & 0.44 & 0.41 \\
-{\em Compatibility only}  & 0.61 & 0.43 & 0.38 & 0.38 \\
-{\em \evpi}                & 0.67 & 0.49 & 0.49 & 0.45 \\ \hline
+&           & Wilcoxon & effect &           & Wilcoxon & effect &           & Wilcoxon & effect &           & Wilcoxon & effect \\
+& {\bf MRR} & p-value  & size   & {\bf P@1} & p-value  & size   & {\bf P@3} & p-value  & size   & {\bf P@5} & p-value  & size \\ \hline
+
+{\em Random}              & 0.52 & & & 0.32 & & & 0.33 & & & 0.34 & &  \\
+{\em Lucene}              & 0.53 & & & 0.35 & & & 0.32 & & & 0.32 & &  \\
+{\em Utility only}        & 0.65 & & & 0.47 & & & 0.44 & & & 0.41 & &  \\
+{\em Compatibility only}  & 0.61 & & & 0.43 & & & 0.38 & & & 0.38 & &  \\
+{\em \evpi}               & {\bf 0.67} & & & 0.49 & & & 0.49 & & & 0.45 & &  \\ \hline
 \end{tabular}
 \label{tab:results}
-\end{table}
+\end{table*}
 
 
 \subsubsection{Results} We summarize the results of our technique (\evpi) versus the identified
@@ -109,7 +111,7 @@ The results of the survey, along each dimension, are presented both at the granu
 \subsection{Threats to Validity}
 Presented approach is affected by several limitations that may negatively impact validity of our findings and ability to generalize them. In this section, we discuss those threats as well as strategies undertaken to mitigate them.
 
-\noindent\textbf{Construct validity.} 
+\noindent\textbf{Construct validity.}
 A possible threat to construct validity is in the preprocessing of bug reports. More specifically, we focus only on the textual content of an issue and ignore other enclosed types of information, such as images or links. In a result, for some bug reports, the system may lack potentially relevant information to locate the most useful follow-up questions.
 This threat is partially mitigated by the size of the corpus that contains 25K GitHub issues with various characteristics and content.
 
@@ -126,5 +128,3 @@ The limited number of follow-up questions associated with each bug report pose a
 In this study, we leveraged a dataset of 25K GitHub issues, however, during evaluation we use a subset of 400 manually annotated bug reports. The limited size of the test set may impact our observations as it covers only a small subset of population. To mitigate that threat, we include bug reports from X open-source software projects leveraging different frameworks and technologies. Moreover, to ensure the quality of the proposed approach, we conducted a user study with 10 software developers. We observed that the number of valid follow-up questions in the user study nearly matched the result obtained in the held-out evaluation, emphasizing the overall quality of the system and supporting validity of the results.
 
 The scope of the developer survey poses another threat to external validity due to the low number of enclosed bug reports and selection of issues only from Python or Java-related software projects. We partially mitigate bias caused by limiting the bug reports to only two technologies by sampling issues with different content characteristics (e.g., with or without stack traces) from multiple projects.  To ensure the quality and generalizability of the survey results, each pair of bug report and follow-up question was assessed by half of the respondents.
-
-

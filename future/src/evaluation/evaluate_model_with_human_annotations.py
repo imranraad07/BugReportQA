@@ -115,13 +115,24 @@ def evaluate_model(human_df, model_df):
 
 	mrr = mean_reciprocal_rank(min_rank_of_ranks)
 	p_1, p_3, p_5 = 0.0, 0.0, 0.0
-	for rank in all_rank_of_ranks:
-		p_1 += precision_at_k(rank,1)
-		p_3 += precision_at_k(rank,3)
-		p_5 += precision_at_k(rank,5)
+	inter_df = pd.DataFrame(columns=['mrr', 'p_1', 'p_3', 'p_5'])
+
+	for idx, (a_rank,m_rank) in enumerate(zip(all_rank_of_ranks,min_rank_of_ranks)):
+		_p_1 = precision_at_k(a_rank,1)
+		_p_3 = precision_at_k(a_rank,3)
+		_p_5 = precision_at_k(a_rank,5)
+		_mrr = mean_reciprocal_rank([m_rank])
+		inter_df.loc[idx] = [_mrr, _p_1, _p_3, _p_5]
+		p_1 += _p_1
+		p_3 += _p_3
+		p_5 += _p_5
+
 	p_1 = p_1 / len(all_rank_of_ranks)
 	p_3 = p_3 / len(all_rank_of_ranks)
 	p_5 = p_5 / len(all_rank_of_ranks)
+
+	print(inter_df)
+	inter_df.to_csv('compat_only.csv')
 
 	return mrr,p_1,p_3,p_5
 
