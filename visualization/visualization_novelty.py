@@ -11,22 +11,29 @@ alt.renderers.enable('altair_viewer')
 def main(args):
     df = pd.DataFrame({'Org': ['New Information', 'New Information'],
                        'response': ['Yes', 'No'],
-                       'percent': [94.42, 5.58],
-                       'value': [4, 60],
-                       'position': [2.5, 8.5]})
+                       'percent': [91.53, 8.47],
+                       'value': [5, 59],
+                       'position': [2.5, 10.5]})
 
     color_scale = alt.Scale(
         domain=[
             "No",
             "Yes"
         ],
-        range=["#CCCC00", "#62c983"]
-        # range=["#c30d24", "#1770ab"]
+        range=['#e4e4e4', '#1a1a1a']
+    )
+
+    y_axis = alt.Axis(
+        title='',
+        offset=5,
+        ticks=False,
+        minExtent=60,
+        domain=False
     )
 
     chart = alt.Chart(df).mark_bar(size=12).encode(
         x=alt.X('percent', title='Percentage'),
-        y=alt.Y('Org', title=''),
+        y=alt.Y('Org', title='', axis=y_axis),
         order=alt.Order(
             'percent',
             sort='ascending'

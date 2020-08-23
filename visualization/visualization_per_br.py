@@ -19,7 +19,7 @@ def main(args):
             "No",
             "Yes"
         ],
-        range=["#c30d24", "#f3a583", "#cccccc", "#94c6da", "#1770ab", "#CCCC00", "#62c983"]
+        range=['#d1d1d1', '#b9b9b9', '#909090', '#595959', '#000000', '#e4e4e4', '#1a1a1a', ]
     )
 
     y_axis = alt.Axis(
@@ -29,7 +29,7 @@ def main(args):
         minExtent=60,
         domain=False
     )
-
+    fontSize = 8
     chart = alt.Chart(source).mark_bar(size=12).encode(
         x=alt.X('percentage:Q', title='Percentage',
                 axis=alt.Axis(format='.0f')),
@@ -49,23 +49,22 @@ def main(args):
         width=200,
         height=200
     ).facet(
-        column=alt.Column("quality:N", title=None, sort=["Specificity", "Usefulness", "Novelty"])
-    )
-
-    combined = chart
-    fontSize = 8
-    combined = combined.configure_axis(
+        column=alt.Column("quality:N", title=None, sort=["Specificity", "Usefulness", "New Information"])
+    ).configure_axis(
         labelFontSize=fontSize,
         titleFontSize=fontSize,
     ).configure_text(
         fontSize=fontSize
     )
+    chart.show()
 
-    combined.show()
 
+import bokeh.palettes as bp
 
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser(sys.argv[0])
+
+    print(bp.Greys3)
 
     argparser.add_argument("--input_file", type=str, default='survey_report.csv')
 

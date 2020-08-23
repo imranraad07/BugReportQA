@@ -9,8 +9,8 @@
 7,FQ3,Usefulness,Neutral,2,40,3
 8,FQ3,Usefulness,Agree,2,40,4
 9,FQ3,Usefulness,Strongly agree,1,20,5
-10,FQ3,Novelty,No,0,0,1
-11,FQ3,Novelty,Yes,5,100,2
+10,FQ3,New Information,No,0,0,1
+11,FQ3,New Information,Yes,5,100,2
 12,FQ5,Specificity,Strongly disagree,1,25,1
 13,FQ5,Specificity,Disagree,3,75,2
 14,FQ5,Specificity,Neutral,0,0,3
@@ -21,8 +21,8 @@
 19,FQ5,Usefulness,Neutral,1,25,3
 20,FQ5,Usefulness,Agree,1,25,4
 21,FQ5,Usefulness,Strongly agree,0,0,5
-22,FQ5,Novelty,No,1,25,1
-23,FQ5,Novelty,Yes,3,75,2
+22,FQ5,New Information,No,1,25,1
+23,FQ5,New Information,Yes,3,75,2
 24,FQ6,Specificity,Strongly disagree,2,50,1
 25,FQ6,Specificity,Disagree,0,0,2
 26,FQ6,Specificity,Neutral,1,25,3
@@ -33,8 +33,8 @@
 31,FQ6,Usefulness,Neutral,2,50,3
 32,FQ6,Usefulness,Agree,1,25,4
 33,FQ6,Usefulness,Strongly agree,1,25,5
-34,FQ6,Novelty,No,0,0,1
-35,FQ6,Novelty,Yes,4,100,2
+34,FQ6,New Information,No,0,0,1
+35,FQ6,New Information,Yes,4,100,2
 36,FQ8,Specificity,Strongly disagree,0,0,1
 37,FQ8,Specificity,Disagree,0,0,2
 38,FQ8,Specificity,Neutral,1,25,3
@@ -45,8 +45,8 @@
 43,FQ8,Usefulness,Neutral,1,25,3
 44,FQ8,Usefulness,Agree,1,25,4
 45,FQ8,Usefulness,Strongly agree,2,50,5
-46,FQ8,Novelty,No,0,0,1
-47,FQ8,Novelty,Yes,4,100,2
+46,FQ8,New Information,No,0,0,1
+47,FQ8,New Information,Yes,4,100,2
 48,FQ9,Specificity,Strongly disagree,0,0,1
 49,FQ9,Specificity,Disagree,0,0,2
 50,FQ9,Specificity,Neutral,0,0,3
@@ -57,8 +57,8 @@
 55,FQ9,Usefulness,Neutral,1,25,3
 56,FQ9,Usefulness,Agree,2,50,4
 57,FQ9,Usefulness,Strongly agree,1,25,5
-58,FQ9,Novelty,No,1,25,1
-59,FQ9,Novelty,Yes,3,75,2
+58,FQ9,New Information,No,1,25,1
+59,FQ9,New Information,Yes,3,75,2
 60,FQ14,Specificity,Strongly disagree,0,0,1
 61,FQ14,Specificity,Disagree,0,0,2
 62,FQ14,Specificity,Neutral,1,20,3
@@ -69,8 +69,8 @@
 67,FQ14,Usefulness,Neutral,1,20,3
 68,FQ14,Usefulness,Agree,1,20,4
 69,FQ14,Usefulness,Strongly agree,3,60,5
-70,FQ14,Novelty,No,0,0,1
-71,FQ14,Novelty,Yes,5,100,2
+70,FQ14,New Information,No,0,0,1
+71,FQ14,New Information,Yes,5,100,2
 72,FQ17,Specificity,Strongly disagree,0,0,1
 73,FQ17,Specificity,Disagree,1,25,2
 74,FQ17,Specificity,Neutral,1,25,3
@@ -81,8 +81,8 @@
 79,FQ17,Usefulness,Neutral,1,25,3
 80,FQ17,Usefulness,Agree,2,50,4
 81,FQ17,Usefulness,Strongly agree,1,25,5
-82,FQ17,Novelty,No,0,0,1
-83,FQ17,Novelty,Yes,4,100,2
+82,FQ17,New Information,No,0,0,1
+83,FQ17,New Information,Yes,4,100,2
 84,FQ18,Specificity,Strongly disagree,0,0,1
 85,FQ18,Specificity,Disagree,1,25,2
 86,FQ18,Specificity,Neutral,1,25,3
@@ -93,8 +93,8 @@
 91,FQ18,Usefulness,Neutral,0,0,3
 92,FQ18,Usefulness,Agree,2,50,4
 93,FQ18,Usefulness,Strongly agree,2,50,5
-94,FQ18,Novelty,No,0,0,1
-95,FQ18,Novelty,Yes,4,100,2
+94,FQ18,New Information,No,0,0,1
+95,FQ18,New Information,Yes,4,100,2
 96,FQ19,Specificity,Strongly disagree,0,0,1
 97,FQ19,Specificity,Disagree,1,25,2
 98,FQ19,Specificity,Neutral,0,0,3
@@ -105,8 +105,8 @@
 103,FQ19,Usefulness,Neutral,0,0,3
 104,FQ19,Usefulness,Agree,3,75,4
 105,FQ19,Usefulness,Strongly agree,1,25,5
-106,FQ19,Novelty,No,0,0,1
-107,FQ19,Novelty,Yes,4,100,2
+106,FQ19,New Information,No,0,0,1
+107,FQ19,New Information,Yes,4,100,2
 132,FQ22,Specificity,Strongly disagree,0,0,1
 133,FQ22,Specificity,Disagree,0,0,2
 134,FQ22,Specificity,Neutral,0,0,3
@@ -117,8 +117,8 @@
 139,FQ22,Usefulness,Neutral,0,0,3
 140,FQ22,Usefulness,Agree,3,60,4
 141,FQ22,Usefulness,Strongly agree,2,40,5
-142,FQ22,Novelty,No,0,0,1
-143,FQ22,Novelty,Yes,5,100,2
+142,FQ22,New Information,No,0,0,1
+143,FQ22,New Information,Yes,5,100,2
 144,FQ2,Specificity,Strongly disagree,0,0,1
 145,FQ2,Specificity,Disagree,1,33.33,2
 146,FQ2,Specificity,Neutral,1,33.33,3
@@ -129,8 +129,8 @@
 151,FQ2,Usefulness,Neutral,0,0,3
 152,FQ2,Usefulness,Agree,3,100,4
 153,FQ2,Usefulness,Strongly agree,0,0,5
-154,FQ2,Novelty,No,1,33.33,1
-155,FQ2,Novelty,Yes,2,66.67,2
+154,FQ2,New Information,No,1,33.33,1
+155,FQ2,New Information,Yes,2,66.67,2
 156,FQ12,Specificity,Strongly disagree,0,0,1
 157,FQ12,Specificity,Disagree,0,0,2
 158,FQ12,Specificity,Neutral,1,33.33,3
@@ -141,8 +141,8 @@
 172,FQ12,Usefulness,Neutral,1,33.33,3
 173,FQ12,Usefulness,Agree,2,66.67,4
 174,FQ12,Usefulness,Strongly agree,0,0,5
-175,FQ12,Novelty,No,0,0,1
-176,FQ12,Novelty,Yes,3,100,2
+175,FQ12,New Information,No,0,0,1
+176,FQ12,New Information,Yes,3,100,2
 177,FQ10,Specificity,Strongly disagree,0,0,1
 178,FQ10,Specificity,Disagree,1,0,2
 179,FQ10,Specificity,Neutral,1,33.33,3
@@ -153,5 +153,5 @@
 184,FQ10,Usefulness,Neutral,1,33.33,3
 185,FQ10,Usefulness,Agree,0,0,4
 186,FQ10,Usefulness,Strongly agree,1,33.34,5
-187,FQ10,Novelty,No,1,33.33,1
-188,FQ10,Novelty,Yes,2,66.67,2
+187,FQ10,New Information,No,1,33.33,1
+188,FQ10,New Information,Yes,2,66.67,2
