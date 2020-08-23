@@ -43,18 +43,17 @@ to rapidly fixing software faults.
 % Despite the success of efforts to make bug reporting consistent and detailed, numerous bug reports still lack
 % sufficient important information.
 %
-Improving incomplete or deficient bug reports, numerous in many popular and actively developed open source software projects, can make software maintenance more effective and improve software quality.
+Improving incomplete or deficient bug reports, which are numerous in many popular and actively developed open source software projects, can make software maintenance more effective and improve software quality.
 %
-In this paper, we propose a system that addresses the problem of bug report incompleteness by automatically posing follow-up questions,
-which are intended to elicit answers that add value and provide missing information to a bug report.
+In this paper, we propose a system that addresses the problem of bug report incompleteness by automatically posing follow-up questions, intended to elicit answers that add value and provide missing information to a bug report.
 %
 Our system is based on selecting follow-up questions from a large corpus of already posted follow-up questions on GitHub.
 %
-To find adequate follow-up questions we use a combination of information retrieval and deep neural networks.
+% To find adequate follow-up questions we use a combination of information retrieval and deep neural networks.
+% %
+% Using information retrieval we retrieve a candidate set of follow-up questions, while neural networks is responsible for estimating the improvement in the quality of a bug report when an answer for a follow-up question is provided.
 %
-Using information retrieval we retrieve a candidate set of follow-up questions, while neural networks is responsible for estimating the improvement in the quality of a bug report when an answer for a follow-up question is provided.
-%
-% the utility the expected answer to the follow-up question would provide to the bug report.
+To retrieve the best follow-up question for a specific deficient bug report we estimate the similarity between the text of the two bug reports, i.e., the similarity between a bug report corresponding to a candidate follow-up question and the deficient bug report. We combine this with an estimate of the utility the expected answer to the follow-up question would provide to the deficient bug report.
 %
 Evaluation of our system, based on a manually annotated held out data set, indicates improved
 performance over a set of simple and ablation baselines.
