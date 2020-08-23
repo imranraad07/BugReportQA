@@ -20,7 +20,7 @@ def main(args):
             "No",
             "Yes"
         ],
-        range=['#e4e4e4', '#1a1a1a']
+        range=['#bf5b17', '#7fc97f', ]
     )
 
     y_axis = alt.Axis(

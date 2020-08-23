@@ -33,7 +33,9 @@ def main(args):
             "Agree",
             "Strongly agree"
         ],
-        range=['#d1d1d1', '#b9b9b9', '#909090', '#595959', '#000000', ]
+        range=[
+               '#b32929', '#b05b5b', '#CFCFCF', '#59B362', '#248F2E'
+               ]
     )
 
     y_axis = alt.Axis(

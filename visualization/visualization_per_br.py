@@ -19,7 +19,10 @@ def main(args):
             "No",
             "Yes"
         ],
-        range=['#d1d1d1', '#b9b9b9', '#909090', '#595959', '#000000', '#e4e4e4', '#1a1a1a', ]
+        range=[
+            '#b32929', '#b05b5b', '#CFCFCF', '#59B362', '#248F2E',
+            '#bf5b17', '#7fc97f',
+        ]
     )
 
     y_axis = alt.Axis(
@@ -64,7 +67,7 @@ import bokeh.palettes as bp
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser(sys.argv[0])
 
-    print(bp.Greys3)
+    print(bp.Accent7)
 
     argparser.add_argument("--input_file", type=str, default='survey_report.csv')
 
