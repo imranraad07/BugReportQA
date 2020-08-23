@@ -81,8 +81,8 @@
 79,FQ17,Usefulness,Neutral,1,25,3
 80,FQ17,Usefulness,Agree,2,50,4
 81,FQ17,Usefulness,Strongly agree,1,25,5
-82,FQ17,New Information,No,0,0,1
-83,FQ17,New Information,Yes,4,100,2
+82,FQ17,New Information,No,1,25,1
+83,FQ17,New Information,Yes,4,75,2
 84,FQ18,Specificity,Strongly disagree,0,0,1
 85,FQ18,Specificity,Disagree,1,25,2
 86,FQ18,Specificity,Neutral,1,25,3
