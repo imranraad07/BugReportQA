@@ -115,19 +115,18 @@ The results of the survey, along each dimension, are presented both at the granu
 
 
 \subsection{Threats to Validity}
-Presented approach is affected by several limitations that may negatively impact validity of our findings and ability to generalize them. In this section, we discuss those threats as well as strategies undertaken to mitigate them.
+The presented approach is affected by several limitations that may negatively the impact the validity of our findings and their ability to generalize. In this section, we discuss those threats as well as strategies we have undertaken to mitigate them.
 
-\noindent\textbf{Construct validity.}
-A possible threat to construct validity is in the preprocessing of bug reports. More specifically, we focus only on the textual content of an issue and ignore other enclosed types of information, such as images or links. In a result, for some bug reports, the system may lack potentially relevant information to locate the most useful follow-up questions.
-This threat is partially mitigated by the size of the corpus that contains 25K GitHub issues with various characteristics and content.
+\noindent{\em Construct validity.}
+A threat to construct validity is in the preprocessing of bug reports, since we focus only on the textual content of an issue and ignore other enclosed types of information, such as images or links. As a result, for some deficient bug reports, our technique may miss potentially relevant information to locate the most useful follow-up questions. This threat is partially mitigated by the size of the corpus, containing 25K GitHub issues with various characteristics and content.
 
 The notion of utility of a follow-up question poses another threat to validity, since it is based only on a subset of information that can be enclosed in a bug report. To mitigate this threat and select the most useful type of information, we followed prior studies that reported S2R, OB and EB among the most helpful categories of information according to software developers~\cite{Zimmermann2010}.
 
-Furthermore,  combining OB, EB ans S2R in the utility function lead to another threat...
+%Furthermore,  combining OB, EB ans S2R in the utility function lead to another threat...
 
 
-\noindent\textbf{Internal validity.}
-The limited number of follow-up questions associated with each bug report pose a threat to internal validity. Following Rao et al.~\cite{rao-daume-iii-2018-learning}, each bug report is assigned 10 candidate question to rank, instead of processing the whole corpus of available questions. This  may lead to omitting follow-up questions that are valid and specific in the context of a particular bug. We partially mitigate this threat by selecting the most similar bug reports, while also extending the content of each bug report with the bug's labels and repository tags in order to provide Lucene with contextual information that can be leveraged when locating similar issues.
+\noindent{\em Internal validity.}
+The limited number of follow-up questions associated with each bug report poses a threat to internal validity. Following Rao et al.~\cite{rao-daume-iii-2018-learning}, each bug report is assigned 10 candidate question to rank, instead of processing the whole corpus of available questions. This  may lead to omitting follow-up questions that are valid and specific in the context of a particular bug. We partially mitigate this threat by selecting the most similar bug reports, while also extending the content of each bug report with the bug's labels and repository tags in order to provide Lucene with contextual information that can be leveraged when locating similar issues.
 
 
 \noindent\textbf{External validity.}
