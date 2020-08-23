@@ -126,16 +126,17 @@ terms of this information.
 
 \subsubsection{Computing Compatibility}
 To compute the probability of a follow-up question occurring for a given bug report, $P(q_{i}+a_{i}|br)$, we use a neural
-network approximation, using a deep NN consisting of 3 layers. As the first layer, in order to introduce semantics, we encode
-the bug report text with GloVe word embeddings that we pre-trained on the entirety of Stack Overflow (using the most recent Stack Overflow data dump as of June, 2020) with default parameters. As the second layer, in order to capture the word sequence, we train a LSTM and compute an average across the hidden layer. As the third and final layer we use a 4-layer dense neural network. The output of the entire network is vector as similar as possible to the concatenation of the average word embeddings of $q_{i}$ and $a_{i}$ (using the same GloVe vectors as above). We train the neural architecture using the actually posed follow-up questions and answers as positive labeled examples for $q_{i}$ and $a_{i}$ and the remaining 9 question-answer pairs in the candidate set as negatively labeled. We use cosine embedding loss and weight balancing to manage the resulting class imbalance as the negative examples significantly outnumber the positive ones, 9 to 1.
+network approximation, using a deep NN consisting of 3 layers (as shown in Figure~\ref{fig:nn}). As the first layer,
+in order to introduce semantics, we encode the bug report text with GloVe word embeddings that we pre-trained on the entirety of Stack Overflow (using the most recent Stack Overflow data dump as of June, 2020) with default parameters. As the second layer, in order to capture the word sequence, we train a LSTM and compute an average across the hidden layer. As the third and final layer we use a 4-layer dense neural network. The output of the entire network is a vector intended to be as similar as possible to the concatenation of the average word embeddings of $q_{i}$ and $a_{i}$ (using the same GloVe vectors as above). We train the neural architecture using the actually posed follow-up questions and answers as positive labeled examples for $q_{i}$ and $a_{i}$ and the remaining 9 question-answer pairs in the candidate set as negatively labeled. We use cosine embedding loss and weight balancing to manage the resulting class imbalance as the negative examples significantly outnumber the positive ones, 9 to 1.
+% The intuition is that, at inference time, the neural model can estimate how likely a question and answer pair from our candidate set to be compatible with the deficient bug report of interest.
 
 \subsubsection{Computing Utility}
 To compute the utility of the follow-up question, $U(q_{i})$, we leverage the pattern based
 identification of the constituent pieces of a bug report (OB,EB and S2R) created by Chaparro et al.~\cite{chaparro17detecting}
 We implement 5 of the most common and most productive patterns for each of OB,EB and S2R, as described by
 the authors. Each of the total 15 patterns we implemented rely on predefined sets of keywords and part-of-speech tagging to ensure high
-precision. In order to compute the average utility of the answers for a particular question in the corpus, we rely on Lucene to provide
-matching between questions and we reserve 10 of the most similar question variants for each queried follow-up question.
+precision. In order to compute the average utility of the answers for a particular question in the corpus, we again rely on Lucene to provide
+matching between questions and we reserve 10 of the most similar question variants for each queried follow-up question. The intuition is that we prefer to estimate the utility of a follow-up question not by what is in a single answer, but by the average amount of OB/EB/S2R across a number of answers of this question (or its close variants).
 
 
 %
