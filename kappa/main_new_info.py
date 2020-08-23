@@ -3,7 +3,6 @@ import sys
 import kappa.agreements as bd
 import kappa.metrics as kd
 import kappa.metrics as metrics
-import numpy as np
 import pandas as pd
 
 new_info_annotations_1 = {
@@ -40,3 +39,5 @@ if __name__ == "__main__":
     alpha = kripp.alpha(data_type="nominal")
     alpha = float("{:.3f}".format(alpha))
     print("Krippendorff nominal", alpha)
+    mets = kd.Metrics(df).fleiss_kappa()
+    print("Fleiss kappa", mets)

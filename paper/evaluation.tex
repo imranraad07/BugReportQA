@@ -35,9 +35,9 @@ We use the set of follow-up questions that both annotators agreed were valid, i.
 &                          & p-value  & size   &                          & p-value  & size   &                          & p-value  & size   &                          & p-value  & size \\ \hline
 
 {\em Random}              & 0.52 & p $<$ 0.01 & 0.23 & 0.32 & p $<$ 0.01 & 0.17 & 0.33 & p $<$ 0.01 & 0.22 & 0.34 & p $<$ 0.01 & 0.21  \\
-{\em Lucene}              & 0.53 & p = 0.11 & 0.25 & 0.35 & p = 0.60 & 0.14 & 0.32 & p = 0.01 & 0.31 & 0.32 & p = 0.01 & 0.29 \\
-{\em Utility only}        & 0.65 & p = 0.01 & 0.06 & 0.47 & p = 0.11 & 0.02 & 0.44 & p $<$ 0.01 & 0.09 & 0.41 & p $<$ 0.01 & 0.08  \\
-{\em Compatibility only}  & 0.61 & p $<$ 0.01 & 0.12 & 0.43 & p $<$ 0.01 & 0.06 & 0.38 & p $<$ 0.01 & 0.20 & 0.38 & p $<$ 0.01 & 0.15  \\
+{\em Lucene}              & 0.53 & p $<$ 0.01 & 0.25 & 0.35 & p $<$ 0.01 & 0.14 & 0.32 & p $<$ 0.01 & 0.31 & 0.32 & p $<$ 0.01 & 0.29 \\
+{\em Utility only}        & 0.65 & p = 0.11   & 0.06 & 0.47 & p = 0.60   & 0.02 & 0.44 & p = 0.01   & 0.09 & 0.41 & p = 0.01   & 0.08  \\
+{\em Compatibility only}  & 0.61 & p = 0.01   & 0.12 & 0.43 & p = 0.11   & 0.06 & 0.38 & p $<$ 0.01 & 0.20 & 0.38 & p $<$ 0.01 & 0.15  \\
 {\em \evpi}               & {\bf 0.67} & & & {\bf 0.49} & & & {\bf 0.49} & & & {\bf 0.45} & &  \\ \hline
 \end{tabular}
 \label{tab:results}
@@ -64,7 +64,7 @@ computed as: $$MRR = \frac{1}{|B|} \sum_{i=1}^{|B|} \frac{1}{rank_{i}}$$ ,where 
 
 The goal of Precision@n is to measure the number of valid results when considering the top $n$ positions in the ranking. Unlike MRR, it consider all, not only the topmost ranked, results. It is computed as: $$P@n = \frac{1}{|B|} \sum_{i=1}^{|B|} \frac{|v|}{n}$$ ,where, as before, $B$ is the set of bug reports in the test set and $v$ is the set of valid follow-up questions ranked in the top $n$ positions. We use values of 1, 3 and 5 for $n$.
 
-We compute Wilcoxon's signed rank test for each of the above metrics to estimate the statistical significance of the difference between our technique \evpi and the baselines. The effect size of the comparison is calculated using Cliff's delta ($\delta$) [49], which ranges from -1 (all values in the first group are larger than the second group) to +1 (all values in the second group are larger than the first group). A value of zero indicates that the two groups are identical. The criteria for interpreting $\delta$ is that $|\delta| >$ 0.147 $\rightarrow$ small effect, $|\delta| >$ 0.33 $\rightarrow$ medium effect, and $|\delta| >$ 0.474 $\rightarrow$ large effect [50].
+We compute Wilcoxon's signed rank test for each of the above metrics to estimate the statistical significance of the difference between our technique \evpi and the baselines. The effect size of the comparison is calculated using Cliff's delta ($\delta$) ~\cite{cliff1993dominance}, which ranges from -1 (all values in the first group are larger than the second group) to +1 (all values in the second group are larger than the first group). A value of zero indicates that the two groups are identical. The criteria for interpreting $\delta$ is that $|\delta| >$ 0.147 $\rightarrow$ small effect, $|\delta| >$ 0.33 $\rightarrow$ medium effect, and $|\delta| >$ 0.474 $\rightarrow$ large effect ~\cite{romano2006appropriate}.
 
 
 \subsubsection{Results} We summarize the results of our technique (\evpi) versus the identified
