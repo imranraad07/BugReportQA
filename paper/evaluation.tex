@@ -107,3 +107,24 @@ The results of the survey, along each dimension, are presented both at the granu
 
 
 \subsection{Threats to Validity}
+Presented approach is affected by several limitations that may negatively impact validity of our findings and ability to generalize them. In this section, we discuss those threats as well as strategies undertaken to mitigate them.
+
+\noindent\textbf{Construct validity.} 
+A possible threat to construct validity is in the preprocessing of bug reports. More specifically, we focus only on the textual content of an issue and ignore other enclosed types of information, such as images or links. In a result, for some bug reports, the system may lack potentially relevant information to locate the most useful follow-up questions.
+This threat is partially mitigated by the size of the corpus that contains 25K GitHub issues with various characteristics and content.
+
+The notion of utility of a follow-up question poses another threat to validity, since it is based only on a subset of information that can be enclosed in a bug report. To mitigate this threat and select the most useful type of information, we followed prior studies that reported S2R, OB and EB among the most helpful categories of information according to software developers~\cite{Zimmermann2010}.
+
+Furthermore,  combining OB, EB ans S2R in the utility function lead to another threat...
+
+
+\noindent\textbf{Internal validity.}
+The limited number of follow-up questions associated with each bug report pose a threat to internal validity. Following Rao et al.~\cite{rao-daume-iii-2018-learning}, each bug report is assigned 10 candidate question to rank, instead of processing the whole corpus of available questions. This  may lead to omitting follow-up questions that are valid and specific in the context of a particular bug. We partially mitigate this threat by selecting the most similar bug reports, while also extending the content of each bug report with the bug's labels and repository tags in order to provide Lucene with contextual information that can be leveraged when locating similar issues.
+
+
+\noindent\textbf{External validity.}
+In this study, we leveraged a dataset of 25K GitHub issues, however, during evaluation we use a subset of 400 manually annotated bug reports. The limited size of the test set may impact our observations as it covers only a small subset of population. To mitigate that threat, we include bug reports from X open-source software projects leveraging different frameworks and technologies. Moreover, to ensure the quality of the proposed approach, we conducted a user study with 10 software developers. We observed that the number of valid follow-up questions in the user study nearly matched the result obtained in the held-out evaluation, emphasizing the overall quality of the system and supporting validity of the results.
+
+The scope of the developer survey poses another threat to external validity due to the low number of enclosed bug reports and selection of issues only from Python or Java-related software projects. We partially mitigate bias caused by limiting the bug reports to only two technologies by sampling issues with different content characteristics (e.g., with or without stack traces) from multiple projects.  To ensure the quality and generalizability of the survey results, each pair of bug report and follow-up question was assessed by half of the respondents.
+
+
