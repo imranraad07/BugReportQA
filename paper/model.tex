@@ -134,8 +134,9 @@ To compute the utility of the follow-up question, $U(q_{i})$, we leverage the pa
 identification of the constituent pieces of a bug report (OB,EB and S2R) created by Chaparro et al.~\cite{chaparro17detecting}
 We implement 5 of the most common and most productive patterns for each of OB,EB and S2R, as described by
 the authors. Each of the total 15 patterns we implemented rely on predefined sets of keywords and part-of-speech tagging to ensure high
-precision. In order to compute the average utility of the answers for a particular question in the corpus, we rely on Lucene to provide
-matching between questions and we reserve 10 of the most similar question variants for each queried follow-up question.
+precision. In order to compute the average utility of the answers for a particular question in the corpus, we again rely on Lucene to provide
+matching between questions and we reserve 10 of the most similar question variants for each queried follow-up question. The intuition is that by computing the average amount of OB/EB/S2R we smooth across individual follow-up questions to determine if the question have value
+across all of its occurrences in the corpus.
 
 
 %
