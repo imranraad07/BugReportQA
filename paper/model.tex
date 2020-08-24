@@ -131,8 +131,8 @@ corpus, $a$ is one of those answers, and $OB(a)$, $EB(a)$ and $S2R(a)$ are the s
 Steps to Reproduce (S2R) found in the answer. We use the $|\cdot|$ operator to denote the cardinality of a set.
 The idea of this metric is that questions whose set of answers have a high proportion
 of OB,EB, or S2R of a bug report have higher utility than do questions whose answers do not contribute much in
-terms of this information. \evpi uses this formulation of EVPI, the product of compatibility and utility, which it
-estimates using a set of steps that we describe next.
+terms of this information. \evpi uses this formulation of EVPI, the product of compatibility and utility, which we
+estimate using a set of steps that we describe next. Rao et al.~\cite{rao-daume-iii-2018-learning} also defined EVPI as the product of the probability distribution (which we call compatibility) and the utility, but their definition of how these constituent terms are computed differs in significant ways from ours.
 
 \subsubsection{Estimating Compatibility}
 To compute the probability of a follow-up question occurring for a given bug report, $P(q_{i}+a_{i}|br)$, we use a neural
