@@ -1,7 +1,7 @@
 \section{System Description}
 
 % describe overall system
-As input, our system for retrieving follow-up questions requires: 1) an incomplete bug
+As input, our system for retrieving follow-up questions, \evpi, requires: 1) an incomplete bug
 report of interest; 2) a corpus of already posed follow-up questions extracted
 from GitHub issues, including their corresponding bug reports and answers. As output, our system
 produces a ranked list of follow-up questions appropriate to the deficient bug report.
@@ -117,20 +117,21 @@ The utility of a question is further expressed in terms of the average quality o
 $$U(q_{i}) = \frac{1}{|A|} * \sum_{a \in A}^{} \frac{|OB(a)|+|EB(a)|+|S2R(a)|}{|a|}$$
 
 \noindent
-,where $A$ is the set of answers $q_{i}$ has received in the corpus, $a$ is one of those answers, and
-$OB(a)$, $EB(a)$ and $S2R(a)$ are the sentences describing Observable Behavior (OB), Expected Behavior (EB), or
+,where $A$ is the set of answers the question $q_{i}$ has received across all of its one or more occurrences in the
+corpus, $a$ is one of those answers, and $OB(a)$, $EB(a)$ and $S2R(a)$ are the sentences describing Observable Behavior (OB), Expected Behavior (EB), or
 Steps to Reproduce (S2R) found in the answer. We use the $|\cdot|$ operator to denote the cardinality of a set.
 The idea of this metric is that questions whose set of answers have a high proportion
 of OB,EB, or S2R of a bug report have higher utility than do questions whose answers do not contribute much in
-terms of this information.
+terms of this information. \evpi uses this formulation of EVPI, the product of compatibility and utility, which it
+estimates using a set of steps that we describe next.
 
-\subsubsection{Computing Compatibility}
+\subsubsection{Estimating Compatibility}
 To compute the probability of a follow-up question occurring for a given bug report, $P(q_{i}+a_{i}|br)$, we use a neural
 network approximation, using a deep NN consisting of 3 layers (as shown in Figure~\ref{fig:nn}). As the first layer,
-in order to introduce semantics, we encode the bug report text with GloVe word embeddings that we pre-trained on the entirety of Stack Overflow (using the most recent Stack Overflow data dump as of June, 2020) with default parameters. As the second layer, in order to capture the word sequence, we train a LSTM and compute an average across the hidden layer. As the third and final layer we use a 4-layer dense neural network. The output of the entire network is a vector intended to be as similar as possible to the concatenation of the average word embeddings of $q_{i}$ and $a_{i}$ (using the same GloVe vectors as above). We train the neural architecture using the actually posed follow-up questions and answers as positive labeled examples for $q_{i}$ and $a_{i}$ and the remaining 9 question-answer pairs in the candidate set as negatively labeled. We use cosine embedding loss and weight balancing to manage the resulting class imbalance as the negative examples significantly outnumber the positive ones, 9 to 1.
+in order to introduce semantics, we encode the bug report text with GloVe word embeddings that we pre-trained on the entirety of Stack Overflow (using the most recent Stack Overflow data dump as of June, 2020) with default parameters. As the second layer, in order to capture the word sequence, we train a LSTM and compute an average across the hidden state. As the third and final layer we use a dense neural network. The output of the entire network is a vector representing the concatenated average word embeddings of $q_{i}$ and $a_{i}$ (using the same GloVe vectors as above). We train the neural architecture using the actually posed follow-up questions and answers as positive labeled examples for $q_{i}$ and $a_{i}$ and the remaining 9 question-answer pairs in the candidate set as negatively labeled. We use cosine embedding loss and weight balancing to manage the resulting class imbalance as the negative examples significantly outnumber the positive ones, 9 to 1.
 % The intuition is that, at inference time, the neural model can estimate how likely a question and answer pair from our candidate set to be compatible with the deficient bug report of interest.
 
-\subsubsection{Computing Utility}
+\subsubsection{Estimating Utility}
 To compute the utility of the follow-up question, $U(q_{i})$, we leverage the pattern based
 identification of the constituent pieces of a bug report (OB,EB and S2R) created by Chaparro et al.~\cite{chaparro17detecting}
 We implement 5 of the most common and most productive patterns for each of OB,EB and S2R, as described by
