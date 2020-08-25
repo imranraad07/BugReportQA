@@ -18,7 +18,8 @@ The project includes the following files and folders:
 	- train_ids.txt: train dataset ids
   - __/embeddings_damevski__: A folder that contains the embeddings we have used
     - Please download embeddings and unzip: https://drive.google.com/file/d/1VCPUWwAC8LfvWhOvoUNZqBb9PIXnokX_/view?usp=sharing
-u.  - __/scripts__: Contains scripts for running the experiments
+u.  
+  - __/scripts__: Contains scripts for running the experiments
     - run_main.sh: the entry point of the experiment
 
 
