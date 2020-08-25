@@ -54,12 +54,12 @@ Our system is based on selecting follow-up questions from a large corpus of alre
 % %
 % Using information retrieval we retrieve a candidate set of follow-up questions, while neural networks is responsible for estimating the improvement in the quality of a bug report when an answer for a follow-up question is provided.
 %
-To retrieve the best follow-up question for a specific deficient bug report we estimate the similarity between the text of the two bug reports, i.e., the similarity between a bug report corresponding to a candidate follow-up question and the deficient bug report. We combine this with an estimate of the utility the expected answer to the follow-up question would provide to the deficient bug report.
+To estimate the best follow-up question for a specific deficient bug report we combine two metrics: 1) the compatibility of a follow-up question to a specific bug report; and 2) the utility the expected answer to the follow-up question would provide to the deficient bug report.
 %
-Evaluation of our system, based on a manually annotated held out data set, indicates improved
+Evaluation of our system, based on a manually annotated held-out data set, indicates improved
 performance over a set of simple and ablation baselines.
 %
-A survey of software developers confirms the held-out set evaluation result that about half of the selected follow-up questions are considered valid. The developer survey also indicates that the valid follow-up questions are useful and can provide new information to a bug report most of the time and are specific to a bug report some of the time.
+A survey of software developers confirms the held-out set evaluation result that about half of the selected follow-up questions are considered valid. The survey also indicates that the valid follow-up questions are useful and can provide new information to a bug report most of the time and are specific to a bug report some of the time.
 
 \end{abstract}
 
