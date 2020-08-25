@@ -13,8 +13,8 @@ The project includes the following files and folders:
 	- github_issue_titles.csv: Titles of those 25k bug reports
 	- github_issue_labels.csv: Labels of those 25k bug reports
 	- github_repo_labels.csv: Repository labels of those 25k bug reports
-	- post_data.tsv: 25k bug reports by lucene output order
-	- qa_data.tsv: 25k bug reports with 10 candidate questions selected by lucene output order
+	- post_data.tsv: 25k bug reports processed by Lucene
+	- qa_data.tsv: 25k bug reports with 10 candidate follow-up questions selected by Lucene
 	- test_ids.txt: Test dataset ids
 	- train_ids.txt: Train dataset ids
   - __/embeddings__: A folder that contains the embeddings we have used
@@ -51,4 +51,4 @@ Step 1: Install software requirements mentioned above.
 
 Step 2: Update the filepaths and parameters in *script/models/run_main.sh*
 
-Step 3: `./src/models/run_main.sh`
+Step 3: `./script/models/run_main.sh`
