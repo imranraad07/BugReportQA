@@ -2,7 +2,7 @@
 In the following, we briefly describe the different components that are included in this project and the softwares required to run the experiments.
 
 ## Project Setup
-  - data: please unzip data.zip in the main directory of the project
+  - data: Please unzip data.zip in the main directory of the project
   - embedding: Please download embeddings and unzip it in the main directory of the project: https://drive.google.com/file/d/1VCPUWwAC8LfvWhOvoUNZqBb9PIXnokX_/view?usp=sharing
 
 ## Project Structure
@@ -15,22 +15,20 @@ The project includes the following files and folders:
 	- github_repo_labels.csv: Repository labels of those 25k bug reports
 	- post_data.tsv: 25k bug reports by lucene output order
 	- qa_data.tsv: 25k bug reports with 10 candidate questions selected by lucene output order
-	- test_ids.txt: test dataset ids
-	- train_ids.txt: train dataset ids
+	- test_ids.txt: Test dataset ids
+	- train_ids.txt: Train dataset ids
   - __/embeddings_damevski__: A folder that contains the embeddings we have used
   - __/scripts__: Contains scripts for running the experiments
-    - run_main.sh: the entry point of the experiment
-
-
+    - run_main.sh: The entry point of the experiment
 
 ## Software Requirements
 We used the following softwares to run our experiments
-  * Python3.6
+  * python3.6
   * torch
   * torchvision
   * spacy>=2.2.4
   * numpy pandas gensim jsonschema
-  * Conda
+  * conda
 
 ## Setup
 Conda
@@ -48,8 +46,8 @@ pip install spacy==2.2.4
 ```
 
 ## Running Experiments
-Step1: Install software requirements mentioned above.
+Step 1: Install software requirements mentioned above.
 
-Step2: Update the filepaths and parameters in *script/models/run_main.sh*
+Step 2: Update the filepaths and parameters in *script/models/run_main.sh*
 
-Step3: `./src/models/run_main.sh`
+Step 3: `./src/models/run_main.sh`
