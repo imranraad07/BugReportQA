@@ -3,7 +3,7 @@ In the following, we briefly describe the different components that are included
 
 ## Project Setup
   - data: Please unzip data.zip in the main directory of the project
-  - embedding: Please download embeddings and unzip it in the main directory of the project: <URL REMOVED FOR DOUBLE BLIND>
+  - embedding: Please unzip embeddings.zip in the main directory of the project
 
 ## Project Structure
 The project includes the following files and folders:
@@ -23,7 +23,7 @@ The project includes the following files and folders:
         - run_main.sh: The entry point of the experiment
 
 ## Software Requirements
-We used the following softwares to run our experiments
+We used the following software to run our experiments
   * python3.6
   * torch
   * torchvision
