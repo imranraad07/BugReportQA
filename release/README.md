@@ -50,5 +50,7 @@ pip install spacy==2.2.4
 
 ## Running Experiments
 Step1: Install software requirements mentioned above.
+
 Step2: Update the filepaths and parameters in *script/models/run_main.sh*
+
 Step3: `./src/models/run_main.sh`
