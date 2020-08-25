@@ -117,7 +117,9 @@ The results of the survey, along each dimension, are presented both at the granu
 The presented approach is affected by several limitations that may negatively the impact the validity of our findings and their ability to generalize. In this section, we discuss those threats as well as strategies we have undertaken to mitigate them.
 
 \noindent{\em Construct validity.}
-A threat to construct validity is in the preprocessing of bug reports, since we focus only on the textual content of an issue and ignore other enclosed types of information, such as images or links. As a result, for some deficient bug reports, our technique may miss potentially relevant information to locate the most useful follow-up questions. This threat is partially mitigated by the size of the corpus, containing 25K GitHub issues with various characteristics and content.
+One threat to construct validity is our use of a manually annotated dataset for the held-out dataset evaluation. We limited this threat by following an annotation process that required the annotators to get familiar with each project. We also observed reasonable Cohen's Kappa values between the two annotators. 
+
+A threat to construct validity is also in the preprocessing of bug reports, since we focus only on the textual content of an issue and ignore other enclosed types of information, such as images or links. As a result, for some deficient bug reports, our technique may miss potentially relevant information to locate the most useful follow-up questions. This threat is partially mitigated by the size of the corpus, containing 25K GitHub issues with various characteristics and content.
 
 The notion of utility of a follow-up question poses another threat to validity, since it is based only on a subset of information that can be enclosed in a bug report. To mitigate this threat and select the most useful type of information, we followed prior studies that reported S2R, OB and EB among the most helpful categories of information according to software developers~\cite{Zimmermann2010}.
 
