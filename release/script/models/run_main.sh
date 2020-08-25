@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPTS_DIR=script/models/
-EMB_DIR=embeddings_damevski
+EMB_DIR=embeddings
 
 DATA_DIR=data
 

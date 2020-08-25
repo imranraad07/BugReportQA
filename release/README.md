@@ -3,7 +3,7 @@ In the following, we briefly describe the different components that are included
 
 ## Project Setup
   - data: Please unzip data.zip in the main directory of the project
-  - embedding: Please download embeddings and unzip it in the main directory of the project: https://drive.google.com/file/d/1VCPUWwAC8LfvWhOvoUNZqBb9PIXnokX_/view?usp=sharing
+  - embedding: Please download embeddings and unzip it in the main directory of the project: <URL REMOVED FOR DOUBLE BLIND>
 
 ## Project Structure
 The project includes the following files and folders:
@@ -17,7 +17,7 @@ The project includes the following files and folders:
 	- qa_data.tsv: 25k bug reports with 10 candidate questions selected by lucene output order
 	- test_ids.txt: Test dataset ids
 	- train_ids.txt: Train dataset ids
-  - __/embeddings_damevski__: A folder that contains the embeddings we have used
+  - __/embeddings__: A folder that contains the embeddings we have used
   - __/script__: Contains the scripts for running the experiments
       - __/models__: Contains the scripts of the model
         - run_main.sh: The entry point of the experiment
