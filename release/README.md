@@ -1,24 +1,23 @@
 # Paper: Automatically Selecting Follow-up Questions for Deficient Bug Reports
-========================================================================================
 In the following, we briefly describe the different components that are included in this project and the softwares required to run the experiments.
 
+## Project Setup
+  - data: please unzip data.zip
+  - embedding: Please download embeddings and unzip: https://drive.google.com/file/d/1VCPUWwAC8LfvWhOvoUNZqBb9PIXnokX_/view?usp=sharing
 
 ## Project Structure
 The project includes the following files and folders:
 
   - __/data__: A folder that contains inputs that are used for the experiments
-    - please unzip data.zip
 	- dataset.csv: CSV file that contains 25k bug reports with follow-up questions and answers
 	- github_issue_titles.csv: Titles of those 25k bug reports
 	- github_issue_labels.csv: Labels of those 25k bug reports
 	- github_repo_labels.csv: Repository labels of those 25k bug reports
-	- post_data.tsv: 25k bug reports in input order
-	- qa_data.tsv: 25k bug reports with 10 candidate questions selected by lucene
+	- post_data.tsv: 25k bug reports by lucene output order
+	- qa_data.tsv: 25k bug reports with 10 candidate questions selected by lucene output order
 	- test_ids.txt: test dataset ids
 	- train_ids.txt: train dataset ids
   - __/embeddings_damevski__: A folder that contains the embeddings we have used
-    - Please download embeddings and unzip: https://drive.google.com/file/d/1VCPUWwAC8LfvWhOvoUNZqBb9PIXnokX_/view?usp=sharing
-u.  
   - __/scripts__: Contains scripts for running the experiments
     - run_main.sh: the entry point of the experiment
 
