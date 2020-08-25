@@ -2,8 +2,8 @@
 In the following, we briefly describe the different components that are included in this project and the softwares required to run the experiments.
 
 ## Project Setup
-  - data: please unzip data.zip
-  - embedding: Please download embeddings and unzip: https://drive.google.com/file/d/1VCPUWwAC8LfvWhOvoUNZqBb9PIXnokX_/view?usp=sharing
+  - data: please unzip data.zip in the main directory of the project
+  - embedding: Please download embeddings and unzip it in the main directory of the project: https://drive.google.com/file/d/1VCPUWwAC8LfvWhOvoUNZqBb9PIXnokX_/view?usp=sharing
 
 ## Project Structure
 The project includes the following files and folders:
