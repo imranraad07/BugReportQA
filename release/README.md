@@ -18,8 +18,9 @@ The project includes the following files and folders:
 	- test_ids.txt: Test dataset ids
 	- train_ids.txt: Train dataset ids
   - __/embeddings_damevski__: A folder that contains the embeddings we have used
-  - __/scripts__: Contains scripts for running the experiments
-    - run_main.sh: The entry point of the experiment
+  - __/script__: Contains the scripts for running the experiments
+      - __/models__: Contains the scripts of the model
+        - run_main.sh: The entry point of the experiment
 
 ## Software Requirements
 We used the following softwares to run our experiments
