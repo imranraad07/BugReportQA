@@ -5,8 +5,7 @@ sys.path.append(os.path.abspath('./src'))
 sys.path.append(os.path.abspath('../pattern_classification'))
 
 import argparse
-import evpi, evpi2
-import evpi_batch, evpi_batch2
+import evpi_batch2
 from gensim.scripts.glove2word2vec import glove2word2vec
 import gensim
 import csv
