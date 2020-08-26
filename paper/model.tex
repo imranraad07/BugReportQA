@@ -114,15 +114,15 @@ $$EVPI(q_{i}|br) = P(q_{i}+a_{i}|br) * U(q_{i})$$
 
 The utility of a question is further expressed in terms of the average quality of the answers it has received, i.e.,
 
-$$U(q_{i}) = \frac{1}{|A|} * \sum_{a \in A}^{} \frac{|OB(a)|+|EB(a)|+|S2R(a)|}{|a|}$$
+$$U(q_{i}) = \frac{1}{|A|} * \sum_{\hat a \in A}^{} \frac{|OB(\hat a)|+|EB(\hat a)|+|S2R(\hat a)|}{|\hat a|}$$
 
 \noindent
 ,where $A$ is the set of answers the question $q_{i}$ has received across all of its one or more occurrences in the
-corpus, $a$ is one of those answers, and $OB(a)$, $EB(a)$ and $S2R(a)$ are the sentences describing Observable Behavior (OB), Expected Behavior (EB), or
+corpus, $\hat a$ is one of those answers, and $OB(\hat a)$, $EB(\hat a)$ and $S2R(\hat a)$ are the sentences describing Observable Behavior (OB), Expected Behavior (EB), or
 Steps to Reproduce (S2R) found in the answer. We use the $|\cdot|$ operator to denote the cardinality of a set.
 The idea of this metric is that questions whose set of answers have a high proportion
-of OB,EB, or S2R of a bug report have higher utility than do questions whose answers do not contribute much in
-terms of this information. \evpi uses this formulation of EVPI, the product of compatibility and utility, which we
+of OB, EB, or S2R have higher utility than questions whose answers do not contribute much in
+terms of this type of information. \evpi uses this formulation of EVPI, the product of compatibility and utility, which we
 estimate using a set of steps that we describe next. Rao et al.~\cite{rao-daume-iii-2018-learning} also defined EVPI as the product of the probability distribution (which we call compatibility) and the utility, but their definition of how these constituent terms are computed differs in significant ways from ours.
 
 \begin{figure}[t]
@@ -142,11 +142,11 @@ in order to introduce semantics, we encode the bug report text with GloVe word e
 
 \subsubsection{Estimating Utility}
 To compute the utility of the follow-up question, $U(q_{i})$, we leverage the pattern based
-identification of the constituent pieces of a bug report (OB,EB and S2R) created by Chaparro et al.~\cite{chaparro17detecting}
+identification of the constituent pieces of a bug report (OB, EB and S2R) created by Chaparro et al.~\cite{chaparro17detecting}
 We implement 5 of the most common and most productive patterns for each of OB,EB and S2R, as described by
 the authors. Each of the total 15 patterns rely on predefined sets of keywords and part-of-speech tagging to ensure high
 precision. In order to compute the average utility of the answers for a particular question in the corpus, we again rely on Lucene to provide
-matching between questions and we reserve 10 of the most similar question variants for each queried follow-up question. The intuition is that we prefer to estimate the utility of a follow-up question not by what is in a single answer, but by the average amount of OB/EB/S2R across a number of answers of this question (or its close variants).
+matching between questions and we reserve 10 of the most similar question variants for each queried follow-up question. The intuition is that it is beneficial to estimate the utility of a follow-up question not by what is in a single answer, which can be noisy, but by the average amount of OB/EB/S2R across a number of answers of this question (or its close variants). In other words, individual answers on GitHub, even to well posed follow-up questions, can sometimes be inadequate, but, when averaging over several instances of the similar question we can more accurately estimate its utility.
 
 
 %

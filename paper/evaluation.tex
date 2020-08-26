@@ -9,7 +9,7 @@ Second, we use a survey of software developers to evaluate the follow-up questio
 \subsection{Quality of Follow-Up Question Ranking}
 
 One way of evaluating the ranking system, based on a held-out dataset (of bug reports and candidate follow-up questions), is
-by using the posed questions as the ground truth. However, this simple setup has a serious deficiency in that the posed question
+by using the posed questions as the ground truth. However, this simple setup has a serious deficiency in that the actually posed question
 may not always be the most optimal among the set of candidate follow-up questions. More importantly, several of
 the remaining candidate questions may be valid and (more) relevant to the bug report and therefore should
 not be considered as negatively labeled instances for evaluation. Therefore, in order to provide an evaluation
@@ -22,7 +22,7 @@ was performed by two of the authors following an agreed-upon predefined procedur
 read the bug report carefully, spending a few minutes to understand its context, e.g., by looking at the purpose of the overall GitHub
 project and the types of technologies it relies on; 2) marked all of the follow-up questions for the candidate set of 10
 that were valid. Both of the annotators processed the same set of 400 bug reports, marking an average of 3.45/10 of the follow-up questions as valid with an inter-annotator agreement (Cohen's kappa) of 0.60.
-We use the set of follow-up questions that both annotators agreed were valid, i.e., the intersection between their annotation.
+We use the set of follow-up questions that both annotators agreed were valid, i.e., the intersection between their annotations.
 
 
 \begin{table*}[t]
@@ -37,7 +37,7 @@ We use the set of follow-up questions that both annotators agreed were valid, i.
 {\em Lucene}              & 0.534 & $p$ $<$ 0.01 & 0.252 & 0.347 & $p$ $<$ 0.01 & 0.139 & 0.318 & $p$ $<$ 0.01 & 0.308 & 0.317 & $p$ $<$ 0.01 & 0.294  \\
 {\em Utility only}        & 0.646 & $p$ = 0.11   & 0.059 & 0.468 & $p$ = 0.60   & 0.019 & 0.443 & $p$ = 0.01   & 0.087 & 0.412 & $p$ = 0.01   & 0.077  \\
 {\em Compatibility only}  & 0.612 & $p$ = 0.01   & 0.115 & 0.426 & $p$ = 0.11   & 0.060 & 0.383 & $p$ $<$ 0.01 & 0.196 & 0.377 & $p$ $<$ 0.01 & 0.152  \\
-{\em \evpi}               & {\bf 0.677} & & & {\bf 0.486} & & & {\bf 0.492} & & & {\bf 0.446} & &  \\ \hline
+{\em \evpi}               & {\bf 0.677} & - & - & {\bf 0.486} & - & - & {\bf 0.492} & - & - & {\bf 0.446} & - & - \\ \hline
 \end{tabular}
 \label{tab:results}
 \end{table*}
@@ -46,7 +46,7 @@ We use the set of follow-up questions that both annotators agreed were valid, i.
 \subsubsection{Baselines}
 The baselines we identified are meant to convey both straightforward approaches to ranking (e.g., directly using the Lucene output) and
 ablation, i.e., using one part of our ranking function but not the other (e.g., ranking based only on the question utility, $U(q_{i})$).
-We did not find appropriate prior research work to compare against, since the research direction is novel and models from other domains
+We did not find directly related prior techniques to compare against, since the research direction is novel and models from other domains
 with a similar purpose are too different in form. Below is an enumerated list of all of the ranking baselines we used.
 \begin{itemize}
 \item {\em Random} -- A random permutation of the candidate follow-up question list. We present metrics averaged over 10 runs.
@@ -56,7 +56,7 @@ with a similar purpose are too different in form. Below is an enumerated list of
 \end{itemize}
 
 \subsubsection{Metrics}
-We use a two popular information retrieval evaluation metrics: Mean Reciprocal Rank (MRR) and Precision@n (P@n).
+We use two popular information retrieval evaluation metrics: Mean Reciprocal Rank (MRR) and Precision@n (P@n).
 
 The goal of MRR is to evaluate how effective is our technique, or a baseline, in locating the first valid follow-up question, as, presumably, this is a proxy for the ease with which an end-user would locate a follow-up question in the ranking. It is
 computed as: $$MRR = \frac{1}{|B|} \sum_{i=1}^{|B|} \frac{1}{rank_{i}}$$ ,where $B$ is the set of bug reports in the test set and $rank_{i}$ is the ranked position of the first valid follow-up question for the $i^{th}$ bug report.
@@ -103,14 +103,14 @@ For a valid follow-up question, we posed a yes/no survey question interrogating 
 \begin{figure*}[t]
 \centering
 \includegraphics[width=0.99\linewidth]{figures/viz_group.pdf}
-\caption{Responses to developer survey grouped per category (top) and per follow-up question (bottom).}
+\caption{Responses to developer survey grouped per category (top) and per follow-up question (bottom). FQ$n$ = Follow-Up Question $n$.}
 \label{fig:survey}
 \end{figure*}
 
 %Results
 The survey results showed that out of the 24 different bug report - follow-up question pairs, a majority of participants (at least 3 out of 5) considered 13 follow-up questions as valid, and 11 as invalid. This ratio is analogous to the results we observed for Precision@1 in the held-out set evaluation above, confirming expectations.
 
-The results of the survey, along each dimension, are presented both at the granularity of individual response and at the granularity of a bug report (and follow-up question pair) in Figure~\ref{fig:survey}. The survey results indicate that among categories, the selected follow-up questions by \evpi provide the most of New Information, followed by Usefulness and Specificity. However, all categories were generally positive with over 50\% of all responses on all categories either agreeing or strongly agreeing with the statements on Specificity and Usefulness or affirming that the follow-up question was asking for New Information. Considering the data per follow-up question, in the bottom part of Figure~\ref{fig:survey}, we observe most follow-up questions, which were deemed as valid, were rated positively.  Some follow-up questions have strongly positive ratings, e.g., follow-up question 14 (FQ14) was rated by all 5 respondents as valid, 4/5 agreeing or strongly agreeing that the question was specific, 4/5 agreeing or strongly agreeing that the question was useful, and 5/5 agreeing that the question aimed to provide new information for the bug report.
+The results of the survey, along each dimension, are presented both at the granularity of an individual response and at the granularity of a bug report (and follow-up question pair) in Figure~\ref{fig:survey}. The survey results indicate that among the categories of Usefulness, Specificity, and New Information, the selected follow-up questions by \evpi provide the most of New Information, followed by Usefulness and Specificity. However, all three categories were generally positive with over 50\% of all responses on each either agreeing or strongly agreeing with the statements on Specificity and Usefulness or affirming that the follow-up question was asking for New Information. Considering the data per follow-up question, in the bottom part of Figure~\ref{fig:survey}, we observe most follow-up questions, which were deemed as valid, were rated positively.  Some follow-up questions have strongly positive ratings, e.g., follow-up question 14 (FQ14) was rated by all 5 respondents as valid, 4/5 agreeing or strongly agreeing that the question was specific, 4/5 agreeing or strongly agreeing that the question was useful, and 5/5 agreeing that the question aimed to provide new information for the bug report.
 
 
 \subsection{Threats to Validity}
