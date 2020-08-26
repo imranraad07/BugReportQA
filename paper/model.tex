@@ -13,7 +13,7 @@ their potential utility to the bug report.
 \subsection{Selecting a Corpus of Bug Reports}
 
 
-\begin{figure}[b]
+\begin{figure}[t]
 \centering
 \includegraphics[width=0.99\linewidth]{figures/pipeline.pdf}
 \caption{Automatically curating a input corpus for our system follows a sequence of filtering steps, starting with filtering
@@ -40,16 +40,16 @@ In more detail, we used the following sequence of steps to curate the corpus. Th
 \begin{enumerate}
 \item We scraped a set of public GitHub repositories with a high rate of
 non-contributor created issues, where a non-contributor is a GitHub user that has never
-committed any code in the specific repository. Repositories with these characteristics form
-the target population of software projects that are more likely to use our technique. In order
-to somewhat constrain  the number of repositories, we focused on longer-running projects,
-specifically, created between 2008-2014, and recently active with new issues created in the repository after Jan 1, 2019.
-\item For each of these repositories, in their descending order of activity as defined in the previous step,
-we selected issues in their GitHub issue tracker that are labeled as ``bug", ``crash", ``fix", ``defect" or unlabeled. Our goal for this step was
-to avoid feature requests and focus on bug reports. We observed that issue labels were not used consistently enough
-in projects, which is why we opted to include unlabeled issues. Since we are interested in incomplete bug reports, we select bug reports that do not contain Observable Behavior, Expected Behavior or Steps to Reproduce. While focusing on incompleteness in one of these categories is possible, for simplicity, we chose bug reports that lacked all three.
-\item We further selected only issues that contain follow-up questions in one of the issue comments.  We identified follow-up questions as GitHub comments containing only questions, identified by both starting with an interrogative word and ending with a question mark. In order to ensure we selected follow-up questions and not just
-any questions, we constrained our selection based on time and comment sequence. That is, the comment containing the follow-up question must have been posted within 60 days of the issue creation date and must have occurred as the comment immediately following the post. We also ignored follow-up posts by the issue author by ensuring that the comment was authored by a different user from the author of the issue.
+committed any code in the specific repository. GitHub repositories with these characteristics form
+our target population, i.e., projects that are more likely to be in need our technique. In order
+to somewhat constrain the number of GitHub repositories, we focused on longer-running projects,
+specifically, with repositories created between 2008-2014, and recently active with new issues created after Jan 1, 2019.
+\item For each of these repositories, in descending order of their number of non-contributor created issues per day,
+we selected all issues from each repository's GitHub issue tracker that are labeled as ``bug", ``crash", ``fix", ``defect" or unlabeled.
+Our goal for this step was to avoid feature requests and focus on bug reports. We observed that issue labels were not used consistently enough
+in projects on GitHub, which is why we opted to include unlabeled issues. Since we are interested in deficient bug reports, we select bug reports that do not contain Observable Behavior, Expected Behavior or Steps to Reproduce. While focusing only on incompleteness in one of these categories could be a good strategy, for simplicity, we chose only bug reports that lacked all three.
+\item We further selected only issues that contain follow-up questions in one of the issue comments.  We identified follow-up questions as  comments containing only questions, identified by both starting with an interrogative word and ending with a question mark. In order to ensure we selected follow-up questions and not just
+any questions, we constrained our selection based on time and comment sequence. That is, the comment containing the follow-up question must have been posted within 60 days of the issue creation date and must have occurred as the comment immediately following the post. We also avoided follow-up posts by the issue author by ensuring that the comment was authored by a different user from the author of the issue.
 \item The set of issues and candidate follow-up questions from the previous step were further filtered to
 retain issues and follow-up questions where an answer was provided. A key heuristic we used for recognizing an answer was that it was authored
 by the original issue creator and occurred as the the next sequential comment
@@ -57,7 +57,7 @@ to the follow-up question. We also searched for answers that were encoded as edi
 \end{enumerate}
 
  We stopped the collection process when we gathered a dataset of 25K GitHub issues, which we deemed to be sufficient for our purpose. Each data point in our dataset is a triple of
-issue, follow-up question, and answer. Together, the 25K triples form the primary corpus we used to
+bug report, follow-up question, and answer. Together, the 25K triples form the primary corpus we used to
 retrieve and rank follow-up questions for a given incomplete bug report.
 
 
@@ -66,7 +66,7 @@ retrieve and rank follow-up questions for a given incomplete bug report.
 Selecting a set of most likely candidate follow-up questions for a specific incomplete bug report of interest from the corpus
 of 25K triples (bug reports, follow-up questions and their answers) can be formulated as an information retrieval
 problem. That is, as a query we can use the text of the incomplete bug report. We can represent the corpus
-as an inverted index of the bug report text (e.g., using Lucene), and use tf*idf as the
+as an inverted index of the bug report text (e.g., using Lucene), and use {\em tf*idf} as the
 ranking mechanism. In this way, we retrieve a set of 10 candidate follow-up questions for each incomplete bug report
 of interest, where these 10 candidates have the most similar bug report text to the bug report of index.
 
@@ -101,7 +101,7 @@ bug report.
 \includegraphics[width=0.99\linewidth]{figures/compat_nn.pdf}
 \caption{The neural architecture for estimating Compatibility. The neural network outputs a vector similar
 to the "ideal" question and answer for the input bug report.}
-\label{fig:pipeline}
+\label{fig:compat_nn}
 \end{figure}
 
 
