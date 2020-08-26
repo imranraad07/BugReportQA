@@ -96,15 +96,6 @@ takes more factors into account when choosing which follow-up question to pose t
 bug report.
 
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.99\linewidth]{figures/compat_nn.pdf}
-\caption{The neural architecture for estimating Compatibility. The neural network outputs a vector similar
-to the "ideal" question and answer for the input bug report.}
-\label{fig:compat_nn}
-\end{figure}
-
-
 \subsection{Ranking the Candidate Follow-Up Questions}\label{sec:ranking}
 
 To rank the set of candidate follow-up questions we reformulate and apply towards bug reporting
@@ -133,6 +124,15 @@ The idea of this metric is that questions whose set of answers have a high propo
 of OB,EB, or S2R of a bug report have higher utility than do questions whose answers do not contribute much in
 terms of this information. \evpi uses this formulation of EVPI, the product of compatibility and utility, which we
 estimate using a set of steps that we describe next. Rao et al.~\cite{rao-daume-iii-2018-learning} also defined EVPI as the product of the probability distribution (which we call compatibility) and the utility, but their definition of how these constituent terms are computed differs in significant ways from ours.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.99\linewidth]{figures/compat_nn.pdf}
+\caption{The neural architecture for estimating Compatibility. The neural network outputs a vector similar
+to the "ideal" question and answer for the input bug report.}
+\label{fig:compat_nn}
+\end{figure}
+
 
 \subsubsection{Estimating Compatibility}
 To compute the probability of a follow-up question occurring for a given bug report, $P(q_{i}+a_{i}|br)$, we use a neural
