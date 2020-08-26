@@ -63,10 +63,10 @@ retrieve and rank follow-up questions for a given incomplete bug report.
 
 \subsection{Selecting Candidate Follow-Up Questions}
 
-Selecting a set of most likely candidate follow-up questions for a specific incomplete bug report of interest from the corpus
+Selecting a set of most appropriate candidate follow-up questions for a specific incomplete bug report of interest from the corpus
 of 25K triples (bug reports, follow-up questions and their answers) can be formulated as an information retrieval
 problem. That is, as a query we can use the text of the incomplete bug report. We can represent the corpus
-as an inverted index of the bug report text (e.g., using Lucene), and use {\em tf*idf} as the
+as an inverted index of the bug report text (i.e., using Lucene), and use {\em tf*idf} as the
 ranking mechanism. In this way, we retrieve a set of 10 candidate follow-up questions for each incomplete bug report
 of interest, where these 10 candidates have the most similar bug report text to the bug report of index.
 
@@ -85,15 +85,15 @@ and split on camel case and dashes, while also keeping the original unsplit toke
 in order to ensure better quality matches, especially when the bug report body has a lot of text. In order to provide
 more context, we extract the tags that the bug report is labeled with (e.g., {\em fix-later, critical}) and the tags the
 GitHub repository is tagged with (e.g., {\em java, linux, web-server}). The former provides specifics on the issue while the
-latter usually denotes technologies or the project uses or broad categories it belongs to.
+latter usually denotes technologies the project uses or broad categories it belongs to.
 \end{itemize}
 
 To create a query out of the incomplete bug report, we tokenize its title and body
 using the equivalent process to the one we performed on the bug reports in the corpus.
-While obtaining a ranked list of follow-up questions from Lucene, we obtain and list of 10
-triples and ignore the ranking. In the following section, we describe a customized ranking, which
-takes more factors into account when choosing which follow-up question to pose to the deficient
-bug report.
+While Lucene returns a ranked list of follow-up questions from Lucene, according to {\em tf*idf}, our
+use of this mechanism is only in retrieving a set of 10 candidates. In the following section, we describe
+an improved, customized ranking, which takes into account both the question's compatibility and its utility
+in order to select which follow-up question to pose to the deficient bug report.
 
 
 \subsection{Ranking the Candidate Follow-Up Questions}\label{sec:ranking}
@@ -144,7 +144,7 @@ in order to introduce semantics, we encode the bug report text with GloVe word e
 To compute the utility of the follow-up question, $U(q_{i})$, we leverage the pattern based
 identification of the constituent pieces of a bug report (OB,EB and S2R) created by Chaparro et al.~\cite{chaparro17detecting}
 We implement 5 of the most common and most productive patterns for each of OB,EB and S2R, as described by
-the authors. Each of the total 15 patterns we implemented rely on predefined sets of keywords and part-of-speech tagging to ensure high
+the authors. Each of the total 15 patterns rely on predefined sets of keywords and part-of-speech tagging to ensure high
 precision. In order to compute the average utility of the answers for a particular question in the corpus, we again rely on Lucene to provide
 matching between questions and we reserve 10 of the most similar question variants for each queried follow-up question. The intuition is that we prefer to estimate the utility of a follow-up question not by what is in a single answer, but by the average amount of OB/EB/S2R across a number of answers of this question (or its close variants).
 
