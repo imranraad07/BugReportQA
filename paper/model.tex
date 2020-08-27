@@ -81,10 +81,9 @@ refer to some external information, which, again, is often stack traces, code, o
 of information retrieval~\cite{marcus2004information,shepherd2012sando}. We tokenize on white space, remove
 punctuation (except for horizontal dashes)
 and split on camel case and dashes, while also keeping the original unsplit tokens.
-\item {\em Indexing.} We use Lucene's standard configuration to index the title and the body in separate fields,
-in order to ensure better quality matches, especially when the bug report body has a lot of text. In order to provide
-more context, we extract the tags that the bug report is labeled with (e.g., {\em fix-later, critical}) and the tags the
-GitHub repository is tagged with (e.g., {\em java, linux, web-server}). The former provides specifics on the issue while the
+\item {\em Indexing.} We use Lucene's standard configuration to index the title and the body in separate fields. In order to provide
+more context, we extract the labels on GitHub that the bug report is associated with (e.g., {\em fix-later, critical}) and the labels the
+GitHub repository is associated with (e.g., {\em java, linux, web-server}). The former provides specifics on the issue while the
 latter usually denotes technologies the project uses or broad categories it belongs to.
 \end{itemize}
 
