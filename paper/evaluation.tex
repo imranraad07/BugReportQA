@@ -36,7 +36,7 @@ We use the set of follow-up questions that both annotators agreed were valid, i.
 \begin{table*}[t]
 \centering
 \caption{Evaluation results contrasting our system (\evpi) relative to several baselines.}
-\begin{tabular}{p{3cm}|ccc|ccc|ccc|ccc}
+\begin{tabular}{|p{3cm}|ccc|ccc|ccc|ccc|}
 \hline
 %                          & \multicolumn{4}{c}{$V_{1} \cap V_{2}$} \\\hline
 & \multirow{2}{*}{\bf MRR} & Wilcoxon & Effect & \multirow{2}{*}{\bf P@1} & Wilcoxon & Effect & \multirow{2}{*}{\bf P@3} & Wilcoxon & Effect & \multirow{2}{*}{\bf P@5} & Wilcoxon & Effect \\
@@ -49,7 +49,6 @@ We use the set of follow-up questions that both annotators agreed were valid, i.
 \end{tabular}
 \label{tab:results}
 \end{table*}
-
 
 \subsubsection{Baselines}
 The baselines we identified are meant to convey both straightforward approaches to ranking (e.g., directly using the Lucene output) and
@@ -115,6 +114,36 @@ For a valid follow-up question, we posed a yes/no survey question asking {\em Do
 \caption{Responses to developer survey grouped per category (top) and per follow-up question (bottom). FQ$n$ = Follow-Up Question $n$.}
 \label{fig:survey}
 \end{figure*}
+
+\begin{table*}[t]
+	\centering
+	\caption{Follow-up question comparison.}
+	\begin{tabular}{ |p{9cm}|p{4cm}|p{4cm}|  }		\hline
+		Bug report & Bug-IQ follow-up question & Original follow-up question\\		\hline
+		Plugin is not working on latest android \newline
+		On app start: \newline
+		[...] \newline
+		On Button Click: \newline
+		[...] \newline
+		I am running the example code on Arch Linux with Java 8, latest Android SDK with target API 22 and default nexus 5 ADM Config \newline
+		Any ideas why the SpeechRecognition object is not being initialized?
+		& Can you share the code you are using? Are you waiting for the device ready to fire before calling the SpeechRecognition?    
+		& Can you share the code you are using? Are you waiting for the device ready to fire before calling the SpeechRecognition?\\ \hline
+		Search longer than 9 characters causes Error 500 \newline
+		[...] \newline
+		Please help!
+		& What is the expected value?  
+		& Could you open the autocomplete url ? [...]		Then could you paste the full traceback please?		\\ \hline
+		Sina Weibo Api has a exception \newline
+		run SinaWeiboExample \newline
+		i got the authorization code,then paste. it's happend.
+		
+		Trading the Request Token for an Access Token
+		[...]
+		& Did you solve your issue? Some hints. May be it will be helpful for someone in the future 
+		& Do you mind getting a pair for me?\\ \hline
+	\end{tabular}
+\end{table*}
 
 %Results
 The survey results showed that out of the 24 different bug report - follow-up question pairs, a majority of participants (at least 3 out of 5) considered 13 follow-up questions as valid, and 11 as invalid. This ratio is analogous to the results we observed for Precision@1 in the held-out set evaluation presented above, confirming our expectations.
