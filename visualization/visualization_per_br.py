@@ -37,8 +37,8 @@ def main(args):
         x=alt.X('percentage:Q', title='Percentage',
                 axis=alt.Axis(format='.0f')),
         y=alt.Y('id:N', axis=y_axis,
-                sort=["FQ9", "FQ8", "FQ22", "FQ14", "FQ10", "FQ12", "FQ18", "FQ17", "FQ19", "FQ2", "FQ6", "FQ3",
-                      "FQ5"]),
+                sort=["FQ22", "FQ9",  "FQ14", "FQ8",   "FQ10",
+                      "FQ12", "FQ19", "FQ18", "FQ17", "FQ2", "FQ6", "FQ3", "FQ5"]),
         color=alt.Color(
             'type:N',
             legend=alt.Legend(orient='bottom', title='', padding=-12),
@@ -62,12 +62,12 @@ def main(args):
     chart.show()
 
 
-#import bokeh.palettes as bp
+# import bokeh.palettes as bp
 
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser(sys.argv[0])
 
-    #print(bp.Accent7)
+    # print(bp.Accent7)
 
     argparser.add_argument("--input_file", type=str, default='survey_report.csv')
 
