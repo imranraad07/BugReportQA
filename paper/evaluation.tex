@@ -51,7 +51,7 @@ with a similar purpose are too different in form. Below is an enumerated list of
 \begin{itemize}
 \item {\em Random} -- A random permutation of the candidate follow-up question list. We present metrics averaged over 10 runs.
 \item {\em Lucene} -- Lucene uses the vector space model (i.e., tf*idf) to rank follow-up questions based on the similarity between the bug reports. This baseline just transfers Lucene's ranking, which we use to generate our candidate set of 10 follow-up questions, as the system's output.
-\item {\em Utility only} -- $U(q_{i})$ -- The utility function, described in detail in Section~\ref{sec:ranking}, computes the average amount of OB,EB or S2R found in the answers to the specific follow-up question.
+\item {\em Utility only} -- $U(q_{i})$ -- The utility function, described in detail in Section~\ref{sec:ranking}, computes the average amount of OB, EB or S2R found in the answers to the specific follow-up question.
 \item {\em Compatibility only} -- $P(q_{i}+a_{i}|br)$ -- The compatibility function computes the probability a bug report can be combined with a specific follow-up question and answer pair. The implementation uses a deep NN architecture to compute this value.
 \end{itemize}
 

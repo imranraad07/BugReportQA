@@ -143,7 +143,7 @@ in order to introduce semantics, we encode the bug report text with GloVe word e
 \subsubsection{Estimating Utility}
 To compute the utility of the follow-up question, $U(q_{i})$, we leverage the pattern based
 identification of the constituent pieces of a bug report (OB, EB and S2R) created by Chaparro et al.~\cite{chaparro17detecting}
-We implement 5 of the most common and most productive patterns for each of OB,EB and S2R, as described by
+We implement 5 of the most common and most productive patterns for each of OB, EB and S2R, as described by
 the authors. Each of the total 15 patterns rely on predefined sets of keywords and part-of-speech tagging to ensure high
 precision. In order to compute the average utility of the answers for a particular question in the corpus, we again rely on Lucene to provide
 matching between questions and we reserve 10 of the most similar question variants for each queried follow-up question. The intuition is that it is beneficial to estimate the utility of a follow-up question not by what is in a single answer, which can be noisy, but by the average amount of OB/EB/S2R across a number of answers of this question (or its close variants). In other words, individual answers on GitHub, even to well posed follow-up questions, can sometimes be inadequate, but, when averaging over several instances of the similar question we can more accurately estimate its utility.
