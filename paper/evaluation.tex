@@ -18,14 +18,17 @@ identifies all of the valid follow-up questions for a specific bug report.
 
 \subsubsection{Annotation}
 We annotated 400 randomly chosen bug reports that were held-out from our original corpus of 25K. The annotation
-was performed by two of the authors following an agreed-upon predefined procedure. For each bug report, each annotator 1)
+was performed by two of the authors following an agreed-upon predefined procedure. We focused our annotation on the 10 candidate follow-up question retrieved by Lucene. For each bug report, each annotator 1)
 read the bug report carefully, spending a few minutes to understand its context, e.g., by looking at the purpose of the overall GitHub
 project and the types of technologies it relies on; 2) marked all of the follow-up questions for the candidate set of 10
-that were valid. Both of the annotators processed the same set of 400 bug reports, marking an average of 3.45/10 of the follow-up questions as valid with an inter-annotator agreement (Cohen's kappa) of 0.60.
+that were valid. Both of the annotators processed the same set of 400 bug reports, marking an average of 3.45/10 of the follow-up questions as valid with an inter-annotator agreement (Cohen's kappa) of 0.60. The distribution of valid follow-up questions is shown in Figure~\ref{fig:annotation}.
 We use the set of follow-up questions that both annotators agreed were valid, i.e., the intersection between their annotations.
+
+
 \begin{figure}
-	\includegraphics[width=\linewidth]{figures/viz_annotation.pdf}
-	\caption{Valid follow-up questions on the annotation}
+	\centering
+	\includegraphics[width=0.8\linewidth]{figures/viz_annotation.pdf}
+	\caption{Distribution of valid follow-up questions in the held-out set (average=3.45).}
 	\label{fig:annotation}
 \end{figure}
 
@@ -71,7 +74,7 @@ The goal of Precision@n is to measure the number of valid results when consideri
 We compute Wilcoxon's signed rank test for each of the above metrics to estimate the statistical significance of the difference between our technique \evpi and the baselines. The effect size of the comparison is calculated using Cliff's delta ($\delta$) ~\cite{cliff1993dominance}, which ranges from -1 (all values in the first group are larger than the second group) to +1 (all values in the second group are larger than the first group). A value of zero indicates that the two groups are identical. The criteria for interpreting $\delta$ is that $|\delta| >$ 0.147 $\rightarrow$ small effect, $|\delta| >$ 0.33 $\rightarrow$ medium effect, and $|\delta| >$ 0.474 $\rightarrow$ large effect ~\cite{romano2006appropriate}.
 
 
-\subsubsection{Results} 
+\subsubsection{Results}
 We summarize the results of our technique (\evpi) versus the identified
 baselines in Table~\ref{tab:results}. Our results indicate that \evpi outperforms all of the baselines,
 with the ablation-type baselines performing better than the simple baselines. The Lucene ranking
