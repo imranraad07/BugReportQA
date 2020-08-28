@@ -10,11 +10,11 @@ Missing information in bug reports was also a key concern in the first open lett
 %
 While nowadays some of the software projects on GitHub rely on specific templates or publish bug reporting guidelines that bug reports must follow, there are many cases where templates are ignored and guidelines are poorly followed by reporters.
 %
-Posting a quick follow-up questions in order to elicit additional information from bug reporters is one method bug triagers use to augment the bug reports with necessary information.
+Posting a quick follow-up questions in order to obtain additional information from bug reporters is one method bug triagers use to augment the bug reports with necessary information.
 %
 However follow-up questions are only effective if they are posed quickly, before the user reporting the bug loses focus on the specifics.
 %
-In this paper, we examine how posing such follow-up questions for incomplete bug reports can be performed automatically, designing and describing a system to reduce bug triage effort and improving overall bug report quality by automatically posing follow-up questions for deficient bug reports.
+In this paper, we examine how posing such follow-up questions for incomplete bug reports can be performed automatically, designing and describing a system to reduce bug triage effort, and improving overall bug report quality by automatically posing follow-up questions for deficient bug reports.
 
 \begin{figure}[t]
 \centering
@@ -38,7 +38,7 @@ Based on this, our system performs an information retrieval task, locating the m
 %
 For instance, consider the example shown in Figure 1, where the text of the bug report {\em boostrap-sass} \#829 is similar to several other bug reports on GitHub with existing follow-up questions.
 %
-In our system, choosing the right follow-up questions is a combination of this similarity between bug reports and the utility of the expected answer to the follow-up question.
+In our system, choosing the right follow-up questions is a combination of the similarity between bug reports and the utility of the expected answer to the follow-up question.
 %
 A requirement for a system that locates candidate follow-up questions and then ranks them in order of their perceived utility is a large-scale corpus.
 

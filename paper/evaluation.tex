@@ -17,7 +17,7 @@ set that identifies all of the valid questions in the candidate set, we perform 
 identifies all of the valid follow-up questions for a specific bug report.
 
 \subsubsection{Annotation}
-We annotated 400 randomly chosen bug reports that were held-out from our original corpus of 25K. The annotation
+We annotated 400 randomly chosen bug reports that were held-out from training in our original corpus of 25K. The annotation
 was performed by two of the authors following an agreed-upon predefined procedure. We focused our annotation on the 10 candidate follow-up question retrieved by Lucene. For each bug report, each annotator 1)
 read the bug report carefully, spending a few minutes to understand its context, e.g., by looking at the purpose of the overall GitHub
 project and the types of technologies it relies on; 2) marked all of the follow-up questions for the candidate set of 10
@@ -57,7 +57,7 @@ We did not find directly related prior techniques to compare against, since the 
 with a similar purpose are too different in form. Below is an enumerated list of all of the ranking baselines we used.
 \begin{itemize}
 \item {\em Random} -- A random permutation of the candidate follow-up question list. We present metrics averaged over 10 runs.
-\item {\em Lucene} -- Lucene uses the vector space model (i.e., tf*idf) to rank follow-up questions based on the similarity between the bug reports. This baseline just transfers Lucene's ranking, which we use to generate our candidate set of 10 follow-up questions, as the system's output.
+\item {\em Lucene} -- Lucene uses the vector space model (i.e., {\em tf*idf}) to rank follow-up questions based on the similarity between the bug reports. This baseline just transfers Lucene's ranking, which we use to generate our candidate set of 10 follow-up questions, as the system's output.
 \item {\em Utility only} -- $U(q_{i})$ -- The utility function, described in detail in Section~\ref{sec:ranking}, computes the average amount of OB, EB or S2R found in the answers to the specific follow-up question.
 \item {\em Compatibility only} -- $P(q_{i}+a_{i}|br)$ -- The compatibility function computes the probability a bug report can be combined with a specific follow-up question and answer pair. The implementation uses a deep NN architecture to compute this value.
 \end{itemize}
@@ -128,22 +128,22 @@ For a valid follow-up question, we posed a yes/no survey question asking {\em Do
 		[...] \newline
 		I am running the example code on Arch Linux with Java 8, latest Android SDK with target API 22 and default nexus 5 ADM Config \newline
 		Any ideas why the SpeechRecognition object is not being initialized?
-		& Can you share the code you are using? Are you waiting for the device ready to fire before calling the SpeechRecognition?    
+		& Can you share the code you are using? Are you waiting for the device ready to fire before calling the SpeechRecognition?
 		& Can you share the code you are using? Are you waiting for the device ready to fire before calling the SpeechRecognition?\\ \hline
 		FQ12
 		&Search longer than 9 characters causes Error 500 \newline
 		[...] \newline
 		Please help!
-		& What is the expected value?  
+		& What is the expected value?
 		& Could you open the autocomplete url ? [...]		Then could you paste the full traceback please?		\\ \hline
-		FQ6	
+		FQ6
 		&Sina Weibo Api has a exception \newline
 		run SinaWeiboExample \newline
 		i got the authorization code,then paste. it's happend.
-		
+
 		Trading the Request Token for an Access Token \newline
 		[...]
-		& Did you solve your issue? Some hints. May be it will be helpful for someone in the future 
+		& Did you solve your issue? Some hints. May be it will be helpful for someone in the future
 		& Do you mind getting a pair for me?\\ \hline
 	\end{tabular}
 \end{table*}
@@ -155,7 +155,7 @@ The results of the survey, along each dimension, are presented both at the granu
 
 
 \subsection{Threats to Validity}
-The presented approach is affected by several limitations that may negatively the impact the validity of our findings and their ability to generalize. In this section, we discuss those threats as well as strategies we have undertaken to mitigate them.
+The presented approach is affected by several limitations that may negatively impact the validity of our findings and their ability to generalize. In this section, we discuss those threats as well as strategies we have undertaken to mitigate them.
 
 \noindent{\em Construct validity.}
 One threat to construct validity is our use of a manually annotated dataset for the held-out dataset evaluation. We limited this threat by following an annotation process that required the annotators to get familiar with each project. We also observed reasonable Cohen's Kappa values between the two annotators.
@@ -168,7 +168,7 @@ The notion of utility of a follow-up question poses another threat to validity, 
 
 
 \noindent{\em Internal validity.}
-The limited number of follow-up questions associated with each bug report poses a threat to internal validity. Following Rao et al.~\cite{rao-daume-iii-2018-learning}, each bug report is assigned 10 candidate question to rank, instead of processing the whole corpus of available questions. This  may lead to omitting follow-up questions that are valid and specific in the context of a particular bug. We partially mitigate this threat by selecting the most similar bug reports, while also extending the content of each bug report with the bug's labels and repository tags in order to provide Lucene with contextual information that can be leveraged when locating similar issues.
+The limited number of follow-up questions associated with each bug report poses a threat to internal validity. Each bug report is assigned 10 candidate question to rank, instead of processing the whole corpus of available questions. This  may lead to omitting follow-up questions that are valid and specific in the context of a particular bug. We partially mitigate this threat by selecting the most similar bug reports, while also extending the content of each bug report with the bug's labels and repository tags in order to provide Lucene with contextual information that can be leveraged when locating similar issues.
 
 
 \noindent{\em External validity.}

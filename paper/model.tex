@@ -3,7 +3,7 @@
 % describe overall system
 As input, our system for retrieving follow-up questions, \evpi, requires: 1) an incomplete bug
 report of interest; 2) a corpus of already posed follow-up questions extracted
-from GitHub issues, including their corresponding bug reports and answers. As output, our system
+from GitHub issues, including their corresponding bug reports and answers. As output, \evpi
 produces a ranked list of follow-up questions appropriate to the deficient bug report.
 In this section, we describe our system, including how we create
 a large corpus of follow-up questions to recommend, how we select candidate follow-up questions from
@@ -47,7 +47,7 @@ specifically, with repositories created between 2008-2014, and recently active w
 \item For each of these repositories, in descending order of their number of non-contributor created issues per day,
 we selected all issues from each repository's GitHub issue tracker that are labeled as ``bug", ``crash", ``fix", ``defect" or unlabeled.
 Our goal for this step was to avoid feature requests and focus on bug reports. We observed that issue labels were not used consistently enough
-in projects on GitHub, which is why we opted to include unlabeled issues. Since we are interested in deficient bug reports, we select bug reports that do not contain Observable Behavior, Expected Behavior or Steps to Reproduce. While focusing separately on incompleteness in one of these categories is a reasonable strategy, for simplicity, we chose only bug reports that lacked all three.
+in projects on GitHub, which is why we opted to include unlabeled issues. Since we are interested in deficient bug reports, we selected bug reports that do not contain Observable Behavior, Expected Behavior or Steps to Reproduce. While focusing separately on incompleteness in one of these categories is a possible strategy, for simplicity, we chose only bug reports that lacked all three.
 \item We further selected only issues that contain follow-up questions in one of the issue comments.  We identified follow-up questions as  comments containing only questions, identified by both starting with an interrogative word and ending with a question mark. In order to ensure we selected follow-up questions and not just
 any questions, we constrained our selection based on time and comment sequence. That is, the comment containing the follow-up question must have been posted within 60 days of the issue creation date and must have occurred as the comment immediately following the post. We also avoided follow-up posts by the issue author by ensuring that the comment was authored by a different user from the author of the issue.
 \item The set of issues and candidate follow-up questions from the previous step were further filtered to
@@ -82,7 +82,7 @@ of information retrieval~\cite{marcus2004information,shepherd2012sando}. We toke
 punctuation (except for horizontal dashes)
 and split on camel case and dashes, while also keeping the original unsplit tokens.
 \item {\em Indexing.} We use Lucene's standard configuration to index the title and the body in separate fields. In order to provide
-more context, we extract the labels on GitHub that the bug report is associated with (e.g., {\em fix-later, critical}) and the labels the
+more context, we add to the index the labels on GitHub that the bug report is associated with (e.g., {\em fix-later, critical}) and the labels the
 GitHub repository is associated with (e.g., {\em java, linux, web-server}). The former provides specifics on the issue while the
 latter usually denotes technologies the project uses or broad categories it belongs to.
 \end{itemize}
@@ -122,7 +122,7 @@ Steps to Reproduce (S2R) found in the answer. We use the $|\cdot|$ operator to d
 The idea of this metric is that questions whose set of answers have a high proportion
 of OB, EB, or S2R have higher utility than questions whose answers do not contribute much in
 terms of this type of information. \evpi uses this formulation of EVPI, the product of compatibility and utility, which we
-estimate using a set of steps that we describe next. Rao et al.~\cite{rao-daume-iii-2018-learning} also defined EVPI as the product of the probability distribution (which we call compatibility) and the utility, but their definition of how these constituent terms are computed differs in significant ways from ours.
+estimate using a set of steps that we describe next. Rao et al.~\cite{rao-daume-iii-2018-learning} also defined EVPI as the product of the probability distribution (which we call compatibility) and the utility, but their definition of these constituent terms and how they are computed differs in significant ways from ours.
 
 \begin{figure}[t]
 \centering
@@ -136,7 +136,7 @@ to the "ideal" question and answer for the input bug report.}
 \subsubsection{Estimating Compatibility}
 To compute the probability of a follow-up question occurring for a given bug report, $P(q_{i}+a_{i}|br)$, we use a neural
 network approximation, using a deep NN consisting of 3 layers (as shown in Figure~\ref{fig:compat_nn}). As the first layer,
-in order to introduce semantics, we encode the bug report text with GloVe word embeddings that we pre-trained on the entirety of Stack Overflow (using the most recent Stack Overflow data dump as of June, 2020) with default parameters. As the second layer, in order to capture the word sequence, we train a LSTM and compute an average across the hidden states. As the third and final layer we use a dense neural network. The output of the entire network is a vector representing the concatenated average word embeddings of $q_{i}$ and $a_{i}$ (using the same GloVe vectors as above). We train the neural architecture using the actually posed follow-up questions and answers as positive labeled examples for $q_{i}$ and $a_{i}$ and the remaining 9 question-answer pairs in the candidate set as negatively labeled. We use cosine embedding loss and weight balancing to manage the resulting class imbalance as the negative examples significantly outnumber the positive ones, 9 to 1.
+in order to introduce semantics, we encode the bug report text with GloVe word embeddings that we pre-trained on the entirety of Stack Overflow (using the most recent Stack Overflow data dump as of June, 2020) with default parameters. As the second layer, in order to capture the word sequence, we train a LSTM and compute an average across the hidden states. As the third and final layer we use a dense neural network. The output of the entire network is a vector that is intended to be as similar as possible (according to cosine similarity) to the concatenated average word embeddings of $q_{i}$ and $a_{i}$ (using the same GloVe vectors as above). We train the neural architecture using the actually posed follow-up questions and answers as positive labeled examples for $q_{i}$ and $a_{i}$ and the remaining 9 question-answer pairs in the candidate set as negatively labeled. We use cosine embedding loss and weight balancing to manage the resulting class imbalance as the negative examples significantly outnumber the positive ones, 9 to 1.
 % The intuition is that, at inference time, the neural model can estimate how likely a question and answer pair from our candidate set to be compatible with the deficient bug report of interest.
 
 \subsubsection{Estimating Utility}
