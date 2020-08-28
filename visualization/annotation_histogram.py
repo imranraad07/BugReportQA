@@ -46,7 +46,7 @@ def main(args):
         fontSize=fontSize
     ).configure_title(fontSize=fontSize)
     # chart.show()
-    altsave.save(chart, fp='viz_annotaiton.pdf')
+    altsave.save(chart, fp='viz_annotation.pdf')
 
 
 # import bokeh.palettes as bp
