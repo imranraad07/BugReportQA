@@ -3,6 +3,7 @@ import csv
 import sys
 
 import altair as alt
+import altair_saver as altsave
 
 alt.renderers.enable('altair_viewer')
 
@@ -62,7 +63,7 @@ def main(args):
 
     text = alt.Chart(source).mark_text(dx=6, color='white').encode(
         x=alt.X('Percentage start:Q', title=''),
-        y=alt.Y('question:N', sort=["Usefulness", "Specificity"]),
+        y=alt.Y('question:N', sort=["Specificity", "Usefulness"]),
         detail='type:N',
         text=alt.Text('value:Q', format='.0f'),
     )
@@ -76,7 +77,8 @@ def main(args):
         fontSize=fontSize
     )
 
-    combined.show()
+    # combined.show()
+    altsave.save(combined, fp='viz_spec_usefulness.pdf')
 
 
 if __name__ == '__main__':
