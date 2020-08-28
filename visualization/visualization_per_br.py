@@ -49,7 +49,7 @@ def main(args):
             sort='ascending'
         ),
     ).properties(
-        width=200,
+        width=140,
         height=200
     ).facet(
         column=alt.Column("quality:N", title=None, sort=["Specificity", "Usefulness", "New Information"])
@@ -57,7 +57,7 @@ def main(args):
         labelFontSize=fontSize,
         titleFontSize=fontSize,
     ).configure_text(
-        fontSize=fontSize
+        fontSize=fontSize,
     )
     chart.show()
 
