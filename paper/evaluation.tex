@@ -5,26 +5,6 @@ a few different dimensions. First, we use metrics and a held-out data set to eva
 of the recommendation, i.e., how well the system selects valid follow-up questions for incomplete bug reports.
 Second, we use a survey of software developers to evaluate the follow-up questions on their usefulness, novelty and specificity.
 
-
-\subsection{Quality of Follow-Up Question Ranking}
-
-One way of evaluating the ranking system, based on a held-out dataset (of bug reports and candidate follow-up questions), is
-by using the posed questions as the ground truth. However, this simple setup has a serious deficiency in that the actually posed question
-may not always be the most optimal among the set of candidate follow-up questions. More importantly, several of
-the remaining candidate questions may be valid and (more) relevant to the bug report and therefore should
-not be considered as negatively labeled instances for evaluation. Therefore, in order to provide an evaluation
-set that identifies all of the valid questions in the candidate set, we perform manual annotation that clearly
-identifies all of the valid follow-up questions for a specific bug report.
-
-\subsubsection{Annotation}
-We annotated 400 randomly chosen bug reports that were held-out from training in our original corpus of 25K. The annotation
-was performed by two of the authors following an agreed-upon predefined procedure. We focused our annotation on the 10 candidate follow-up question retrieved by Lucene. For each bug report, each annotator 1)
-read the bug report carefully, spending a few minutes to understand its context, e.g., by looking at the purpose of the overall GitHub
-project and the types of technologies it relies on; 2) marked all of the follow-up questions for the candidate set of 10
-that were valid. Both of the annotators processed the same set of 400 bug reports, marking an average of 3.45/10 of the follow-up questions as valid with an inter-annotator agreement (Cohen's kappa) of 0.60. The distribution of valid follow-up questions is shown in Figure~\ref{fig:annotation}.
-We use the set of follow-up questions that both annotators agreed were valid, i.e., the intersection between their annotations.
-
-
 \begin{figure}
 	\centering
 	\includegraphics[width=0.8\linewidth]{figures/viz_annotation.pdf}
@@ -50,6 +30,29 @@ We use the set of follow-up questions that both annotators agreed were valid, i.
 \label{tab:results}
 \end{table*}
 
+
+\subsection{Quality of Follow-Up Question Ranking}
+
+One way of evaluating the ranking system, based on a held-out dataset (of bug reports and candidate follow-up questions), is
+by using the posed questions as the ground truth. However, this simple setup has a serious deficiency in that the actually posed question
+may not always be the most optimal among the set of candidate follow-up questions. More importantly, several of
+the remaining candidate questions may be valid and (more) relevant to the bug report and therefore should
+not be considered as negatively labeled instances for evaluation. Therefore, in order to provide an evaluation
+set that identifies all of the valid questions in the candidate set, we perform manual annotation that clearly
+identifies all of the valid follow-up questions for a specific bug report.
+
+
+
+\subsubsection{Annotation}
+We annotated 400 randomly chosen bug reports that were held-out from training in our original corpus of 25K. The annotation
+was performed by two of the authors following an agreed-upon predefined procedure. We focused our annotation on the 10 candidate follow-up question retrieved by Lucene. For each bug report, each annotator 1)
+read the bug report carefully, spending a few minutes to understand its context, e.g., by looking at the purpose of the overall GitHub
+project and the types of technologies it relies on; 2) marked all of the follow-up questions for the candidate set of 10
+that were valid. Both of the annotators processed the same set of 400 bug reports, marking an average of 3.45/10 of the follow-up questions as valid with an inter-annotator agreement (Cohen's kappa) of 0.60. The distribution of valid follow-up questions is shown in Figure~\ref{fig:annotation}.
+We use the set of follow-up questions that both annotators agreed were valid, i.e., the intersection between their annotations.
+
+
+
 \subsubsection{Baselines}
 The baselines we identified are meant to convey both straightforward approaches to ranking (e.g., directly using the Lucene output) and
 ablation, i.e., using one part of our ranking function but not the other (e.g., ranking based only on the question utility, $U(q_{i})$).
@@ -72,6 +75,12 @@ The goal of Precision@n is to measure the number of valid results when consideri
 
 We compute Wilcoxon's signed rank test for each of the above metrics to estimate the statistical significance of the difference between our technique \evpi and the baselines. The effect size of the comparison is calculated using Cliff's delta ($\delta$) ~\cite{cliff1993dominance}, which ranges from -1 (all values in the first group are larger than the second group) to +1 (all values in the second group are larger than the first group). A value of zero indicates that the two groups are identical. The criteria for interpreting $\delta$ is that $|\delta| >$ 0.147 $\rightarrow$ small effect, $|\delta| >$ 0.33 $\rightarrow$ medium effect, and $|\delta| >$ 0.474 $\rightarrow$ large effect ~\cite{romano2006appropriate}.
 
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.95\linewidth]{figures/viz_group.pdf}
+\caption{Responses to developer survey grouped per category (top) and per follow-up question (bottom). FQ$n$ = Follow-Up Question $n$.}
+\label{fig:survey}
+\end{figure*}
 
 \subsubsection{Results}
 We summarize the results of our technique (\evpi) versus the identified
@@ -84,6 +93,40 @@ questions by our system were valid. The Wilcoxon's signed rank test and the Clif
 the raw metric values, i.e., that Utility only has a strong similarity to \evpi and could be strong contributing
 factor to the approach's effectiveness. They also confirm that \evpi has a strong advantage over the simple
 baselines.
+
+\begin{table*}[t]
+	\centering
+	\caption{Comparison of the \evpi follow-up question and the actually posed (original) follow-up question for three of the highest rated instances by the survey respondents.}
+	\begin{tabular}{ |M{1cm}|p{7.3cm}|p{4cm}|p{4cm}|  }		\hline
+		&Bug report & Bug-IQ follow-up question & Original follow-up question\\		\hline
+		FQ9
+		& {\em Title =} "random.multivariate\_normal broken in python 3" \newline
+		{\em Body =} "The following example \newline
+		[...] gives [...] \newline
+		in python-2.7.11 and [...] \newline
+		in python-3.4.4 both with numpy 1.10.2."
+		& Could you try upgrading/re-installing your numpy? \newline
+		(Also refer - [this SO answer] (http://stackoverflow.com/[...]))
+		& How did you install numpy? What platform are you on? If you installed numpy yourself, you might want to check that you have made a clean install.		\\ \hline
+
+		FQ22
+		&{\em Title =} "Plugin is not working on latest android" \newline
+		{\em Body =} "On app start: [...] \newline
+		On Button Click: [...] \newline
+		I am running the example code on Arch Linux with Java 8, latest Android SDK with target API 22 and default nexus 5 ADM Config.
+		Any ideas why the SpeechRecognition object is not being initialized?""
+		& Can you share the code you are using? Are you waiting for the device ready to fire before calling the SpeechRecognition?
+		& Can you share the code you are using? Are you waiting for the device ready to fire before calling the SpeechRecognition?\\ \hline
+
+		FQ14
+		&{\em Title =} "Multiple time tests discovering" \newline
+		{\em Body =} "I have strange problem with running xunit tests as part of my build process. Since yesterday after running all tests my tfs build starts discovering tests again and after that it runs tests again. And that's repeated 15 times.
+		Below I have log from TFS: [...]"
+		& Can you describe your scenario a little more? One way of doing this is described in [...]
+		& Can you check if you have multiple copies of the xUnit adapter under [...]? Thanks! \\ \hline
+	\end{tabular}
+\label{tab:survey}
+\end{table*}
 
 
 \subsection{Developer Survey}
@@ -108,56 +151,12 @@ was presented with a screenshot from GitHub containing the title and text of the
 %Measures
 For a valid follow-up question, we posed a yes/no survey question asking {\em Does the follow-up question ask for new information currently not included in the description?}, followed by two Likert score survey questions (5 point; Strongly Disagree, Disagree, Neutral, Agree, Strongly Agree) interrogating whether {\em The follow-up question is specific to the bug report} and {\em The follow-up question is useful to the bug report}. In the following, we refer to the first (yes/no) survey question as measuring New Information, the second measuring Specificity, and the third measuring Usefulness.
 
-\begin{figure*}[t]
-\centering
-\includegraphics[width=0.95\linewidth]{figures/viz_group.pdf}
-\caption{Responses to developer survey grouped per category (top) and per follow-up question (bottom). FQ$n$ = Follow-Up Question $n$.}
-\label{fig:survey}
-\end{figure*}
-
-\begin{table*}[t]
-	\centering
-	\caption{Follow-up question comparison.}
-	\begin{tabular}{ |p{1cm}|p{8cm}|p{4cm}|p{4cm}|  }		\hline
-		&Bug report & Bug-IQ follow-up question & Original follow-up question\\		\hline
-		FQ9
-		& random.multivariate\_normal broken in python 3 \newline
-		The following example \newline
-		[...] \newline
-		gives \newline
-		[...] \newline
-		in python-2.7.11 and \newline
-		[...] \newline
-		in python-3.4.4 both with numpy 1.10.2.
-		& Could you try upgrading/re-installing your numpy? \newline
-		(Also refer - [this SO answer] (http://stackoverflow.com/[...]))
-		& How did you install numpy? What platform are you on? If you installed numpy yourself, you might want to check that you have made a clean install.		\\ \hline
-		
-		FQ22
-		&Plugin is not working on latest android \newline
-		On app start: \newline
-		[...] \newline
-		On Button Click: \newline
-		[...] \newline
-		I am running the example code on Arch Linux with Java 8, latest Android SDK with target API 22 and default nexus 5 ADM Config \newline
-		Any ideas why the SpeechRecognition object is not being initialized?
-		& Can you share the code you are using? Are you waiting for the device ready to fire before calling the SpeechRecognition?
-		& Can you share the code you are using? Are you waiting for the device ready to fire before calling the SpeechRecognition?\\ \hline
-
-		FQ14
-		&Multiple time tests discovering \newline
-		I have strange problem with running xunit tests as part of my build process. Since yesterday after running all tests my tfs build starts discovering tests again and after that it runs tests again. And that's repeated 15 times. \newline
-		Below I have log from TFS: \newline
-		[...]
-		& Can you describe your scenario a little more? One way of doing this is described in [...] Thanks!
-		& Can you check if you have multiple copies of the xUnit adapter under [...]? Thanks! \\ \hline
-	\end{tabular}
-\end{table*}
-
 %Results
 The survey results showed that out of the 24 different bug report - follow-up question pairs, a majority of participants (at least 3 out of 5) considered 13 follow-up questions as valid, and 11 as invalid. This ratio is analogous to the results we observed for Precision@1 in the held-out set evaluation presented above, confirming our expectations.
 
 The results of the survey, along each dimension, are presented both at the granularity of an individual response and at the granularity of a bug report (and follow-up question pair) in Figure~\ref{fig:survey}. The survey results indicate that among the categories of Usefulness, Specificity, and New Information, the follow-up questions selected by \evpi provide the most of New Information, followed by Usefulness and Specificity. However, all three categories were generally positive with over 50\% of all responses on each either agreeing or strongly agreeing with the statements on Specificity and Usefulness or affirming that the follow-up question was asking for New Information. Considering the data per follow-up question, in the bottom part of Figure~\ref{fig:survey}, we observe most follow-up questions, which were deemed as valid, were rated positively.  Some follow-up questions have strongly positive ratings, e.g., follow-up question 14 (FQ14) was rated by all 5 respondents as valid, 4/5 agreeing or strongly agreeing that the question was specific, 4/5 agreeing or strongly agreeing that the question was useful, and 5/5 agreeing that the question aimed to provide new information for the bug report.
+
+To further illustrate \evpi's performance, we contrast the \evpi follow-up questions to the ones posed in the original bug report for three of the highest rated survey instances in Table~\ref{tab:survey}. While for one of the instances, FQ22, the recommended follow-up question matches the posed follow-up question, which is possible since the original follow-up question is in our candidate set, the remaining two follow-up questions are different. \evpi's follow-up question in FQ9 is specific to {\em numpy}, which is a library mentioned in the bug report, while FQ14 asks the more generic, but appropriate, question of {\em Can you describe your scenario a little more?}. 
 
 
 \subsection{Threats to Validity}
