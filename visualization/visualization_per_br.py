@@ -1,6 +1,7 @@
 import argparse
 import csv
 import sys
+import altair_saver as altsave
 
 import altair as alt
 
@@ -37,7 +38,7 @@ def main(args):
         x=alt.X('percentage:Q', title='Percentage',
                 axis=alt.Axis(format='.0f')),
         y=alt.Y('id:N', axis=y_axis,
-                sort=["FQ22", "FQ9",  "FQ14", "FQ8",   "FQ10",
+                sort=["FQ9", "FQ22", "FQ14", "FQ8", "FQ10",
                       "FQ12", "FQ19", "FQ18", "FQ17", "FQ2", "FQ6", "FQ3", "FQ5"]),
         color=alt.Color(
             'type:N',
@@ -49,7 +50,7 @@ def main(args):
             sort='ascending'
         ),
     ).properties(
-        width=140,
+        width=180,
         height=200
     ).facet(
         column=alt.Column("quality:N", title=None, sort=["Specificity", "Usefulness", "New Information"])
@@ -59,7 +60,8 @@ def main(args):
     ).configure_text(
         fontSize=fontSize,
     )
-    chart.show()
+    # chart.show()
+    altsave.save(chart, fp='viz_combined.pdf')
 
 
 # import bokeh.palettes as bp

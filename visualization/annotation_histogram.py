@@ -3,7 +3,9 @@ import csv
 import sys
 
 import altair as alt
+import altair_saver as altsave
 import pandas as pd
+print(alt.__version__)
 
 alt.renderers.enable('altair_viewer')
 
@@ -18,37 +20,33 @@ alt.renderers.enable('altair_viewer')
 # 8 -> 5
 
 def main(args):
-    # output_file("bars.html")
-    # fruits = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
-    # counts = [14.35, 25, 13.42, 19.90, 12.03, 7.87, 5.09, 2.34, 0, 0]
-    # p = figure(x_range=fruits, plot_height=250,
-    #            toolbar_location=None, tools="")
-    # p.vbar(x=fruits, top=counts, width=0.9)
-    # p.xgrid.grid_line_color = None
-    # p.y_range.start = 0
-    # show(p)
-
-    # source = alt.pd.read_csv(args.input_file)
     source = pd.DataFrame({
         'num_valid': [1, 2, 3, 4, 5, 6, 7, 8, 9],
         'Percentage of instances': [14.35, 25, 13.42, 19.90, 12.03, 7.87, 5.09, 2.34, 0],
     })
 
-    alt.Chart(source).mark_bar(size=30).encode(
-        x=alt.X('num_valid', title='Number of valid follow-ups per bug report (out of 10)',
+    fontSize = 16
+    chart = alt.Chart(source).mark_bar(size=30).encode(
+        x=alt.X('num_valid', title='Number of valid follow-ups per bug report',
                 sort=["1", "2", "3", "4", "5",
                       "6", "7", "8", "9", "10"],
                 axis=alt.Axis(labels=True,
                               ticks=True,
                               values=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
                 ),
-        y='Percentage of instances',
+        y=alt.Y('Percentage of instances'),
         color=alt.value('gray')
     ).properties(
         width=400
     ).configure_axis(
-        grid=False
-    ).show()
+        grid=False,
+        labelFontSize=fontSize,
+        titleFontSize=fontSize,
+    ).configure_text(
+        fontSize=fontSize
+    ).configure_title(fontSize=fontSize)
+    # chart.show()
+    altsave.save(chart, fp='viz_annotaiton.pdf')
 
 
 # import bokeh.palettes as bp
