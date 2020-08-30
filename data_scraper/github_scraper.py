@@ -16,6 +16,50 @@ headers = {'Authorization': 'token e0611cfcb582b98c9d94c3b53a380b5b88d98c2e'}
 bug_report_counter = 0
 
 
+def is_this_comment_follow_up(comment, issue_data):
+    if comment['user']['id'] == issue_data['user']['id']:
+        return False, ''
+    for sentence in sent_tokenize(comment['body']):
+        sentence = sentence.strip()
+        if sentence.startswith(">"):
+            continue
+        elif question_identifier(sentence):
+            # if sentence starts with @someone, check if this @someone is original issue author or not
+            if sentence.startswith("@"):
+                mentioned_login = sentence.split()[0]
+                github_login = "@{0}".format(issue_data['user']['login'])
+                if mentioned_login != github_login:
+                    break
+            return True, sentence
+    return False, ''
+
+
+def is_valid_issue(issue_data):
+    if issue_data is None:
+        return False
+
+    if issue_data['body'] is None:
+        return False
+
+    # github v3 api considers pull requests as issues. so filter them
+    if 'pull_request' in issue_data:
+        return False
+    if 'comments' not in issue_data:
+        print("comments is not in issue data")
+        return False
+    # check if comment count is at least two
+    if issue_data['comments'] < 2:
+        print("less than two comments")
+        return False
+    if 'comments_url' not in issue_data:
+        print("comments_url is not in issue data")
+        return False
+    if 'user' not in issue_data:
+        print("user is not in issue data")
+        return False
+    return True
+
+
 def read_github_issues(github_repo, bug_ids, csv_writer):
     global bug_report_counter
     for issue_id in bug_ids:
@@ -24,22 +68,12 @@ def read_github_issues(github_repo, bug_ids, csv_writer):
             url = "https://api.github.com/repos/{repo}/issues/{issue_id}"
             url = url.format(repo=github_repo, issue_id=issue_id)
             issue_data = get_an_issue(url, headers)
-            # print(issue_data)
 
-            if issue_data is None:
-                continue
-
-            if issue_data['body'] is None:
+            if not is_valid_issue(issue_data):
                 continue
 
-            # github v3 api considers pull requests as issues. so filter them
-            if 'pull_request' in issue_data:
-                continue
-            if 'comments' not in issue_data:
-                print("comments is not in issue data")
-                continue
-            # check if comment count is at least two
-            if issue_data['comments'] < 2:
+            comments = get_comments(issue_data['comments_url'], headers)
+            if comments is None:
                 continue
 
             comment_count = 0
@@ -48,20 +82,13 @@ def read_github_issues(github_repo, bug_ids, csv_writer):
             is_follow_up_question_answer = False
             follow_up_question = ''
             follow_up_question_reply = ''
-            if 'comments_url' not in issue_data:
-                print("comments_url is not in issue data")
-                continue
-            comments = get_comments(issue_data['comments_url'], headers)
-            if comments is None:
-                continue
+
+            original_post = issue_data['body']
 
             # reading the comments
             for comment in comments:
                 if 'user' not in comment:
                     print("user is not in comment data")
-                    continue
-                if 'user' not in issue_data:
-                    print("user is not in issue data")
                     continue
 
                 # comment within 60 days of issue creation
@@ -70,29 +97,18 @@ def read_github_issues(github_repo, bug_ids, csv_writer):
                 if d1 - d2 > timedelta(days=60):
                     # print(d1-d2)
                     continue
-
-                if not is_follow_up_question and comment_count < 3:
-                    comment_count = comment_count + 1
-                    # if comment author and issue author are same, then discard the comment
-                    if comment['user']['id'] == issue_data['user']['id']:
+                if not is_follow_up_question and comment_count < 1:
+                    # when the original poster comments right after the post, add it to original text
+                    if issue_data['user']['login'] == comment['user']['login']:
+                        original_post = original_post + "\n" + comment['body']
                         continue
-                    follow_up_question = comment['body']
-                    for sentence in sent_tokenize(comment['body']):
-                        sentence = sentence.strip()
-                        if sentence.startswith(">"):
-                            continue
-                        elif question_identifier(sentence):
-                            # if sentence starts with @someone, check if this @someone is original issue author or not
-                            if sentence.startswith("@"):
-                                mentioned_login = sentence.split()[0]
-                                github_login = "@{0}".format(issue_data['user']['login'])
-                                if mentioned_login != github_login:
-                                    break
-                            is_follow_up_question = True
-                            idx = comment['body'].find(sentence)
-                            follow_up_question = comment['body'][idx:]
-                            after_question = 0
-                            break
+
+                    comment_count = comment_count + 1
+                    follow_up_question_pair = is_this_comment_follow_up(comment, issue_data)
+                    if follow_up_question_pair[0] is True:
+                        follow_up_question = follow_up_question_pair[1]
+                        is_follow_up_question = True
+                        after_question = 0
                 elif is_follow_up_question and after_question < 3:
                     after_question = after_question + 1
                     if issue_data['user']['login'] == comment['user']['login']:
@@ -107,9 +123,7 @@ def read_github_issues(github_repo, bug_ids, csv_writer):
                     continue
 
                 # do not filter them when parsing
-                original_post = issue_data['body']
-                postid = issue_data['html_url'][19:]
-                postid = postid.replace("/", "_")
+                postid = issue_data['html_url'][19:].replace("/", "_")
                 write_row = [github_repo, issue_data['html_url'], postid, original_post, follow_up_question,
                              follow_up_question_reply]
                 csv_writer.writerow(write_row)
@@ -226,26 +240,10 @@ def get_follow_up_question(issue):
 
         if not is_follow_up_question and comment_count < 3:
             comment_count = comment_count + 1
-            # if comment author and issue author are same, then discard the comment
-            if comment['user']['id'] == issue['user']['id']:
-                continue
-            follow_up_question = comment['body']
-            follow_up_question_time = comment['created_at']
-            for sentence in sent_tokenize(comment['body']):
-                sentence = sentence.strip()
-                if sentence.startswith(">"):
-                    continue
-                elif question_identifier(sentence):
-                    # if sentence starts with @someone, check if this @someone is original issue author or not
-                    if sentence.startswith("@"):
-                        is_mentioned = sentence.split()[0]
-                        github_login = "@{0}".format(issue['user']['login'])
-                        if is_mentioned != github_login:
-                            break
-                    is_follow_up_question = True
-                    idx = comment['body'].find(sentence)
-                    follow_up_question = comment['body'][idx:]
-                    break
+            if follow_up_question_pair[0] is True:
+                follow_up_question = follow_up_question_pair[1]
+                is_follow_up_question = True
+                follow_up_question_time = comment['created_at']
 
     if is_follow_up_question:
         # just filtering by character count
@@ -375,11 +373,11 @@ if __name__ == '__main__':
     print(sys.argv)
 
     argparser = argparse.ArgumentParser(sys.argv[0])
-    argparser.add_argument("--type", type=str, default='edit')
+    argparser.add_argument("--type", type=str, default='parse')
     argparser.add_argument("--repo_csv", type=str,
                            default='../data/repos/repos_final2008.csv')
     argparser.add_argument("--output_csv", type=str,
-                           default='../data/bug_reports/github_data_2008_edit.csv')
+                           default='../data/bug_reports/github_data_2008.csv')
 
     args = argparser.parse_args()
     print(args)
