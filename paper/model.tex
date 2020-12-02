@@ -1,25 +1,24 @@
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.9\linewidth]{figures/pipeline2.pdf}
+% \caption{Automatically curating an input corpus for our system follows a sequence of filtering steps, starting with filtering
+% GitHub repositories to selecting only the issues in these repositories that are bug reports with answered follow-up questions.}
+\caption{Overall workflow for how the \evpi system is used to improve bug report quality.}
+\label{fig:pipeline}
+\end{figure*}
+
 \section{System Description}
 
 % describe overall system
-As input, our system for retrieving follow-up questions, \evpi, requires: 1) an incomplete bug
+As input, our system for retrieving follow-up questions, \evpi, requires: 1) a bug
 report of interest; 2) a corpus of already posed follow-up questions extracted
-from GitHub issues, including their corresponding bug reports and answers. As output, \evpi
-produces a ranked list of follow-up questions appropriate to the deficient bug report.
-In this section, we describe our system, including how we create
-a large corpus of follow-up questions to recommend, how we select candidate follow-up questions from
+from GitHub issues, including their corresponding bug reports and answers. When the bug report is deficient in OB, EB, or S2R, as output, \evpi poses a single (or a small set) follow-up question appropriate to the deficient bug report. 
+The overall vision of \evpi is shown in Figure~\ref{fig:pipeline}. The left side of the figure shows the online part of \evpi that determines the optimal follow-up questions for a deficient bug report, while the right side shows the steps necessary for the offline generation of a corpus of follow-up questions for reuse. In this section, we describe our system, including how we create a large corpus of follow-up questions to recommend, how we select candidate follow-up questions from
 this corpus for a specific incomplete bug report, and how we rank these questions in descending order of
 their potential utility to the bug report.
 
 \subsection{Selecting a Corpus of Bug Reports}
 
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.99\linewidth]{figures/pipeline.pdf}
-\caption{Automatically curating an input corpus for our system follows a sequence of filtering steps, starting with filtering
-GitHub repositories to selecting only the issues in these repositories that are bug reports with answered follow-up questions.}
-\label{fig:pipeline}
-\end{figure}
 
 % overview of the entire process
 Our goal in curating a corpus of bug report-related follow-up questions and their answers
@@ -36,7 +35,7 @@ as measured by the number of issues created by non-contributors over some fixed 
 answers to the follow-up questions encoded as either comments or as edits to the
 original bug report.
 
-In more detail, we used the following sequence of steps to curate the corpus. The highlights of the corpus curation process are also illustrated in Figure~\ref{fig:pipeline}.
+In more detail, we used the following sequence of steps to curate the corpus. The highlights of the corpus curation process are also illustrated on the right part of Figure~\ref{fig:pipeline} (Offline Corpus Curation Workflow).
 \begin{enumerate}
 \item We scraped a set of public GitHub repositories with a high rate of
 non-contributor created issues, where a non-contributor is a GitHub user that has never
