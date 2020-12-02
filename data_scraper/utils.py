@@ -17,7 +17,8 @@ def mkdir(d):
 
 def question_identifier(sentence):
     start_words = ['who', 'what', 'when', 'where', 'why', 'which', 'how', "while", "do", "does", "did", "will", "would",
-                   "can", "could", "shall", "should", "may", "might", "must"]
+                   "can", "could", "shall", "should", "may", "might", "must", "is", "are", "were", "was", "has", "have",
+                   "had"]
     flag = False
     for word in start_words:
         if sentence.lower().startswith(word.lower()):
