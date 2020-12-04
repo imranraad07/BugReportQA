@@ -12,7 +12,7 @@
 % describe overall system
 As input, our system for retrieving follow-up questions, \evpi, requires: 1) a bug
 report of interest; 2) a corpus of already posed follow-up questions extracted
-from GitHub issues, including their corresponding bug reports and answers. When the bug report is deficient in OB, EB, or S2R, as output, \evpi poses a single (or a small set) follow-up question appropriate to the deficient bug report. 
+from GitHub issues, including their corresponding bug reports and answers. When the bug report is deficient in OB, EB, or S2R (computed based on the language patterns described in Section~\ref{sec:estimate_util}), \evpi poses a single follow-up question (or a small set) appropriate to the deficient bug report. 
 The overall vision of \evpi is shown in Figure~\ref{fig:pipeline}. The left side of the figure shows the online part of \evpi that determines the optimal follow-up questions for a deficient bug report, while the right side shows the steps necessary for the offline generation of a corpus of follow-up questions for reuse. In this section, we describe our system, including how we create a large corpus of follow-up questions to recommend, how we select candidate follow-up questions from
 this corpus for a specific incomplete bug report, and how we rank these questions in descending order of
 their potential utility to the bug report.
@@ -35,7 +35,7 @@ as measured by the number of issues created by non-contributors over some fixed 
 answers to the follow-up questions encoded as either comments or as edits to the
 original bug report.
 
-In more detail, we used the following sequence of steps to curate the corpus. The highlights of the corpus curation process are also illustrated on the right part of Figure~\ref{fig:pipeline} (Offline Corpus Curation Workflow).
+In more detail, we used the following sequence of steps to curate the corpus. The highlights of the corpus curation process are also illustrated on the right part of Figure~\ref{fig:pipeline}.
 \begin{enumerate}
 \item We scraped a set of public GitHub repositories with a high rate of
 non-contributor created issues, where a non-contributor is a GitHub user that has never
@@ -46,7 +46,8 @@ specifically, with repositories created between 2008-2014, and recently active w
 \item For each of these repositories, in descending order of their number of non-contributor created issues per day,
 we selected all issues from each repository's GitHub issue tracker that are labeled as ``bug", ``crash", ``fix", ``defect" or unlabeled.
 Our goal for this step was to avoid feature requests and focus on bug reports. We observed that issue labels were not used consistently enough
-in projects on GitHub, which is why we opted to include unlabeled issues. Since we are interested in deficient bug reports, we selected bug reports that do not contain Observable Behavior, Expected Behavior or Steps to Reproduce. While focusing separately on incompleteness in one of these categories is a possible strategy, for simplicity, we chose only bug reports that lacked all three.
+in projects on GitHub, which is why we opted to include unlabeled issues. Since we are interested in deficient bug reports, we selected bug reports that do not contain Observable Behavior, Expected Behavior or Steps to Reproduce. {\bf This selection of bug reports still produces a wide variety of OB/EB/S2R within the answer set to the follow-up questions as shown in Table X}.
+% While focusing separately on incompleteness in one of these categories is a possible strategy, for simplicity, we chose only bug reports that lacked all three.
 \item We further selected only issues that contain follow-up questions in one of the issue comments.  We identified follow-up questions as  comments containing only questions, identified by both starting with an interrogative word and ending with a question mark. In order to ensure we selected follow-up questions and not just
 any questions, we constrained our selection based on time and comment sequence. That is, the comment containing the follow-up question must have been posted within 60 days of the issue creation date and must have occurred as the comment immediately following the post. We also avoided follow-up posts by the issue author by ensuring that the comment was authored by a different user from the author of the issue.
 \item The set of issues and candidate follow-up questions from the previous step were further filtered to
@@ -138,12 +139,15 @@ network approximation, using a deep NN consisting of 3 layers (as shown in Figur
 in order to introduce semantics, we encode the bug report text with GloVe word embeddings that we pre-trained on the entirety of Stack Overflow (using the most recent Stack Overflow data dump as of June, 2020) with default parameters. As the second layer, in order to capture the word sequence, we train a LSTM and compute an average across the hidden states. As the third and final layer we use a dense neural network. The output of the entire network is a vector that is intended to be as similar as possible (according to cosine similarity) to the concatenated average word embeddings of $q_{i}$ and $a_{i}$ (using the same GloVe vectors as above). We train the neural architecture using the actually posed follow-up questions and answers as positive labeled examples for $q_{i}$ and $a_{i}$ and the remaining 9 question-answer pairs in the candidate set as negatively labeled. We use cosine embedding loss and weight balancing to manage the resulting class imbalance as the negative examples significantly outnumber the positive ones, 9 to 1.
 % The intuition is that, at inference time, the neural model can estimate how likely a question and answer pair from our candidate set to be compatible with the deficient bug report of interest.
 
-\subsubsection{Estimating Utility}
+\subsubsection{Estimating Utility}~\label{sec:estimate_util}
 To compute the utility of the follow-up question, $U(q_{i})$, we leverage the pattern based
-identification of the constituent pieces of a bug report (OB, EB and S2R) created by Chaparro et al.~\cite{chaparro17detecting}
+identification of the constituent pieces of a bug report (OB, EB and S2R) created by Chaparro 
+et al.~\cite{chaparro17detecting}
 We implement 5 of the most common and most productive patterns for each of OB, EB and S2R, as described by
 the authors. Each of the total 15 patterns rely on predefined sets of keywords and part-of-speech tagging to ensure high
-precision. In order to compute the average utility of the answers for a particular question in the corpus, we again rely on Lucene to provide
+precision\footnote{Depending on the choice of patterns, Chaparro et al. report average EB precision of 95.1\%-96.7\%, recall of 46.1\%-76.6\% and average S2R precision of 81.6\%-84.5\% and recall of 31.0\%-38.5\%; no OB data was reported~\cite{chaparro17detecting}.}. We value high precision over recall since it is more important overall for \evpi to produce fewer false positives rather than false negatives.
+
+In order to compute the average utility of the answers for a particular question in the corpus, we again rely on Lucene to provide
 matching between questions and we reserve 10 of the most similar question variants for each queried follow-up question. The intuition is that it is beneficial to estimate the utility of a follow-up question not by what is in a single answer, which can be noisy, but by the average amount of OB/EB/S2R across a number of answers of this question (or its close variants). In other words, individual answers on GitHub, even to well posed follow-up questions, can sometimes be inadequate, but, when averaging over several instances of the similar question we can more accurately estimate its utility.
 
 

@@ -1,6 +1,6 @@
 \section{Evaluation}
 
-We implemented a prototype of the system with the aim of evaluating its efficacy along
+We implemented a prototype of the follow-up question selection of the \evpi system (i.e., Offline Corpus Curation and Selecting Follow-Up Questions, as shown in Figure~\ref{fig:pipeline}) with the aim of evaluating its combined efficacy along
 a few different dimensions. First, we use metrics and a held-out data set to evaluate the quality
 of the recommendation, i.e., how well the system selects valid follow-up questions for incomplete bug reports.
 Second, we use a survey of software developers to evaluate the follow-up questions on their usefulness, novelty and specificity.
@@ -12,6 +12,7 @@ Second, we use a survey of software developers to evaluate the follow-up questio
 	\label{fig:annotation}
 \end{figure}
 
+\newcommand*{\tab}{\hspace*{0.5cm}}%
 
 \begin{table*}[t]
 \centering
@@ -20,13 +21,14 @@ Second, we use a survey of software developers to evaluate the follow-up questio
 \hline
 %                          & \multicolumn{4}{c}{$V_{1} \cap V_{2}$} \\\hline
 & \multirow{2}{*}{\bf MRR} & Wilcoxon & Effect & \multirow{2}{*}{\bf P@1} & Wilcoxon & Effect & \multirow{2}{*}{\bf P@3} & Wilcoxon & Effect & \multirow{2}{*}{\bf P@5} & Wilcoxon & Effect \\
-&                          & $p$-value  & size   &                          & $p$-value  & size   &                          & $p$-value  & size   &                          & $p$-value  & size \\ \hline
-{\em Random}              & 0.542 & $p$ $<$ 0.01 & 0.229 & 0.319 & $p$ $<$ 0.01 & 0.167 & 0.368 & $p$ $<$ 0.01 & 0.216 & 0.355 & $p$ $<$ 0.01 & 0.214 \\
-{\em Lucene}              & 0.534 & $p$ $<$ 0.01 & 0.252 & 0.347 & $p$ $<$ 0.01 & 0.139 & 0.318 & $p$ $<$ 0.01 & 0.308 & 0.317 & $p$ $<$ 0.01 & 0.294 \\
-{\em Utility only}        & 0.646 & $p$ = 0.11   & 0.059 & 0.468 & $p$ = 0.60   & 0.019 & 0.443 & $p$ = 0.01   & 0.087 & 0.412 & $p$ = 0.01   & 0.077 \\
-{\em Compatibility only}  & 0.612 & $p$ = 0.01   & 0.115 & 0.426 & $p$ = 0.11   & 0.060 & 0.383 & $p$ $<$ 0.01 & 0.196 & 0.377 & $p$ $<$ 0.01 & 0.152 \\
-{\em Evpi (Rao)}  		  & 0.551 & $p$ $<$ 0.01 & 0.218 & 0.342 & $p$ $<$ 0.01	& 0.144	& 0.336 & $p$ $<$ 0.01 & 0.279 & 0.342 & $p$ $<$ 0.01 & 0.245 \\
+&                          & $p$-value & size   &                          & $p$-value  & size   &                          & $p$-value  & size   &                          & $p$-value  & size \\ \hline
 {\em \evpi}               & {\bf 0.677} & - & - & {\bf 0.486} & - & - & {\bf 0.492} & - & - & {\bf 0.446} & - & - \\ \hline
+{\sc Baselines:}   &  &  &  &  &  &  &  &  &  &  &  &  \\ 
+\tab {\em Random}              & 0.542 & $p$ $<$ 0.01 & 0.229 & 0.319 & $p$ $<$ 0.01 & 0.167 & 0.368 & $p$ $<$ 0.01 & 0.216 & 0.355 & $p$ $<$ 0.01 & 0.214 \\
+\tab {\em Lucene}              & 0.534 & $p$ $<$ 0.01 & 0.252 & 0.347 & $p$ $<$ 0.01 & 0.139 & 0.318 & $p$ $<$ 0.01 & 0.308 & 0.317 & $p$ $<$ 0.01 & 0.294 \\
+\tab {\em Utility only}        & 0.646 & $p$ = 0.11   & 0.059 & 0.468 & $p$ = 0.60   & 0.019 & 0.443 & $p$ = 0.01   & 0.087 & 0.412 & $p$ = 0.01   & 0.077 \\
+\tab {\em Compatibility only}  & 0.612 & $p$ = 0.01   & 0.115 & 0.426 & $p$ = 0.11   & 0.060 & 0.383 & $p$ $<$ 0.01 & 0.196 & 0.377 & $p$ $<$ 0.01 & 0.152 \\
+\tab {\em Rao et al.~\cite{rao-daume-iii-2018-learning}}  		  & 0.551 & $p$ $<$ 0.01 & 0.218 & 0.342 & $p$ $<$ 0.01	& 0.144	& 0.336 & $p$ $<$ 0.01 & 0.279 & 0.342 & $p$ $<$ 0.01 & 0.245 \\ \hline
 \end{tabular}
 \label{tab:results}
 \end{table*}
@@ -99,15 +101,15 @@ baselines.
 	\centering
 	\caption{Comparison of the \evpi follow-up question and the actually posed (original) follow-up question for three of the highest rated instances by the survey respondents.}
 	\begin{tabular}{ |M{1cm}|p{7.3cm}|p{4cm}|p{4cm}|  }		\hline
-		Instance &Bug report & Bug-IQ follow-up question & Original follow-up question\\		\hline
-		FQ9
-		& {\em Title =} "random.multivariate\_normal broken in python 3" \newline
-		{\em Body =} "The following example [...] \newline
-		gives [...] in python-2.7.11 \newline
-		and [...] in python-3.4.4 both with numpy 1.10.2."
-		& Could you try upgrading/re-installing your numpy? \newline
-		(Also refer - [this SO answer] (http://stackoverflow.com/[...]))
-		& How did you install numpy? What platform are you on? If you installed numpy yourself, you might want to check that you have made a clean install.		\\ \hline
+		% Instance &Bug report & Bug-IQ follow-up question & Original follow-up question\\		\hline
+		% FQ9
+		% & {\em Title =} "random.multivariate\_normal broken in python 3" \newline
+		% {\em Body =} "The following example [...] \newline
+		% gives [...] in python-2.7.11 \newline
+		% and [...] in python-3.4.4 both with numpy 1.10.2."
+		% & Could you try upgrading/re-installing your numpy? \newline
+		% (Also refer - [this SO answer] (http://stackoverflow.com/[...]))
+		% & How did you install numpy? What platform are you on? If you installed numpy yourself, you might want to check that you have made a clean install.		\\ \hline
 
 		FQ22
 		&{\em Title =} "Plugin is not working on latest android" \newline
@@ -115,8 +117,8 @@ baselines.
 		On Button Click: [...] \newline
 		I am running the example code on Arch Linux with Java 8, latest Android SDK with target API 22 and default nexus 5 ADM Config.
 		Any ideas why the SpeechRecognition object is not being initialized?""
-		& Can you share the code you are using? Are you waiting for the device ready to fire before calling the SpeechRecognition?
-		& Can you share the code you are using? Are you waiting for the device ready to fire before calling the SpeechRecognition?\\ \hline
+		& [...] Are you waiting for the device ready to fire before calling the SpeechRecognition?
+		& [...] Are you waiting for the device ready to fire before calling the SpeechRecognition?\\ \hline
 
 		FQ14
 		&{\em Title =} "Multiple time tests discovering" \newline
@@ -156,7 +158,10 @@ The survey results showed that out of the 24 different bug report - follow-up qu
 
 The results of the survey, along each dimension, are presented both at the granularity of an individual response and at the granularity of a bug report (and follow-up question pair) in Figure~\ref{fig:survey}. The survey results indicate that among the categories of Usefulness, Specificity, and New Information, the follow-up questions selected by \evpi provide the most of New Information, followed by Usefulness and Specificity. However, all three categories were generally positive with over 50\% of all responses on each either agreeing or strongly agreeing with the statements on Specificity and Usefulness or affirming that the follow-up question was asking for New Information. Considering the data per follow-up question, in the bottom part of Figure~\ref{fig:survey}, we observe most follow-up questions, which were deemed as valid, were rated positively.  Some follow-up questions have strongly positive ratings, e.g., follow-up question 14 (FQ14) was rated by all 5 respondents as valid, 4/5 agreeing or strongly agreeing that the question was specific, 4/5 agreeing or strongly agreeing that the question was useful, and 5/5 agreeing that the question aimed to provide new information for the bug report.
 
-To further illustrate \evpi's performance, we contrast the \evpi follow-up questions to the ones posed in the original bug report for three of the highest rated survey instances in Table~\ref{tab:survey}. While for one of the instances, FQ22, the recommended follow-up question matches the posed follow-up question, which is possible since the original follow-up question is among our candidate set, the remaining two follow-up questions are different. \evpi's follow-up question in FQ9 is specific to {\em numpy}, which is a library mentioned in the bug report, while FQ14 asks the question of {\em Can you describe your scenario a little more?} and provides some additional context in the succeeding sentence.
+To further illustrate \evpi's performance, we contrast the \evpi follow-up questions to the ones posed in the original bug report for two of the highest rated survey instances in Table~\ref{tab:survey}. While for one of the instances, FQ22, the recommended follow-up question matches the posed follow-up question, which is possible since the original follow-up question is among our candidate set, the follow-up question in FQ15 is different, asking the question of {\em Can you describe your scenario a little more?} and providing some additional context on how to do so in the succeeding sentence.
+
+
+% \evpi's follow-up question in FQ9 is specific to {\em numpy}, which is a library mentioned in the bug report, while FQ14 asks the question of {\em Can you describe your scenario a little more?} and provides some additional context in the succeeding sentence.
 
 
 \subsection{Threats to Validity}
