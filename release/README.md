@@ -21,6 +21,7 @@ The project includes the following files and folders:
   - __/script__: Contains the scripts for running the experiments
       - __/models__: Contains the scripts of the model
         - run_main.sh: The entry point of the experiment
+  - __/survey__: A folder that contains surevey related files
 
 ## Software Requirements
 We used the following software to run our experiments
