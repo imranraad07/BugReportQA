@@ -26,9 +26,9 @@ Second, we use a survey of software developers to evaluate the follow-up questio
 {\sc Baselines:}   &  &  &  &  &  &  &  &  &  &  &  &  \\ 
 \tab {\em Random}              & 0.542 & $p$ $<$ 0.01 & 0.229 & 0.319 & $p$ $<$ 0.01 & 0.167 & 0.368 & $p$ $<$ 0.01 & 0.216 & 0.355 & $p$ $<$ 0.01 & 0.214 \\
 \tab {\em Lucene}              & 0.534 & $p$ $<$ 0.01 & 0.252 & 0.347 & $p$ $<$ 0.01 & 0.139 & 0.318 & $p$ $<$ 0.01 & 0.308 & 0.317 & $p$ $<$ 0.01 & 0.294 \\
+\tab {\em Rao et al.~\cite{rao-daume-iii-2018-learning}}  		  & 0.551 & $p$ $<$ 0.01 & 0.218 & 0.342 & $p$ $<$ 0.01	& 0.144	& 0.336 & $p$ $<$ 0.01 & 0.279 & 0.342 & $p$ $<$ 0.01 & 0.245 \\
 \tab {\em Utility only}        & 0.646 & $p$ = 0.11   & 0.059 & 0.468 & $p$ = 0.60   & 0.019 & 0.443 & $p$ = 0.01   & 0.087 & 0.412 & $p$ = 0.01   & 0.077 \\
-\tab {\em Compatibility only}  & 0.612 & $p$ = 0.01   & 0.115 & 0.426 & $p$ = 0.11   & 0.060 & 0.383 & $p$ $<$ 0.01 & 0.196 & 0.377 & $p$ $<$ 0.01 & 0.152 \\
-\tab {\em Rao et al.~\cite{rao-daume-iii-2018-learning}}  		  & 0.551 & $p$ $<$ 0.01 & 0.218 & 0.342 & $p$ $<$ 0.01	& 0.144	& 0.336 & $p$ $<$ 0.01 & 0.279 & 0.342 & $p$ $<$ 0.01 & 0.245 \\ \hline
+\tab {\em Compatibility only}  & 0.612 & $p$ = 0.01   & 0.115 & 0.426 & $p$ = 0.11   & 0.060 & 0.383 & $p$ $<$ 0.01 & 0.196 & 0.377 & $p$ $<$ 0.01 & 0.152 \\ \hline
 \end{tabular}
 \label{tab:results}
 \end{table*}
@@ -96,6 +96,8 @@ questions by our system were valid. The Wilcoxon's signed rank test and the Clif
 the raw metric values, i.e., that Utility only has a strong similarity to \evpi and could be strong contributing
 factor to the approach's effectiveness. They also confirm that \evpi has a strong advantage over the simple
 baselines.
+
+We interpret the results 
 
 \begin{table*}[t]
 	\centering
