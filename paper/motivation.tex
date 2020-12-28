@@ -35,9 +35,9 @@ From each of the 10 repositories, we randomly sampled 50 closed bug reports (500
 of the three key parts of a bug report: Observable Behavior (OB), Expected Behavior (EB) or Steps to Reproduce (S2R).
 We found that follow-up questions were present in 23.6\% (118/500) of bug reports and about 73\% (86/118) of them were
 answered with 57\% (49/86) of the answers containing Observable Behavior, Expected Behavior or Steps to Reproduce.
-These small scale study results indicate that, since follow-up questions tend to be answered by bug reporters at a relatively high rate (73\% in our study) with answers that seem to add value to the bug report, an automated technique to pose such follow-up question should be of value.
+Our analysis of this small randomly-sampled dataset indicates that, since follow-up questions tend to be answered by bug reporters at a relatively high rate (73\% in our study) with answers that seem to add value to the bug report, an automated technique to pose such follow-up question should be of value.
 
 We highlight one of the bug reports we examined ({\bf ansible/ansible \#3933}) in Figure~\ref{fig:bug_report}. The follow-up question {\em What OS/version of
 Ansible was this on?} elicited an answer that provided key OB to this bug report, leading to its quick subsequent fix.
-Developer surveys have confirmed the importance of OB, EB and S2R in bug reports , noting that S2R is among the most valuable aspects of a bug report
+Developer surveys have confirmed the importance of OB, EB and S2R in bug reports, observing that S2R is among the most valuable aspects of a bug report
 with OB and EB closely behind~\cite{zimmermann10whatmakes,laukkanen2011survey}. The availability of existing follow-up questions on social coding platforms like GitHub provides the preconditions for the approach described in this paper, which leverages such existing follow-up questions to automatically rank and select the most appropriate one to be asked for a newly written, incomplete bug report. In the remainder of this paper, we describe the design of this system, which we entitle \evpi\ -- Bug Automated Questioner\footnotemark\footnotetext{Replication package available at: https://tinyurl.com/y4k43fll}.
