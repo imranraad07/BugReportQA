@@ -52,7 +52,7 @@ was performed by two of the authors following an agreed-upon predefined procedur
 read the bug report carefully, spending a few minutes to understand its context, e.g., by looking at the purpose of the overall GitHub
 project and the types of technologies it relies on; 2) marked all of the follow-up questions for the candidate set of 10
 that were valid. Both of the annotators processed the same set of 400 bug reports, marking an average of 3.45/10 of the follow-up questions as valid with an inter-annotator agreement (Cohen's kappa) of 0.60. The distribution of valid follow-up questions is shown in Figure~\ref{fig:annotation}.
-We use the set of follow-up questions that both annotators agreed were valid, i.e., the intersection between their annotations.
+We use the set of follow-up questions that both annotators agreed were valid, i.e., the intersection between their annotations. \textcolor{red}{This intersection approach has been popular among ranking question related researches~\cite{rao-daume-iii-2018-learning, kumar2020ranking} recently.}
 
 
 
@@ -105,7 +105,7 @@ We interpret the results to mean that our formulations of Utility and Compatibil
 	\centering
 	\caption{Comparison of the \evpi follow-up question and the actually posed (original) follow-up question for three of the highest rated instances by the survey respondents.}
 	\begin{tabular}{ |M{1cm}|p{7.3cm}|p{4cm}|p{4cm}|  }		\hline
-		Instance &Bug report & Bug-IQ follow-up question & Original follow-up question\\		\hline
+		Instance &Bug report & Bug-AutoQ follow-up question & Original follow-up question\\		\hline
 		% FQ9
 		% & {\em Title =} "random.multivariate\_normal broken in python 3" \newline
 		% {\em Body =} "The following example [...] \newline
@@ -152,12 +152,7 @@ additional information?}). To investigate how \evpi performs across several such
 software developers.
 
 %\subsubsection{Participants}
-Through personal contacts, we e-mailed 10 software developers about the study, providing the basic context of our project
-and a link to a Web form containing the survey. None of the developers were
-aware about the details of our technique. The developers were half (5) from academia (graduate students at
-institutions in the U.S. and Europe) and half professional developers from industry. All had programming
-experience of 4 or more years with popular languages like Java and Python and all indicated one of their primary
-responsibilities was developing software.
+Through personal contacts, we e-mailed 10 software developers about the study, providing the basic context of our project, \textcolor{red}{brief definitions and examples of the characteristics,} and a link to a Web form containing the survey. None of the developers were aware about the details of our technique. The developers were half (5) from academia (graduate students at institutions in the U.S. and Europe) and half professional developers from industry. All had programming experience of 4 or more years with popular languages like Java and Python and all indicated one of their primary responsibilities was developing software.
 
 %Procedure
 We randomly assigned the developers into two groups of 5 and each group was assigned 12 instances of bug report and follow-up question pairs, where all of the follow-up questions were the top-1 selected by \evpi. Each group was presented with bug reports from our corpus that belong to GitHub projects where Java or Python are the primary technologies. For each of the assigned bug reports, a developer
@@ -183,7 +178,11 @@ The presented approach is affected by several limitations that may negatively im
 \noindent{\em Construct validity.}
 One threat to construct validity is our use of a manually annotated dataset for the held-out dataset evaluation. We limited this threat by following an annotation process that required the annotators to get familiar with each project. We also observed reasonable Cohen's Kappa values between the two annotators.
 
+\textcolor{red}{Another threat to construct validity is using Chaparro et al.'s~\cite{chaparro17detecting} definitions to find OB/EB/S2R in bug reports. We did not perform an explicit validation of the pattern accuracy as that would have required us to curate a non-trivial dataset specifically for this purpose. Instead, we aimed to control noise introduced in recognizing OB/EB/S2R by our formulation of EVPI.}
+
 A threat to construct validity is also in the preprocessing of bug reports, since we focus only on the textual content of an issue and ignore other enclosed types of information, such as images or links. As a result, for some deficient bug reports, our technique may miss potentially relevant information to locate the most useful follow-up questions. This threat is partially mitigated by the size of the corpus, containing 25K GitHub issues with various characteristics and content.
+
+\textcolor{red}{The possibility of data snooping is also minimum or non-existent int the evaluation since 25K bug reports were completely randomly sampled from 6452 unique repositories.}
 
 The notion of utility of a follow-up question poses another threat to validity, since it is based only on a subset of information that can be enclosed in a bug report. To mitigate this threat and select the most useful type of information, we followed prior studies that reported S2R, OB and EB among the most helpful categories of information according to software developers~\cite{Zimmermann2010}.
 
