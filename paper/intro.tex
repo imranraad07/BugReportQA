@@ -18,14 +18,14 @@ In this paper, we examine how posing such follow-up questions for bug reports ca
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.99\linewidth]{figures/br_motivation.pdf}
+\includegraphics[width=0.95\linewidth]{figures/br_motivation.pdf}
 \caption{The text for bug report \#829 of the {\em bootstrap-sass} project is similar to other bug reports with already posed follow-up questions. The similarity between a pair of bug reports is illustrated as the length of the line connecting them.}
 \label{fig:motivation}
 \end{figure}
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.99\linewidth]{figures/popular_repos.pdf}
+\includegraphics[width=0.95\linewidth]{figures/popular_repos.pdf}
 \caption{Daily issue creation activity in 2019 for a selection of ten highly active
 (by number of commits) repositories on GitHub.}
 \label{fig:repo_activity}
@@ -42,9 +42,8 @@ In our system, choosing the right follow-up questions is a combination of the si
 %
 A requirement for a system that locates candidate follow-up questions and then ranks them in order of their perceived utility is a large-scale corpus.
 
-To curate a corpus of prior bug reports, follow-up questions, and their answers we leverage GitHub, where we focus on popular repositories that have a high level of activity and therefore are likely to have numerous relevant follow-up questions, encoded as GitHub issue comments. We gather the answers to these follow-up questions that occur either as additional GitHub issue comments or as edits to the original bug report text. We base our estimate of the utility of an answer on the quantity of Observable Behavior (OB), Expected Behavior (EB) and Steps to Reproduce (S2R) it contributes, which we identify using the linguistic patterns published by Chaparro et al~\cite{chaparro17detecting}. We evaluate our prototype in two ways, based on its ability to predict valid follow-up questions on a manually annotated held-out dataset, and based on a developer survey that aims to gauge the usefulness of the follow-up questions we recommend. The results indicate that the technique is viable, with 0.677 MRR on the held-out dataset, 53\% of respondents indicating that the follow-up questions are valid, and 92\% of the valid questions asking for new information for each bug report.
+To curate a corpus of prior bug reports, follow-up questions, and their answers we leverage GitHub, where we focus on popular repositories that have a high level of activity and therefore are likely to have numerous relevant follow-up questions, encoded as GitHub issue comments. We gather the answers to these follow-up questions that occur either as additional GitHub issue comments or as edits to the original bug report text. We base our estimate of the utility of an answer on the quantity of Observable Behavior (OB), Expected Behavior (EB) and Steps to Reproduce (S2R) it contributes, which we identify using the linguistic patterns published by Chaparro et al~\cite{chaparro17detecting}. We evaluate our prototype in two ways, based on its ability to predict valid follow-up questions on a manually annotated held-out dataset, and based on a developer survey that aims to gauge the usefulness of the follow-up questions we recommend. The results indicate that the technique is viable, with 0.677 MRR on the held-out dataset, 53\% of respondents indicating that the follow-up questions are valid, and 92\% of the valid questions asking for new information for each bug report. To summarize, the primary contributions of this paper are:
 
-To summarize, the primary contributions of this paper are:
 \begin{enumerate}
 \item mechanism for automatically posing follow-up questions to aid with incomplete bug reports;
 \item metrics to select follow-up questions for a specific bug report from a corpus of bug reports, follow-up questions and their answers extracted from bug triage histories;
