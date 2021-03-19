@@ -10,9 +10,9 @@ Missing information in bug reports was also a key concern in the first open lett
 %
 While nowadays some of the software projects on GitHub rely on specific templates or publish bug reporting guidelines that bug reports must follow, there are many cases where templates are ignored and guidelines are poorly followed by reporters.
 %
-Posting a quick follow-up questions in order to obtain additional information from bug reporters is one method bug triagers use to augment the bug reports with necessary information.
+Posting a quick follow-up question in order to obtain additional information from bug reporters is one method bug triagers use to augment the bug reports with necessary information.
 %
-However follow-up questions are only effective if they are posed quickly, before the user reporting the bug loses focus on the specifics.
+However, follow-up questions are only effective if they are posed quickly, before the user reporting the bug loses focus on the specifics.
 %
 In this paper, we examine how posing such follow-up questions for bug reports can be performed automatically, designing and describing a system to reduce bug triage effort, and improving overall bug report quality by automatically posing follow-up questions for deficient bug reports.
 
@@ -32,22 +32,22 @@ In this paper, we examine how posing such follow-up questions for bug reports ca
 \end{figure}
 
 %
-We base our automatic follow-up question posing system on the following assumptions and ideas: 1) relevant follow-up question are common, not overly specific, and have already been posed in other prior bug reports in the current project or in others; 2) similar bug reports necessitate similar follow-up questions; and 3) the utility of the answer provided to a prior similar follow-up question is indicative of its value to the current bug report.
+We base our automatic follow-up question posing system on the following assumptions and ideas: 1) relevant follow-up questions are common, not overly specific, and have already been posed in other prior bug reports in the current project or in others; 2) similar bug reports necessitate similar follow-up questions; and 3) the utility of the answer provided to a prior similar follow-up question is indicative of its value to the current bug report.
 %
 Based on this, our system performs an information retrieval task, locating the most relevant and useful follow-up question for a specific deficient bug report, given a large corpus of previous bug reports, follow-up questions, and their answers.
 %
-For instance, consider the example shown in Figure 1, where the text of the bug report {\em boostrap-sass} \#829 is similar to several other bug reports on GitHub with existing follow-up questions.
+For instance, consider the example shown in Figure 1, where the text of the bug report {\em bootstrap-sass} \#829 is similar to several other bug reports on GitHub with existing follow-up questions.
 %
 In our system, choosing the right follow-up questions is a combination of the similarity between bug reports and the utility of the expected answer to the follow-up question.
 %
 A requirement for a system that locates candidate follow-up questions and then ranks them in order of their perceived utility is a large-scale corpus.
 
-To curate a corpus of prior bug reports, follow-up questions, and their answers we leverage GitHub, where we focus on popular repositories that have a high level of activity and therefore are likely to have numerous relevant follow-up questions, encoded as GitHub issue comments. We gather the answers to these follow-up questions that occur either as additional GitHub issue comments or as edits to the original bug report text. We base our estimate of the utility of an answer on the quantity of Observable Behavior (OB), Expected Behavior (EB) and Steps to Reproduce (S2R) it contributes, which we identify using the linguistic patterns published by Chaparro et al~\cite{chaparro17detecting}. We evaluate our prototype in two ways, based on its ability to predict valid follow-up questions on a manually annotated held-out dataset, and based on a developer survey that aims to gauge the usefulness of the follow-up questions we recommend. The results indicate that the technique is viable, with 0.677 MRR on the held-out dataset, 53\% of respondents indicating that the follow-up questions are valid, and 92\% of the valid questions asking for new information for each bug report. To summarize, the primary contributions of this paper are:
+To curate a corpus of prior bug reports, follow-up questions, and their answers, we leverage GitHub, where we focus on popular repositories that have a high level of activity and therefore are likely to have numerous relevant follow-up questions, encoded as GitHub issue comments. We gather the answers to these follow-up questions that occur either as additional GitHub issue comments or as edits to the original bug report text. We base our estimate of the utility of an answer on the quantity of Observable Behavior (OB), Expected Behavior (EB) and Steps to Reproduce (S2R) it contributes, which we identify using the linguistic patterns published by Chaparro et al~\cite{chaparro17detecting}. We evaluate our prototype in two ways, based on its ability to predict valid follow-up questions on a manually annotated held-out dataset, and based on a developer survey that aims to gauge the usefulness of the follow-up questions we recommend. The results indicate that the technique is viable, with 0.677 MRR on the held-out dataset, 53\% of respondents indicating that the follow-up questions are valid, and 92\% of the valid questions asking for new information for each bug report. To summarize, the primary contributions of this paper are:
 
 \begin{enumerate}
-\item mechanism for automatically posing follow-up questions to aid with incomplete bug reports;
+\item a mechanism for automatically posing follow-up questions to aid with incomplete bug reports;
 \item metrics to select follow-up questions for a specific bug report from a corpus of bug reports, follow-up questions and their answers extracted from bug triage histories;
-\item process for curating a large and high-quality corpus of bug reports, follow-up questions and answers from online software development platforms like GitHub.
+\item a process for curating a large and high-quality corpus of bug reports, follow-up questions and answers from online software development platforms like GitHub.
 \end{enumerate}
 
 Relative to the prior efforts by the software engineering research community towards improving the quality of bug reports, this paper is the first to propose follow-up questions. Automatically posing follow-up questions has been proposed in several other domains, e.g.,  for improving the quality of Web forum posts~\cite{rao-daume-iii-2018-learning}, product reviews in online retail~\cite{rao2019answer}, and improving query quality in Web search~\cite{10.1145/3366423.3380126}.

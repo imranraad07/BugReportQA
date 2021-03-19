@@ -50,9 +50,7 @@ in projects on GitHub, which is why we opted to include unlabeled issues. Since 
 % While focusing separately on incompleteness in one of these categories is a possible strategy, for simplicity, we chose only bug reports that lacked all three.
 \item We further selected only issues that contain follow-up questions in one of the issue comments.  We identified follow-up questions as  comments containing only questions, identified by both starting with an interrogative word and ending with a question mark. In order to ensure we selected follow-up questions and not just
 any questions, we constrained our selection based on time and comment sequence. That is, the comment containing the follow-up question must have been posted within 60 days of the issue creation date and must have occurred as the comment immediately following the post. We also avoided follow-up posts by the issue author by ensuring that the comment was authored by a different user from the author of the issue.
-\item The set of issues and candidate follow-up questions from the previous step were further filtered to
-retain issues and follow-up questions where an answer was provided. A key heuristic we used for recognizing an answer was that it was authored by the original issue creator and occurred as the the next sequential comment
-to the follow-up question. We also searched for answers that were encoded as edits to the original issue text by the author, which occurred after the follow-up question was posted and were limited to add at least 4 additional words to the original text in order to avoid minor spelling or grammar modifications.
+\item The set of issues and candidate follow-up questions from the previous step were further filtered to retain issues and follow-up questions where an answer was provided. A key heuristic we used for recognizing an answer was that it was authored by the original issue creator and occurred as the next sequential comment to the follow-up question. We also searched for answers that were encoded as edits to the original issue text by the author, which occurred after the follow-up question was posted and were limited to add at least 4 additional words to the original text in order to avoid minor spelling or grammar modifications.
 \end{enumerate}
 
 We stopped the collection process when we gathered a dataset of 25K GitHub issues, which we deemed to be sufficient for our purpose. With 25K issues, the dataset provided a distribution of OB/EB/S2R in the answers, specifically 10930 answers containing OB, 3100 answers containing EB, and 266 containing S2R. Each data point in our dataset is a triple of
@@ -138,7 +136,7 @@ in order to introduce semantics, we encode the bug report text with GloVe word e
 \subsubsection{Estimating Utility}~\label{sec:estimate_util}
 To compute the utility of the follow-up question, $U(q_{i})$, we leverage the pattern based
 identification of the constituent pieces of a bug report (OB, EB and S2R) created by Chaparro
-et al.~\cite{chaparro17detecting}
+et al.~\cite{chaparro17detecting}.
 We implement 5 of the most common and most productive patterns for each of OB, EB and S2R, as described by
 the authors. Each of the total 15 patterns rely on predefined sets of keywords and part-of-speech tagging to ensure high
 precision\footnote{Depending on the choice of patterns, Chaparro et al. report average EB precision of 95.1\%-96.7\%, recall of 46.1\%-76.6\% and average S2R precision of 81.6\%-84.5\% and recall of 31.0\%-38.5\%; OB results were not reported~\cite{chaparro17detecting}.}. We value high precision over recall since we believe it is more important for \evpi to produce fewer false positives rather than fewer false negatives, i.e, it is better to pose a good follow-up question rather than ensure a follow-up question for all incomplete bug reports.
