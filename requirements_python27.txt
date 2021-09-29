@@ -15,7 +15,7 @@ idna==2.8
 ipaddress==1.0.23
 joblib==0.14.1
 Lasagne==0.2.dev1
-nltk==3.4
+nltk==3.6.3
 numpy==1.16.6
 pycosat==0.6.3
 pycparser==2.19
