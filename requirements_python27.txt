@@ -13,7 +13,7 @@ enum34==1.1.6
 futures==3.3.0
 idna==2.8
 ipaddress==1.0.23
-joblib==0.14.1
+joblib==1.2.0
 Lasagne==0.2.dev1
 nltk==3.4
 numpy==1.16.6
