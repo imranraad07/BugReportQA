@@ -1,4 +1,4 @@
-certifi==2019.11.28
+certifi==2023.7.22
 cffi==1.13.2
 future==0.18.2
 mkl-fft==1.0.15
